@@ -14,8 +14,42 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  username String @unique
-  role     String // "user" หรือ "admin"
-  createdAt DateTime @default(now())
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  username     String         @unique
+  role         String         // "user" หรือ "admin"
+  year         String
+  name         String
+  student_id   String         @unique
+  dept         String         // สาขาวิชาของผู้เข้าร่วม
+  joinedBooths BoothJoin[]    // กิจกรรมที่เข้าร่วม
+  ownedBooths  BoothOwner[]   // บูธที่เป็นเจ้าของ
+  createdAt    DateTime       @default(now())
+}
+
+model Booth {
+  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  booth_name   String
+  booth_code   String         @unique
+  dept_type    String         // หมวดหมู่ของงานนิทรรศการ
+  boothOwners  BoothOwner[]   // ผู้เป็นเจ้าของบูธ
+  joinedUsers  BoothJoin[]    // ผู้เข้าร่วมบูธ
+  pics         String[]       // URL ภาพบูธ
+}
+
+model BoothJoin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  boothId   String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  booth     Booth    @relation(fields: [boothId], references: [id])
+  joinedAt  DateTime @default(now())
+}
+
+model BoothOwner {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  boothId   String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  booth     Booth    @relation(fields: [boothId], references: [id])
+  addedAt   DateTime @default(now())
 }
