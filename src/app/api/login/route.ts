@@ -5,40 +5,42 @@ import jwt from 'jsonwebtoken';
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET!;
 
-// กำหนด user type
+// กำหนด role จาก username
 function getRole(username: string): 'user' | 'admin' {
-  if (/^\d{8}$/.test(username)) return 'user';
-  return 'admin';
+  return /^\d{8}$/.test(username) ? 'user' : 'admin';
 }
 
 export async function POST(req: NextRequest) {
-  const { username } = await req.json();
+  const body = await req.json();
+  const { username, name, year, dept } = body;
+
   if (!username || typeof username !== 'string') {
     return NextResponse.json({ error: 'Username is required' }, { status: 400 });
   }
 
-  // ค้นหาหรือสร้างผู้ใช้
   let user = await prisma.user.findUnique({ where: { username } });
   if (!user) {
     const role = getRole(username);
     user = await prisma.user.create({
-      data: { username, role },
+      data: {
+        username,
+        role,
+        name: name || '',
+        year: year || '',
+        student_id: username,
+        dept: dept || '',
+      },
     });
   }
 
-  // สร้าง JWT token
   const token = jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-      role: user.role,
-    },
+    { id: user.id, username: user.username, role: user.role },
     JWT_SECRET,
-    { expiresIn: '7d' } // Token มีอายุ 7 วัน
+    { expiresIn: '7d' }
   );
 
-  // สร้าง response พร้อมเซ็ต cookie
   const res = NextResponse.json({ message: 'Authenticated', user });
+
   res.cookies.set({
     name: 'token',
     value: token,
@@ -46,7 +48,7 @@ export async function POST(req: NextRequest) {
     path: '/',
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7, // 7 วัน
+    maxAge: 60 * 60 * 24 * 7,
   });
 
   return res;
