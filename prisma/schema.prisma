@@ -34,6 +34,7 @@ model Booth {
   boothOwners  BoothOwner[]   // ผู้เป็นเจ้าของบูธ
   joinedUsers  BoothJoin[]    // ผู้เข้าร่วมบูธ
   pics         String[]       // URL ภาพบูธ
+  description  String?        // รายละเอียดบูธ หลาย paragraph ได้
 }
 
 model BoothJoin {
