@@ -4,8 +4,13 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const boothId = params.id
+export async function GET(req: NextRequest) {
+  const urlParts = req.nextUrl.pathname.split('/');
+  const boothId = urlParts[urlParts.length - 1];
+
+  if (!boothId) {
+    return NextResponse.json([{ error: 'Missing booth ID' }, {status: 400}])
+  }
 
   const booth = await prisma.booth.findUnique({
     where: { id: boothId },
