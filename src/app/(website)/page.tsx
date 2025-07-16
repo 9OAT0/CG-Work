@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 "use client";
 
 import { useEffect, useState } from "react";
@@ -43,3 +44,14 @@ export default function Home() {
     </>
   );
 }
+=======
+export default function Home() {
+  return (
+    <>
+      <div className="min-h-screen bg-pink-500 flex justify-center items-center">
+        <img src="/Ellipse 2.png" alt="" />
+      </div>
+    </>
+  )
+}
+>>>>>>> Stashed changes
