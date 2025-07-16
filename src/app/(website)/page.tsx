@@ -1,67 +1,56 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
-export default function Home() {
-  const [showSplash, setShowSplash] = useState(true);
-  const router = useRouter();
+export default function CombinedPage() {
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowSplash(false); // เริ่ม animation ออกจาก splash
-      setTimeout(() => {
-        router.push("/prelogin"); // ไปหน้า Prelogin
-      }, 1000); // รอให้ animation จบก่อน (1s)
-    }, 3000); // Splash screen อยู่ 3 วิ
+      setShowLogin(true); // หลัง 3 วิ → โลโก้ขยับ + ปุ่มโผล่
+    }, 3000);
 
     return () => clearTimeout(timer);
-  }, [router]);
+  }, []);
 
   return (
-    <>
-      <AnimatePresence>
-        {showSplash && (
-          <motion.div
-            key="splash"
-            className="min-h-screen bg-cover bg-center bg-no-repeat flex justify-center items-center"
-            style={{ backgroundImage: "url('/Rectangle 140.png')" }}
-            initial={{ opacity: 1, scale: 1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.5 }}
-            transition={{ duration: 1 }}
-          >
-            <img
-              src="/Ellipse 51.png"
-              alt="Logo"
-              className="w-[291px] h-[291px]"
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    <div
+      className="relative h-screen w-screen bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center text-white"
+      style={{ backgroundImage: "url('/Rectangle 140.png')" }}
+    >
+      {/* Logo */}
+      <motion.img
+        src="/Ellipse 51.png"
+        alt="Logo"
+        initial={{ y: 0 }}
+        animate={showLogin ? { y: -100 } : { y: 0 }} // ลดระยะเลื่อนขึ้นให้ใกล้กว่าเดิม
+        transition={{ type: "spring", stiffness: 70, damping: 15 }}
+        className="w-[291px] h-[291px] z-10"
+      />
+
+      {/* Login Buttons */}
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        animate={showLogin ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+        transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+        className={`flex flex-col items-center gap-4 ${
+          showLogin ? "mt-4" : "mt-12" // หลัง fade-out ลดห่างเหลือ mt-4
+        } ${showLogin ? "pointer-events-auto" : "pointer-events-none"}`}
+      >
+        <a
+          href="/login"
+          className="w-[250px] h-[49px] bg-pink-500 rounded-[30px] font-bold flex justify-center items-center"
+        >
+          เข้าสู่ระบบ
+        </a>
+        <div className="flex gap-2">
+          <h1 className="font-bold">หรือ</h1>
+          <a href="/register" className="border-b font-bold">
+            ลงทะเบียน
+          </a>
+        </div>
+      </motion.div>
+    </div>
   );
 }
-=======
-export default function Home() {
-  return (
-    <>
-=======
-export default function Home() {
-  return (
-    <>
->>>>>>> Stashed changes
-      <div className="min-h-screen bg-pink-500 flex justify-center items-center">
-        <img src="/Ellipse 2.png" alt="" />
-      </div>
-    </>
-  )
-<<<<<<< Updated upstream
-}
->>>>>>> Stashed changes
-=======
-}
->>>>>>> Stashed changes
