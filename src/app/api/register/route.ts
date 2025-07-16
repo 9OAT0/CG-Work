@@ -4,33 +4,42 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 export async function POST(req: NextRequest) {
-  const { status, studentId, name, year, dept } = await req.json()
+  const { status, studentId, name, dept } = await req.json()
 
+  // ✅ ตรวจสอบฟิลด์ที่ต้องกรอก
   if (!status || !name || !dept) {
-    return NextResponse.json({ error: 'กรุณากรอกข้อมูลให้ครบ' }, { status: 400 })
+    return NextResponse.json({ error: 'กรุณากรอกข้อมูลให้ครบทุกช่อง' }, { status: 400 })
   }
 
-  if (studentId && typeof studentId === 'string' && studentId.trim() !== '') {
+  // ✅ ตรวจสอบ studentId เฉพาะนิสิต
+  if (status === 'นิสิต') {
+    if (!studentId || studentId.trim() === '') {
+      return NextResponse.json({ error: 'กรุณากรอกรหัสนิสิต' }, { status: 400 })
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: { student_id: studentId }
     })
 
     if (existingUser) {
-      return NextResponse.json({ error: 'รหัสนิสิตนี้ลงทะเบียนแล้ว' }, { status: 409 })
+      return NextResponse.json({ error: 'รหัสนิสิตนี้ถูกใช้ลงทะเบียนแล้ว' }, { status: 409 })
     }
   }
 
+  // ✅ สร้าง username อัตโนมัติสำหรับบุคลากรอื่น
+  const username = studentId || `${name.replace(/\s/g, '')}-${Date.now()}`
+
+  // ✅ บันทึกผู้ใช้ใหม่
   await prisma.user.create({
     data: {
-      username: studentId || `${name}-${Date.now()}`,
+      username,
       student_id: studentId || null,
       status,
       role: 'user',
-      year: year || '',
       name,
       dept
     }
   })
 
-  return NextResponse.json({ message: 'ลงทะเบียนสำเร็จ' })
+  return NextResponse.json({ message: 'ลงทะเบียนสำเร็จ' }, { status: 201 })
 }
