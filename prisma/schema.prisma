@@ -18,7 +18,7 @@ model User {
   username     String         @unique
   status       String
   role         String         // "user" หรือ "admin"
-  year         String
+  year         String?
   name         String
   student_id   String?         @unique
   dept         String         // สาขาวิชาของผู้เข้าร่วม
