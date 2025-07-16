@@ -1,40 +1,59 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
-import jwt from 'jsonwebtoken'
+import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import jwt from "jsonwebtoken";
+import { getThailandTime } from "@/lib/time";
 
-const prisma = new PrismaClient()
-const JWT_SECRET = process.env.JWT_SECRET!
+const prisma = new PrismaClient();
+const JWT_SECRET = process.env.JWT_SECRET!;
 
 export async function POST(req: NextRequest) {
-  const { student_id, name } = await req.json()
+  const { student_id, name } = await req.json();
 
   if (!student_id || !name) {
-    return NextResponse.json({ error: 'กรุณากรอก รหัสนิสิต และ ชื่อ-นามสกุล' }, { status: 400 })
+    return NextResponse.json(
+      { error: "กรุณากรอก รหัสนิสิต และ ชื่อ-นามสกุล" },
+      { status: 400 }
+    );
   }
 
+  // ✅ ค้นหา user ก่อน
   const user = await prisma.user.findFirst({
-    where: { student_id, name }
-  })
+    where: { student_id, name },
+  });
 
   if (!user) {
-    return NextResponse.json({ error: 'ไม่พบผู้ใช้งาน' }, { status: 404 })
+    return NextResponse.json({ error: "ไม่พบผู้ใช้งาน" }, { status: 404 });
   }
 
-  const token = jwt.sign(
-    { id: user.id, student_id: user.student_id, name: user.name, role: user.role },
-    JWT_SECRET,
-    { expiresIn: '7d' }
-  )
+  // ✅ บันทึก visit log หลังพบ user
+  await prisma.visitLog.create({
+    data: {
+      userId: user.id,
+      visitedAt: getThailandTime()
+    },
+  });
 
-  const res = NextResponse.json({ message: 'เข้าสู่ระบบสำเร็จ', user })
+  // ✅ สร้าง JWT
+  const token = jwt.sign(
+    {
+      id: user.id,
+      student_id: user.student_id,
+      name: user.name,
+      role: user.role,
+    },
+    JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+
+  const res = NextResponse.json({ message: "เข้าสู่ระบบสำเร็จ", user });
   res.cookies.set({
-    name: 'token',
+    name: "token",
     value: token,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 60 * 60 * 24 * 7
-  })
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24 * 7, // 7 วัน
+  });
 
-  return res
+  return res;
 }

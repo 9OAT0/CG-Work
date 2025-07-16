@@ -28,6 +28,8 @@ model User {
 
   TranscriptLog TranscriptLog[]
   score        Int @default(0)
+
+  VisitLog VisitLog[]
 }
 
 model Booth {
@@ -64,6 +66,13 @@ model TranscriptLog {
   userId    String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id])
   date      DateTime @default(now()) // วันที่รับ transcript
+}
+
+model VisitLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String?  @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id])
+  visitedAt DateTime @default(now())
 }
 
 model TranscriptIssue {

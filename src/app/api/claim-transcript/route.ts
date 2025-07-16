@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { verify } from 'jsonwebtoken'
+import { getThailandTime } from '@/lib/time'
 
 const prisma = new PrismaClient()
 const JWT_SECRET = process.env.JWT_SECRET!
@@ -47,7 +48,10 @@ export async function POST(req: NextRequest) {
 
     // ✅ บันทึกการรับ transcript
     await prisma.transcriptLog.create({
-      data: { userId }
+      data: {
+        userId : userId,
+        date : getThailandTime() 
+       }
     })
 
     // ✅ หักคะแนน 6

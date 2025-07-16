@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
+import { getThailandTime } from '@/lib/time'
 
 const prisma = new PrismaClient()
 const JWT_SECRET = process.env.JWT_SECRET!
@@ -73,7 +74,8 @@ export async function POST(req: NextRequest) {
     await prisma.boothJoin.create({
       data: {
         userId: user.id,
-        boothId: booth.id
+        boothId: booth.id,
+        joinedAt: getThailandTime()
       }
     })
 

@@ -6,16 +6,17 @@ const prisma = new PrismaClient()
 
 export async function GET(req: NextRequest) {
   const auth = verifyAdmin(req)
-  if (auth instanceof NextResponse) return auth // 🛑 ถ้าไม่ใช่ admin
+  
+  if (auth instanceof NextResponse) return auth
 
-  const boothJoins = await prisma.boothJoin.groupBy({
-    by: ['joinedAt'],
+  const visitLogs = await prisma.visitLog.groupBy({
+    by: ['visitedAt'],
     _count: true
   })
 
-  const data = boothJoins.map(join => ({
-    date: join.joinedAt.toISOString().split('T')[0],
-    count: join._count
+  const data = visitLogs.map(log => ({
+    date: log.visitedAt.toISOString().split('T')[0],
+    count: log._count
   }))
 
   const total = data.reduce((sum, item) => sum + item.count, 0)
