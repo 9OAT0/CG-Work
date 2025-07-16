@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <div
-      className="h-screen bg-cover bg-center bg-no-repeat flex justify-center items-center"
+      className="min-h-screen bg-cover bg-center bg-no-repeat flex justify-center items-center"
       style={{ backgroundImage: "url('/Rectangle 140.png')" }}
     >
       <div className=''>
