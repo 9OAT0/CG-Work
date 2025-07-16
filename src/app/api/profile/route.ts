@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { verify } from 'jsonwebtoken'
+import { getThailandTime } from '@/lib/time'
 
 const prisma = new PrismaClient()
 const JWT_SECRET = process.env.JWT_SECRET!
@@ -34,6 +35,9 @@ export async function GET(req: NextRequest) {
     ).length  // สมมุติ 1 booth = 10 คะแนน
 
     const totalPoints = user.joinedBooths.length
+    const ThailandDates = user.TranscriptLog.map(log =>
+      getThailandTime(log.date).toISOString().split('T')[0]
+    )
 
     return NextResponse.json({
       name: user.name,
