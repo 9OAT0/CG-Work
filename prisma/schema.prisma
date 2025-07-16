@@ -16,14 +16,18 @@ datasource db {
 model User {
   id           String         @id @default(auto()) @map("_id") @db.ObjectId
   username     String         @unique
+  status       String
   role         String         // "user" หรือ "admin"
   year         String
   name         String
-  student_id   String         @unique
+  student_id   String?         @unique
   dept         String         // สาขาวิชาของผู้เข้าร่วม
   joinedBooths BoothJoin[]    // กิจกรรมที่เข้าร่วม
   ownedBooths  BoothOwner[]   // บูธที่เป็นเจ้าของ
   createdAt    DateTime       @default(now())
+
+  TranscriptLog TranscriptLog[]
+  score        Int @default(0)
 }
 
 model Booth {
@@ -53,4 +57,20 @@ model BoothOwner {
   user      User     @relation(fields: [userId], references: [id])
   booth     Booth    @relation(fields: [boothId], references: [id])
   addedAt   DateTime @default(now())
+}
+
+model TranscriptLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  date      DateTime @default(now()) // วันที่รับ transcript
+}
+
+model TranscriptIssue {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  student_id String
+  name       String
+  year       String
+  dept       String
+  createdAt  DateTime @default(now())
 }
