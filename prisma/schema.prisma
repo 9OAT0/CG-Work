@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id           String         @id @default(auto()) @map("_id") @db.ObjectId
-  username     String         @unique
+  username     String
   status       String
   role         String         // "user" หรือ "admin"
   year         String?
