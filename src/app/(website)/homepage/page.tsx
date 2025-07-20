@@ -4,9 +4,10 @@ export default function Homepage() {
     return (
         <>
         <Navbar />
-            <div>
-                dfbnfghfg
+            <div className='min-h-screen'>
+                <img src="/bg.jpg" alt="" className=''/>
             </div>
+            
         </>
     )
 }

@@ -14,6 +14,15 @@ module.exports = {
         blueBrand: "#312F8E",
         pinkBrand: "#BE1C7E",
       },
+      keyframes: {
+        arrowBounceFade: {
+          '0%, 100%': { transform: 'translateX(0)', opacity: '1' },
+          '50%': { transform: 'translateX(-10px)', opacity: '0' },
+        },
+      },
+      animation: {
+        'arrow': 'arrowBounceFade 1.8s infinite ease-in-out',
+      },
     },
   },
   plugins: [],

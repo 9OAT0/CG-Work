@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
 
   // ✅ สร้าง username อัตโนมัติสำหรับบุคลากรอื่น
   const username = studentId || `${name.replace(/\s/g, '')}-${Date.now()}`
+  const studentID = "user"
 
   // ✅ บันทึกผู้ใช้ใหม่
   await prisma.user.create({
@@ -37,7 +38,8 @@ export async function POST(req: NextRequest) {
       status,
       role: 'user',
       name,
-      dept
+      dept,
+      ...(status === 'นิสิต' && { student_id: studentId }),
     }
   })
 

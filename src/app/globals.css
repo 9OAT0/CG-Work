@@ -23,6 +23,36 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
+
+/* 🔥 Keyframes for left arrow */
+@keyframes arrowLeftBounceFade {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(10px); /* ซ้ายวิ่งเข้า fingerprint */
+    opacity: 0;
+  }
+}
+
+/* 🔥 Keyframes for right arrow */
+@keyframes arrowRightBounceFade {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-10px); /* ขวาวิ่งเข้า fingerprint */
+    opacity: 0;
+  }
+}
+
+/* 🏃‍♂️ Animation Classes */
+.animate-arrow-left {
+  animation: arrowLeftBounceFade 2s infinite ease-in-out;
+}
+
+.animate-arrow-right {
+  animation: arrowRightBounceFade 2s infinite ease-in-out;
+}
