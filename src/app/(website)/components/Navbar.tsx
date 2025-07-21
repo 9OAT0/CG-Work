@@ -35,7 +35,7 @@ export default function Navbar() {
       <div className="bg-blueBrand h-[106px] w-full flex justify-between items-end px-[29px] pb-5 relative z-50">
         {/* Logo */}
         <div>
-          <img src="/logo.jpg" alt="Logo" className="w-[75px] h-[45px]" />
+          <img src="/bb.jpg" alt="Logo" className="w-[75px] h-[45px]" />
         </div>
 
         {/* Hamburger Icon */}
@@ -69,11 +69,10 @@ export default function Navbar() {
           menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <ul className="flex flex-col p-4 gap-4">
-          <li className="hover:text-blue-300 cursor-pointer">หน้าแรก</li>
-          <li className="hover:text-blue-300 cursor-pointer">เกี่ยวกับเรา</li>
-          <li className="hover:text-blue-300 cursor-pointer">บริการ</li>
-          <li className="hover:text-blue-300 cursor-pointer">ติดต่อ</li>
+        <ul className="flex flex-col p-4 gap-6">
+          <a href="/homepage"><li className="hover:text-blue-300 cursor-pointer font-light text-xl">หน้าหลัก</li></a>
+          <a href="/profile"><li className="hover:text-blue-300 cursor-pointer font-light text-xl">ข้อมูลผู้ใช้งาน</li></a>
+          <a href="/homepage"><li className="hover:text-blue-300 cursor-pointer font-light text-xl">ผลงาน</li></a>
         </ul>
       </div>
     </>
