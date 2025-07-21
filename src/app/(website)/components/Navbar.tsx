@@ -35,7 +35,7 @@ export default function Navbar() {
       <div className="bg-blueBrand h-[106px] w-full flex justify-between items-end px-[29px] pb-5 relative z-50">
         {/* Logo */}
         <div>
-          <img src="/bb.jpg" alt="Logo" className="w-[75px] h-[45px]" />
+          <img src="/brainbang_logo.png" alt="Logo" className="w-[75px] h-[45px]" />
         </div>
 
         {/* Hamburger Icon */}
