@@ -30,6 +30,15 @@ model User {
   score        Int @default(0)
 
   VisitLog VisitLog[]
+  
+  // New relations
+  boothRatings   BoothRating[]
+  boothComments  BoothComment[]
+  boothFavorites BoothFavorite[]
+  uploadedFiles  File[]
+  notifications  Notification[]
+  feedbacks      Feedback[]
+  systemLogs     SystemLog[]
 }
 
 model Booth {
@@ -41,6 +50,11 @@ model Booth {
   joinedUsers  BoothJoin[]    // ผู้เข้าร่วมบูธ
   pics         String[]       // URL ภาพบูธ
   description  String?        // รายละเอียดบูธ หลาย paragraph ได้
+  
+  // New relations
+  ratings      BoothRating[]
+  comments     BoothComment[]
+  favorites    BoothFavorite[]
 }
 
 model BoothJoin {
@@ -82,4 +96,86 @@ model TranscriptIssue {
   year       String
   dept       String
   createdAt  DateTime @default(now())
+}
+
+model BoothRating {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  boothId   String   @db.ObjectId
+  rating    Int      // 1-5 stars
+  comment   String?
+  user      User     @relation(fields: [userId], references: [id])
+  booth     Booth    @relation(fields: [boothId], references: [id])
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, boothId])
+}
+
+model BoothComment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  boothId   String   @db.ObjectId
+  comment   String
+  user      User     @relation(fields: [userId], references: [id])
+  booth     Booth    @relation(fields: [boothId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model BoothFavorite {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  boothId   String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  booth     Booth    @relation(fields: [boothId], references: [id])
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, boothId])
+}
+
+model File {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  filename     String
+  originalName String
+  mimetype     String
+  size         Int
+  path         String
+  url          String
+  thumbnailUrl String?
+  uploadedBy   String   @db.ObjectId
+  user         User     @relation(fields: [uploadedBy], references: [id])
+  createdAt    DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  message   String
+  type      String   @default("info") // info, success, warning, error
+  userId    String?  @db.ObjectId // null = broadcast to all
+  user      User?    @relation(fields: [userId], references: [id])
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Feedback {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  subject   String
+  message   String
+  type      String   @default("general") // bug, feature, general
+  email     String?
+  userId    String?  @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id])
+  status    String   @default("pending") // pending, reviewed, resolved
+  createdAt DateTime @default(now())
+}
+
+model SystemLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  action    String   // login, logout, join_booth, etc.
+  userId    String?  @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id])
+  details   String?  // JSON string with additional details
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
 }

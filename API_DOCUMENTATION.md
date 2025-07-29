@@ -1,444 +1,441 @@
-# API Documentation
+## ภาพรวม
 
-## Overview
-นี่คือ API documentation สำหรับระบบจัดการงานนิทรรศการ (Exhibition Management System) ที่พัฒนาด้วย Next.js และ Prisma ORM
+เอกสารนี้รวบรวมรายละเอียดของทุก Endpoints ในระบบ Exhibition Management System (CG-Work) พัฒนาด้วย Next.js 14 App Router และใช้ MongoDB กับ Prisma ORM
 
-## Base URL
-```
-http://localhost:3000/api
-```
-
-## Authentication
-ระบบใช้ JWT Token ที่เก็บใน HTTP-only cookies สำหรับการ authentication
-- Token จะมีอายุ 7 วัน
-- ต้องส่ง token ผ่าน cookies ในทุก request ที่ต้องการ authentication
-
-## Data Models
-
-### User
-```typescript
-{
-  id: string
-  username: string
-  status: string // "นิสิต" หรือ "บุคคลทั่วไป"
-  role: string // "user" หรือ "admin"
-  year?: string
-  name: string
-  student_id?: string // unique สำหรับนิสิต
-  dept: string // สาขาวิชา
-  score: number // คะแนนสะสม (default: 0)
-  createdAt: DateTime
-}
-```
-
-### Booth
-```typescript
-{
-  id: string
-  booth_name: string
-  booth_code: string // unique
-  dept_type: string // หมวดหมู่ของงานนิทรรศการ
-  description?: string
-  pics: string[] // URL ภาพบูธ
-}
-```
+**Base URL**: `http://localhost:3000/api`
 
 ---
 
-## API Endpoints
+## การ Authentication
 
-### 🔐 Authentication
+ระบบใช้ JWT Token เก็บใน HTTP-only cookies (อายุ 7 วัน) สำหรับการยืนยันตัวตน และมี 2 บทบาทคือ `user` และ `admin` (Admin endpoints ต้องตรวจสอบ `role` ใน payload ด้วย)
 
-#### POST /api/register
-ลงทะเบียนผู้ใช้ใหม่
+**Headers**:
 
-**Request Body:**
+```
+Content-Type: application/json
+Cookie: token=<jwt_token>
+```
+
+### ข้อผิดพลาดมาตรฐาน
+
 ```json
 {
-  "status": "นิสิต", // หรือ "บุคคลทั่วไป"
-  "studentId": "6410001234", // จำเป็นเฉพาะนิสิต
-  "name": "นาย สมชาย ใจดี",
-  "dept": "วิศวกรรมคอมพิวเตอร์"
+  "error": "ข้อความผิดพลาด",
+  "code": "ERROR_CODE",
+  "timestamp": "2025-01-30T00:00:00.000Z"
 }
 ```
 
-**Response:**
-```json
-{
-  "message": "ลงทะเบียนสำเร็จ"
-}
-```
+**Common Codes**:
 
-**Error Responses:**
-- `400` - ข้อมูลไม่ครบถ้วน
-- `409` - รหัสนิสิตซ้ำ
+* `VALIDATION_ERROR` (400)
+* `AUTHENTICATION_ERROR` (401)
+* `AUTHORIZATION_ERROR` (403)
+* `NOT_FOUND_ERROR` (404)
+* `CONFLICT_ERROR` (409)
+* `RATE_LIMIT_EXCEEDED` (429)
+* `INTERNAL_SERVER_ERROR` (500)
+
+**Rate Limiting**:
+
+* Authentication: 5 req / 15 นาที
+* Upload: 10 req / นาที
+* ทั่วไป: 100 req / นาที
+* เข้มงวด: 10 req / นาที
 
 ---
 
-#### POST /api/login
+## 🔐 Authentication Endpoints
+
+### POST /api/register
+
+ลงทะเบียนผู้ใช้ใหม่ (นิสิตหรือบุคคลทั่วไป)
+**Request**:
+
+```json
+{
+  "status": "นิสิต" | "บุคคลทั่วไป",
+  "studentId": "string", // จำเป็นถ้า status เป็น นิสิต
+  "name": "string",
+  "dept": "string",
+  "year": "string" // ไม่บังคับ
+}
+```
+
+**Response (201)**:
+
+```json
+{
+  "message": "ลงทะเบียนสำเร็จ",
+  "user": {
+    "id": "string",
+    "name": "string",
+    "dept": "string",
+    "role": "user"
+  }
+}
+```
+
+**Error**:
+
+* 400: ข้อมูลไม่ครบถ้วน
+* 409: รหัสนิสิตซ้ำ
+
+### POST /api/login
+
 เข้าสู่ระบบ
+**Request**:
 
-**Request Body:**
 ```json
 {
-  "student_id": "6410001234",
-  "name": "นาย สมชาย ใจดี"
+  "student_id": "string",
+  "name": "string"
 }
 ```
 
-**Response:**
+**Response (200)**:
+
 ```json
 {
   "message": "เข้าสู่ระบบสำเร็จ",
   "user": {
-    "id": "...",
-    "username": "6410001234",
-    "name": "นาย สมชาย ใจดี",
+    "id": "string",
+    "name": "string",
+    "dept": "string",
     "role": "user",
-    "dept": "วิศวกรรมคอมพิวเตอร์"
+    "score": 0
   }
 }
 ```
 
-**Error Responses:**
-- `400` - ข้อมูลไม่ครบถ้วน
-- `404` - ไม่พบผู้ใช้งาน
+### POST /api/logout
 
----
+**Response**:
 
-#### POST /api/logout
-ออกจากระบบ
-
-**Response:**
 ```json
-{
-  "message": "Logged out"
-}
+{ "message": "ออกจากระบบสำเร็จ" }
 ```
 
----
+### GET /api/me
 
-### 👤 User Profile
+ดึงข้อมูลผู้ใช้ปัจจุบัน
+**Response**:
 
-#### GET /api/me
-ดึงข้อมูลผู้ใช้ปัจจุบัน (ต้อง login)
-
-**Response:**
 ```json
 {
-  "id": "...",
-  "username": "6410001234",
-  "name": "นาย สมชาย ใจดี",
-  "student_id": "6410001234",
-  "year": null,
-  "dept": "วิศวกรรมคอมพิวเตอร์",
-  "role": "user",
-  "joinedBooths": [
-    {
-      "booth_id": "...",
-      "booth_name": "AI Innovation",
-      "dept_type": "เทคโนโลยี",
-      "joinedAt": "2025-01-30T10:30:00.000Z"
-    }
-  ]
-}
-```
-
-**Error Responses:**
-- `401` - ไม่มี token หรือ token ไม่ถูกต้อง
-- `404` - ไม่พบผู้ใช้งาน
-
----
-
-#### GET /api/profile
-ดึงข้อมูล profile พร้อมสถิติคะแนน (ต้อง login)
-
-**Response:**
-```json
-{
-  "name": "นาย สมชาย ใจดี",
-  "student_id": "6410001234",
-  "status": "นิสิต",
-  "dept": "วิศวกรรมคอมพิวเตอร์",
-  "dailyPoints": 5, // คะแนนวันนี้
-  "dailyMax": 30, // คะแนนสูงสุดต่อวัน
-  "totalPoints": 25, // คะแนนรวม
-  "totalMax": 90, // คะแนนสูงสุดรวม
-  "transcriptDates": ["2025-01-30", "2025-01-29"] // วันที่รับ transcript
-}
-```
-
----
-
-### 🏢 Booth Management
-
-#### GET /api/booth/[id]
-ดึงข้อมูลบูธตาม ID
-
-**URL Parameters:**
-- `id` - Booth ID
-
-**Response:**
-```json
-{
-  "id": "...",
-  "booth_name": "AI Innovation",
-  "dept_type": "เทคโนโลยี",
-  "description": "นิทรรศการเกี่ยวกับ AI และ Machine Learning",
-  "pics": ["https://example.com/pic1.jpg", "https://example.com/pic2.jpg"]
-}
-```
-
-**Error Responses:**
-- `400` - ไม่มี booth ID
-- `404` - ไม่พบบูธ
-
----
-
-#### GET /api/booth/by-dept?dept_type={type}
-ดึงรายการบูธตามหมวดหมู่
-
-**Query Parameters:**
-- `dept_type` - หมวดหมู่ของบูธ (เช่น "เทคโนโลยี", "3D", "วิศวกรรม")
-
-**Response:**
-```json
-{
-  "count": 5,
-  "booths": [
-    {
-      "id": "...",
-      "booth_name": "AI Innovation",
-      "dept_type": "เทคโนโลยี",
-      "description": "นิทรรศการเกี่ยวกับ AI",
-      "pics": ["https://example.com/pic1.jpg"],
-      "booth_code": "AI2025",
-      "joined": true // true ถ้าผู้ใช้เข้าร่วมแล้ว (ต้อง login)
-    }
-  ]
-}
-```
-
-**Error Responses:**
-- `400` - ไม่มี dept_type parameter
-- `404` - ไม่พบบูธในหมวดหมู่ที่ระบุ
-
----
-
-#### POST /api/register-booth
-สร้างบูธใหม่ (ต้อง login)
-
-**Request Body:**
-```json
-{
-  "booth_name": "AI Innovation",
-  "booth_code": "AI2025",
-  "dept_type": "เทคโนโลยี",
-  "description": "นิทรรศการเกี่ยวกับ AI และ Machine Learning"
-}
-```
-
-**Response:**
-```json
-{
-  "message": "สร้างบูธสำเร็จ",
-  "booth": {
-    "id": "...",
-    "booth_name": "AI Innovation",
-    "booth_code": "AI2025",
-    "dept_type": "เทคโนโลยี",
-    "description": "นิทรรศการเกี่ยวกับ AI และ Machine Learning"
+  "user": {
+    "id": "string",
+    "name": "string",
+    "dept": "string",
+    "role": "user",
+    "score": 0,
+    "student_id": "string",
+    "status": "นิสิต",
+    "year": "string"
   }
 }
 ```
 
-**Error Responses:**
-- `400` - ข้อมูลไม่ครบหรือ booth_code ซ้ำ
-- `401` - ไม่มี token หรือ token ไม่ถูกต้อง
-
 ---
 
-#### POST /api/join-booth
-เข้าร่วมบูธด้วย booth code (ต้อง login)
+## 👤 User Profile Endpoints
 
-**Request Body:**
+### GET /api/profile
+
+ดึงโปรไฟล์ผู้ใช้พร้อมสถิติ
+**Response**:
+
 ```json
 {
-  "boothCode": "AI2025"
-}
-```
-
-**Response:**
-```json
-{
-  "message": "เข้าร่วม booth สำเร็จ (คะแนนวันนี้: 6/30)"
-}
-```
-
-**Business Rules:**
-- ได้คะแนน 1 คะแนนต่อการเข้าร่วม 1 บูธ
-- สามารถได้คะแนนสูงสุด 30 คะแนนต่อวัน
-- ไม่สามารถเข้าร่วมบูธเดิมซ้ำได้
-
-**Error Responses:**
-- `400` - ไม่มี boothCode หรือ booth code ไม่ถูกต้อง หรือคะแนนเต็มแล้ว
-- `401` - ไม่มี token หรือ token ไม่ถูกต้อง
-- `404` - ไม่พบผู้ใช้งาน
-
----
-
-### 📜 Transcript Management
-
-#### POST /api/claim-transcript
-รับ transcript (ต้อง login และมีคะแนนอย่างน้อย 6 คะแนน)
-
-**Response:**
-```json
-{
-  "message": "รับ transcript สำเร็จ และหัก 6 คะแนนแล้ว"
-}
-```
-
-**Business Rules:**
-- ต้องมีคะแนนอย่างน้อย 6 คะแนน
-- รับได้วันละ 1 ครั้ง
-- หักคะแนน 6 คะแนนทุกครั้งที่รับ
-
-**Error Responses:**
-- `400` - คะแนนไม่เพียงพอหรือรับวันนี้แล้ว
-- `401` - ไม่มี token หรือ token ไม่ถูกต้อง
-- `404` - ไม่พบผู้ใช้งาน
-
----
-
-### 👨‍💼 Admin APIs
-
-#### GET /api/admin/participants
-ดึงสถิติผู้เข้าร่วม (ต้อง login เป็น admin)
-
-**Response:**
-```json
-{
-  "data": [
-    {
-      "date": "2025-01-30",
-      "count": 150
+  "user": {
+    "id": "string",
+    "name": "string",
+    "dept": "string",
+    "score": 0,
+    "student_id": "string",
+    "status": "นิสิต",
+    "stats": {
+      "joinedBooths": 5,
+      "ratingsGiven": 3,
+      "transcriptsReceived": 2,
+      "favoriteBooths": 4
     },
-    {
-      "date": "2025-01-29",
-      "count": 120
-    }
-  ],
-  "total": 270
+    "recentActivity": [ ... ]
+  }
 }
 ```
 
-**Error Responses:**
-- `401` - ไม่มี token หรือ token ไม่ถูกต้อง
-- `403` - ไม่ใช่ admin
+### PUT /api/profile
+
+อัปเดตโปรไฟล์
+**Request**:
+
+```json
+{ "name?": "string", "dept?": "string", "year?": "string" }
+```
+
+**Response**:
+
+```json
+{ "message": "อัปเดตโปรไฟล์สำเร็จ", "user": { ... } }
+```
 
 ---
 
-#### GET /api/admin/transcript-issues
-ดึงรายการปัญหา transcript (ต้อง login เป็น admin)
+## 🏢 Booth Management
 
-**Response:**
+### GET /api/booth
+
+ดึงรายการบูธทั้งหมด (pagination, filtering)
+**Query**: `page`, `limit`, `search`, `dept_type`, `sortBy`, `sortOrder`
+**Response**:
+
 ```json
 {
-  "issues": [
-    {
-      "id": "...",
-      "student_id": "6410001234",
-      "name": "นาย สมชาย ใจดี",
-      "year": "4",
-      "dept": "วิศวกรรมคอมพิวเตอร์",
-      "createdAt": "2025-01-30T10:30:00.000Z"
-    }
-  ]
+  "booths": [ ... ],
+  "pagination": { ... }
 }
 ```
 
----
+### GET /api/booth/\[id]
 
-#### POST /api/admin/transcript-issues
-เพิ่มรายการปัญหา transcript (ต้อง login เป็น admin)
+ดึงรายละเอียดบูธ
+**Response**:
 
-**Request Body:**
 ```json
 {
-  "student_id": "6410001234",
-  "name": "นาย สมชาย ใจดี",
-  "year": "4",
-  "dept": "วิศวกรรมคอมพิวเตอร์"
+  "id": "string",
+  "booth_name": "string",
+  "booth_code": "string",
+  "dept_type": "string",
+  "description": "string",
+  "pics": ["string"],
+  "owners": [ ... ],
+  "stats": { ... },
+  "ratings": [ ... ],
+  "comments": [ ... ]
 }
 ```
 
-**Response:**
+### POST /api/register-booth
+
+สร้างบูธใหม่ (ต้อง login)
+**Request**:
+
 ```json
 {
-  "message": "เพิ่มรายชื่อสำเร็จ"
+  "booth_name": "string",
+  "booth_code": "string",
+  "dept_type": "string",
+  "description": "string",
+  "pics?": ["string"]
 }
 ```
 
-**Error Responses:**
-- `400` - ข้อมูลไม่ครบถ้วน
-- `401` - ไม่มี token หรือ token ไม่ถูกต้อง
-- `403` - ไม่ใช่ admin
+**Response (201)**:
 
----
+```json
+{ "message": "สร้างบูธสำเร็จ", "booth": { ... } }
+```
 
-## Error Handling
+### PUT /api/booth/\[id]
 
-### Standard Error Response Format
+อัปเดตบูธ (Owner/Admin)
+**Request**: fields ใดๆ ที่ต้องการอัปเดต
+**Response**:
+
+```json
+{ "message": "อัปเดตบูธสำเร็จ", "booth": { ... } }
+```
+
+### DELETE /api/booth/\[id]
+
+ลบบูธ (Owner/Admin)
+**Response**:
+
+```json
+{ "message": "ลบบูธสำเร็จ" }
+```
+
+### POST /api/jjoin-booth
+
+เข้าร่วมบูธด้วย booth code
+**Request**:
+
+```json
+{ "boothCode": "string" }
+```
+
+**Response**:
+
 ```json
 {
-  "error": "Error message in Thai"
+  "message": "เข้าร่วมบูธสำเร็จ",
+  "booth": { "id","booth_name","dept_type" },
+  "newScore": 10
 }
 ```
 
-### HTTP Status Codes
-- `200` - Success
-- `201` - Created
-- `400` - Bad Request (ข้อมูลไม่ถูกต้อง)
-- `401` - Unauthorized (ไม่มี token หรือ token หมดอายุ)
-- `403` - Forbidden (ไม่มีสิทธิ์เข้าถึง)
-- `404` - Not Found (ไม่พบข้อมูล)
-- `409` - Conflict (ข้อมูลซ้ำ)
-- `500` - Internal Server Error
+### GET /api/booth/by-dept
+
+ดึงบูธตามหมวดหมู่
+**Query**: `dept_type`
+**Response**:
+
+```json
+{ "departments": [ { "dept_type": "string", "booths": [ ... ] } ] }
+```
 
 ---
 
-## Business Logic Summary
+## ⭐ Booth Rating & Social
 
-### คะแนนระบบ (Scoring System)
-- เข้าร่วมบูธ 1 ครั้ง = 1 คะแนน
-- คะแนนสูงสุดต่อวัน = 30 คะแนน
-- รับ transcript ต้องใช้ 6 คะแนน
-- รับ transcript ได้วันละ 1 ครั้ง
+### POST /api/booth/\[id]/rating
 
-### การ Authentication
-- ใช้ JWT Token เก็บใน HTTP-only cookies
-- Token มีอายุ 7 วัน
-- มี 2 role: "user" และ "admin"
+ให้คะแนนบูธ
+**Request**: `{ "rating": 1-5, "comment?": "string" }`
+**Response**:
 
-### การจัดการบูธ
-- แต่ละบูธมี booth_code ที่ unique
-- ผู้ใช้สามารถเข้าร่วมบูธเดิมได้เพียงครั้งเดียว
-- บูธจัดกลุ่มตาม dept_type
+```json
+{ "message": "ให้คะแนนสำเร็จ", "rating": { ... } }
+```
+
+### GET /api/booth/\[id]/rating
+
+ดึงคะแนนทั้งหมดและสถิติ
+**Response**:
+
+```json
+{ "ratings": [ ... ], "stats": { totalRatings, averageRating } }
+```
+
+### POST /api/booth/\[id]/favorite
+
+สลับสถานะโปรด
+**Response**:
+
+```json
+{ "message": "เพิ่มเข้ารายการโปรดแล้ว", "isFavorited": true }
+```
+
+### GET /api/booth/\[id]/favorite
+
+ตรวจสถานะโปรด
+**Response**:
+
+```json
+{ "isFavorited": true }
+```
+
+### GET /api/booth/favorites
+
+ดึงรายการโปรดผู้ใช้ (pagination)
+**Response**:
+
+```json
+{ "favorites": [ ... ], "pagination": { ... } }
+```
 
 ---
 
-## Environment Variables Required
-```env
+## 📜 Transcript Management
+
+### POST /api/claim-transcript
+
+รับ transcript (ต้อง login, ใช้คะแนน 6 คะแนน วันละ 1 ครั้ง)
+**Response**:
+
+```json
+{ "message": "รับ transcript สำเร็จ และหัก 6 คะแนนแล้ว" }
+```
+
+**Business Rules**:
+
+* คะแนน ≥ 6
+* วันละ 1 ครั้ง
+
+---
+
+## 📊 Statistics & Analytics
+
+### GET /api/leaderboard
+
+ดึงกระดานผู้นำ (pagination, filter dept, period)
+**Response**:
+
+```json
+{ "leaderboard": [ ... ], "pagination": { ... }, "departmentStats": [ ... ], "filters": { ... } }
+```
+
+---
+
+## 👨‍💼 Admin Endpoints
+
+### GET /api/admin/stats
+
+สถิติภาพรวม (period: 7d,30d,90d,all)
+**Response**: overview, topBooths, topUsers, departmentStats, dailyActivity
+
+### GET /api/admin/participants
+
+ดึงผู้ใช้งาน (pagination, search, filter dept)
+
+### GET /api/admin/transcript-issues
+
+ดึงรายการปัญหา transcript
+
+### POST /api/admin/transcript-issues
+
+เพิ่มปัญหา transcript
+**Request**: `{ student_id, name, year, dept }`
+
+---
+
+## 📁 File Upload
+
+### POST /api/upload
+
+อัปโหลดรูปภาพ (JPEG, PNG, WebP, GIF; max 5MB)
+**Response**: รายละเอียดไฟล์ที่อัปโหลด
+
+---
+
+## ✅ System
+
+### GET /api/health
+
+ตรวจสอบสถานะระบบ
+**Response**:
+
+```json
+{ "status": "healthy", "timestamp": "...", "version": "1.0.0", "database": "connected" }
+```
+
+---
+
+## โมเดลข้อมูล
+
+```typescript
+interface User { id, username, status, role, year?, name, student_id?, dept, score, createdAt }
+interface Booth { id, booth_name, booth_code, dept_type, description?, pics }
+interface BoothRating { id, userId, boothId, rating, comment?, createdAt }
+interface BoothFavorite { id, userId, boothId, createdAt }
+```
+
+---
+
+## สรุปโลจิกธุรกิจ
+
+* เข้าร่วมบูธ 1 ครั้ง = 1 คะแนน (max 30/day)
+* รับ transcript ใช้ 6 คะแนน (max 1/day)
+
+---
+
+## ตัวแปรสภาพแวดล้อม
+
+```
 DATABASE_URL="mongodb://..."
 JWT_SECRET="your-secret-key"
 NODE_ENV="development" # หรือ "production"
 ```
-
----
-
-## Notes
-- ระบบใช้ MongoDB เป็น database
-- เวลาทั้งหมดใช้ timezone ประเทศไทย (UTC+7)
-- API ส่วนใหญ่ return ข้อความเป็นภาษาไทย
-- ระบบมีการ logging การเข้าชมผ่าน VisitLog model
