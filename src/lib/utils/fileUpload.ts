@@ -68,7 +68,7 @@ export async function handleFileUpload(
       const buffer = Buffer.from(new Uint8Array(bytes))
 
       // Process image if needed
-      let processedBuffer = buffer
+      let processedBuffer: Buffer = buffer
       if (file.type.startsWith('image/')) {
         processedBuffer = await processImage(buffer, opts)
       }
