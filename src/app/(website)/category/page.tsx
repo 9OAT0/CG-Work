@@ -1,7 +1,191 @@
+'use client';
+
+import Navbar from "../components/Navbar";
+import { useState, useEffect } from "react";
+
+const categories = [
+  "หมวดหมู่ที่ 1",
+  "หมวดหมู่ที่ 2",
+  "หมวดหมู่ที่ 3",
+  "หมวดหมู่ที่ 4",
+  "หมวดหมู่ที่ 5",
+  "หมวดหมู่ที่ 6",
+] as const;
+
+type Category = (typeof categories)[number];
+
+interface Booth {
+  id: string;
+  booth_name: string;
+  dept_type: string;
+  description: string;
+  pics: string[];
+  booth_code: string;
+  joined: boolean;
+}
+
 export default function CategoryPage() {
-    return (
-        <>
-            hfhfthygf
-        </>
-    )
+  const [selectedCategory, setSelectedCategory] = useState<Category>(categories[0]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [booths, setBooths] = useState<Booth[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+
+  const selectCategory = (category: Category) => {
+    setSelectedCategory(category);
+    setIsDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    const fetchBooths = async () => {
+      setLoading(true);
+      try {
+        const deptIndex = categories.indexOf(selectedCategory) + 1;
+        const res = await fetch(`/api/booth/by-dept?dept_type=${deptIndex}`, {
+          credentials: 'include'
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setBooths(data.booths);
+        } else {
+          setBooths([]);
+          console.error(data.message || data.error);
+        }
+      } catch (err) {
+        console.error("Failed to load booths", err);
+        setBooths([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBooths();
+  }, [selectedCategory]);
+
+  const filteredBooths = booths.filter(
+    (booth) =>
+      booth.booth_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      booth.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <>
+      <Navbar />
+      <div className="min-h-screen py-10 px-4 flex flex-col gap-8 relative">
+        {/* Header Buttons */}
+        <div className="flex flex-row justify-center items-center gap-6 sm:gap-8">
+          <a href="/admin">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#00478A] flex justify-center items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-4 h-4 sm:w-5 sm:h-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </div>
+          </a>
+
+          <div className="relative w-[200px] sm:w-[281px]">
+            <button
+              onClick={toggleDropdown}
+              className="w-full h-[50px] sm:h-[56px] rounded-[30px] bg-blueBrand flex justify-center items-center text-[20px] sm:text-[24px] font-bold text-white"
+            >
+              {selectedCategory}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`w-5 h-5 ml-2 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {isDropdownOpen && (
+              <div className="absolute top-14 w-full bg-white rounded-lg shadow-lg z-10 animate-fade-slide">
+                {categories.map((category) => (
+                  <div
+                    key={category}
+                    onClick={() => selectCategory(category)}
+                    className="px-4 py-2 text-gray-700 hover:bg-blue-100 hover:text-blue-800 cursor-pointer rounded-lg"
+                  >
+                    {category}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Search Input */}
+        <div className="flex justify-center">
+          <input
+            type="text"
+            placeholder="ค้นหาชื่อผลงานหรือคำอธิบาย"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full max-w-md h-[40px] rounded-full border px-4 bg-gray-200"
+          />
+        </div>
+
+        {/* Banner Image */}
+        <div className="flex justify-center items-center px-4">
+          <img src="/banner.jpg" alt="banner" className="w-full max-w-[490px] h-auto rounded-xl" />
+        </div>
+
+        {/* Booths */}
+        <div className="flex flex-col justify-center items-center gap-6 px-4">
+          {loading ? (
+            <p className="text-gray-500">กำลังโหลด...</p>
+          ) : filteredBooths.length > 0 ? (
+            filteredBooths.map((booth, idx) => (
+              <a
+                key={idx}
+                href={`/booth?title=${encodeURIComponent(booth.booth_name)}&description=${encodeURIComponent(booth.description)}`}
+              >
+                <div
+                  className={`w-full max-w-[440px] rounded-[15px] bg-blueBrand flex flex-col sm:flex-row gap-4 p-4 relative hover:scale-105 transition-transform duration-200 ${booth.joined ? "opacity-50" : ""}`}
+                >
+                  <img
+                    src={booth.pics[0] || "/banner.jpg"}
+                    alt="preview"
+                    className="w-full sm:w-[260px] h-[156px] object-cover rounded-[15px]"
+                  />
+                  <div className="flex flex-col justify-between w-full text-white">
+                    <h1 className="text-[20px] font-bold">{booth.booth_name}</h1>
+                    <p className="text-[14px]">{booth.description}</p>
+                  </div>
+                </div>
+              </a>
+            ))
+          ) : (
+            <p className="text-gray-500">ไม่พบผลงานที่ค้นหา</p>
+          )}
+        </div>
+      </div>
+
+      {/* Fade slide animation */}
+      <style jsx>{`
+        @keyframes fade-slide {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade-slide {
+          animation: fade-slide 0.3s ease-out;
+        }
+      `}</style>
+    </>
+  );
 }
