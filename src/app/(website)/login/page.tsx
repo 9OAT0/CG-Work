@@ -28,7 +28,7 @@ export default function LoginPage() {
       }
 
       alert(data.message || "เข้าสู่ระบบสำเร็จ");
-      router.push("/homepage"); // ✅ Redirect หลัง login สำเร็จ
+      router.push("/homepage");
     } catch (err) {
       console.error(err);
       alert("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
@@ -39,20 +39,20 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen flex flex-col justify-center items-center gap-16 bg-cover bg-center bg-no-repeat"
+      className="min-h-screen flex flex-col justify-center items-center gap-12 bg-cover bg-center bg-no-repeat px-4"
       style={{ backgroundImage: "url('/Rectangle 140.png')" }}
     >
-      <h1 className="text-white text-4xl font-bold">เข้าสู่ระบบ</h1>
+      <h1 className="text-white text-3xl sm:text-4xl font-bold">เข้าสู่ระบบ</h1>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-center gap-6"
+        className="flex flex-col items-center gap-6 w-full max-w-[380px]"
       >
         <input
           type="text"
           placeholder="  รหัสนิสิต                                  ถ้ามีโปรดระบุ*"
           value={studentID}
           onChange={(e) => setStudentID(e.target.value)}
-          className="w-[342px] h-[51px] rounded-[30px] px-4"
+          className="w-full h-[51px] rounded-[30px] px-4 text-base"
           required
         />
 
@@ -61,14 +61,14 @@ export default function LoginPage() {
           placeholder="  ชื่อ - สกุล*"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-[342px] h-[51px] rounded-[30px] px-4"
+          className="w-full h-[51px] rounded-[30px] px-4 text-base"
           required
         />
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`w-[250px] h-[49px] rounded-[30px] mt-4 text-white font-bold text-xl transition-colors duration-300 ${
+          className={`w-[250px] h-[49px] rounded-[30px] mt-2 text-white font-bold text-lg transition-colors duration-300 ${
             isSubmitting
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-pinkBrand hover:bg-pink-600"

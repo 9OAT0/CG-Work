@@ -12,16 +12,22 @@
     "tailwind:init": "tailwindcss init -p"
   },
   "dependencies": {
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@heroicons/react": "^2.0.0",
     "@hookform/resolvers": "^5.1.1",
     "@prisma/client": "^6.10.1",
     "axios": "^1.10.0",
     "bcryptjs": "^3.0.2",
     "framer-motion": "^12.23.6",
+    "html5-qrcode": "^2.3.8",
     "jsonwebtoken": "^9.0.2",
     "next": "15.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-fontawesome": "^1.7.1",
     "react-hook-form": "^7.60.0",
+    "swiper": "^11.2.10",
     "zod": "^4.0.5"
   },
   "devDependencies": {
