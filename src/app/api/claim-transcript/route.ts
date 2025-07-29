@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
 
     const decoded: any = verify(token, JWT_SECRET)
     const userId = decoded.id
+    const transcript_score = 6
 
     const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
 
@@ -42,7 +43,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'ไม่พบผู้ใช้งาน' }, { status: 404 })
     }
 
-    if (user.score < 6) {
+    if (user.score < transcript_score) {
       return NextResponse.json({ error: 'คะแนนไม่เพียงพอในการรับ transcript วันนี้' }, { status: 400 })
     }
 
@@ -58,7 +59,7 @@ export async function POST(req: NextRequest) {
     await prisma.user.update({
       where: { id: userId },
       data: {
-        score: { decrement: 6 }
+        score: { decrement: transcript_score }
       }
     })
 

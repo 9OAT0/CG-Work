@@ -22,3 +22,53 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
+
+
+/* 🔥 Keyframes for left arrow */
+@keyframes arrowLeftBounceFade {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(10px); /* ซ้ายวิ่งเข้า fingerprint */
+    opacity: 0;
+  }
+}
+
+/* 🔥 Keyframes for right arrow */
+@keyframes arrowRightBounceFade {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-10px); /* ขวาวิ่งเข้า fingerprint */
+    opacity: 0;
+  }
+}
+
+/* 🏃‍♂️ Animation Classes */
+.animate-arrow-left {
+  animation: arrowLeftBounceFade 2s infinite ease-in-out;
+}
+
+.animate-arrow-right {
+  animation: arrowRightBounceFade 2s infinite ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes scaleIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+.animate-scaleIn {
+    animation: scaleIn 0.3s ease-out forwards;
+}
