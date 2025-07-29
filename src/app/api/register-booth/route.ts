@@ -6,7 +6,7 @@ const prisma = new PrismaClient()
 const JWT_SECRET = process.env.JWT_SECRET!
 
 export async function POST(req: NextRequest) {
-  const { booth_name, booth_code, dept_type, description } = await req.json()
+  const { booth_name, booth_code, dept_type, description, pics } = await req.json()
 
   if (!booth_name || !booth_code || !dept_type || !description ) {
     return NextResponse.json({ error: 'ข้อมูลไม่ครบ' }, { status: 400 })
@@ -36,6 +36,7 @@ export async function POST(req: NextRequest) {
       booth_code,
       dept_type,
       description,
+      pics: pics || [], // Handle pics array, default to empty array if not provided
       boothOwners: {
         create: {
           user: {
