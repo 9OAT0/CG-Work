@@ -42,12 +42,12 @@ export default function Homepage() {
           <div className="flex flex-col items-center gap-7">
             <h1 className="text-blueBrand text-2xl font-bold">หมวดหมู่งาน</h1>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              <a href="/"><img src="/sola.jpg" alt="" className="w-[117px] h-[150px]" /></a>
-              <a href="/"><img src="/galaxy.jpg" alt="" className="w-[118px] h-[147px]" /></a>
-              <a href="/"><img src="/nebula.jpg" alt="" className="w-[124px] h-[141px]" /></a>
-              <a href="/"><img src="/comet.jpg" alt="" className="w-[109px] h-[139px]" /></a>
-              <a href="/"><img src="/blackhole.jpg" alt="" className="w-[146px] h-[147px]" /></a>
-              <a href="/"><img src="/eclipse.jpg" alt="" className="w-[108px] h-[140px]" /></a>
+              <a href="/category?dept=1"><img src="/sola.jpg" alt="Category 1" className="w-[117px] h-[150px]" /></a>
+              <a href="/category?dept=2"><img src="/galaxy.jpg" alt="Category 2" className="w-[118px] h-[147px]" /></a>
+              <a href="/category?dept=3"><img src="/nebula.jpg" alt="Category 3" className="w-[124px] h-[141px]" /></a>
+              <a href="/category?dept=4"><img src="/comet.jpg" alt="Category 4" className="w-[109px] h-[139px]" /></a>
+              <a href="/category?dept=5"><img src="/blackhole.jpg" alt="Category 5" className="w-[146px] h-[147px]" /></a>
+              <a href="/category?dept=6"><img src="/eclipse.jpg" alt="Category 6" className="w-[108px] h-[140px]" /></a>
             </div>
           </div>
 

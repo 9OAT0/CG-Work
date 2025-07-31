@@ -29,9 +29,9 @@ export default function Navbar() {
     <>
       <div className="bg-blueBrand h-[106px] w-full flex justify-between items-end px-6 md:px-12 pb-5 relative z-50">
         {/* Logo */}
-        <div>
+        <a href="/homepage">
           <img src="/brainbang_logo.png" alt="Logo" className="w-[75px] h-[45px]" />
-        </div>
+        </a>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-10 text-white text-lg font-light">

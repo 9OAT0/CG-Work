@@ -2,6 +2,7 @@
 
 import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 const categories = [
   "หมวดหมู่ที่ 1",
@@ -25,6 +26,7 @@ interface Booth {
 }
 
 export default function CategoryPage() {
+  const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<Category>(categories[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,6 +39,14 @@ export default function CategoryPage() {
     setSelectedCategory(category);
     setIsDropdownOpen(false);
   };
+
+  // 📌 อ่าน dept จาก query string และเซ็ต category
+  useEffect(() => {
+    const dept = Number(searchParams.get("dept"));
+    if (dept >= 1 && dept <= categories.length) {
+      setSelectedCategory(categories[dept - 1]);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     const fetchBooths = async () => {
@@ -75,7 +85,7 @@ export default function CategoryPage() {
       <div className="min-h-screen py-10 px-4 flex flex-col gap-8 relative">
         {/* Header Buttons */}
         <div className="flex flex-row justify-center items-center gap-6 sm:gap-8">
-          <a href="/admin">
+          <a href="/homepage">
             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#00478A] flex justify-center items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -134,7 +144,7 @@ export default function CategoryPage() {
           />
         </div>
 
-        {/* Banner Image */}
+        {/* Banner */}
         <div className="flex justify-center items-center px-4">
           <img src="/banner.jpg" alt="banner" className="w-full max-w-[490px] h-auto rounded-xl" />
         </div>
@@ -170,7 +180,7 @@ export default function CategoryPage() {
         </div>
       </div>
 
-      {/* Fade slide animation */}
+      {/* Animation */}
       <style jsx>{`
         @keyframes fade-slide {
           from {
