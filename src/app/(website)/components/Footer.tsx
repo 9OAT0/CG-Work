@@ -22,7 +22,7 @@ export default function Footer() {
             <a href="/category?dept=1" className="hover:underline">3D</a>
             <a href="/category?dept=2" className="hover:underline">Graphic</a>
             <a href="/category?dept=3" className="hover:underline">Product Design</a>
-            <a href="/category?dept=4" className="hover:underline">Editor & Motion</a>
+            <a href="/category?dept=4" className="hover:underline">Production</a>
             <a href="/category?dept=5" className="hover:underline">Digital Art</a>
             <a href="/category?dept=6" className="hover:underline">Game Design</a>
         </div>

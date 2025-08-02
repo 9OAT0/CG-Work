@@ -16,8 +16,6 @@ async function getBoothsHandler(req: NextRequest) {
   // Filter parameters
   const search = searchParams.get('search') || ''
   const deptType = searchParams.get('dept_type') || ''
-  const sortBy = searchParams.get('sortBy') || 'createdAt'
-  const sortOrder = searchParams.get('sortOrder') || 'desc'
 
   // Build where clause
   const where: any = {}
@@ -34,71 +32,43 @@ async function getBoothsHandler(req: NextRequest) {
     where.dept_type = deptType
   }
 
-  // Build orderBy clause
-  const orderBy: any = {}
-  if (sortBy === 'participants') {
-    orderBy.joinedUsers = { _count: sortOrder }
-  } else if (sortBy === 'rating') {
-    orderBy.ratings = { _count: sortOrder }
-  } else {
-    orderBy[sortBy] = sortOrder
-  }
-
   try {
-    // Get booths with pagination
+    // Get booths with basic info only
     const [booths, totalCount] = await Promise.all([
       prisma.booth.findMany({
         where,
-        include: {
-          boothOwners: {
-            include: {
-              user: {
-                select: { name: true }
-              }
-            }
-          },
-          _count: {
-            select: {
-              joinedUsers: true,
-              ratings: true,
-              favorites: true
-            }
-          },
-          ratings: {
-            select: { rating: true }
-          }
+        select: {
+          id: true,
+          booth_name: true,
+          booth_code: true,
+          dept_type: true,
+          description: true,
+          pics: true,
+          owner_names: true
         },
-        orderBy,
+        orderBy: { booth_name: 'asc' },
         skip,
         take: limit
       }),
       prisma.booth.count({ where })
     ])
 
-    // Calculate average ratings
-    const boothsWithStats = booths.map(booth => {
-      const avgRating = booth.ratings.length > 0 
-        ? booth.ratings.reduce((sum, r) => sum + r.rating, 0) / booth.ratings.length 
-        : 0
-
-      return {
-        id: booth.id,
-        booth_name: booth.booth_name,
-        booth_code: booth.booth_code,
-        dept_type: booth.dept_type,
-        description: booth.description,
-        pics: booth.pics,
-        owners: booth.boothOwners.map(owner => ({
-          name: owner.user.name
-        })),
-        stats: {
-          participants: booth._count.joinedUsers,
-          ratings: booth._count.ratings,
-          favorites: booth._count.favorites,
-          averageRating: Math.round(avgRating * 10) / 10
-        }
+    // Format response
+    const boothsWithStats = booths.map(booth => ({
+      id: booth.id,
+      booth_name: booth.booth_name,
+      booth_code: booth.booth_code,
+      dept_type: booth.dept_type,
+      description: booth.description,
+      pics: booth.pics,
+      owners: booth.owner_names?.map(name => ({ name })) || [],
+      stats: {
+        participants: 0,
+        ratings: 0,
+        favorites: 0,
+        averageRating: 0
       }
-    })
+    }))
 
     const totalPages = Math.ceil(totalCount / limit)
 

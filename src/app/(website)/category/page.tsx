@@ -5,12 +5,12 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
 const categories = [
-  "หมวดหมู่ที่ 1",
-  "หมวดหมู่ที่ 2",
-  "หมวดหมู่ที่ 3",
-  "หมวดหมู่ที่ 4",
-  "หมวดหมู่ที่ 5",
-  "หมวดหมู่ที่ 6",
+  "3D",
+  "Graphic",
+  "Product Design",
+  "Production",
+  "Digital Art",
+  "Game Design",
 ] as const;
 
 type Category = (typeof categories)[number];
@@ -52,13 +52,23 @@ export default function CategoryPage() {
     const fetchBooths = async () => {
       setLoading(true);
       try {
-        const deptIndex = categories.indexOf(selectedCategory) + 1;
-        const res = await fetch(`/api/booth/by-dept?dept_type=${deptIndex}`, {
+        // Map category to dept_type
+        const deptTypeMap: { [key: string]: string } = {
+          "3D": "3D",
+          "Graphic": "Graphic",
+          "Product Design": "Product Design",
+          "Production": "Production",
+          "Digital Art": "Digital Art",
+          "Game Design": "Game Design"
+        };
+        
+        const deptType = deptTypeMap[selectedCategory] || selectedCategory;
+        const res = await fetch(`/api/booth/by-dept?dept_type=${encodeURIComponent(deptType)}`, {
           credentials: 'include'
         });
         const data = await res.json();
         if (res.ok) {
-          setBooths(data.booths);
+          setBooths(data.booths || []);
         } else {
           setBooths([]);
           console.error(data.message || data.error);
@@ -157,7 +167,7 @@ export default function CategoryPage() {
             filteredBooths.map((booth, idx) => (
               <a
                 key={idx}
-                href={`/booth?title=${encodeURIComponent(booth.booth_name)}&description=${encodeURIComponent(booth.description)}`}
+                href={`/booth?id=${booth.id}`}
               >
                 <div
                   className={`w-full max-w-[440px] rounded-[15px] bg-blueBrand flex flex-col sm:flex-row gap-4 p-4 relative hover:scale-105 transition-transform duration-200 ${booth.joined ? "opacity-50" : ""}`}

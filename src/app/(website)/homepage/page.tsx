@@ -13,14 +13,25 @@ export default function Homepage() {
   ];
 
   const [current, setCurrent] = useState(0);
-  const [showOverlay, setShowOverlay] = useState(true);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
+    // Check if overlay has been shown before
+    const hasSeenOverlay = localStorage.getItem('hasSeenOverlay');
+    if (!hasSeenOverlay) {
+      setShowOverlay(true);
+    }
+
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % banners.length);
     }, 10000);
     return () => clearInterval(interval);
   }, [banners.length]);
+
+  const handleCloseOverlay = () => {
+    setShowOverlay(false);
+    localStorage.setItem('hasSeenOverlay', 'true');
+  };
 
   const nextSlide = () => {
     setCurrent((prev) => (prev + 1) % banners.length);
@@ -42,12 +53,12 @@ export default function Homepage() {
           <div className="flex flex-col items-center gap-7">
             <h1 className="text-blueBrand text-2xl font-bold">หมวดหมู่งาน</h1>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              <a href="/category?dept=1"><img src="/sola.jpg" alt="Category 1" className="w-[117px] h-[150px]" /></a>
-              <a href="/category?dept=2"><img src="/galaxy.jpg" alt="Category 2" className="w-[118px] h-[147px]" /></a>
-              <a href="/category?dept=3"><img src="/nebula.jpg" alt="Category 3" className="w-[124px] h-[141px]" /></a>
-              <a href="/category?dept=4"><img src="/comet.jpg" alt="Category 4" className="w-[109px] h-[139px]" /></a>
-              <a href="/category?dept=5"><img src="/blackhole.jpg" alt="Category 5" className="w-[146px] h-[147px]" /></a>
-              <a href="/category?dept=6"><img src="/eclipse.jpg" alt="Category 6" className="w-[108px] h-[140px]" /></a>
+              <a href="/category?dept=3D"><img src="/sola.jpg" alt="Category 1" className="w-[117px] h-[150px]" /></a>
+              <a href="/category?dept=Graphic"><img src="/galaxy.jpg" alt="Category 2" className="w-[118px] h-[147px]" /></a>
+              <a href="/category?dept=Product Design"><img src="/nebula.jpg" alt="Category 3" className="w-[124px] h-[141px]" /></a>
+              <a href="/category?dept=Production"><img src="/comet.jpg" alt="Category 4" className="w-[109px] h-[139px]" /></a>
+              <a href="/category?dept=Digital Art"><img src="/blackhole.jpg" alt="Category 5" className="w-[146px] h-[147px]" /></a>
+              <a href="/category?dept=Game Design"><img src="/eclipse.jpg" alt="Category 6" className="w-[108px] h-[140px]" /></a>
             </div>
           </div>
 
@@ -119,15 +130,15 @@ export default function Homepage() {
       {showOverlay && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
-          onClick={() => setShowOverlay(false)}
+          onClick={handleCloseOverlay}
         >
           <div
             className="relative max-w-[90%] max-h-[90%] rounded-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setShowOverlay(false)}
-              className="absolute top-2 right-2 text-white text-4xl"
+              onClick={handleCloseOverlay}
+              className="absolute top-2 right-6 text-white text-4xl"
             >
               ×
             </button>
