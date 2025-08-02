@@ -18,6 +18,9 @@ export default function RegisterBooth() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  
+  // Booth owners state
+  const [boothOwners, setBoothOwners] = useState([{ name: "", contact: "" }]);
 
   // Department types - updated based on feedback
   const deptTypes = [
@@ -34,7 +37,8 @@ export default function RegisterBooth() {
     boothName.trim() !== "" &&
     boothCode.trim() !== "" &&
     description.trim() !== "" &&
-    selectedDeptType !== "เลือกประเภทหน่วยงาน";
+    selectedDeptType !== "เลือกประเภทหน่วยงาน" &&
+    boothOwners.some(owner => owner.name.trim() !== "");
 
   // Handle file upload
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +80,45 @@ export default function RegisterBooth() {
     setUploadedImages(prev => prev.filter((_, index) => index !== indexToRemove));
   };
 
+  // Move image up in order
+  const moveImageUp = (index: number) => {
+    if (index === 0) return;
+    setUploadedImages(prev => {
+      const newImages = [...prev];
+      [newImages[index - 1], newImages[index]] = [newImages[index], newImages[index - 1]];
+      return newImages;
+    });
+  };
+
+  // Move image down in order
+  const moveImageDown = (index: number) => {
+    setUploadedImages(prev => {
+      if (index === prev.length - 1) return prev;
+      const newImages = [...prev];
+      [newImages[index], newImages[index + 1]] = [newImages[index + 1], newImages[index]];
+      return newImages;
+    });
+  };
+
+  // Handle booth owner changes
+  const updateBoothOwner = (index: number, field: 'name' | 'contact', value: string) => {
+    setBoothOwners(prev => prev.map((owner, i) => 
+      i === index ? { ...owner, [field]: value } : owner
+    ));
+  };
+
+  // Add new booth owner
+  const addBoothOwner = () => {
+    setBoothOwners(prev => [...prev, { name: "", contact: "" }]);
+  };
+
+  // Remove booth owner
+  const removeBoothOwner = (index: number) => {
+    if (boothOwners.length > 1) {
+      setBoothOwners(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
   // Handle form submission
   const handleRegisterClick = () => {
     if (!isFormComplete) return;
@@ -85,6 +128,8 @@ export default function RegisterBooth() {
   const handleConfirm = async () => {
     setIsSubmitting(true);
     try {
+      const ownerNames = boothOwners.filter(owner => owner.name.trim() !== "").map(owner => owner.name.trim());
+      
       const response = await fetch('/api/register-booth', {
         method: 'POST',
         headers: {
@@ -96,6 +141,8 @@ export default function RegisterBooth() {
           dept_type: selectedDeptType,
           description: description,
           pics: uploadedImages,
+          owner_names: ownerNames,
+          owner_contacts: [] // Empty array since we don't collect contact info
         }),
       });
 
@@ -190,6 +237,39 @@ export default function RegisterBooth() {
             className="bg-[#D9D9D9] w-full border px-4 py-3 rounded-2xl text-black placeholder-gray-600 resize-none"
           />
 
+          {/* Booth Owners Section */}
+          <div className="bg-white/20 rounded-2xl p-4">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-white text-lg">เจ้าของบูธ</h3>
+              <button
+                onClick={addBoothOwner}
+                className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg hover:bg-green-600"
+              >
+                +
+              </button>
+            </div>
+            
+            {boothOwners.map((owner, index) => (
+              <div key={index} className="mb-3 flex gap-2">
+                <input
+                  type="text"
+                  placeholder={`ชื่อเจ้าของบูธคนที่ ${index + 1}`}
+                  value={owner.name}
+                  onChange={(e) => updateBoothOwner(index, 'name', e.target.value)}
+                  className="bg-[#D9D9D9] flex-1 h-[40px] border px-3 py-2 rounded-lg text-black placeholder-gray-600"
+                />
+                {boothOwners.length > 1 && (
+                  <button
+                    onClick={() => removeBoothOwner(index)}
+                    className="bg-red-500 text-white rounded-lg w-10 h-10 flex items-center justify-center text-sm hover:bg-red-600"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
           {/* Image Upload Section */}
           <div className="bg-white/20 rounded-2xl p-4">
             <h3 className="text-white text-lg mb-3">รูปภาพบูธ (ไม่บังคับ)</h3>
@@ -226,21 +306,50 @@ export default function RegisterBooth() {
             {/* Uploaded Images Preview */}
             {uploadedImages.length > 0 && (
               <div className="mt-4">
-                <h4 className="text-white text-sm mb-2">รูปภาพที่อัพโหลดแล้ว:</h4>
-                <div className="grid grid-cols-2 gap-2">
+                <h4 className="text-white text-sm mb-2">รูปภาพที่อัพโหลดแล้ว (ลากเพื่อจัดลำดับ):</h4>
+                <div className="grid grid-cols-1 gap-3">
                   {uploadedImages.map((imageUrl, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={imageUrl}
-                        alt={`Uploaded ${index + 1}`}
-                        className="w-full h-24 object-cover rounded-lg"
-                      />
-                      <button
-                        onClick={() => removeImage(index)}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
-                      >
-                        ×
-                      </button>
+                    <div key={index} className="relative bg-white/10 rounded-lg p-2">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={imageUrl}
+                          alt={`Uploaded ${index + 1}`}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                        <div className="flex-1">
+                          <p className="text-white text-sm">รูปที่ {index + 1}</p>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          <button
+                            onClick={() => moveImageUp(index)}
+                            disabled={index === 0}
+                            className={`w-8 h-8 rounded flex items-center justify-center text-xs ${
+                              index === 0 
+                                ? 'bg-gray-500 text-gray-300 cursor-not-allowed' 
+                                : 'bg-blue-500 text-white hover:bg-blue-600'
+                            }`}
+                          >
+                            ↑
+                          </button>
+                          <button
+                            onClick={() => moveImageDown(index)}
+                            disabled={index === uploadedImages.length - 1}
+                            className={`w-8 h-8 rounded flex items-center justify-center text-xs ${
+                              index === uploadedImages.length - 1 
+                                ? 'bg-gray-500 text-gray-300 cursor-not-allowed' 
+                                : 'bg-blue-500 text-white hover:bg-blue-600'
+                            }`}
+                          >
+                            ↓
+                          </button>
+                        </div>
+                        <button
+                          onClick={() => removeImage(index)}
+                          className="bg-red-500 text-white rounded w-8 h-8 flex items-center justify-center text-xs hover:bg-red-600"
+                        >
+                          ×
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
