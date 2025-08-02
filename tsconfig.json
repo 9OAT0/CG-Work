@@ -14,7 +14,6 @@
     "jsx": "preserve",
     "incremental": true,
     "typeRoots": ["node_modules/@types", "src/types"],  // เพิ่ม src/types
-    "types": ["@heroicons/react"],
     "plugins": [
       {
         "name": "next"
