@@ -63,25 +63,25 @@ async function getProfileHandler(req: NextRequest) {
     timestamp: join.joinedAt
   }))
 
+  // Calculate daily points (today's booth joins)
+  const today = new Date().toISOString().split('T')[0]
+  const dailyJoins = user.joinedBooths.filter(join =>
+    join.joinedAt.toISOString().startsWith(today)
+  ).length
+
+  // Get transcript dates
+  const transcriptDates = user.TranscriptLog.map(log => 
+    log.date.toISOString().split('T')[0]
+  )
+
   return NextResponse.json({
-    user: {
-      id: user.id,
-      name: user.name,
-      dept: user.dept,
-      score: user.score,
-      student_id: user.student_id,
-      status: user.status,
-      year: user.year,
-      role: user.role,
-      stats: {
-        joinedBooths: user._count.joinedBooths,
-        ratingsGiven: user._count.boothRatings,
-        transcriptsReceived: user._count.TranscriptLog,
-        favoriteBooths: user._count.boothFavorites
-      },
-      recentActivity,
-      createdAt: user.createdAt
-    }
+    name: user.name,
+    student_id: user.student_id,
+    status: user.status,
+    dept: user.dept,
+    dailyPoints: dailyJoins,
+    totalPoints: user.score,
+    transcriptDates
   })
 }
 

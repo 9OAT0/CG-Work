@@ -30,7 +30,7 @@ export default function BoothPage() {
 
   useEffect(() => {
     if (!boothId) return;
-    fetch(`/api/booth/${boothId}`)
+    fetch(`/api/booth/${boothId}/basic`)
       .then(res => res.json())
       .then(data => {
         if (!data.error) {
