@@ -46,10 +46,14 @@ model Booth {
   booth_name   String
   booth_code   String         @unique
   dept_type    String         // หมวดหมู่ของงานนิทรรศการ
-  boothOwners  BoothOwner[]   // ผู้เป็นเจ้าของบูธ
+  boothOwners  BoothOwner[]   // ผู้เป็นเจ้าของบูธ (สำหรับ user ที่ login แล้ว)
   joinedUsers  BoothJoin[]    // ผู้เข้าร่วมบูธ
   pics         String[]       // URL ภาพบูธ
   description  String?        // รายละเอียดบูธ หลาย paragraph ได้
+  
+  // Owner information for non-authenticated registration
+  owner_names    String[]     // ชื่อเจ้าของบูธ (สำหรับการลงทะเบียนโดยไม่ต้อง auth)
+  owner_contacts String[]     // ข้อมูลติดต่อเจ้าของบูธ
   
   // New relations
   ratings      BoothRating[]
