@@ -22,32 +22,11 @@ async function getProfileHandler(req: NextRequest) {
     throw new AuthenticationError('Invalid token')
   }
 
+  // First, get the user basic info
   const user = await prisma.user.findUnique({
     where: { id: payload.id },
     include: {
-      joinedBooths: {
-        include: {
-          booth: {
-            select: {
-              booth_name: true,
-              dept_type: true
-            }
-          }
-        },
-        orderBy: { joinedAt: 'desc' },
-        take: 10
-      },
-      boothRatings: true,
-      boothFavorites: true,
-      TranscriptLog: true,
-      _count: {
-        select: {
-          joinedBooths: true,
-          boothRatings: true,
-          boothFavorites: true,
-          TranscriptLog: true
-        }
-      }
+      TranscriptLog: true
     }
   })
 
@@ -55,17 +34,71 @@ async function getProfileHandler(req: NextRequest) {
     throw new NotFoundError('User not found')
   }
 
+  // Get existing booth IDs first
+  const existingBoothIds = await prisma.booth.findMany({
+    select: { id: true }
+  }).then(booths => booths.map(b => b.id))
+
+  // Get booth joins without include, then fetch booth data separately
+  const allBoothJoins = await prisma.boothJoin.findMany({
+    where: {
+      userId: payload.id,
+      boothId: { in: existingBoothIds }
+    },
+    orderBy: { joinedAt: 'desc' },
+    take: 10
+  })
+
+  // Get booth data for the valid joins
+  const boothIds = allBoothJoins.map(join => join.boothId)
+  const booths = await prisma.booth.findMany({
+    where: { id: { in: boothIds } },
+    select: {
+      id: true,
+      booth_name: true,
+      dept_type: true
+    }
+  })
+
+  // Create a map for quick booth lookup
+  const boothMap = new Map(booths.map(booth => [booth.id, booth]))
+
+  // Get counts for valid records only
+  const [boothJoinCount, boothRatingCount, boothFavoriteCount] = await Promise.all([
+    prisma.boothJoin.count({
+      where: {
+        userId: payload.id,
+        boothId: { in: existingBoothIds }
+      }
+    }),
+    prisma.boothRating.count({
+      where: {
+        userId: payload.id,
+        boothId: { in: existingBoothIds }
+      }
+    }),
+    prisma.boothFavorite.count({
+      where: {
+        userId: payload.id,
+        boothId: { in: existingBoothIds }
+      }
+    })
+  ])
+
   // Calculate recent activity
-  const recentActivity = user.joinedBooths.map(join => ({
-    type: 'join_booth',
-    boothName: join.booth.booth_name,
-    deptType: join.booth.dept_type,
-    timestamp: join.joinedAt
-  }))
+  const recentActivity = allBoothJoins.map(join => {
+    const booth = boothMap.get(join.boothId)
+    return {
+      type: 'join_booth',
+      boothName: booth?.booth_name || 'Unknown Booth',
+      deptType: booth?.dept_type || 'Unknown Department',
+      timestamp: join.joinedAt
+    }
+  })
 
   // Calculate daily points (today's booth joins)
   const today = new Date().toISOString().split('T')[0]
-  const dailyJoins = user.joinedBooths.filter(join =>
+  const dailyJoins = allBoothJoins.filter(join =>
     join.joinedAt.toISOString().startsWith(today)
   ).length
 
