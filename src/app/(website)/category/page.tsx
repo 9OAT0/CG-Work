@@ -1,7 +1,7 @@
 'use client';
 
 import Navbar from "../components/Navbar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 const categories = [
@@ -25,7 +25,7 @@ interface Booth {
   joined: boolean;
 }
 
-export default function CategoryPage() {
+function CategoryContent() {
   const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<Category>(categories[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -90,9 +90,7 @@ export default function CategoryPage() {
   );
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen py-10 px-4 flex flex-col gap-8 relative">
+    <div className="min-h-screen py-10 px-4 flex flex-col gap-8 relative">
         {/* Header Buttons */}
         <div className="flex flex-row justify-center items-center gap-6 sm:gap-8">
           <a href="/homepage">
@@ -188,24 +186,34 @@ export default function CategoryPage() {
             <p className="text-gray-500">ไม่พบผลงานที่ค้นหา</p>
           )}
         </div>
-      </div>
 
-      {/* Animation */}
-      <style jsx>{`
-        @keyframes fade-slide {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
+        {/* Animation */}
+        <style jsx>{`
+          @keyframes fade-slide {
+            from {
+              opacity: 0;
+              transform: translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+          .animate-fade-slide {
+            animation: fade-slide 0.3s ease-out;
           }
-        }
-        .animate-fade-slide {
-          animation: fade-slide 0.3s ease-out;
-        }
-      `}</style>
+        `}</style>
+      </div>
+  );
+}
+
+export default function CategoryPage() {
+  return (
+    <>
+      <Navbar />
+      <Suspense fallback={<div className="text-center mt-10">กำลังโหลด...</div>}>
+        <CategoryContent />
+      </Suspense>
     </>
   );
 }
