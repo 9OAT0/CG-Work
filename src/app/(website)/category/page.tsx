@@ -22,6 +22,7 @@ interface Booth {
   description: string;
   pics: string[];
   booth_code: string;
+  owner_names: string[];
   joined: boolean;
 }
 
@@ -163,24 +164,46 @@ function CategoryContent() {
             <p className="text-gray-500">กำลังโหลด...</p>
           ) : filteredBooths.length > 0 ? (
             filteredBooths.map((booth, idx) => (
-              <a
-                key={idx}
-                href={`/booth?id=${booth.id}`}
-              >
-                <div
-                  className={`w-full max-w-[440px] rounded-[15px] bg-blueBrand flex flex-col sm:flex-row gap-4 p-4 relative hover:scale-105 transition-transform duration-200 ${booth.joined ? "opacity-50" : ""}`}
+              <div className="w-full max-w-4xl mx-auto">
+                <a
+                  key={idx}
+                  href={`/booth?id=${booth.id}`}
                 >
-                  <img
-                    src={booth.pics[0] || "/banner.jpg"}
-                    alt="preview"
-                    className="w-full sm:w-[260px] h-[156px] object-cover rounded-[15px]"
-                  />
-                  <div className="flex flex-col justify-between w-full text-white">
-                    <h1 className="text-[20px] font-bold">{booth.booth_name}</h1>
-                    <p className="text-[14px]">{booth.description}</p>
+                  <div
+                    className={`w-full rounded-3xl bg-blueBrand  flex flex-col lg:flex-row gap-6 p-6 relative hover:scale-105 transition-transform duration-200 ${booth.joined ? "opacity-50" : ""}`}
+                  >
+                    {/* Image Section */}
+                    <div className="w-full lg:w-1/3 h-64 bg-gray-200 rounded-2xl flex items-center justify-center overflow-hidden">
+                      {booth.pics && booth.pics.length > 0 ? (
+                        <img 
+                          src={booth.pics[0]} 
+                          alt="รูปงาน" 
+                          className="w-full h-full object-cover rounded-2xl"
+                        />
+                      ) : (
+                        <span className="text-gray-500 text-lg">รูปงาน</span>
+                      )}
+                    </div>
+                    
+                    {/* Content Section */}
+                    <div className="flex-1 text-white flex flex-col justify-between">
+                      <div className="mb-4">
+                        <h2 className="text-xl lg:text-2xl font-bold mb-2">
+                          {booth.booth_name}
+                        </h2>
+                      </div>
+                      
+                      <div className="text-right">
+                        {booth.owner_names && booth.owner_names.length > 0 && (
+                          booth.owner_names.map((name, nameIdx) => (
+                            <p key={nameIdx} className="text-sm mb-1">{name}</p>
+                          ))
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </a>
+                </a>
+              </div>
             ))
           ) : (
             <p className="text-gray-500">ไม่พบผลงานที่ค้นหา</p>

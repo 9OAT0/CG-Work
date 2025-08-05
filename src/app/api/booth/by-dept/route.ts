@@ -47,6 +47,7 @@ export async function GET(req: NextRequest) {
     description: booth.description,
     pics: booth.pics,
     booth_code: booth.booth_code,
+    owner_names: booth.owner_names,
     joined: booth.joinedUsers && booth.joinedUsers.length > 0
   }))
 

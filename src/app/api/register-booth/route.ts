@@ -17,16 +17,15 @@ export async function POST(req: NextRequest) {
   }
 
   // สร้าง booth โดยไม่ต้องมี authentication
-  // เก็บข้อมูลเจ้าของบูธใน description สำหรับตอนนี้
-  const ownerInfo = owner_names.length > 0 ? `\n\nเจ้าของบูธ: ${owner_names.join(', ')}` : '';
-  
   const booth = await prisma.booth.create({
     data: {
       booth_name,
       booth_code,
       dept_type,
-      description: description + ownerInfo,
-      pics: pics || [] // Handle pics array, default to empty array if not provided
+      description,
+      pics: pics || [], // Handle pics array, default to empty array if not provided
+      owner_names: owner_names || [], // Save owner names in separate field
+      owner_contacts: [] // Initialize empty contacts array
     }
   })
 
