@@ -1,9 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    serverComponentsExternalPackages: ['sharp'],
-  },
+  serverExternalPackages: ['sharp'],
   images: {
     remotePatterns: [
       {
@@ -15,12 +13,6 @@ const nextConfig: NextConfig = {
         hostname: 'localhost',
       },
     ],
-  },
-  // Increase API route body size limit for file uploads
-  api: {
-    bodyParser: {
-      sizeLimit: '10mb',
-    },
   },
   // Enable static file serving from uploads directory
   async rewrites() {
