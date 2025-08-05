@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
+import jwt from 'jsonwebtoken'
+import { getThailandTime } from '@/lib/time'
 
 const prisma = new PrismaClient()
+const JWT_SECRET = process.env.JWT_SECRET!
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,7 +34,7 @@ export async function POST(req: NextRequest) {
     const username = studentId || `${name.replace(/\s/g, '')}-${Date.now()}`
 
     // ✅ บันทึกผู้ใช้ใหม่
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         username,
         student_id: studentId || null,
@@ -42,7 +45,44 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    return NextResponse.json({ message: 'ลงทะเบียนสำเร็จ' }, { status: 201 })
+    // ✅ บันทึก visit log สำหรับการเข้าสู่ระบบครั้งแรก
+    await prisma.visitLog.create({
+      data: {
+        userId: newUser.id,
+        visitedAt: getThailandTime()
+      },
+    })
+
+    // ✅ สร้าง JWT token
+    const token = jwt.sign(
+      {
+        id: newUser.id,
+        student_id: newUser.student_id,
+        name: newUser.name,
+        role: newUser.role,
+      },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    )
+
+    // ✅ สร้าง response พร้อม set cookie
+    const response = NextResponse.json(
+      { message: 'ลงทะเบียนและเข้าสู่ระบบสำเร็จ', user: newUser },
+      { status: 201 }
+    )
+
+    // ✅ Set JWT token ใน cookie
+    response.cookies.set({
+      name: 'token',
+      value: token,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7, // 7 วัน
+    })
+
+    return response
+
   } catch (error: any) {
     console.error('Registration error:', error)
     

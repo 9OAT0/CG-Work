@@ -40,10 +40,26 @@ export default function RegisterBooth() {
     selectedDeptType !== "เลือกประเภทหน่วยงาน" &&
     boothOwners.some(owner => owner.name.trim() !== "");
 
-  // Handle file upload
+  // Handle file upload with Cloudinary integration
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
+
+    // Validate files before upload (Cloudinary supports up to 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB for Cloudinary
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/tiff'];
+    
+    for (const file of Array.from(files)) {
+      if (file.size > maxSize) {
+        alert(`ไฟล์ ${file.name} มีขนาดใหญ่เกินไป (สูงสุด 10MB)`);
+        return;
+      }
+      
+      if (!allowedTypes.includes(file.type.toLowerCase())) {
+        alert(`ไฟล์ ${file.name} ไม่ใช่ประเภทที่รองรับ (รองรับ JPEG, PNG, WebP, GIF, BMP, TIFF)`);
+        return;
+      }
+    }
 
     setIsUploading(true);
     try {
@@ -68,10 +84,18 @@ export default function RegisterBooth() {
       const newImageUrls = data.files.map((file: any) => file.url);
       setUploadedImages(prev => [...prev, ...newImageUrls]);
 
+      // Show Cloudinary feedback
+      if (data.cloudinary) {
+        console.log('ไฟล์ได้รับการอัพโหลดและปรับปรุงผ่าน Cloudinary แล้ว');
+      }
+
     } catch (error) {
-      alert('เกิดข้อผิดพลาดในการอัพโหลดไฟล์');
+      console.error('Upload error:', error);
+      alert('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
     } finally {
       setIsUploading(false);
+      // Clear the input so the same file can be uploaded again if needed
+      event.target.value = '';
     }
   };
 
@@ -283,7 +307,7 @@ export default function RegisterBooth() {
                 <p className="mb-2 text-sm text-white">
                   <span className="font-semibold">คลิกเพื่ออัพโหลด</span> หรือลากไฟล์มาวาง
                 </p>
-                <p className="text-xs text-white/70">PNG, JPG, GIF (สูงสุด 5MB)</p>
+                <p className="text-xs text-white/70">PNG, JPG, WebP, GIF, BMP, TIFF (สูงสุด 10MB)</p>
               </div>
               <input
                 type="file"
@@ -295,11 +319,12 @@ export default function RegisterBooth() {
               />
             </label>
 
-            {/* Loading indicator */}
+            {/* Loading indicator with enhanced feedback */}
             {isUploading && (
-              <div className="flex items-center justify-center mt-4">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
-                <span className="ml-2 text-white">กำลังอัพโหลด...</span>
+              <div className="flex flex-col items-center justify-center mt-4 p-4 bg-white/10 rounded-lg">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mb-2"></div>
+                <span className="text-white text-sm">กำลังอัพโหลดและปรับปรุงไฟล์...</span>
+                <span className="text-white/70 text-xs mt-1">กรุณารอสักครู่</span>
               </div>
             )}
 

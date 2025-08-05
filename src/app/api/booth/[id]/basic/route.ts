@@ -21,7 +21,8 @@ async function getBoothBasicHandler(req: NextRequest, { params }: { params: { id
       booth_code: true,
       dept_type: true,
       description: true,
-      pics: true
+      pics: true,
+      owner_names: true
     }
   })
 
@@ -35,7 +36,8 @@ async function getBoothBasicHandler(req: NextRequest, { params }: { params: { id
     booth_code: booth.booth_code,
     dept_type: booth.dept_type,
     description: booth.description,
-    pics: booth.pics || []
+    pics: booth.pics || [],
+    owner_names: booth.owner_names || []
   })
 }
 

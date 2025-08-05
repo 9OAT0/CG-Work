@@ -1,13 +1,35 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        // Redirect to login page after successful logout
+        router.push('/login');
+      } else {
+        console.error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -64,10 +86,15 @@ export default function Navbar() {
           menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <ul className="flex flex-col p-4 gap-6">
+        <ul className="flex flex-col p-4 gap-6 bg-blueBrand">
           <a href="/homepage"><li className="hover:text-blue-300 cursor-pointer font-light text-xl">หน้าหลัก</li></a>
           <a href="/profile"><li className="hover:text-blue-300 cursor-pointer font-light text-xl">ข้อมูลผู้ใช้งาน</li></a>
           <a href="/homepage"><li className="hover:text-blue-300 cursor-pointer font-light text-xl">ผลงาน</li></a>
+          <li 
+            onClick={handleLogout}
+            className="hover:text-blue-300 cursor-pointer font-light text-xl">
+            ออกจากระบบ
+          </li>
         </ul>
       </div>
     </>
