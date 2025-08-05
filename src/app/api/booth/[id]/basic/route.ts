@@ -5,8 +5,9 @@ import { withRateLimit, apiRateLimit } from '@/lib/middleware/rateLimit'
 
 const prisma = new PrismaClient()
 
-async function getBoothBasicHandler(req: NextRequest, { params }: { params: { id: string } }) {
-  const boothId = params.id
+async function getBoothBasicHandler(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params
+  const boothId = resolvedParams.id
 
   if (!boothId) {
     throw new NotFoundError('Missing booth ID')
