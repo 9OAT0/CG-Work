@@ -27,24 +27,18 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="bg-blueBrand h-[106px] w-full flex justify-between items-end px-6 md:px-12 pb-5 relative z-50">
+      {/* Navbar Top Bar */}
+      <div className="bg-blueBrand h-[106px] w-full flex justify-between items-end px-6 pb-5 relative z-50">
         {/* Logo */}
         <a href="/homepage">
           <img src="/brainbang_logo.png" alt="Logo" className="w-[75px] h-[45px]" />
         </a>
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-10 text-white text-lg font-light">
-          <a href="/homepage"><li className="hover:text-blue-300">หน้าหลัก</li></a>
-          <a href="/profile"><li className="hover:text-blue-300">ข้อมูลผู้ใช้งาน</li></a>
-          <a href="/homepage"><li className="hover:text-blue-300">ผลงาน</li></a>
-        </ul>
-
-        {/* Hamburger Icon (Mobile only) */}
+        {/* Hamburger Icon (Always visible) */}
         <button
           ref={buttonRef}
           onClick={toggleMenu}
-          className="flex flex-col justify-between w-8 h-6 focus:outline-none md:hidden"
+          className="flex flex-col justify-between w-8 h-6 focus:outline-none"
         >
           <span
             className={`block h-1 bg-white rounded transition-all duration-300 ${
@@ -64,17 +58,23 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Dropdown Menu (Mobile only) */}
+      {/* Dropdown Menu */}
       <div
         ref={menuRef}
-        className={`md:hidden absolute top-[106px] left-0 w-full bg-blue-700 text-white shadow-md transition-all duration-300 ease-in-out overflow-hidden ${
+        className={`absolute top-[106px] left-0 w-full bg-blue-700 text-white shadow-md transition-all duration-300 ease-in-out overflow-hidden z-40 ${
           menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <ul className="flex flex-col p-4 gap-6">
-          <a href="/homepage"><li className="hover:text-blue-300 cursor-pointer font-light text-xl">หน้าหลัก</li></a>
-          <a href="/profile"><li className="hover:text-blue-300 cursor-pointer font-light text-xl">ข้อมูลผู้ใช้งาน</li></a>
-          <a href="/homepage"><li className="hover:text-blue-300 cursor-pointer font-light text-xl">ผลงาน</li></a>
+          <a href="/homepage">
+            <li className="hover:text-blue-300 cursor-pointer font-light text-xl">หน้าหลัก</li>
+          </a>
+          <a href="/profile">
+            <li className="hover:text-blue-300 cursor-pointer font-light text-xl">ข้อมูลผู้ใช้งาน</li>
+          </a>
+          <a href="/homepage">
+            <li className="hover:text-blue-300 cursor-pointer font-light text-xl">ผลงาน</li>
+          </a>
         </ul>
       </div>
     </>
