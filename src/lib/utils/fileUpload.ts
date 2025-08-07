@@ -56,11 +56,8 @@ export async function handleFileUpload(
       // Validate file
       validateFile(file, opts)
 
-      // Generate unique filename
-      const timestamp = Date.now()
-      const randomString = Math.random().toString(36).substring(2, 15)
-      const extension = path.extname(file.name)
-      const filename = `${timestamp}_${randomString}${extension}`
+      // Generate unique filename with better security
+      const filename = generateSecureFilename(file.name)
       const filepath = path.join(uploadDir, filename)
 
       // Convert file to buffer
@@ -69,24 +66,53 @@ export async function handleFileUpload(
 
       // Process image if needed
       let processedBuffer: Buffer = buffer
+      let finalExtension = path.extname(file.name)
+      
       if (file.type.startsWith('image/')) {
-        processedBuffer = await processImage(buffer, opts)
+        const result = await processImage(buffer, opts)
+        processedBuffer = result.buffer
+        finalExtension = result.extension
+        
+        // Update filename with correct extension if changed
+        if (finalExtension !== path.extname(filename)) {
+          const baseName = path.basename(filename, path.extname(filename))
+          const newFilename = baseName + finalExtension
+          const newFilepath = path.join(uploadDir, newFilename)
+          
+          await writeFile(newFilepath, processedBuffer)
+          
+          const uploadedFile: UploadedFile = {
+            filename: newFilename,
+            originalName: file.name,
+            mimetype: `image/${finalExtension.slice(1)}`,
+            size: processedBuffer.length,
+            path: newFilepath,
+            url: `/uploads/${newFilename}`,
+          }
+          
+          // Generate thumbnail if requested
+          if (opts.generateThumbnail) {
+            await generateThumbnail(processedBuffer, newFilename, opts)
+          }
+          
+          uploadedFiles.push(uploadedFile)
+          continue
+        }
       }
 
       // Save file
       await writeFile(filepath, processedBuffer)
 
       // Generate thumbnail if requested
-      let thumbnailUrl = ''
       if (opts.generateThumbnail && file.type.startsWith('image/')) {
-        thumbnailUrl = await generateThumbnail(buffer, filename, opts)
+        await generateThumbnail(processedBuffer, filename, opts)
       }
 
       const uploadedFile: UploadedFile = {
         filename,
         originalName: file.name,
         mimetype: file.type,
-        size: file.size,
+        size: processedBuffer.length,
         path: filepath,
         url: `/uploads/${filename}`,
       }
@@ -99,6 +125,7 @@ export async function handleFileUpload(
     if (error instanceof ValidationError) {
       throw error
     }
+    console.error('File upload error:', error)
     throw new Error('เกิดข้อผิดพลาดในการอัพโหลดไฟล์')
   }
 }
@@ -120,16 +147,20 @@ function validateFile(file: File, options: UploadOptions): void {
   }
 }
 
-async function processImage(buffer: Buffer, options: UploadOptions): Promise<Buffer> {
+async function processImage(
+  buffer: Buffer, 
+  options: UploadOptions
+): Promise<{ buffer: Buffer; extension: string }> {
   try {
     let image = sharp(buffer)
     
     // Auto-orient based on EXIF data
     image = image.rotate()
     
-    // Optimize image
+    // Get metadata
     const metadata = await image.metadata()
     
+    // Resize if too large
     if (metadata.width && metadata.width > 1920) {
       image = image.resize(1920, null, { 
         withoutEnlargement: true,
@@ -137,15 +168,38 @@ async function processImage(buffer: Buffer, options: UploadOptions): Promise<Buf
       })
     }
     
-    // Convert to WebP for better compression (optional)
+    // Convert to WebP for better compression and smaller file size
+    // This is especially important for deployment
     if (metadata.format !== 'gif') {
-      image = image.webp({ quality: 85 })
+      image = image.webp({ 
+        quality: 85,
+        effort: 6 // Higher effort for better compression
+      })
+      return {
+        buffer: await image.toBuffer(),
+        extension: '.webp'
+      }
     }
     
-    return await image.toBuffer()
+    // For GIFs, keep original format but optimize
+    if (metadata.format === 'gif') {
+      return {
+        buffer: await image.gif().toBuffer(),
+        extension: '.gif'
+      }
+    }
+    
+    return {
+      buffer: await image.toBuffer(),
+      extension: path.extname(metadata.format || '.jpg')
+    }
   } catch (error) {
+    console.error('Image processing error:', error)
     // If image processing fails, return original buffer
-    return buffer
+    return {
+      buffer,
+      extension: '.jpg'
+    }
   }
 }
 
@@ -160,7 +214,9 @@ async function generateThumbnail(
       await mkdir(thumbnailDir, { recursive: true })
     }
 
-    const thumbnailFilename = `thumb_${filename}`
+    // Generate thumbnail filename with webp extension
+    const baseName = path.basename(filename, path.extname(filename))
+    const thumbnailFilename = `thumb_${baseName}.webp`
     const thumbnailPath = path.join(thumbnailDir, thumbnailFilename)
 
     await sharp(buffer)
@@ -168,7 +224,10 @@ async function generateThumbnail(
         fit: 'cover',
         position: 'center'
       })
-      .webp({ quality: 80 })
+      .webp({ 
+        quality: 75,
+        effort: 6
+      })
       .toFile(thumbnailPath)
 
     return `/uploads/thumbnails/${thumbnailFilename}`
@@ -199,10 +258,41 @@ export function isImageFile(mimetype: string): boolean {
 export function generateSecureFilename(originalName: string): string {
   const timestamp = Date.now()
   const randomString = Math.random().toString(36).substring(2, 15)
-  const extension = path.extname(originalName)
+  const extension = path.extname(originalName).toLowerCase()
   const baseName = path.basename(originalName, extension)
     .replace(/[^a-zA-Z0-9]/g, '_')
     .substring(0, 20)
   
   return `${timestamp}_${baseName}_${randomString}${extension}`
+}
+
+// New utility function for deployment optimization
+export function optimizeForDeployment(): boolean {
+  return process.env.NODE_ENV === 'production' || process.env.VERCEL === '1'
+}
+
+// Enhanced file validation for production
+export function validateFileForProduction(file: File): void {
+  // Additional validation for production deployment
+  const maxSize = 5 * 1024 * 1024 // 5MB limit for production
+  const allowedTypes = [
+    'image/jpeg',
+    'image/jpg', 
+    'image/png',
+    'image/webp',
+    'image/gif'
+  ]
+  
+  if (file.size > maxSize) {
+    throw new ValidationError(`ไฟล์มีขนาดใหญ่เกินไป (สูงสุด ${formatFileSize(maxSize)})`)
+  }
+  
+  if (!allowedTypes.includes(file.type.toLowerCase())) {
+    throw new ValidationError('รองรับเฉพาะไฟล์รูปภาพ (JPEG, PNG, WebP, GIF)')
+  }
+  
+  // Check filename for security
+  if (file.name.includes('..') || file.name.includes('/') || file.name.includes('\\')) {
+    throw new ValidationError('ชื่อไฟล์ไม่ถูกต้อง')
+  }
 }

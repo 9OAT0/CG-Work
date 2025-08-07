@@ -46,10 +46,14 @@ model Booth {
   booth_name   String
   booth_code   String         @unique
   dept_type    String         // หมวดหมู่ของงานนิทรรศการ
-  boothOwners  BoothOwner[]   // ผู้เป็นเจ้าของบูธ
+  boothOwners  BoothOwner[]   // ผู้เป็นเจ้าของบูธ (สำหรับ user ที่ login แล้ว)
   joinedUsers  BoothJoin[]    // ผู้เข้าร่วมบูธ
   pics         String[]       // URL ภาพบูธ
   description  String?        // รายละเอียดบูธ หลาย paragraph ได้
+  
+  // Owner information for non-authenticated registration
+  owner_names    String[]     // ชื่อเจ้าของบูธ (สำหรับการลงทะเบียนโดยไม่ต้อง auth)
+  owner_contacts String[]     // ข้อมูลติดต่อเจ้าของบูธ
   
   // New relations
   ratings      BoothRating[]
@@ -61,8 +65,8 @@ model BoothJoin {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
   boothId   String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  booth     Booth    @relation(fields: [boothId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booth     Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   joinedAt  DateTime @default(now())
 }
 
@@ -70,8 +74,8 @@ model BoothOwner {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
   boothId   String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  booth     Booth    @relation(fields: [boothId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booth     Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   addedAt   DateTime @default(now())
 }
 
@@ -104,8 +108,8 @@ model BoothRating {
   boothId   String   @db.ObjectId
   rating    Int      // 1-5 stars
   comment   String?
-  user      User     @relation(fields: [userId], references: [id])
-  booth     Booth    @relation(fields: [boothId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booth     Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   
   @@unique([userId, boothId])
@@ -116,8 +120,8 @@ model BoothComment {
   userId    String   @db.ObjectId
   boothId   String   @db.ObjectId
   comment   String
-  user      User     @relation(fields: [userId], references: [id])
-  booth     Booth    @relation(fields: [boothId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booth     Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 }
 
@@ -125,8 +129,8 @@ model BoothFavorite {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
   boothId   String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  booth     Booth    @relation(fields: [boothId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booth     Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   
   @@unique([userId, boothId])

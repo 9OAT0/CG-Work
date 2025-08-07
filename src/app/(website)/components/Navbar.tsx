@@ -1,13 +1,35 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        // Redirect to login page after successful logout
+        router.push('/login');
+      } else {
+        console.error('Logout failed');
+      }
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -33,7 +55,6 @@ export default function Navbar() {
         <a href="/homepage">
           <img src="/brainbang_logo.png" alt="Logo" className="w-[75px] h-[45px]" />
         </a>
-
         {/* Hamburger Icon (Always visible) */}
         <button
           ref={buttonRef}
@@ -42,7 +63,7 @@ export default function Navbar() {
         >
           <span
             className={`block h-1 bg-white rounded transition-all duration-300 ${
-              menuOpen ? "rotate-45 translate-y-2" : ""
+              menuOpen ? "rotate-45 translate-y-2.5" : ""
             }`}
           ></span>
           <span
@@ -52,7 +73,7 @@ export default function Navbar() {
           ></span>
           <span
             className={`block h-1 bg-white rounded transition-all duration-300 ${
-              menuOpen ? "-rotate-45 -translate-y-2" : ""
+              menuOpen ? "-rotate-45 -translate-y-2.5" : ""
             }`}
           ></span>
         </button>
@@ -64,6 +85,7 @@ export default function Navbar() {
         className={`absolute top-[106px] left-0 w-full bg-blue-700 text-white shadow-md transition-all duration-300 ease-in-out overflow-hidden z-40 ${
           menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
+        style={{ overflow: menuOpen ? 'visible' : 'hidden' }}
       >
         <ul className="flex flex-col p-4 gap-6">
           <a href="/homepage">
@@ -77,6 +99,14 @@ export default function Navbar() {
           </a>
         </ul>
       </div>
-    </>
+
+      {/* Mobile Menu Overlay */}
+      {menuOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-25 z-30"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
+    </nav>
   );
 }

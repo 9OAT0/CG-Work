@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import jwt from 'jsonwebtoken'
-import { handleFileUpload } from '@/lib/utils/fileUpload'
+import { uploadMultipleToCloudinary } from '@/lib/utils/cloudinary'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { withRateLimit, uploadRateLimit } from '@/lib/middleware/rateLimit'
 
@@ -23,24 +23,36 @@ async function uploadHandler(req: NextRequest) {
   }
 
   try {
-    const uploadedFiles = await handleFileUpload(req, {
-      maxSize: 5 * 1024 * 1024, // 5MB
-      allowedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
-      destination: 'public/uploads',
+    // Get files from form data
+    const formData = await req.formData()
+    const files = formData.getAll('files') as File[]
+    
+    if (!files || files.length === 0) {
+      return NextResponse.json({ error: 'ไม่พบไฟล์ที่อัพโหลด' }, { status: 400 })
+    }
+
+    // Upload files to Cloudinary
+    const cloudinaryResults = await uploadMultipleToCloudinary(files, {
+      folder: 'booth-images',
+      quality: 'auto:good',
+      format: 'auto',
+      width: 1920,
+      height: 1080,
+      crop: 'limit',
       generateThumbnail: true
     })
 
     // Save file records to database
     const fileRecords = await Promise.all(
-      uploadedFiles.map(file => 
+      cloudinaryResults.map(result => 
         prisma.file.create({
           data: {
-            filename: file.filename,
-            originalName: file.originalName,
-            mimetype: file.mimetype,
-            size: file.size,
-            path: file.path,
-            url: file.url,
+            filename: result.public_id.split('/').pop() || result.public_id,
+            originalName: files[cloudinaryResults.indexOf(result)].name,
+            mimetype: `image/${result.format}`,
+            size: result.bytes,
+            path: result.public_id,
+            url: result.secure_url,
             uploadedBy: payload.id
           }
         })
@@ -55,9 +67,12 @@ async function uploadHandler(req: NextRequest) {
         originalName: record.originalName,
         url: record.url,
         size: record.size,
-        mimetype: record.mimetype
-      }))
+        mimetype: record.mimetype,
+        uploadedAt: record.createdAt
+      })),
+      cloudinary: true
     })
+
   } catch (error: any) {
     console.error('Upload error:', error)
     return NextResponse.json(

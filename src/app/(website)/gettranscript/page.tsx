@@ -1,10 +1,10 @@
 'use client';
 
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Navbar from '../components/Navbar';
 
-export default function GetTranscriptPage() {
+function GetTranscriptContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const day = searchParams.get('day') || '';
@@ -65,9 +65,7 @@ export default function GetTranscriptPage() {
   }
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen flex flex-col justify-center items-center pt-10 px-4">
+    <div className="min-h-screen flex flex-col justify-center items-center pt-10 px-4">
         <h1 className="text-xl md:text-2xl font-bold text-blueBrand mb-4 text-center">
           Transcript สำหรับ {dayText[day]}
         </h1>
@@ -82,7 +80,17 @@ export default function GetTranscriptPage() {
         >
           กลับหน้าโปรไฟล์
         </button>
-      </div>
+    </div>
+  );
+}
+
+export default function GetTranscriptPage() {
+  return (
+    <>
+      <Navbar />
+      <Suspense fallback={<div className="text-center mt-10">กำลังโหลด...</div>}>
+        <GetTranscriptContent />
+      </Suspense>
     </>
   );
 }

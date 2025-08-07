@@ -1,26 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
-import jwt from 'jsonwebtoken'
 
 const prisma = new PrismaClient()
-const JWT_SECRET = process.env.JWT_SECRET!
 
 export async function POST(req: NextRequest) {
-  const { booth_name, booth_code, dept_type, description, pics } = await req.json()
+  const { booth_name, booth_code, dept_type, description, pics, owner_names } = await req.json()
 
-  if (!booth_name || !booth_code || !dept_type || !description ) {
-    return NextResponse.json({ error: 'ข้อมูลไม่ครบ' }, { status: 400 })
-  }
-
-  // ตรวจสอบ token
-  const token = req.cookies.get('token')?.value
-  if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-
-  let payload
-  try {
-    payload = jwt.verify(token, JWT_SECRET) as { id: string }
-  } catch {
-    return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
+  if (!booth_name || !booth_code || !dept_type || !description || !owner_names || owner_names.length === 0) {
+    return NextResponse.json({ error: 'ข้อมูลไม่ครบ กรุณากรอกข้อมูลเจ้าของบูธอย่างน้อย 1 คน' }, { status: 400 })
   }
 
   // ตรวจสอบว่ามี booth_code ซ้ำไหม
@@ -29,7 +16,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'booth_code นี้มีอยู่แล้ว' }, { status: 400 })
   }
 
-  // สร้าง booth
+  // สร้าง booth โดยไม่ต้องมี authentication
   const booth = await prisma.booth.create({
     data: {
       booth_name,
@@ -37,13 +24,8 @@ export async function POST(req: NextRequest) {
       dept_type,
       description,
       pics: pics || [], // Handle pics array, default to empty array if not provided
-      boothOwners: {
-        create: {
-          user: {
-            connect: { id: payload.id }
-          }
-        }
-      }
+      owner_names: owner_names || [], // Save owner names in separate field
+      owner_contacts: [] // Initialize empty contacts array
     }
   })
 

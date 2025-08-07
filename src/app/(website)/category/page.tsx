@@ -1,16 +1,16 @@
 'use client';
 
 import Navbar from "../components/Navbar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 const categories = [
-  "หมวดหมู่ที่ 1",
-  "หมวดหมู่ที่ 2",
-  "หมวดหมู่ที่ 3",
-  "หมวดหมู่ที่ 4",
-  "หมวดหมู่ที่ 5",
-  "หมวดหมู่ที่ 6",
+  "3D",
+  "Graphic",
+  "Product Design",
+  "Production",
+  "Digital Art",
+  "Game Design",
 ] as const;
 
 type Category = (typeof categories)[number];
@@ -22,10 +22,11 @@ interface Booth {
   description: string;
   pics: string[];
   booth_code: string;
+  owner_names: string[];
   joined: boolean;
 }
 
-export default function CategoryPage() {
+function CategoryContent() {
   const searchParams = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState<Category>(categories[0]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -52,13 +53,23 @@ export default function CategoryPage() {
     const fetchBooths = async () => {
       setLoading(true);
       try {
-        const deptIndex = categories.indexOf(selectedCategory) + 1;
-        const res = await fetch(`/api/booth/by-dept?dept_type=${deptIndex}`, {
+        // Map category to dept_type
+        const deptTypeMap: { [key: string]: string } = {
+          "3D": "3D",
+          "Graphic": "Graphic",
+          "Product Design": "Product Design",
+          "Production": "Production",
+          "Digital Art": "Digital Art",
+          "Game Design": "Game Design"
+        };
+        
+        const deptType = deptTypeMap[selectedCategory] || selectedCategory;
+        const res = await fetch(`/api/booth/by-dept?dept_type=${encodeURIComponent(deptType)}`, {
           credentials: 'include'
         });
         const data = await res.json();
         if (res.ok) {
-          setBooths(data.booths);
+          setBooths(data.booths || []);
         } else {
           setBooths([]);
           console.error(data.message || data.error);
@@ -80,9 +91,7 @@ export default function CategoryPage() {
   );
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen py-10 px-4 flex flex-col gap-8 relative">
+    <div className="min-h-screen py-10 px-4 flex flex-col gap-8 relative">
         {/* Header Buttons */}
         <div className="flex flex-row justify-center items-center gap-6 sm:gap-8">
           <a href="/homepage">
@@ -155,47 +164,79 @@ export default function CategoryPage() {
             <p className="text-gray-500">กำลังโหลด...</p>
           ) : filteredBooths.length > 0 ? (
             filteredBooths.map((booth, idx) => (
-              <a
-                key={idx}
-                href={`/booth?title=${encodeURIComponent(booth.booth_name)}&description=${encodeURIComponent(booth.description)}`}
-              >
-                <div
-                  className={`w-full max-w-[440px] rounded-[15px] bg-blueBrand flex flex-col sm:flex-row gap-4 p-4 relative hover:scale-105 transition-transform duration-200 ${booth.joined ? "opacity-50" : ""}`}
+              <div className="w-full max-w-4xl mx-auto">
+                <a
+                  key={idx}
+                  href={`/booth?id=${booth.id}`}
                 >
-                  <img
-                    src={booth.pics[0] || "/banner.jpg"}
-                    alt="preview"
-                    className="w-full sm:w-[260px] h-[156px] object-cover rounded-[15px]"
-                  />
-                  <div className="flex flex-col justify-between w-full text-white">
-                    <h1 className="text-[20px] font-bold">{booth.booth_name}</h1>
-                    <p className="text-[14px]">{booth.description}</p>
+                  <div
+                    className={`w-full rounded-3xl bg-blueBrand  flex flex-col lg:flex-row gap-6 p-6 relative hover:scale-105 transition-transform duration-200 ${booth.joined ? "opacity-50" : ""}`}
+                  >
+                    {/* Image Section */}
+                    <div className="w-full lg:w-1/3 h-64 bg-gray-200 rounded-2xl flex items-center justify-center overflow-hidden">
+                      {booth.pics && booth.pics.length > 0 ? (
+                        <img 
+                          src={booth.pics[0]} 
+                          alt="รูปงาน" 
+                          className="w-full h-full object-cover rounded-2xl"
+                        />
+                      ) : (
+                        <span className="text-gray-500 text-lg">รูปงาน</span>
+                      )}
+                    </div>
+                    
+                    {/* Content Section */}
+                    <div className="flex-1 text-white flex flex-col justify-between">
+                      <div className="mb-4">
+                        <h2 className="text-xl lg:text-2xl font-bold mb-2">
+                          {booth.booth_name}
+                        </h2>
+                      </div>
+                      
+                      <div className="text-right">
+                        {booth.owner_names && booth.owner_names.length > 0 && (
+                          booth.owner_names.map((name, nameIdx) => (
+                            <p key={nameIdx} className="text-sm mb-1">{name}</p>
+                          ))
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </a>
+                </a>
+              </div>
             ))
           ) : (
             <p className="text-gray-500">ไม่พบผลงานที่ค้นหา</p>
           )}
         </div>
-      </div>
 
-      {/* Animation */}
-      <style jsx>{`
-        @keyframes fade-slide {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
+        {/* Animation */}
+        <style jsx>{`
+          @keyframes fade-slide {
+            from {
+              opacity: 0;
+              transform: translateY(-10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+          .animate-fade-slide {
+            animation: fade-slide 0.3s ease-out;
           }
-        }
-        .animate-fade-slide {
-          animation: fade-slide 0.3s ease-out;
-        }
-      `}</style>
+        `}</style>
+      </div>
+  );
+}
+
+export default function CategoryPage() {
+  return (
+    <>
+      <Navbar />
+      <Suspense fallback={<div className="text-center mt-10">กำลังโหลด...</div>}>
+        <CategoryContent />
+      </Suspense>
     </>
   );
 }

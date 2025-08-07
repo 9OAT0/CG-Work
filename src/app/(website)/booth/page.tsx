@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Suspense } from "react";
 
 type Booth = {
   booth_name: string;
@@ -14,7 +14,7 @@ type Booth = {
   pics: string[];
 };
 
-export default function BoothPage() {
+function BoothContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const boothId = searchParams.get("id");
@@ -30,7 +30,7 @@ export default function BoothPage() {
 
   useEffect(() => {
     if (!boothId) return;
-    fetch(`/api/booth/${boothId}`)
+    fetch(`/api/booth/${boothId}/basic`)
       .then(res => res.json())
       .then(data => {
         if (!data.error) {
@@ -88,9 +88,7 @@ export default function BoothPage() {
   if (loading) return <div className="text-center mt-10">กำลังโหลด...</div>;
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen flex flex-col justify-center items-center gap-10 px-4 py-8">
+    <div className="min-h-screen flex flex-col justify-center items-center gap-10 px-4 py-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
           <a href="/category">
@@ -180,6 +178,16 @@ export default function BoothPage() {
           </div>
         )}
       </div>
+  );
+}
+
+export default function BoothPage() {
+  return (
+    <>
+      <Navbar />
+      <Suspense fallback={<div className="text-center mt-10">กำลังโหลด...</div>}>
+        <BoothContent />
+      </Suspense>
     </>
   );
 }
