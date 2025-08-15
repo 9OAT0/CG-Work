@@ -49,16 +49,21 @@ export default function LoginPage() {
       >
         <input
           type="text"
-          placeholder="  รหัสนิสิต                                  ถ้ามีโปรดระบุ*"
+          placeholder="รหัสนิสิต (สำหรับนิสิตเท่านั้น)"
           value={studentID}
-          onChange={(e) => setStudentID(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, ''); // Only allow digits
+            if (value.length <= 8) {
+              setStudentID(value);
+            }
+          }}
           className="w-full h-[51px] rounded-[30px] px-4 text-base"
-          required
+          maxLength={8}
         />
 
         <input
           type="text"
-          placeholder="  ชื่อ - สกุล*"
+          placeholder="ชื่อ - นามสกุล*"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full h-[51px] rounded-[30px] px-4 text-base"
