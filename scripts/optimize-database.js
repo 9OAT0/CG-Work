@@ -4,8 +4,35 @@
 // This script adds performance indexes to improve query speed
 
 const { MongoClient } = require('mongodb');
+const fs = require('fs');
+const path = require('path');
+
+// Load .env file manually
+function loadEnv() {
+  try {
+    const envPath = path.join(__dirname, '..', '.env');
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    const lines = envContent.split('\n');
+    
+    lines.forEach(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine && !trimmedLine.startsWith('#')) {
+        const [key, ...valueParts] = trimmedLine.split('=');
+        if (key && valueParts.length > 0) {
+          const value = valueParts.join('=').replace(/^["']|["']$/g, '');
+          process.env[key.trim()] = value;
+        }
+      }
+    });
+  } catch (error) {
+    console.log('Could not load .env file:', error.message);
+  }
+}
 
 async function addIndexes() {
+  // Load environment variables
+  loadEnv();
+  
   // Get DATABASE_URL from environment or use default
   const DATABASE_URL = process.env.DATABASE_URL;
   

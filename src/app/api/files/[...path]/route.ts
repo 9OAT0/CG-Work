@@ -43,7 +43,7 @@ export async function GET(
       headers.set('Content-Disposition', 'inline')
     }
 
-    return new NextResponse(fileBuffer, {
+    return new NextResponse(fileBuffer as any, {
       status: 200,
       headers,
     })
