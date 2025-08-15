@@ -29,6 +29,7 @@
     "html5-qrcode": "^2.3.8",
     "jsonwebtoken": "^9.0.2",
     "mime-types": "^3.0.1",
+    "mongodb": "^6.18.0",
     "multer": "^2.0.2",
     "next": "15.3.4",
     "nodemailer": "^7.0.5",
