@@ -5,7 +5,17 @@ import { withErrorHandler, AuthenticationError, NotFoundError } from '@/lib/midd
 import { validateRequest, updateProfileSchema } from '@/lib/validation/schemas'
 import { withRateLimit, apiRateLimit } from '@/lib/middleware/rateLimit'
 
-const prisma = new PrismaClient()
+// Use singleton pattern for Prisma client to avoid connection issues
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined
+}
+
+const prisma = globalForPrisma.prisma ?? new PrismaClient({
+  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+})
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+
 const JWT_SECRET = process.env.JWT_SECRET!
 
 async function getProfileHandler(req: NextRequest) {
@@ -22,11 +32,20 @@ async function getProfileHandler(req: NextRequest) {
     throw new AuthenticationError('Invalid token')
   }
 
-  // First, get the user basic info
+  // Get user with transcript logs in a single query
   const user = await prisma.user.findUnique({
     where: { id: payload.id },
-    include: {
-      TranscriptLog: true
+    select: {
+      name: true,
+      student_id: true,
+      status: true,
+      dept: true,
+      score: true,
+      TranscriptLog: {
+        select: {
+          date: true
+        }
+      }
     }
   })
 
@@ -34,73 +53,24 @@ async function getProfileHandler(req: NextRequest) {
     throw new NotFoundError('User not found')
   }
 
-  // Get existing booth IDs first
-  const existingBoothIds = await prisma.booth.findMany({
-    select: { id: true }
-  }).then(booths => booths.map(b => b.id))
+  // Calculate daily points efficiently with a single query
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const tomorrow = new Date(today)
+  tomorrow.setDate(tomorrow.getDate() + 1)
 
-  // Get booth joins without include, then fetch booth data separately
-  const allBoothJoins = await prisma.boothJoin.findMany({
+  const dailyJoinsCount = await prisma.boothJoin.count({
     where: {
       userId: payload.id,
-      boothId: { in: existingBoothIds }
-    },
-    orderBy: { joinedAt: 'desc' },
-    take: 10
-  })
-
-  // Get booth data for the valid joins
-  const boothIds = allBoothJoins.map(join => join.boothId)
-  const booths = await prisma.booth.findMany({
-    where: { id: { in: boothIds } },
-    select: {
-      id: true,
-      booth_name: true,
-      dept_type: true
+      joinedAt: {
+        gte: today,
+        lt: tomorrow
+      },
+      booth: {
+        id: { not: undefined } // Only count joins to existing booths
+      }
     }
   })
-
-  // Create a map for quick booth lookup
-  const boothMap = new Map(booths.map(booth => [booth.id, booth]))
-
-  // Get counts for valid records only
-  const [boothJoinCount, boothRatingCount, boothFavoriteCount] = await Promise.all([
-    prisma.boothJoin.count({
-      where: {
-        userId: payload.id,
-        boothId: { in: existingBoothIds }
-      }
-    }),
-    prisma.boothRating.count({
-      where: {
-        userId: payload.id,
-        boothId: { in: existingBoothIds }
-      }
-    }),
-    prisma.boothFavorite.count({
-      where: {
-        userId: payload.id,
-        boothId: { in: existingBoothIds }
-      }
-    })
-  ])
-
-  // Calculate recent activity
-  const recentActivity = allBoothJoins.map(join => {
-    const booth = boothMap.get(join.boothId)
-    return {
-      type: 'join_booth',
-      boothName: booth?.booth_name || 'Unknown Booth',
-      deptType: booth?.dept_type || 'Unknown Department',
-      timestamp: join.joinedAt
-    }
-  })
-
-  // Calculate daily points (today's booth joins)
-  const today = new Date().toISOString().split('T')[0]
-  const dailyJoins = allBoothJoins.filter(join =>
-    join.joinedAt.toISOString().startsWith(today)
-  ).length
 
   // Get transcript dates
   const transcriptDates = user.TranscriptLog.map(log => 
@@ -112,7 +82,7 @@ async function getProfileHandler(req: NextRequest) {
     student_id: user.student_id,
     status: user.status,
     dept: user.dept,
-    dailyPoints: dailyJoins,
+    dailyPoints: dailyJoinsCount,
     totalPoints: user.score,
     transcriptDates
   })

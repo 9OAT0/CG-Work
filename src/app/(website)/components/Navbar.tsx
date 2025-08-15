@@ -107,6 +107,6 @@ export default function Navbar() {
           onClick={() => setMenuOpen(false)}
         />
       )}
-    </nav>
+    </>
   );
 }

@@ -20,7 +20,7 @@ model User {
   role         String         // "user" หรือ "admin"
   year         String?
   name         String
-  student_id   String?         @unique
+  student_id   String?
   dept         String         // สาขาวิชาของผู้เข้าร่วม
   joinedBooths BoothJoin[]    // กิจกรรมที่เข้าร่วม
   ownedBooths  BoothOwner[]   // บูธที่เป็นเจ้าของ
