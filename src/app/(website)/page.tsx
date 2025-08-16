@@ -11,23 +11,35 @@ export default function CombinedPage() {
 
   // ตรวจสอบ session ผ่าน API
   useEffect(() => {
+    let isMounted = true;
+    
     const checkAuth = async () => {
       try {
         const response = await fetch('/api/me', {
           credentials: 'include'
         });
+        
+        if (!isMounted) return; // Prevent state updates if component unmounted
+        
         if (response.ok) {
           // มี session แล้ว redirect ไป homepage
           router.replace("/homepage");
           return;
         }
       } catch (error) {
-        console.log('No session found');
+        console.log('No session found:', error);
       }
-      setIsCheckingAuth(false);
+      
+      if (isMounted) {
+        setIsCheckingAuth(false);
+      }
     };
 
     checkAuth();
+    
+    return () => {
+      isMounted = false;
+    };
   }, [router]);
 
   // ถ้าเช็ค session อยู่ให้ return loading

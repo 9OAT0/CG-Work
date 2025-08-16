@@ -14,9 +14,16 @@ export default function Navbar() {
 
   // ✅ Check user role on mount
   useEffect(() => {
+    let isMounted = true;
+    
     const checkUserRole = async () => {
       try {
-        const response = await fetch("/api/me");
+        const response = await fetch("/api/me", {
+          credentials: 'include'
+        });
+        
+        if (!isMounted) return; // Prevent state updates if component unmounted
+        
         if (response.ok) {
           const userData = await response.json();
           setUserRole(userData.role);
@@ -25,7 +32,12 @@ export default function Navbar() {
         console.error("Error checking user role:", error);
       }
     };
+    
     checkUserRole();
+    
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // ✅ Logout
