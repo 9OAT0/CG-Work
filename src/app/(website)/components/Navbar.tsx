@@ -26,10 +26,14 @@ export default function Navbar() {
         
         if (response.ok) {
           const userData = await response.json();
-          setUserRole(userData.role);
+          if (isMounted) {
+            setUserRole(userData.role);
+          }
         }
       } catch (error) {
-        console.error("Error checking user role:", error);
+        if (isMounted) {
+          console.error("Error checking user role:", error);
+        }
       }
     };
     
