@@ -76,13 +76,13 @@ export default function Navbar() {
   return (
     <>
       {/* Top Navbar */}
-      <div className="bg-blueBrand h-[106px] w-full flex justify-between items-end px-6 pb-5 relative z-50">
+      <div className="bg-blueBrand h-[80px] sm:h-[106px] w-full flex justify-between items-center px-4 sm:px-6 relative z-50">
         {/* Logo */}
-        <a href="/homepage">
+        <a href="/homepage" className="flex-shrink-0">
           <img
             src="/brainbang_logo.png"
             alt="Logo"
-            className="w-[75px] h-[45px]"
+            className="w-[60px] h-[36px] sm:w-[75px] sm:h-[45px]"
           />
         </a>
 
@@ -92,7 +92,7 @@ export default function Navbar() {
           onClick={toggleMenu}
           type="button"
           aria-label="Toggle menu"
-          className="relative z-[60] flex flex-col justify-between w-8 h-6 focus:outline-none appearance-none bg-transparent"
+          className="relative z-[60] flex flex-col justify-between w-8 h-6 focus:outline-none appearance-none bg-transparent p-2"
           style={{ WebkitTapHighlightColor: "transparent" }}
         >
           <span
@@ -116,7 +116,7 @@ export default function Navbar() {
       {/* Dropdown Menu */}
       <div
         ref={menuRef}
-        className={`absolute top-[106px] left-0 w-full bg-blueBrand text-white shadow-md transition-all duration-300 ease-in-out overflow-hidden z-40 ${
+        className={`absolute top-[80px] sm:top-[106px] left-0 w-full bg-blueBrand text-white shadow-md transition-all duration-300 ease-in-out overflow-hidden z-40 ${
           menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
         style={{ overflow: menuOpen ? "visible" : "hidden" }}
