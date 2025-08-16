@@ -6,8 +6,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-kanit: var(--font-kanit);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +19,45 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-kanit), system-ui, sans-serif;
+}
+
+/* Kanit Typography Utility Classes */
+@layer components {
+  /* Main Headers */
+  .text-header-main {
+    @apply text-kanit-34 font-kanit;
+  }
+  
+  /* Sub Headers / Brain Bang / หนวดกบี */
+  .text-header-sub {
+    @apply text-kanit-24 font-kanit;
+  }
+  
+  /* Buttons */
+  .text-button {
+    @apply text-kanit-24-light font-kanit;
+  }
+  
+  /* Input Fields */
+  .text-input {
+    @apply text-kanit-18 font-kanit;
+  }
+  
+  /* Content Text */
+  .text-content {
+    @apply text-kanit-18-content font-kanit;
+  }
+  
+  /* Work/Project Names */
+  .text-work-name {
+    @apply text-kanit-16 font-kanit;
+  }
+  
+  /* General Info / Search Fields */
+  .text-info {
+    @apply text-kanit-16-light font-kanit;
+  }
 }
 
 

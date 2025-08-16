@@ -2,15 +2,48 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function CombinedPage() {
   const [showLogin, setShowLogin] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const router = useRouter();
+
+  // ตรวจสอบ session ผ่าน API
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch('/api/me', {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          // มี session แล้ว redirect ไป homepage
+          router.replace("/homepage");
+          return;
+        }
+      } catch (error) {
+        console.log('No session found');
+      }
+      setIsCheckingAuth(false);
+    };
+
+    checkAuth();
+  }, [router]);
+
+  // ถ้าเช็ค session อยู่ให้ return loading
+  if (isCheckingAuth) {
+    return (
+      <div className="relative min-h-screen w-full bg-cover bg-center bg-no-repeat flex flex-col items-center justify-center text-white px-4"
+           style={{ backgroundImage: "url('/Rectangle 140.png')" }}>
+        <div className="text-white text-xl">กำลังโหลด...</div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowLogin(true);
     }, 3000);
-
     return () => clearTimeout(timer);
   }, []);
 
