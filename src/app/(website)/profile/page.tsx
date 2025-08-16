@@ -28,15 +28,22 @@ export default function ProfilePage() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+    
     const fetchProfile = async () => {
       try {
-        setLoading(true);
-        setError(null);
+        if (isMounted) {
+          setLoading(true);
+          setError(null);
+        }
         
         const res = await fetch('/api/profile', { 
           credentials: 'include',
           cache: 'no-store' // Ensure fresh data
         });
+        
+        if (!isMounted) return; // Prevent state updates if component unmounted
+        
         const data = await res.json();
 
         if (!res.ok) {
@@ -55,14 +62,22 @@ export default function ProfilePage() {
 
         setRedeemed(claimedMap);
       } catch (err) {
-        setError('Failed to load profile');
-        console.error('Failed to load profile:', err);
+        if (isMounted) {
+          setError('Failed to load profile');
+          console.error('Failed to load profile:', err);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchProfile();
+    
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleRedeem = (day: string) => {
