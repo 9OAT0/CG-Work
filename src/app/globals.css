@@ -57,6 +57,44 @@ img {
     font-size: 16px;
     line-height: 1.5;
   }
+  
+  /* Fix background attachment on mobile */
+  .bg-fixed {
+    background-attachment: scroll !important;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 475px) {
+  /* Reduce padding for very small screens */
+  .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Ensure content doesn't overflow */
+  .overflow-x-auto {
+    overflow-x: auto;
+  }
+  
+  /* Improve button sizing on small screens */
+  .min-h-\[50px\] {
+    min-height: 48px;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  /* Reduce vertical spacing in landscape */
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  /* Adjust logo size in landscape */
+  .landscape-logo {
+    width: 120px !important;
+    height: 120px !important;
+  }
 }
 
 /* Kanit Typography Utility Classes */
