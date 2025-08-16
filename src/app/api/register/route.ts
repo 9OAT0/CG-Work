@@ -39,8 +39,10 @@ export async function POST(req: NextRequest) {
       
       console.log('Checking for existing student ID:', trimmedStudentId)
       
-      const existingUser = await prisma.user.findUnique({
-        where: { student_id: trimmedStudentId }
+      const existingUser = await prisma.user.findFirst({
+        where: { 
+          student_id: trimmedStudentId
+        }
       })
 
       if (existingUser) {
@@ -75,15 +77,22 @@ export async function POST(req: NextRequest) {
     const username = (status === 'นิสิต' && studentId) ? studentId : `${name.replace(/\s/g, '')}-${Date.now()}`
 
     // ✅ บันทึกผู้ใช้ใหม่
+    // สำหรับนิสิต: เก็บ student_id, สำหรับอื่นๆ: ไม่เก็บ student_id เลย
+    const userData: any = {
+      username,
+      status,
+      role: 'user',
+      name,
+      dept
+    }
+
+    // เพิ่ม student_id เฉพาะกรณีที่เป็นนิสิตเท่านั้น
+    if (status === 'นิสิต' && studentId) {
+      userData.student_id = studentId.trim()
+    }
+
     const newUser = await prisma.user.create({
-      data: {
-        username,
-        student_id: status === 'นิสิต' ? studentId.trim() : null, // เก็บ student_id เฉพาะนิสิตเท่านั้น
-        status,
-        role: 'user',
-        name,
-        dept
-      }
+      data: userData
     })
 
     // ✅ บันทึก visit log สำหรับการเข้าสู่ระบบครั้งแรก

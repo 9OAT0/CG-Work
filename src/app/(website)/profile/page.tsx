@@ -136,7 +136,7 @@ export default function ProfilePage() {
             <h1 className="text-[16px]">
               {user.student_id} สถานะ : {user.status}
             </h1>
-            <h1 className="text-[16px]">คณะ{user.dept}</h1>
+            <h1 className="text-[16px]">{user.dept}</h1>
           </div>
         </div>
 

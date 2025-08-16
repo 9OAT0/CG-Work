@@ -40,6 +40,7 @@
     "redis": "^5.6.1",
     "sharp": "^0.34.3",
     "swiper": "^11.2.10",
+    "xlsx": "^0.18.5",
     "zod": "^4.0.13"
   },
   "devDependencies": {

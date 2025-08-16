@@ -63,56 +63,58 @@ export default function Homepage() {
         <div className="flex flex-col items-center gap-10">
           <div className="flex flex-col items-center gap-7">
             <h1 className="text-blueBrand text-2xl font-bold">หมวดหมู่งาน</h1>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              <a href="/category?dept=3D">
-                <img 
-                  src="/sola.jpg" 
-                  alt="Category 1" 
-                  className="w-[117px] h-[150px]" 
-                  loading="lazy"
-                  decoding="async"
-                />
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center items-center">
+              <a href="/category?dept=1" className="relative">
+                <div className="relative w-[117px] h-[150px]">
+                  <img 
+                    src="/sola.jpg" 
+                    alt="3D" 
+                    className="w-full h-full object-cover" 
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
               </a>
-              <a href="/category?dept=Graphic">
+              <a href="/category?dept=2">
                 <img 
                   src="/galaxy.jpg" 
-                  alt="Category 2" 
+                  alt="Graphic" 
                   className="w-[118px] h-[147px]" 
                   loading="lazy"
                   decoding="async"
                 />
               </a>
-              <a href="/category?dept=Product Design">
+              <a href="/category?dept=3">
                 <img 
                   src="/nebula.jpg" 
-                  alt="Category 3" 
+                  alt="Product Design" 
                   className="w-[124px] h-[141px]" 
                   loading="lazy"
                   decoding="async"
                 />
               </a>
-              <a href="/category?dept=Production">
+              <a href="/category?dept=4">
                 <img 
                   src="/comet.jpg" 
-                  alt="Category 4" 
+                  alt="Production" 
                   className="w-[109px] h-[139px]" 
                   loading="lazy"
                   decoding="async"
                 />
               </a>
-              <a href="/category?dept=Digital Art">
+              <a href="/category?dept=5">
                 <img 
                   src="/blackhole.jpg" 
-                  alt="Category 5" 
+                  alt="Digital Art" 
                   className="w-[146px] h-[147px]" 
                   loading="lazy"
                   decoding="async"
                 />
               </a>
-              <a href="/category?dept=Game Design">
+              <a href="/category?dept=6">
                 <img 
                   src="/eclipse.jpg" 
-                  alt="Category 6" 
+                  alt="Game Design" 
                   className="w-[108px] h-[140px]" 
                   loading="lazy"
                   decoding="async"

@@ -29,10 +29,10 @@ export async function POST(req: NextRequest) {
     });
   } else {
     // ✅ ถ้าไม่มีรหัสนิสิต ค้นหาด้วยชื่อเท่านั้น (สำหรับไม่ใช่นิสิต)
+    // ค้นหาผู้ใช้ที่ไม่ใช่นิสิต โดยไม่สนใจ student_id field
     user = await prisma.user.findFirst({
       where: { 
         name: name.trim(),
-        student_id: null,
         status: { not: 'นิสิต' }
       },
     });
