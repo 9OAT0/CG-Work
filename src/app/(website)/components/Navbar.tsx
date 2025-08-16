@@ -92,24 +92,26 @@ export default function Navbar() {
           onClick={toggleMenu}
           type="button"
           aria-label="Toggle menu"
-          className="relative z-[60] flex flex-col justify-between w-8 h-6 focus:outline-none appearance-none bg-transparent p-2"
+          className="relative z-[60] flex flex-col justify-center items-center w-10 h-10 focus:outline-none appearance-none bg-transparent cursor-pointer hover:bg-white hover:bg-opacity-10 rounded-md transition-colors duration-200"
           style={{ WebkitTapHighlightColor: "transparent" }}
         >
-          <span
-            className={`block w-full h-1 bg-white rounded transition-transform duration-300 ${
-              menuOpen ? "rotate-45 translate-y-2.5" : ""
-            }`}
-          />
-          <span
-            className={`block w-full h-1 bg-white rounded transition-opacity duration-300 ${
-              menuOpen ? "opacity-0" : "opacity-100"
-            }`}
-          />
-          <span
-            className={`block w-full h-1 bg-white rounded transition-transform duration-300 ${
-              menuOpen ? "-rotate-45 -translate-y-2.5" : ""
-            }`}
-          />
+          <div className="flex flex-col justify-between w-6 h-4">
+            <span
+              className={`block w-full h-0.5 bg-white rounded transition-all duration-300 ${
+                menuOpen ? "rotate-45 translate-y-1.5" : ""
+              }`}
+            />
+            <span
+              className={`block w-full h-0.5 bg-white rounded transition-all duration-300 ${
+                menuOpen ? "opacity-0" : "opacity-100"
+              }`}
+            />
+            <span
+              className={`block w-full h-0.5 bg-white rounded transition-all duration-300 ${
+                menuOpen ? "-rotate-45 -translate-y-1.5" : ""
+              }`}
+            />
+          </div>
         </button>
       </div>
 
