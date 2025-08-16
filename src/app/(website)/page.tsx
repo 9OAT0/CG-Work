@@ -9,9 +9,10 @@ export default function CombinedPage() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const router = useRouter();
 
-  // ตรวจสอบ session ผ่าน API
+  // ตรวจสอบ session และจัดการ UI
   useEffect(() => {
     let isMounted = true;
+    let loginTimer: NodeJS.Timeout;
     
     const checkAuth = async () => {
       try {
@@ -19,7 +20,7 @@ export default function CombinedPage() {
           credentials: 'include'
         });
         
-        if (!isMounted) return; // Prevent state updates if component unmounted
+        if (!isMounted) return;
         
         if (response.ok) {
           // มี session แล้ว redirect ไป homepage
@@ -32,6 +33,12 @@ export default function CombinedPage() {
       
       if (isMounted) {
         setIsCheckingAuth(false);
+        // เริ่ม timer สำหรับแสดง login button หลังจากเช็ค auth เสร็จ
+        loginTimer = setTimeout(() => {
+          if (isMounted) {
+            setShowLogin(true);
+          }
+        }, 3000);
       }
     };
 
@@ -39,6 +46,9 @@ export default function CombinedPage() {
     
     return () => {
       isMounted = false;
+      if (loginTimer) {
+        clearTimeout(loginTimer);
+      }
     };
   }, [router]);
 
@@ -51,13 +61,6 @@ export default function CombinedPage() {
       </div>
     );
   }
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowLogin(true);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, []);
 
   return (
     <div
