@@ -103,159 +103,202 @@ export default function Register() {
 
   return (
     <div
-      className="min-h-screen flex flex-col justify-center items-center gap-16 bg-cover bg-center bg-no-repeat relative px-4"
-      style={{ backgroundImage: "url('/Rectangle 140.png')" }}
+      className="h-[100dvh] flex flex-col justify-center items-center gap-8 bg-gradient-to-br from-purple-900 via-purple-700 to-pink-500 relative px-4 overflow-hidden bg-no-repeat bg-cover bg-center"
+      style={{
+        backgroundImage: "url('/Rectangle 140.png')",
+        backgroundBlendMode: "overlay",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat"
+      }}
     >
-      <h1 className="text-[34px] font-normal text-white text-center">ลงทะเบียน</h1>
+      {/* Animated particles background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-white opacity-30 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 3}s`
+            }}
+          />
+        ))}
+      </div>
 
-      <div className="flex flex-col gap-6 w-full max-w-sm">
-        {/* Dropdown: สถานะ */}
-        <div className="relative w-full">
-          <button
-            type="button"
-            onClick={() => setStatusOpen(!statusOpen)}
-            className="w-full h-[50px] rounded-full border bg-[#D9D9D9] px-4 py-2 text-sm shadow-sm hover:bg-gray-50"
-          >
-            {selectedStatus}
-            <span className="float-right">&#9662;</span>
-          </button>
-          {statusOpen && (
-            <ul className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg text-sm max-h-60 overflow-auto">
-              {statuses.map((status) => (
-                <li
-                  key={status}
-                  onClick={() => {
-                    setSelectedStatus(status);
-                    setStatusOpen(false);
+      <div className="relative z-10 flex flex-col items-center gap-8 w-full max-w-md">
+        <h1 className="text-4xl sm:text-5xl font-bold text-white text-center drop-shadow-lg">
+          ลงทะเบียน
+        </h1>
+
+          <div className="flex flex-col gap-4 w-full bg-white/10 backdrop-blur-md rounded-3xl p-6 shadow-2xl border border-white/20">
+            {/* Dropdown: สถานะ */}
+            <div className="relative w-full">
+              <button
+                type="button"
+                onClick={() => setStatusOpen(!statusOpen)}
+                className="w-full h-[50px] rounded-full border-0 bg-white/90 backdrop-blur-sm px-4 py-2 text-gray-700 shadow-lg hover:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              ><div className="flex justify-between">
+                <span className="text-left block">{selectedStatus}</span>
+                <span className="justify-end text-pink-500">▼</span>
+                </div>
+              </button>
+              {statusOpen && (
+                <ul className="absolute z-20 mt-2 w-full bg-white/95 backdrop-blur-md border-0 rounded-2xl shadow-2xl text-sm max-h-60 overflow-auto">
+                  {statuses.map((status) => (
+                    <li
+                      key={status}
+                      onClick={() => {
+                        setSelectedStatus(status);
+                        setStatusOpen(false);
+                      }}
+                      className="px-4 py-3 hover:bg-pink-100 cursor-pointer transition-colors duration-150 first:rounded-t-2xl last:rounded-b-2xl"
+                    >
+                      {status}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Conditional: รหัสนิสิต */}
+            {selectedStatus === "นิสิต" && (
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="รหัสนิสิต (8 หลัก)"
+                  value={studentID}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    if (value.length <= 8) {
+                      setStudentID(value);
+                    }
                   }}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                >
-                  {status}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                  className="bg-white/90 backdrop-blur-sm w-full h-[50px] border-0 px-4 py-2 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all duration-200"
+                  maxLength={8}
+                />
+                {studentID && studentID.length > 0 && studentID.length < 8 && (
+                  <p className="text-yellow-200 text-xs mt-2 px-4 bg-yellow-500/20 rounded-full py-1">
+                    รหัสนิสิตต้องมี 8 หลัก (ปัจจุบัน {studentID.length} หลัก)
+                  </p>
+                )}
+              </div>
+            )}
 
-        {/* Conditional: รหัสนิสิต */}
-        {selectedStatus === "นิสิต" && (
-          <div className="relative">
+            {/* Input: ชื่อ - นามสกุล */}
             <input
               type="text"
-              placeholder="รหัสนิสิต (8 หลัก)"
-              value={studentID}
-              onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, ''); // Only allow digits
-                if (value.length <= 8) {
-                  setStudentID(value);
-                }
-              }}
-              className="bg-[#D9D9D9] w-full h-[50px] border px-3 py-2 rounded-full"
-              maxLength={8}
+              placeholder="ชื่อ - นามสกุล"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="bg-white/90 backdrop-blur-sm w-full h-[50px] border-0 px-4 py-2 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all duration-200"
             />
-            {studentID && studentID.length > 0 && studentID.length < 8 && (
-              <p className="text-yellow-300 text-xs mt-1 px-4">
-                รหัสนิสิตต้องมี 8 หลัก (ปัจจุบัน {studentID.length} หลัก)
-              </p>
-            )}
-          </div>
-        )}
 
-        {/* Input: ชื่อ - นามสกุล */}
-        <input
-          type="text"
-          placeholder="ชื่อ - นามสกุล"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          className="bg-[#D9D9D9] w-full h-[50px] border px-3 py-2 rounded-full"
-        />
+            {/* Dropdown: คณะ */}
+            <div className="relative w-full">
+              <button
+                type="button"
+                onClick={() => setFacultyOpen(!facultyOpen)}
+                className="w-full h-[50px] rounded-full border-0 bg-white/90 backdrop-blur-sm px-4 py-2 text-gray-700 shadow-lg hover:bg-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              >
+                <div className="flex justify-between">
+                  <span className="text-left block truncate">{selectedFaculty}</span>
+                  <span className="float-right text-pink-500">▼</span>
+                </div>
+              </button>
+              {facultyOpen && (
+                <ul className="absolute z-20 mt-2 w-full bg-white/95 backdrop-blur-md border-0 rounded-2xl shadow-2xl text-sm max-h-60 overflow-auto">
+                  {faculties.map((faculty) => (
+                    <li
+                      key={faculty}
+                      onClick={() => {
+                        setSelectedFaculty(faculty);
+                        setFacultyOpen(false);
+                      }}
+                      className="px-4 py-3 hover:bg-pink-100 cursor-pointer transition-colors duration-150 first:rounded-t-2xl last:rounded-b-2xl"
+                    >
+                      {faculty}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-        {/* Dropdown: คณะ */}
-        <div className="relative w-full">
-          <button
-            type="button"
-            onClick={() => setFacultyOpen(!facultyOpen)}
-            className="w-full h-[50px] rounded-full border bg-[#D9D9D9] px-4 py-2 text-sm shadow-sm hover:bg-gray-50"
-          >
-            {selectedFaculty}
-            <span className="float-right">&#9662;</span>
-          </button>
-          {facultyOpen && (
-            <ul className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg text-sm max-h-60 overflow-auto">
-              {faculties.map((faculty) => (
-                <li
-                  key={faculty}
-                  onClick={() => {
-                    setSelectedFaculty(faculty);
-                    setFacultyOpen(false);
-                  }}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            {/* Checkbox */}
+            <div className="flex items-start gap-3 mt-2">
+              <div className="relative mt-1 flex">
+                <input
+                  id="consent"
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="peer w-5 h-5 border-2 border-white rounded-md appearance-none checked:bg-pink-500 checked:border-pink-500 focus:ring-0 cursor-pointer transition-all duration-200"
+                />
+                <svg
+                  className="hidden peer-checked:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4 text-white pointer-events-none"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  {faculty}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+              </div>
+              <label htmlFor="consent" className="text-white cursor-pointer text-sm leading-relaxed">
+                ยินยอมให้ข้อมูลการลงทะเบียนแก่ผู้จัดงาน 
+                สำหรับเป็นข้อมูลลงทะเบียนเท่านั้น และท่านทราบว่า
+                ข้อมูลชื่อ-นามสกุลจะถูกแสดงบนหน้าเว็บไซต์*
+              </label>
+            </div>
 
-        {/* Checkbox */}
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <input
-              id="consent"
-              type="checkbox"
-              checked={consent}
-              onChange={(e) => setConsent(e.target.checked)}
-              className="peer w-5 h-5 border-2 border-pink-500 rounded-sm appearance-none checked:bg-white checked:border-pink-500 focus:ring-0 cursor-pointer"
-            />
-            <svg
-              className="hidden peer-checked:block absolute top-0 left-0 w-5 h-5 text-pink-500 pointer-events-none"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3"
-              viewBox="0 0 24 24"
+            {/* Submit Button */}
+            <button
+              onClick={handleRegisterClick}
+              disabled={!isFormComplete}
+              className={`w-full h-[60px] rounded-full text-white text-xl font-bold py-2 mt-4 transition-all duration-300 transform ${
+                isFormComplete
+                  ? "bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 cursor-pointer shadow-lg hover:shadow-xl hover:scale-105"
+                  : "bg-gray-400 cursor-not-allowed opacity-50"
+              }`}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+              ลงทะเบียน
+            </button>
           </div>
-          <label htmlFor="consent" className="text-white cursor-pointer text-sm">
-            ยินยอมให้ข้อมูลการลงทะเบียบแก่ผู้จัดงาน 
-            สำหรับเป็นข้อมูลลงทะเบียนเท่านั้น และท่านทราบว่า
-            ข้อมูลชื่อ-นามสกุลจะถูกแสดงบนหน้าเว็บไซต์*
-          </label>
-        </div>
-
-        {/* Submit Button */}
-        <button
-          onClick={handleRegisterClick}
-          disabled={!isFormComplete}
-          className={`w-full h-[70px] rounded-full text-white text-2xl py-2 transition-colors duration-300 ${
-            isFormComplete
-              ? "bg-pink-500 hover:bg-pink-600 cursor-pointer"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          ลงทะเบียน
-        </button>
       </div>
 
       {/* Confirm Overlay */}
       {showConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-pink-500 rounded-3xl p-6 w-11/12 max-w-sm flex flex-col justify-center items-center gap-6">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+          <div className="bg-gradient-to-br from-pink-500 to-purple-600 rounded-3xl p-8 w-full max-w-sm flex flex-col items-center gap-6 shadow-2xl border border-white/20 animate-scaleIn">
             <button
               onClick={handleCancelConfirm}
-              className="self-start text-white text-2xl"
+              className="self-start text-white/80 hover:text-white text-2xl transition-colors duration-200"
             >
-              <img src="/Vector.png" alt="back" />
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
-            <h2 className="text-white text-2xl font-bold text-center">
-              แน่ใจใช่หรือไม่?
-            </h2>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h2 className="text-white text-2xl font-bold mb-2">
+                ยืนยันการลงทะเบียน
+              </h2>
+              <p className="text-white/80 text-sm">
+                แน่ใจใช่หรือไม่?
+              </p>
+            </div>
             <button
               onClick={handleConfirm}
               disabled={isSubmitting}
-              className="w-40 h-12 bg-white rounded-full text-pink-500 font-medium text-lg mt-6"
+              className={`w-full h-12 rounded-full font-bold text-lg transition-all duration-300 ${
+                isSubmitting 
+                  ? "bg-white/50 text-gray-400 cursor-not-allowed" 
+                  : "bg-white text-pink-500 hover:bg-gray-100 hover:scale-105 shadow-lg"
+              }`}
             >
               {isSubmitting ? "กำลังส่ง..." : "ยืนยันจ้า"}
             </button>
@@ -265,27 +308,45 @@ export default function Register() {
 
       {/* Success Overlay */}
       {showSuccess && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-pink-500 rounded-3xl p-6 w-11/12 max-w-sm flex flex-col items-center gap-4">
-            <h2 className="text-white text-2xl font-bold text-center">
-              ลงทะเบียน<br />เรียบร้อยแล้ว!
-            </h2>
-            <div className="flex items-center gap-6 relative mt-4">
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white animate-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-              </svg>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+          <div className="bg-gradient-to-br from-pink-500 to-purple-600 rounded-3xl p-8 w-full max-w-sm flex flex-col items-center gap-6 shadow-2xl border border-white/20 animate-scaleIn">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h2 className="text-white text-3xl font-bold mb-2">
+                สำเร็จ!
+              </h2>
+              <p className="text-white/80 text-lg">
+                ลงทะเบียนเรียบร้อยแล้ว
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-4 mt-4">
+              <div className="flex items-center gap-2 text-white/60">
+                <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span className="text-sm">แตะที่นี่</span>
+              </div>
+              
               <button
                 onClick={handleTouchMe}
-                className="flex flex-col items-center justify-center"
+                className="flex flex-col items-center justify-center bg-white/20 rounded-full p-4 hover:bg-white/30 transition-all duration-300 hover:scale-110"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 text-white animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 11v2m0 4v2m0-8a4 4 0 110-8 4 4 0 010 8zm0 0v2m0 4v2" />
+                <svg className="w-8 h-8 text-white animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                <p className="text-white mt-2">Touch Me</p>
               </button>
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white animate-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
+              
+              <div className="flex items-center gap-2 text-white/60">
+                <span className="text-sm">เพื่อดำเนินการต่อ</span>
+                <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
             </div>
           </div>
         </div>

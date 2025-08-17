@@ -188,7 +188,7 @@ function CategoryContent() {
                     {/* Content Section */}
                     <div className="flex-1 text-white flex flex-col justify-between">
                       <div className="mb-4">
-                        <h2 className="text-xl lg:text-2xl font-bold mb-2">
+                        <h2 className="text-xl lg:text-2xl font-bold mb-2 whitespace-pre-wrap">
                           {booth.booth_name}
                         </h2>
                       </div>

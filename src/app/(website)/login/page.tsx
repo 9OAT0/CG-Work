@@ -39,14 +39,34 @@ export default function LoginPage() {
 
   return (
     <div
-      className="min-h-screen flex flex-col justify-center items-center gap-12 bg-cover bg-center bg-no-repeat px-4"
-      style={{ backgroundImage: "url('/Rectangle 140.png')" }}
+      className="h-[100dvh] flex flex-col justify-center items-center gap-8 bg-gradient-to-br from-purple-900 via-purple-700 to-pink-500 relative px-4 overflow-hidden bg-no-repeat bg-cover bg-center"
+      style={{
+        backgroundImage: "url('/Rectangle 140.png')",
+        backgroundBlendMode: "overlay",
+      }}
     >
-      <h1 className="text-white text-3xl sm:text-4xl font-bold">เข้าสู่ระบบ</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center gap-6 w-full max-w-[380px]"
-      >
+      {/* Animated particles background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-white opacity-30 rounded-full animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${2 + Math.random() * 3}s`
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10 flex flex-col items-center gap-12 w-full max-w-[380px]">
+        <h1 className="text-white text-3xl sm:text-4xl font-bold">เข้าสู่ระบบ</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-center gap-6 w-full"
+        >
         <input
           type="text"
           placeholder="รหัสนิสิต (สำหรับนิสิตเท่านั้น)"
@@ -81,7 +101,8 @@ export default function LoginPage() {
         >
           {isSubmitting ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
         </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

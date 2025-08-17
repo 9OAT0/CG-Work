@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@/generated/prisma'
 import jwt from 'jsonwebtoken'
 import { uploadMultipleToCloudinary } from '@/lib/utils/cloudinary'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'

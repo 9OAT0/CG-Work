@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@/generated/prisma'
 import jwt from 'jsonwebtoken'
 import { withErrorHandler, AuthenticationError, NotFoundError } from '@/lib/middleware/errorHandler'
 import { validateRequest, updateProfileSchema } from '@/lib/validation/schemas'

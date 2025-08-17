@@ -100,7 +100,7 @@ export type SystemLog = $Result.DefaultSelection<Prisma.$SystemLogPayload>
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -132,13 +132,6 @@ export class PrismaClient<
    * Disconnect from the database
    */
   $disconnect(): $Utils.JsPromise<void>;
-
-  /**
-   * Add a middleware
-   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
-   * @see https://pris.ly/d/extensions
-   */
-  $use(cb: Prisma.Middleware): void
 
 /**
    * Allows the running of a sequence of read/write operations that are guaranteed to either succeed or fail as a whole.
@@ -373,8 +366,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.10.1
-   * Query Engine version: 9b628578b3b7cae625e8c927178f15a170e74a9c
+   * Prisma Client JS version: 6.14.0
+   * Query Engine version: 717184b7b35ea05dfa71a3236b7af656013e1e49
    */
   export type PrismaVersion = {
     client: string
@@ -1858,16 +1851,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     * 
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1921,10 +1922,15 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
-  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
-    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-    : never
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T['level'] : T
+  >;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
+    ? GetLogType<T[number]>
+    : never;
 
   export type QueryEvent = {
     timestamp: Date
@@ -1964,25 +1970,6 @@ export namespace Prisma {
     | 'runCommandRaw'
     | 'findRaw'
     | 'groupBy'
-
-  /**
-   * These options are being passed into the middleware as "params"
-   */
-  export type MiddlewareParams = {
-    model?: ModelName
-    action: PrismaAction
-    args: any
-    dataPath: string[]
-    runInTransaction: boolean
-  }
-
-  /**
-   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
-   */
-  export type Middleware<T = any> = (
-    params: MiddlewareParams,
-    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
-  ) => $Utils.JsPromise<T>
 
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
@@ -3602,6 +3589,7 @@ export namespace Prisma {
     description: number
     owner_names: number
     owner_contacts: number
+    owner_images: number
     _all: number
   }
 
@@ -3631,6 +3619,7 @@ export namespace Prisma {
     description?: true
     owner_names?: true
     owner_contacts?: true
+    owner_images?: true
     _all?: true
   }
 
@@ -3715,6 +3704,7 @@ export namespace Prisma {
     description: string | null
     owner_names: string[]
     owner_contacts: string[]
+    owner_images: string[]
     _count: BoothCountAggregateOutputType | null
     _min: BoothMinAggregateOutputType | null
     _max: BoothMaxAggregateOutputType | null
@@ -3743,6 +3733,7 @@ export namespace Prisma {
     description?: boolean
     owner_names?: boolean
     owner_contacts?: boolean
+    owner_images?: boolean
     boothOwners?: boolean | Booth$boothOwnersArgs<ExtArgs>
     joinedUsers?: boolean | Booth$joinedUsersArgs<ExtArgs>
     ratings?: boolean | Booth$ratingsArgs<ExtArgs>
@@ -3762,9 +3753,10 @@ export namespace Prisma {
     description?: boolean
     owner_names?: boolean
     owner_contacts?: boolean
+    owner_images?: boolean
   }
 
-  export type BoothOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "booth_name" | "booth_code" | "dept_type" | "pics" | "description" | "owner_names" | "owner_contacts", ExtArgs["result"]["booth"]>
+  export type BoothOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "booth_name" | "booth_code" | "dept_type" | "pics" | "description" | "owner_names" | "owner_contacts" | "owner_images", ExtArgs["result"]["booth"]>
   export type BoothInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     boothOwners?: boolean | Booth$boothOwnersArgs<ExtArgs>
     joinedUsers?: boolean | Booth$joinedUsersArgs<ExtArgs>
@@ -3792,6 +3784,7 @@ export namespace Prisma {
       description: string | null
       owner_names: string[]
       owner_contacts: string[]
+      owner_images: string[]
     }, ExtArgs["result"]["booth"]>
     composites: {}
   }
@@ -4197,6 +4190,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Booth", 'String'>
     readonly owner_names: FieldRef<"Booth", 'String[]'>
     readonly owner_contacts: FieldRef<"Booth", 'String[]'>
+    readonly owner_images: FieldRef<"Booth", 'String[]'>
   }
     
 
@@ -16675,7 +16669,8 @@ export namespace Prisma {
     pics: 'pics',
     description: 'description',
     owner_names: 'owner_names',
-    owner_contacts: 'owner_contacts'
+    owner_contacts: 'owner_contacts',
+    owner_images: 'owner_images'
   };
 
   export type BoothScalarFieldEnum = (typeof BoothScalarFieldEnum)[keyof typeof BoothScalarFieldEnum]
@@ -17031,6 +17026,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Booth"> | string | null
     owner_names?: StringNullableListFilter<"Booth">
     owner_contacts?: StringNullableListFilter<"Booth">
+    owner_images?: StringNullableListFilter<"Booth">
     boothOwners?: BoothOwnerListRelationFilter
     joinedUsers?: BoothJoinListRelationFilter
     ratings?: BoothRatingListRelationFilter
@@ -17047,6 +17043,7 @@ export namespace Prisma {
     description?: SortOrder
     owner_names?: SortOrder
     owner_contacts?: SortOrder
+    owner_images?: SortOrder
     boothOwners?: BoothOwnerOrderByRelationAggregateInput
     joinedUsers?: BoothJoinOrderByRelationAggregateInput
     ratings?: BoothRatingOrderByRelationAggregateInput
@@ -17066,6 +17063,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Booth"> | string | null
     owner_names?: StringNullableListFilter<"Booth">
     owner_contacts?: StringNullableListFilter<"Booth">
+    owner_images?: StringNullableListFilter<"Booth">
     boothOwners?: BoothOwnerListRelationFilter
     joinedUsers?: BoothJoinListRelationFilter
     ratings?: BoothRatingListRelationFilter
@@ -17082,6 +17080,7 @@ export namespace Prisma {
     description?: SortOrder
     owner_names?: SortOrder
     owner_contacts?: SortOrder
+    owner_images?: SortOrder
     _count?: BoothCountOrderByAggregateInput
     _max?: BoothMaxOrderByAggregateInput
     _min?: BoothMinOrderByAggregateInput
@@ -17099,6 +17098,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Booth"> | string | null
     owner_names?: StringNullableListFilter<"Booth">
     owner_contacts?: StringNullableListFilter<"Booth">
+    owner_images?: StringNullableListFilter<"Booth">
   }
 
   export type BoothJoinWhereInput = {
@@ -17954,6 +17954,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerCreateNestedManyWithoutBoothInput
     joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
@@ -17970,6 +17971,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedCreateNestedManyWithoutBoothInput
     joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
@@ -17985,6 +17987,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUpdateManyWithoutBoothNestedInput
     joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
@@ -18000,6 +18003,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedUpdateManyWithoutBoothNestedInput
     joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
@@ -18016,6 +18020,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
   }
 
   export type BoothUpdateManyMutationInput = {
@@ -18026,6 +18031,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
   }
 
   export type BoothUncheckedUpdateManyInput = {
@@ -18036,6 +18042,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
   }
 
   export type BoothJoinCreateInput = {
@@ -18989,6 +18996,7 @@ export namespace Prisma {
     description?: SortOrder
     owner_names?: SortOrder
     owner_contacts?: SortOrder
+    owner_images?: SortOrder
   }
 
   export type BoothMaxOrderByAggregateInput = {
@@ -19865,6 +19873,10 @@ export namespace Prisma {
     set: string[]
   }
 
+  export type BoothCreateowner_imagesInput = {
+    set: string[]
+  }
+
   export type BoothOwnerCreateNestedManyWithoutBoothInput = {
     create?: XOR<BoothOwnerCreateWithoutBoothInput, BoothOwnerUncheckedCreateWithoutBoothInput> | BoothOwnerCreateWithoutBoothInput[] | BoothOwnerUncheckedCreateWithoutBoothInput[]
     connectOrCreate?: BoothOwnerCreateOrConnectWithoutBoothInput | BoothOwnerCreateOrConnectWithoutBoothInput[]
@@ -19946,6 +19958,11 @@ export namespace Prisma {
   }
 
   export type BoothUpdateowner_contactsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type BoothUpdateowner_imagesInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -21297,6 +21314,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
     comments?: BoothCommentCreateNestedManyWithoutBoothInput
@@ -21312,6 +21330,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
     comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
@@ -21397,6 +21416,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUpdateManyWithoutBoothNestedInput
@@ -21411,6 +21431,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
@@ -21477,6 +21498,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
     comments?: BoothCommentCreateNestedManyWithoutBoothInput
@@ -21492,6 +21514,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
     comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
@@ -21577,6 +21600,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUpdateManyWithoutBoothNestedInput
@@ -21591,6 +21615,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
@@ -21869,6 +21894,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerCreateNestedManyWithoutBoothInput
     joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
     comments?: BoothCommentCreateNestedManyWithoutBoothInput
@@ -21884,6 +21910,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedCreateNestedManyWithoutBoothInput
     joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
     comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
@@ -21969,6 +21996,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUpdateManyWithoutBoothNestedInput
     joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUpdateManyWithoutBoothNestedInput
@@ -21983,6 +22011,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedUpdateManyWithoutBoothNestedInput
     joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
@@ -22049,6 +22078,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerCreateNestedManyWithoutBoothInput
     joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
@@ -22064,6 +22094,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedCreateNestedManyWithoutBoothInput
     joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
@@ -22149,6 +22180,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUpdateManyWithoutBoothNestedInput
     joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
@@ -22163,6 +22195,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedUpdateManyWithoutBoothNestedInput
     joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
@@ -22229,6 +22262,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerCreateNestedManyWithoutBoothInput
     joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
@@ -22244,6 +22278,7 @@ export namespace Prisma {
     description?: string | null
     owner_names?: BoothCreateowner_namesInput | string[]
     owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedCreateNestedManyWithoutBoothInput
     joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
@@ -22329,6 +22364,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUpdateManyWithoutBoothNestedInput
     joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
@@ -22343,6 +22379,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     owner_names?: BoothUpdateowner_namesInput | string[]
     owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
     boothOwners?: BoothOwnerUncheckedUpdateManyWithoutBoothNestedInput
     joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
