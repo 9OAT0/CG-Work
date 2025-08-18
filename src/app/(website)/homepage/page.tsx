@@ -16,9 +16,13 @@ export default function Homepage() {
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
-    // Check if overlay has been shown before
-    const hasSeenOverlay = localStorage.getItem('hasSeenOverlay');
-    if (!hasSeenOverlay) {
+    // Check if overlay has been shown before (with date-based logic)
+    const today = new Date().toDateString();
+    const lastShown = localStorage.getItem('overlayLastShown');
+    const hasSeenToday = lastShown === today;
+    
+    // Only show overlay once per day
+    if (!hasSeenToday) {
       setShowOverlay(true);
     }
 
@@ -30,7 +34,8 @@ export default function Homepage() {
 
   const handleCloseOverlay = () => {
     setShowOverlay(false);
-    localStorage.setItem('hasSeenOverlay', 'true');
+    const today = new Date().toDateString();
+    localStorage.setItem('overlayLastShown', today);
   };
 
   const nextSlide = () => {
@@ -46,19 +51,75 @@ export default function Homepage() {
       <Navbar />
       <div className="min-h-screen flex flex-col gap-16 px-4">
         {/* Top Background */}
-        <img src="/bg.jpg" alt="Background" className="w-full object-cover" />
+        <img 
+          src="/bg.jpg" 
+          alt="Background" 
+          className="w-full object-cover" 
+          loading="eager"
+          decoding="async"
+        />
 
         {/* Category Section */}
         <div className="flex flex-col items-center gap-10">
           <div className="flex flex-col items-center gap-7">
             <h1 className="text-blueBrand text-2xl font-bold">หมวดหมู่งาน</h1>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              <a href="/category?dept=3D"><img src="/sola.jpg" alt="Category 1" className="w-[117px] h-[150px]" /></a>
-              <a href="/category?dept=Graphic"><img src="/galaxy.jpg" alt="Category 2" className="w-[118px] h-[147px]" /></a>
-              <a href="/category?dept=Product Design"><img src="/nebula.jpg" alt="Category 3" className="w-[124px] h-[141px]" /></a>
-              <a href="/category?dept=Production"><img src="/comet.jpg" alt="Category 4" className="w-[109px] h-[139px]" /></a>
-              <a href="/category?dept=Digital Art"><img src="/blackhole.jpg" alt="Category 5" className="w-[146px] h-[147px]" /></a>
-              <a href="/category?dept=Game Design"><img src="/eclipse.jpg" alt="Category 6" className="w-[108px] h-[140px]" /></a>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center items-center">
+              <a href="/category?dept=1" className="relative">
+                <div className="relative w-[117px] h-[150px]">
+                  <img 
+                    src="/sola.jpg" 
+                    alt="3D" 
+                    className="w-full h-full object-cover" 
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </a>
+              <a href="/category?dept=2">
+                <img 
+                  src="/galaxy.jpg" 
+                  alt="Graphic" 
+                  className="w-[118px] h-[147px]" 
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <a href="/category?dept=3">
+                <img 
+                  src="/nebula.jpg" 
+                  alt="Product Design" 
+                  className="w-[124px] h-[141px]" 
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <a href="/category?dept=4">
+                <img 
+                  src="/comet.jpg" 
+                  alt="Production" 
+                  className="w-[109px] h-[139px]" 
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <a href="/category?dept=5">
+                <img 
+                  src="/blackhole.jpg" 
+                  alt="Digital Art" 
+                  className="w-[146px] h-[147px]" 
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <a href="/category?dept=6">
+                <img 
+                  src="/eclipse.jpg" 
+                  alt="Game Design" 
+                  className="w-[108px] h-[140px]" 
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
             </div>
           </div>
 
@@ -72,7 +133,13 @@ export default function Homepage() {
             <p>มหาวิทยาลัยพะเยา ณ ลานอเนกประสงค์ชั้น 2</p>
             <p>อาคาร 99 ปี พระอุบาลีคุณูปมาจารย์ (ปวง ธมฺมปญฺโญ)</p>
             <p>วันที่ 27 - 29 สิงหาคม 2568 เวลา 09.00 น. – 17.00 น.</p>
-            <img src="/discritionicon.jpg" alt="" className="w-[155px] h-[154px]" />
+            <img 
+              src="/discritionicon.jpg" 
+              alt="" 
+              className="w-[155px] h-[154px]" 
+              loading="lazy"
+              decoding="async"
+            />
           </div>
 
           {/* Header Before Slide */}
@@ -91,6 +158,8 @@ export default function Homepage() {
                 src={banner}
                 alt={`Banner ${index + 1}`}
                 className="w-full flex-shrink-0 object-cover h-64 md:h-96"
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
               />
             ))}
           </div>

@@ -17,6 +17,8 @@ interface ProfileData {
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<ProfileData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [redeemed, setRedeemed] = useState<{ [key: string]: boolean }>({
     '27': false,
     '28': false,
@@ -26,12 +28,26 @@ export default function ProfilePage() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+    
     const fetchProfile = async () => {
       try {
-        const res = await fetch('/api/profile', { credentials: 'include' });
+        if (isMounted) {
+          setLoading(true);
+          setError(null);
+        }
+        
+        const res = await fetch('/api/profile', { 
+          credentials: 'include',
+          cache: 'no-store' // Ensure fresh data
+        });
+        
+        if (!isMounted) return; // Prevent state updates if component unmounted
+        
         const data = await res.json();
 
         if (!res.ok) {
+          setError(data.error || 'Failed to load profile');
           console.error('Error:', data.error);
           return;
         }
@@ -56,11 +72,22 @@ export default function ProfilePage() {
 
         setRedeemed(claimedMap);
       } catch (err) {
-        console.error('Failed to load profile:', err);
+        if (isMounted) {
+          setError('Failed to load profile');
+          console.error('Failed to load profile:', err);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchProfile();
+    
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const handleRedeem = (day: string) => {
@@ -77,7 +104,50 @@ export default function ProfilePage() {
     router.push(`/gettranscript?day=${day}`);
   };
 
-  if (!user) return null;
+  // Loading state
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex flex-col justify-center items-center py-10 px-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blueBrand"></div>
+          <p className="mt-4 text-blueBrand">กำลังโหลดข้อมูล...</p>
+        </div>
+      </>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex flex-col justify-center items-center py-10 px-4">
+          <div className="text-center">
+            <p className="text-red-500 mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="bg-blueBrand text-white px-6 py-2 rounded-full"
+            >
+              ลองใหม่
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // No user data
+  if (!user) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex flex-col justify-center items-center py-10 px-4">
+          <p className="text-blueBrand">ไม่พบข้อมูลผู้ใช้</p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -91,7 +161,7 @@ export default function ProfilePage() {
             <h1 className="text-[16px]">
               {user.student_id} สถานะ : {user.status}
             </h1>
-            <h1 className="text-[16px]">คณะ{user.dept}</h1>
+            <h1 className="text-[16px]">{user.dept}</h1>
           </div>
         </div>
 

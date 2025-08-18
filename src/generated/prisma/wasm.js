@@ -116,7 +116,127 @@ Prisma.NullTypes = {
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   username: 'username',
+  status: 'status',
   role: 'role',
+  year: 'year',
+  name: 'name',
+  student_id: 'student_id',
+  dept: 'dept',
+  createdAt: 'createdAt',
+  score: 'score'
+};
+
+exports.Prisma.BoothScalarFieldEnum = {
+  id: 'id',
+  booth_name: 'booth_name',
+  booth_code: 'booth_code',
+  dept_type: 'dept_type',
+  pics: 'pics',
+  description: 'description',
+  owner_names: 'owner_names',
+  owner_contacts: 'owner_contacts'
+};
+
+exports.Prisma.BoothJoinScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  boothId: 'boothId',
+  joinedAt: 'joinedAt'
+};
+
+exports.Prisma.BoothOwnerScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  boothId: 'boothId',
+  addedAt: 'addedAt'
+};
+
+exports.Prisma.TranscriptLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  date: 'date'
+};
+
+exports.Prisma.VisitLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  visitedAt: 'visitedAt'
+};
+
+exports.Prisma.TranscriptIssueScalarFieldEnum = {
+  id: 'id',
+  student_id: 'student_id',
+  name: 'name',
+  year: 'year',
+  dept: 'dept',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BoothRatingScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  boothId: 'boothId',
+  rating: 'rating',
+  comment: 'comment',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BoothCommentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  boothId: 'boothId',
+  comment: 'comment',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BoothFavoriteScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  boothId: 'boothId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FileScalarFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  originalName: 'originalName',
+  mimetype: 'mimetype',
+  size: 'size',
+  path: 'path',
+  url: 'url',
+  thumbnailUrl: 'thumbnailUrl',
+  uploadedBy: 'uploadedBy',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  type: 'type',
+  userId: 'userId',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FeedbackScalarFieldEnum = {
+  id: 'id',
+  subject: 'subject',
+  message: 'message',
+  type: 'type',
+  email: 'email',
+  userId: 'userId',
+  status: 'status',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SystemLogScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  userId: 'userId',
+  details: 'details',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
   createdAt: 'createdAt'
 };
 
@@ -132,7 +252,20 @@ exports.Prisma.QueryMode = {
 
 
 exports.Prisma.ModelName = {
-  User: 'User'
+  User: 'User',
+  Booth: 'Booth',
+  BoothJoin: 'BoothJoin',
+  BoothOwner: 'BoothOwner',
+  TranscriptLog: 'TranscriptLog',
+  VisitLog: 'VisitLog',
+  TranscriptIssue: 'TranscriptIssue',
+  BoothRating: 'BoothRating',
+  BoothComment: 'BoothComment',
+  BoothFavorite: 'BoothFavorite',
+  File: 'File',
+  Notification: 'Notification',
+  Feedback: 'Feedback',
+  SystemLog: 'SystemLog'
 };
 
 /**

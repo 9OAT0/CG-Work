@@ -6,8 +6,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-kanit: var(--font-kanit);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +19,120 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-kanit), system-ui, sans-serif;
+  /* Prevent horizontal scrolling on mobile */
+  overflow-x: hidden;
+  /* Improve text rendering on mobile */
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure all containers don't exceed viewport width */
+* {
+  box-sizing: border-box;
+}
+
+/* Prevent images from overflowing */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Improve touch targets */
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent zoom on input focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+  
+  /* Improve readability */
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Fix background attachment on mobile */
+  .bg-fixed {
+    background-attachment: scroll !important;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 475px) {
+  /* Reduce padding for very small screens */
+  .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Ensure content doesn't overflow */
+  .overflow-x-auto {
+    overflow-x: auto;
+  }
+  
+  /* Improve button sizing on small screens */
+  .min-h-\[50px\] {
+    min-height: 48px;
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  /* Reduce vertical spacing in landscape */
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  /* Adjust logo size in landscape */
+  .landscape-logo {
+    width: 120px !important;
+    height: 120px !important;
+  }
+}
+
+/* Kanit Typography Utility Classes */
+@layer components {
+  /* Main Headers */
+  .text-header-main {
+    @apply text-kanit-34 font-kanit;
+  }
+  
+  /* Sub Headers / Brain Bang / หนวดกบี */
+  .text-header-sub {
+    @apply text-kanit-24 font-kanit;
+  }
+  
+  /* Buttons */
+  .text-button {
+    @apply text-kanit-24-light font-kanit;
+  }
+  
+  /* Input Fields */
+  .text-input {
+    @apply text-kanit-18 font-kanit;
+  }
+  
+  /* Content Text */
+  .text-content {
+    @apply text-kanit-18-content font-kanit;
+  }
+  
+  /* Work/Project Names */
+  .text-work-name {
+    @apply text-kanit-16 font-kanit;
+  }
+  
+  /* General Info / Search Fields */
+  .text-info {
+    @apply text-kanit-16-light font-kanit;
+  }
 }
 
 

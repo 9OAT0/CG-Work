@@ -46,28 +46,46 @@ export default function Register() {
   const handleConfirm = async () => {
     setIsSubmitting(true);
     try {
+      console.log('Submitting registration:', {
+        status: selectedStatus,
+        studentId: selectedStatus === "นิสิต" ? studentID : null,
+        name: fullName,
+        dept: selectedFaculty,
+      });
+
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           status: selectedStatus,
-          studentId: selectedStatus === "นิสิต" ? studentID : null,
-          name: fullName,
+          studentId: selectedStatus === "นิสิต" ? studentID.trim() : null,
+          name: fullName.trim(),
           dept: selectedFaculty,
         }),
       });
 
       const data = await res.json();
+      console.log('Registration response:', { status: res.status, data });
 
       if (!res.ok) {
-        alert(data.error || "เกิดข้อผิดพลาดในการลงทะเบียน");
+        console.error('Registration failed:', data.error);
+        let errorMessage = data.error || "เกิดข้อผิดพลาดในการลงทะเบียน";
+        
+        // Provide helpful guidance for duplicate student ID errors
+        if (data.error && data.error.includes('ถูกใช้ลงทะเบียนแล้ว')) {
+          errorMessage += '\n\nกรุณาตรวจสอบรหัสนิสิตของท่าน หรือติดต่อเจ้าหน้าที่หากมีปัญหา';
+        }
+        
+        alert(errorMessage);
         setShowConfirm(false);
         return;
       }
 
+      console.log('Registration successful');
       setShowConfirm(false);
       setShowSuccess(true);
     } catch (error) {
+      console.error('Registration error:', error);
       alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
       setShowConfirm(false);
     } finally {
@@ -121,13 +139,26 @@ export default function Register() {
 
         {/* Conditional: รหัสนิสิต */}
         {selectedStatus === "นิสิต" && (
-          <input
-            type="text"
-            placeholder="รหัสนิสิต"
-            value={studentID}
-            onChange={(e) => setStudentID(e.target.value)}
-            className="bg-[#D9D9D9] w-full h-[50px] border px-3 py-2 rounded-full"
-          />
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="รหัสนิสิต (8 หลัก)"
+              value={studentID}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, ''); // Only allow digits
+                if (value.length <= 8) {
+                  setStudentID(value);
+                }
+              }}
+              className="bg-[#D9D9D9] w-full h-[50px] border px-3 py-2 rounded-full"
+              maxLength={8}
+            />
+            {studentID && studentID.length > 0 && studentID.length < 8 && (
+              <p className="text-yellow-300 text-xs mt-1 px-4">
+                รหัสนิสิตต้องมี 8 หลัก (ปัจจุบัน {studentID.length} หลัก)
+              </p>
+            )}
+          </div>
         )}
 
         {/* Input: ชื่อ - นามสกุล */}
