@@ -52,12 +52,22 @@ export default function ProfilePage() {
           return;
         }
 
-        setUser(data);
+        const userData = data.user;
 
         const claimedMap: { [key: string]: boolean } = { '27': false, '28': false, '29': false };
-        data.transcriptDates?.forEach((date: string) => {
+        userData.transcriptDates?.forEach((date: string) => {
           const day = date.split('-')[2];
           if (['27', '28', '29'].includes(day)) claimedMap[day] = true;
+        });
+
+        setUser({
+          name: userData.name,
+          student_id: userData.student_id,
+          status: userData.status,
+          dept: userData.dept,
+          dailyPoints: userData.score ?? 0,
+          totalPoints: userData.score ?? 0,
+          transcriptDates: userData.transcriptDates ?? [],
         });
 
         setRedeemed(claimedMap);
