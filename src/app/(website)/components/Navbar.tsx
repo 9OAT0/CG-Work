@@ -13,21 +13,20 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('/api/logout', {
-        method: 'POST',
+      const response = await fetch("/api/logout", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
       if (response.ok) {
-        // Redirect to login page after successful logout
-        router.push('/login');
+        router.push("/login");
       } else {
-        console.error('Logout failed');
+        console.error("Logout failed");
       }
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error("Error during logout:", error);
     }
   };
 
@@ -55,6 +54,7 @@ export default function Navbar() {
         <a href="/homepage">
           <img src="/brainbang_logo.png" alt="Logo" className="w-[75px] h-[45px]" />
         </a>
+
         {/* Hamburger Icon (Always visible) */}
         <button
           ref={buttonRef}
@@ -85,7 +85,7 @@ export default function Navbar() {
         className={`absolute top-[106px] left-0 w-full bg-blue-700 text-white shadow-md transition-all duration-300 ease-in-out overflow-hidden z-40 ${
           menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
-        style={{ overflow: menuOpen ? 'visible' : 'hidden' }}
+        style={{ overflow: menuOpen ? "visible" : "hidden" }}
       >
         <ul className="flex flex-col p-4 gap-6">
           <a href="/homepage">
@@ -97,16 +97,22 @@ export default function Navbar() {
           <a href="/homepage">
             <li className="hover:text-blue-300 cursor-pointer font-light text-xl">ผลงาน</li>
           </a>
+          <li
+            onClick={handleLogout}
+            className="hover:text-red-400 cursor-pointer font-light text-xl"
+          >
+            ออกจากระบบ
+          </li>
         </ul>
       </div>
 
       {/* Mobile Menu Overlay */}
       {menuOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-25 z-30"
+        <div
+          className="fixed inset-0 bg-black bg-opacity-25 z-30"
           onClick={() => setMenuOpen(false)}
         />
       )}
-    </nav>
+    </>
   );
 }
