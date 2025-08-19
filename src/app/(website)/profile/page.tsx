@@ -52,22 +52,33 @@ export default function ProfilePage() {
           return;
         }
 
-        const userData = data.user;
+        // Ensure data has the expected structure
+        if (!data || typeof data !== 'object') {
+          setError('Invalid response format');
+          console.error('Invalid data format:', data);
+          return;
+        }
 
         const claimedMap: { [key: string]: boolean } = { '27': false, '28': false, '29': false };
-        userData.transcriptDates?.forEach((date: string) => {
-          const day = date.split('-')[2];
-          if (['27', '28', '29'].includes(day)) claimedMap[day] = true;
-        });
+        
+        // Safely access transcriptDates with proper null checking
+        if (data.transcriptDates && Array.isArray(data.transcriptDates)) {
+          data.transcriptDates.forEach((date: string) => {
+            if (typeof date === 'string') {
+              const day = date.split('-')[2];
+              if (['27', '28', '29'].includes(day)) claimedMap[day] = true;
+            }
+          });
+        }
 
         setUser({
-          name: userData.name,
-          student_id: userData.student_id,
-          status: userData.status,
-          dept: userData.dept,
-          dailyPoints: userData.score ?? 0,
-          totalPoints: userData.score ?? 0,
-          transcriptDates: userData.transcriptDates ?? [],
+          name: data.name,
+          student_id: data.student_id,
+          status: data.status,
+          dept: data.dept,
+          dailyPoints: data.dailyPoints ?? 0,
+          totalPoints: data.totalPoints ?? 0,
+          transcriptDates: data.transcriptDates ?? [],
         });
 
         setRedeemed(claimedMap);
