@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@/generated/prisma'
 import { withErrorHandler, NotFoundError } from '@/lib/middleware/errorHandler'
 import { withRateLimit, apiRateLimit } from '@/lib/middleware/rateLimit'
 
@@ -23,7 +23,8 @@ async function getBoothBasicHandler(req: NextRequest, { params }: { params: Prom
       dept_type: true,
       description: true,
       pics: true,
-      owner_names: true
+      owner_names: true,
+      owner_images: true,
     }
   })
 
@@ -38,7 +39,8 @@ async function getBoothBasicHandler(req: NextRequest, { params }: { params: Prom
     dept_type: booth.dept_type,
     description: booth.description,
     pics: booth.pics || [],
-    owner_names: booth.owner_names || []
+    owner_names: booth.owner_names || [],
+    owner_images: booth.owner_images || []
   })
 }
 

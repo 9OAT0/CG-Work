@@ -6,21 +6,25 @@ import Navbar from "../components/Navbar";
 
 export default function RegisterBooth() {
   const router = useRouter();
-  
+
   // Form states
   const [boothName, setBoothName] = useState("");
   const [boothCode, setBoothCode] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedDeptType, setSelectedDeptType] = useState("เลือกประเภทหน่วยงาน");
+  const [selectedDeptType, setSelectedDeptType] = useState(
+    "เลือกประเภทหน่วยงาน"
+  );
   const [deptTypeOpen, setDeptTypeOpen] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  
+
   // Booth owners state
-  const [boothOwners, setBoothOwners] = useState([{ name: "", contact: "" }]);
+  const [boothOwners, setBoothOwners] = useState([
+    { name: "", contact: "", image: "" },
+  ]);
 
   // Department types - updated based on feedback
   const deptTypes = [
@@ -29,34 +33,45 @@ export default function RegisterBooth() {
     "Product Design",
     "Production",
     "Digital Art",
-    "Game Design"
+    "Game Design",
   ];
 
   // Form validation
-  const isFormComplete = 
+  const isFormComplete =
     boothName.trim() !== "" &&
     boothCode.trim() !== "" &&
     description.trim() !== "" &&
     selectedDeptType !== "เลือกประเภทหน่วยงาน" &&
-    boothOwners.some(owner => owner.name.trim() !== "");
+    boothOwners.some((owner) => owner.name.trim() !== "");
 
   // Handle file upload with Cloudinary integration
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
-    // Validate files before upload (Cloudinary supports up to 10MB)
     const maxSize = 10 * 1024 * 1024; // 10MB for Cloudinary
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/bmp', 'image/tiff'];
-    
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+      "image/bmp",
+      "image/tiff",
+    ];
+
     for (const file of Array.from(files)) {
       if (file.size > maxSize) {
         alert(`ไฟล์ ${file.name} มีขนาดใหญ่เกินไป (สูงสุด 10MB)`);
         return;
       }
-      
+
       if (!allowedTypes.includes(file.type.toLowerCase())) {
-        alert(`ไฟล์ ${file.name} ไม่ใช่ประเภทที่รองรับ (รองรับ JPEG, PNG, WebP, GIF, BMP, TIFF)`);
+        alert(
+          `ไฟล์ ${file.name} ไม่ใช่ประเภทที่รองรับ (รองรับ JPEG, PNG, WebP, GIF, BMP, TIFF)`
+        );
         return;
       }
     }
@@ -64,100 +79,168 @@ export default function RegisterBooth() {
     setIsUploading(true);
     try {
       const formData = new FormData();
-      Array.from(files).forEach(file => {
-        formData.append('files', file);
+      Array.from(files).forEach((file) => {
+        formData.append("files", file);
       });
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
+      const response = await fetch("/api/upload", {
+        method: "POST",
         body: formData,
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || 'เกิดข้อผิดพลาดในการอัพโหลดไฟล์');
+        alert(data.error || "เกิดข้อผิดพลาดในการอัพโหลดไฟล์");
         return;
       }
 
-      // Add uploaded file URLs to the state
       const newImageUrls = data.files.map((file: any) => file.url);
-      setUploadedImages(prev => [...prev, ...newImageUrls]);
-
-      // Show Cloudinary feedback
-      if (data.cloudinary) {
-        console.log('ไฟล์ได้รับการอัพโหลดและปรับปรุงผ่าน Cloudinary แล้ว');
-      }
-
+      setUploadedImages((prev) => [...prev, ...newImageUrls]);
     } catch (error) {
-      console.error('Upload error:', error);
-      alert('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
+      console.error("Upload error:", error);
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
     } finally {
       setIsUploading(false);
-      // Clear the input so the same file can be uploaded again if needed
-      event.target.value = '';
+      event.target.value = "";
     }
   };
 
   // Remove uploaded image
   const removeImage = (indexToRemove: number) => {
-    setUploadedImages(prev => prev.filter((_, index) => index !== indexToRemove));
+    setUploadedImages((prev) =>
+      prev.filter((_, index) => index !== indexToRemove)
+    );
   };
 
-  // Move image up in order
+  // Handle image upload for booth owner
+  const handleOwnerImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+
+    if (file.size > maxSize) {
+      alert(`ไฟล์ขนาดเกิน 10MB`);
+      return;
+    }
+
+    if (!allowedTypes.includes(file.type)) {
+      alert("ไฟล์ไม่รองรับ");
+      return;
+    }
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("files", file);
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        const imageUrl = data.files?.[0]?.url || data.fileUrl;
+        setBoothOwners((prev) => {
+          const updatedOwners = [...prev];
+          updatedOwners[index].image = imageUrl;
+          return updatedOwners;
+        });
+      } else {
+        alert(data.error || "อัปโหลดไม่สำเร็จ");
+      }
+    } catch (error) {
+      alert("อัปโหลดผิดพลาด");
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
+  };
+
+  // Move image up in the list
   const moveImageUp = (index: number) => {
     if (index === 0) return;
-    setUploadedImages(prev => {
+    setUploadedImages((prev) => {
       const newImages = [...prev];
-      [newImages[index - 1], newImages[index]] = [newImages[index], newImages[index - 1]];
+      [newImages[index - 1], newImages[index]] = [
+        newImages[index],
+        newImages[index - 1],
+      ];
       return newImages;
     });
   };
 
-  // Move image down in order
+  // Move image down in the list
   const moveImageDown = (index: number) => {
-    setUploadedImages(prev => {
-      if (index === prev.length - 1) return prev;
+    if (index === uploadedImages.length - 1) return;
+    setUploadedImages((prev) => {
       const newImages = [...prev];
-      [newImages[index], newImages[index + 1]] = [newImages[index + 1], newImages[index]];
+      [newImages[index], newImages[index + 1]] = [
+        newImages[index + 1],
+        newImages[index],
+      ];
       return newImages;
     });
   };
 
-  // Handle booth owner changes
-  const updateBoothOwner = (index: number, field: 'name' | 'contact', value: string) => {
-    setBoothOwners(prev => prev.map((owner, i) => 
-      i === index ? { ...owner, [field]: value } : owner
-    ));
+  // Update booth owner info
+  const updateBoothOwner = (
+    index: number,
+    field: "name" | "contact" | "image",
+    value: string
+  ) => {
+    setBoothOwners((prev) =>
+      prev.map((owner, i) =>
+        i === index ? { ...owner, [field]: value } : owner
+      )
+    );
   };
 
   // Add new booth owner
   const addBoothOwner = () => {
-    setBoothOwners(prev => [...prev, { name: "", contact: "" }]);
+    setBoothOwners((prev) => [...prev, { name: "", contact: "", image: "" }]);
   };
 
   // Remove booth owner
   const removeBoothOwner = (index: number) => {
     if (boothOwners.length > 1) {
-      setBoothOwners(prev => prev.filter((_, i) => i !== index));
+      setBoothOwners((prev) => prev.filter((_, i) => i !== index));
     }
   };
 
   // Handle form submission
   const handleRegisterClick = () => {
     if (!isFormComplete) return;
+    
+    // Validate booth code format (should be alphanumeric)
+    const boothCodeRegex = /^[a-zA-Z0-9]+$/;
+    if (!boothCodeRegex.test(boothCode.trim())) {
+      alert("รหัสบูธต้องเป็นตัวอักษรและตัวเลขเท่านั้น (ไม่มีช่องว่างหรือสัญลักษณ์พิเศษ)");
+      return;
+    }
+    
     setShowConfirm(true);
   };
 
   const handleConfirm = async () => {
     setIsSubmitting(true);
     try {
-      const ownerNames = boothOwners.filter(owner => owner.name.trim() !== "").map(owner => owner.name.trim());
-      
-      const response = await fetch('/api/register-booth', {
-        method: 'POST',
+      const validOwners = boothOwners.filter(
+        (owner) => owner.name.trim() !== ""
+      );
+      const ownerNames = validOwners.map((owner) => owner.name.trim());
+      const ownerImages = validOwners.map((owner) => owner.image || "");
+
+      const response = await fetch("/api/admin/register-booth", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           booth_name: boothName,
@@ -166,23 +249,22 @@ export default function RegisterBooth() {
           description: description,
           pics: uploadedImages,
           owner_names: ownerNames,
-          owner_contacts: [] // Empty array since we don't collect contact info
+          owner_images: ownerImages,
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || 'เกิดข้อผิดพลาดในการลงทะเบียนบูธ');
+        alert(data.error || "เกิดข้อผิดพลาดในการลงทะเบียนบูธ");
         setShowConfirm(false);
         return;
       }
 
       setShowConfirm(false);
       setShowSuccess(true);
-
     } catch (error) {
-      alert('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
+      alert("เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์");
       setShowConfirm(false);
     } finally {
       setIsSubmitting(false);
@@ -200,18 +282,28 @@ export default function RegisterBooth() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blueBrand to-pinkBrand">
       <Navbar />
-      
+
       <div className="flex flex-col items-center px-4 py-8">
-        <h1 className="text-[34px] font-normal text-white mb-8">ลงทะเบียนบูธ</h1>
+        <h1 className="text-header-main text-white mb-8">
+          ลงทะเบียนบูธ
+        </h1>
 
         <div className="flex flex-col gap-6 w-full max-w-[400px]">
-          {/* Booth Name Input */}
-          <input
-            type="text"
-            placeholder="ชื่อบูธ"
+          {/* Booth Name Input - Multi-line support */}
+          <textarea
+            placeholder="ชื่อบูธ (กด Enter เพื่อขึ้นบรรทัดใหม่)"
             value={boothName}
             onChange={(e) => setBoothName(e.target.value)}
-            className="bg-[#D9D9D9] w-full h-[50px] border px-4 py-2 rounded-full text-black placeholder-gray-600"
+            onKeyDown={(e) => {
+              // Allow Enter key to create new lines
+              if (e.key === "Enter") {
+                e.stopPropagation();
+              }
+            }}
+            rows={2}
+            className="bg-[#D9D9D9] w-full min-h-[50px] border px-4 py-3 rounded-2xl text-input text-black placeholder-gray-600 resize-none whitespace-pre-wrap focus:outline-none focus:ring-2 focus:ring-blue-400"
+            style={{ lineHeight: "1.4" }}
+            aria-label="ชื่อบูธ"
           />
 
           {/* Booth Code Input */}
@@ -219,8 +311,12 @@ export default function RegisterBooth() {
             type="text"
             placeholder="รหัสบูธ (ใช้สำหรับให้ผู้เข้าร่วมสแกน)"
             value={boothCode}
-            onChange={(e) => setBoothCode(e.target.value)}
-            className="bg-[#D9D9D9] w-full h-[50px] border px-4 py-2 rounded-full text-black placeholder-gray-600"
+            onChange={(e) => {
+              // Only allow alphanumeric characters
+              const value = e.target.value.replace(/[^a-zA-Z0-9]/g, '');
+              setBoothCode(value);
+            }}
+            className="bg-[#D9D9D9] w-full h-[50px] border px-4 py-2 rounded-full text-input text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
           {/* Department Type Dropdown */}
@@ -228,14 +324,14 @@ export default function RegisterBooth() {
             <button
               type="button"
               onClick={() => setDeptTypeOpen(!deptTypeOpen)}
-              className="w-full h-[50px] rounded-full border bg-[#D9D9D9] px-4 py-2 text-sm shadow-sm hover:bg-gray-50 text-left text-black"
+              className="w-full h-[50px] rounded-full border bg-[#D9D9D9] px-4 py-2 text-input shadow-sm hover:bg-gray-50 text-left text-black focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               {selectedDeptType}
               <span className="float-right">&#9662;</span>
             </button>
 
             {deptTypeOpen && (
-              <ul className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg text-sm max-h-60 overflow-auto">
+              <ul className="absolute z-10 mt-1 w-full bg-white border rounded-md shadow-lg max-h-60 overflow-auto">
                 {deptTypes.map((deptType) => (
                   <li
                     key={deptType}
@@ -243,7 +339,7 @@ export default function RegisterBooth() {
                       setSelectedDeptType(deptType);
                       setDeptTypeOpen(false);
                     }}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black"
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black text-input"
                   >
                     {deptType}
                   </li>
@@ -254,60 +350,146 @@ export default function RegisterBooth() {
 
           {/* Description Textarea */}
           <textarea
-            placeholder="รายละเอียดบูธ (กิจกรรม, จุดเด่น, สิ่งที่น่าสนใจ)"
+            placeholder="รายละเอียดบูธ (กิจกรรม, จุดเด่น, สิ่งที่น่าสนใจ)&#10;กด Enter เพื่อขึ้นบรรทัดใหม่"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            rows={4}
-            className="bg-[#D9D9D9] w-full border px-4 py-3 rounded-2xl text-black placeholder-gray-600 resize-none"
+            onKeyDown={(e) => {
+              // Allow Enter key to create new lines
+              if (e.key === "Enter") {
+                e.stopPropagation();
+              }
+            }}
+            rows={6}
+            className="bg-[#D9D9D9] w-full border px-4 py-3 rounded-2xl text-input text-black placeholder-gray-600 resize-none whitespace-pre-wrap focus:outline-none focus:ring-2 focus:ring-blue-400"
+            style={{ lineHeight: "1.5" }}
           />
 
           {/* Booth Owners Section */}
           <div className="bg-white/20 rounded-2xl p-4">
-            <div className="flex justify-between items-center mb-3">
-              <h3 className="text-white text-lg">เจ้าของบูธ</h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-white text-header-sub">เจ้าของบูธ</h3>
               <button
                 onClick={addBoothOwner}
-                className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg hover:bg-green-600"
+                className="bg-green-500 hover:bg-green-600 text-white rounded-full w-10 h-10 flex items-center justify-center text-button font-bold transition-colors shadow-md"
+                aria-label="เพิ่มเจ้าของบูธ"
               >
                 +
               </button>
             </div>
-            
+
             {boothOwners.map((owner, index) => (
-              <div key={index} className="mb-3 flex gap-2">
-                <input
-                  type="text"
-                  placeholder={`ชื่อเจ้าของบูธคนที่ ${index + 1}`}
-                  value={owner.name}
-                  onChange={(e) => updateBoothOwner(index, 'name', e.target.value)}
-                  className="bg-[#D9D9D9] flex-1 h-[40px] border px-3 py-2 rounded-lg text-black placeholder-gray-600"
-                />
+              <div
+                key={index}
+                className={`mb-4 p-4 bg-white/10 rounded-xl border ${
+                  owner.name.trim() === ""
+                    ? "border-yellow-400/50"
+                    : "border-transparent"
+                }`}
+              >
+                {/* Name Input */}
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    placeholder={`ชื่อเจ้าของบูธคนที่ ${index + 1}`}
+                    value={owner.name}
+                    onChange={(e) =>
+                      updateBoothOwner(index, "name", e.target.value)
+                    }
+                    className="bg-[#D9D9D9] w-full h-[40px] border px-3 py-2 rounded-lg text-input text-black placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                  {owner.name.trim() === "" && (
+                    <p className="text-yellow-300 text-info mt-1">
+                      ⚠ กรุณากรอกชื่อเจ้าของบูธ
+                    </p>
+                  )}
+                </div>
+
+                {/* Image Upload & Preview */}
+                <div className="flex items-center gap-3">
+                  {/* Upload Button */}
+                  <div className="flex-1">
+                    <label className="block w-full text-center bg-blue-500 hover:bg-blue-600 text-white text-info py-2 px-4 rounded-lg cursor-pointer transition-colors">
+                      เลือกรูปภาพ
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleOwnerImageUpload(e, index)}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+
+                  {/* Image Preview */}
+                  {owner.image ? (
+                    <div className="relative">
+                      <img
+                        src={owner.image}
+                        alt={`เจ้าของบูธ ${index + 1}`}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md"
+                      />
+                      <button
+                        onClick={() => updateBoothOwner(index, "image", "")}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                        aria-label="ลบภาพ"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+                      <span className="text-gray-600 text-info">รูป</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Remove Owner Button */}
                 {boothOwners.length > 1 && (
-                  <button
-                    onClick={() => removeBoothOwner(index)}
-                    className="bg-red-500 text-white rounded-lg w-10 h-10 flex items-center justify-center text-sm hover:bg-red-600"
-                  >
-                    ×
-                  </button>
+                  <div className="text-right mt-3">
+                    <button
+                      onClick={() => removeBoothOwner(index)}
+                      className="bg-red-500 hover:bg-red-600 text-white text-info rounded-lg px-3 py-1 transition-colors flex items-center gap-1 ml-auto"
+                    >
+                      <span>ลบ</span>
+                    </button>
+                  </div>
                 )}
               </div>
             ))}
+
+            {/* Info Tip */}
+            <p className="text-white/70 text-info mt-2">
+              สามารถเพิ่มเจ้าของหลายคนได้ (เช่น ทีมงาน)
+              โดยแต่ละคนสามารถมีรูปภาพของตัวเอง
+            </p>
           </div>
 
           {/* Image Upload Section */}
           <div className="bg-white/20 rounded-2xl p-4">
-            <h3 className="text-white text-lg mb-3">รูปภาพบูธ (ไม่บังคับ)</h3>
-            
+            <h3 className="text-white text-header-sub mb-3">รูปภาพบูธ (ไม่บังคับ)</h3>
+
             {/* Upload Button */}
             <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/50 rounded-lg cursor-pointer hover:border-white/70 transition-colors">
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <svg className="w-8 h-8 mb-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                <svg
+                  className="w-8 h-8 mb-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  ></path>
                 </svg>
-                <p className="mb-2 text-sm text-white">
-                  <span className="font-semibold">คลิกเพื่ออัพโหลด</span> หรือลากไฟล์มาวาง
+                <p className="mb-2 text-info text-white">
+                  <span className="font-semibold">คลิกเพื่ออัพโหลด</span>{" "}
+                  หรือลากไฟล์มาวาง
                 </p>
-                <p className="text-xs text-white/70">PNG, JPG, WebP, GIF, BMP, TIFF (สูงสุด 10MB)</p>
+                <p className="text-info text-white/70">
+                  PNG, JPG, WebP, GIF, BMP, TIFF (สูงสุด 10MB)
+                </p>
               </div>
               <input
                 type="file"
@@ -323,18 +505,27 @@ export default function RegisterBooth() {
             {isUploading && (
               <div className="flex flex-col items-center justify-center mt-4 p-4 bg-white/10 rounded-lg">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mb-2"></div>
-                <span className="text-white text-sm">กำลังอัพโหลดและปรับปรุงไฟล์...</span>
-                <span className="text-white/70 text-xs mt-1">กรุณารอสักครู่</span>
+                <span className="text-white text-info">
+                  กำลังอัพโหลดและปรับปรุงไฟล์...
+                </span>
+                <span className="text-white/70 text-info mt-1">
+                  กรุณารอสักครู่
+                </span>
               </div>
             )}
 
             {/* Uploaded Images Preview */}
             {uploadedImages.length > 0 && (
               <div className="mt-4">
-                <h4 className="text-white text-sm mb-2">รูปภาพที่อัพโหลดแล้ว (ลากเพื่อจัดลำดับ):</h4>
+                <h4 className="text-white text-info mb-2">
+                  รูปภาพที่อัพโหลดแล้ว (ลากเพื่อจัดลำดับ):
+                </h4>
                 <div className="grid grid-cols-1 gap-3">
                   {uploadedImages.map((imageUrl, index) => (
-                    <div key={index} className="relative bg-white/10 rounded-lg p-2">
+                    <div
+                      key={index}
+                      className="relative bg-white/10 rounded-lg p-2"
+                    >
                       <div className="flex items-center gap-3">
                         <img
                           src={imageUrl}
@@ -342,16 +533,18 @@ export default function RegisterBooth() {
                           className="w-16 h-16 object-cover rounded-lg"
                         />
                         <div className="flex-1">
-                          <p className="text-white text-sm">รูปที่ {index + 1}</p>
+                          <p className="text-white text-info">
+                            รูปที่ {index + 1}
+                          </p>
                         </div>
                         <div className="flex flex-col gap-1">
                           <button
                             onClick={() => moveImageUp(index)}
                             disabled={index === 0}
                             className={`w-8 h-8 rounded flex items-center justify-center text-xs ${
-                              index === 0 
-                                ? 'bg-gray-500 text-gray-300 cursor-not-allowed' 
-                                : 'bg-blue-500 text-white hover:bg-blue-600'
+                              index === 0
+                                ? "bg-gray-500 text-gray-300 cursor-not-allowed"
+                                : "bg-blue-500 text-white hover:bg-blue-600"
                             }`}
                           >
                             ↑
@@ -360,9 +553,9 @@ export default function RegisterBooth() {
                             onClick={() => moveImageDown(index)}
                             disabled={index === uploadedImages.length - 1}
                             className={`w-8 h-8 rounded flex items-center justify-center text-xs ${
-                              index === uploadedImages.length - 1 
-                                ? 'bg-gray-500 text-gray-300 cursor-not-allowed' 
-                                : 'bg-blue-500 text-white hover:bg-blue-600'
+                              index === uploadedImages.length - 1
+                                ? "bg-gray-500 text-gray-300 cursor-not-allowed"
+                                : "bg-blue-500 text-white hover:bg-blue-600"
                             }`}
                           >
                             ↓
@@ -386,7 +579,7 @@ export default function RegisterBooth() {
           <button
             onClick={handleRegisterClick}
             disabled={!isFormComplete}
-            className={`w-full h-[70px] rounded-full text-white text-2xl py-2 transition-colors duration-300 ${
+            className={`w-full h-[70px] rounded-full text-white text-button py-2 transition-colors duration-300 ${
               isFormComplete
                 ? "bg-orangeBrand hover:bg-orange-600 cursor-pointer"
                 : "bg-gray-400 cursor-not-allowed"
@@ -407,25 +600,34 @@ export default function RegisterBooth() {
             >
               <img src="/Vector.png" alt="back" />
             </button>
-            
+
             <div className="text-center">
-              <h2 className="text-white text-2xl font-bold mb-4">
+              <h2 className="text-white text-header-sub font-bold mb-4">
                 ยืนยันการลงทะเบียนบูธ
               </h2>
-              <div className="text-white text-sm space-y-2">
-                <p><strong>ชื่อบูธ:</strong> {boothName}</p>
-                <p><strong>รหัสบูธ:</strong> {boothCode}</p>
-                <p><strong>หน่วยงาน:</strong> {selectedDeptType}</p>
+              <div className="text-white text-info space-y-2">
+                <div>
+                  <strong>ชื่อบูธ:</strong>
+                  <div className="whitespace-pre-wrap">{boothName}</div>
+                </div>
+                <p>
+                  <strong>รหัสบูธ:</strong> {boothCode}
+                </p>
+                <p>
+                  <strong>หน่วยงาน:</strong> {selectedDeptType}
+                </p>
                 {uploadedImages.length > 0 && (
-                  <p><strong>รูปภาพ:</strong> {uploadedImages.length} รูป</p>
+                  <p>
+                    <strong>รูปภาพ:</strong> {uploadedImages.length} รูป
+                  </p>
                 )}
               </div>
             </div>
-            
+
             <button
               onClick={handleConfirm}
               disabled={isSubmitting}
-              className="w-40 h-12 bg-white rounded-full text-orangeBrand font-medium text-lg"
+              className="w-40 h-12 bg-white rounded-full text-orangeBrand font-medium text-button"
             >
               {isSubmitting ? "กำลังส่ง..." : "ยืนยัน"}
             </button>
@@ -437,8 +639,10 @@ export default function RegisterBooth() {
       {showSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4">
           <div className="bg-orangeBrand rounded-3xl p-6 w-full max-w-80 flex flex-col items-center gap-4">
-            <h2 className="text-white text-2xl font-bold text-center">
-              ลงทะเบียนบูธ<br />เรียบร้อยแล้ว!
+            <h2 className="text-white text-header-sub font-bold text-center">
+              ลงทะเบียนบูธ
+              <br />
+              เรียบร้อยแล้ว!
             </h2>
             <div className="flex items-center gap-6 relative mt-4">
               {/* Arrow Left - Animated */}
@@ -450,7 +654,11 @@ export default function RegisterBooth() {
                 stroke="currentColor"
                 strokeWidth="2"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
 
               {/* Touch Me Button */}
@@ -466,9 +674,13 @@ export default function RegisterBooth() {
                   stroke="currentColor"
                   strokeWidth="2"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 11v2m0 4v2m0-8a4 4 0 110-8 4 4 0 010 8zm0 0v2m0 4v2" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 11v2m0 4v2m0-8a4 4 0 110-8 4 4 0 010 8zm0 0v2m0 4v2"
+                  />
                 </svg>
-                <p className="text-white mt-2">Touch Me</p>
+                <p className="text-white text-info mt-2">Touch Me</p>
               </button>
 
               {/* Arrow Right - Animated */}
@@ -480,7 +692,11 @@ export default function RegisterBooth() {
                 stroke="currentColor"
                 strokeWidth="2"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </div>
           </div>

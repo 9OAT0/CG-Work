@@ -55,6 +55,7 @@ model Booth {
   // Owner information for non-authenticated registration
   owner_names    String[]     // ชื่อเจ้าของบูธ (สำหรับการลงทะเบียนโดยไม่ต้อง auth)
   owner_contacts String[]     // ข้อมูลติดต่อเจ้าของบูธ
+  owner_images   String[]     // รูปภาพเจ้าของบูธ (URLs)
   
   // New relations
   ratings      BoothRating[]

@@ -1,22 +1,42 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 
-const prisma = new PrismaClient()
 
 export async function POST(req: NextRequest) {
-  const { booth_name, booth_code, dept_type, description, pics, owner_names } = await req.json()
+  const {
+    booth_name,
+    booth_code,
+    dept_type,
+    description,
+    pics,
+    owner_names,
+    owner_images,
+  } = await req.json();
 
-  if (!booth_name || !booth_code || !dept_type || !description || !owner_names || owner_names.length === 0) {
-    return NextResponse.json({ error: 'ข้อมูลไม่ครบ กรุณากรอกข้อมูลเจ้าของบูธอย่างน้อย 1 คน' }, { status: 400 })
+  if (
+    !booth_name ||
+    !booth_code ||
+    !dept_type ||
+    !description ||
+    !owner_names ||
+    owner_names.length === 0
+  ) {
+    return NextResponse.json(
+      { error: "ข้อมูลไม่ครบ กรุณากรอกข้อมูลเจ้าของบูธอย่างน้อย 1 คน" },
+      { status: 400 }
+    );
   }
 
   // ตรวจสอบว่ามี booth_code ซ้ำไหม
-  const existing = await prisma.booth.findUnique({ where: { booth_code } })
+  const existing = await prisma.booth.findUnique({ where: { booth_code } });
   if (existing) {
-    return NextResponse.json({ error: 'booth_code นี้มีอยู่แล้ว' }, { status: 400 })
+    return NextResponse.json(
+      { error: "booth_code นี้มีอยู่แล้ว" },
+      { status: 400 }
+    );
   }
 
-  // สร้าง booth โดยไม่ต้องมี authentication
+  // สร้างบูธโดยไม่ต้องมี authentication
   const booth = await prisma.booth.create({
     data: {
       booth_name,
@@ -25,9 +45,10 @@ export async function POST(req: NextRequest) {
       description,
       pics: pics || [], // Handle pics array, default to empty array if not provided
       owner_names: owner_names || [], // Save owner names in separate field
-      owner_contacts: [] // Initialize empty contacts array
-    }
-  })
+      owner_contacts: [], // Initialize empty contacts array, and save owner images URLs if provided
+      owner_images: owner_images || [], // Save owner images URLs
+    },
+  });
 
-  return NextResponse.json({ message: 'สร้างบูธสำเร็จ', booth })
+  return NextResponse.json({ message: "สร้างบูธสำเร็จ", booth });
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@/generated/prisma'
 import { verify } from 'jsonwebtoken'
 import { getThailandTime } from '@/lib/time'
 
