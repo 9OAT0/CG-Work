@@ -42,6 +42,11 @@ model User {
   systemLogs             SystemLog[]
   workingHoursUpdates    WorkingHours[]
   maintenanceModeUpdates MaintenanceMode[]
+
+  // Enhanced maintenance and login tracking
+  lastLoginDate        DateTime? // วันที่ login ล่าสุด
+  maintenanceLoggedOut Boolean        @default(false) // ถูก force logout ในช่วง maintenance หรือไม่
+  loginHistory         LoginHistory[] // ประวัติการ login
 }
 
 model Booth {
@@ -210,4 +215,15 @@ model MaintenanceMode {
   updatedUser User?     @relation(fields: [updatedBy], references: [id])
   updatedAt   DateTime  @default(now())
   createdAt   DateTime  @default(now())
+}
+
+model LoginHistory {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  loginDate DateTime @default(now()) // วันที่และเวลาที่ login
+  ipAddress String? // IP address ของผู้ login
+  userAgent String? // User agent ของ browser
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, loginDate])
 }

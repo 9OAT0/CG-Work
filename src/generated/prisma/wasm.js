@@ -123,7 +123,9 @@ exports.Prisma.UserScalarFieldEnum = {
   student_id: 'student_id',
   dept: 'dept',
   createdAt: 'createdAt',
-  score: 'score'
+  score: 'score',
+  lastLoginDate: 'lastLoginDate',
+  maintenanceLoggedOut: 'maintenanceLoggedOut'
 };
 
 exports.Prisma.BoothScalarFieldEnum = {
@@ -263,6 +265,14 @@ exports.Prisma.MaintenanceModeScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.LoginHistoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  loginDate: 'loginDate',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -290,7 +300,8 @@ exports.Prisma.ModelName = {
   Feedback: 'Feedback',
   SystemLog: 'SystemLog',
   WorkingHours: 'WorkingHours',
-  MaintenanceMode: 'MaintenanceMode'
+  MaintenanceMode: 'MaintenanceMode',
+  LoginHistory: 'LoginHistory'
 };
 
 /**

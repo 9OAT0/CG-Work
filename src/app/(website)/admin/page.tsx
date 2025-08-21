@@ -90,6 +90,8 @@ export default function AdminDashboard() {
   const [participants, setParticipants] = useState<ParticipantsData | null>(null);
   const [transcriptIssues, setTranscriptIssues] = useState<TranscriptIssue[]>([]);
   const [workingHours, setWorkingHours] = useState<WorkingHours | null>(null);
+  const [dailyLogins, setDailyLogins] = useState<any>(null);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [period, setPeriod] = useState('7d');
@@ -321,6 +323,29 @@ export default function AdminDashboard() {
     }
   }, [activeTab, workingHours]);
 
+  // Fetch daily logins data
+  const fetchDailyLogins = async (date?: string) => {
+    try {
+      const targetDate = date || selectedDate;
+      const response = await fetch(`/api/admin/daily-logins?date=${targetDate}`);
+      if (response.ok) {
+        const data = await response.json();
+        setDailyLogins(data.data);
+      } else {
+        console.error('Failed to fetch daily logins');
+      }
+    } catch (error) {
+      console.error('Error fetching daily logins:', error);
+    }
+  };
+
+  // Load daily logins when daily-logins tab is selected
+  useEffect(() => {
+    if (activeTab === 'daily-logins') {
+      fetchDailyLogins();
+    }
+  }, [activeTab, selectedDate]);
+
   if (loading) {
     return (
       <>
@@ -358,6 +383,7 @@ export default function AdminDashboard() {
               { id: 'booths', label: '🏪 บูธยอดนิยม' },
               { id: 'users', label: '🏆 ผู้ใช้อันดับต้น' },
               { id: 'departments', label: '🏫 สถิติคณะ' },
+              { id: 'daily-logins', label: '📊 สถิติการ Login รายวัน' },
               { id: 'working-hours', label: '⏰ จัดการเวลาทำงาน' },
               { id: 'transcript-issues', label: '📋 ปัญหาทรานสคริปต์' }
             ].map(tab => (
@@ -578,6 +604,163 @@ export default function AdminDashboard() {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Daily Logins Tab */}
+          {activeTab === 'daily-logins' && (
+            <div className="space-y-6">
+              {/* Date Selector */}
+              <div className="bg-white p-6 rounded-lg shadow">
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+                  <h2 className="text-2xl font-bold text-gray-800">📊 สถิติการ Login รายวัน</h2>
+                  <div className="flex gap-2 items-center">
+                    <label className="text-sm font-medium text-gray-700">เลือกวันที่:</label>
+                    <input
+                      type="date"
+                      value={selectedDate}
+                      onChange={(e) => setSelectedDate(e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button
+                      onClick={() => fetchDailyLogins()}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    >
+                      🔍 ค้นหา
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {dailyLogins ? (
+                <>
+                  {/* Statistics Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-white p-6 rounded-lg shadow">
+                      <h3 className="text-lg font-semibold text-gray-700">🔢 การ Login ทั้งหมด</h3>
+                      <p className="text-3xl font-bold text-blue-600">{dailyLogins.stats.totalLogins}</p>
+                      <p className="text-sm text-gray-500">ครั้ง</p>
+                    </div>
+                    
+                    <div className="bg-white p-6 rounded-lg shadow">
+                      <h3 className="text-lg font-semibold text-gray-700">👥 ผู้ใช้ที่ Login</h3>
+                      <p className="text-3xl font-bold text-green-600">{dailyLogins.stats.uniqueUsers}</p>
+                      <p className="text-sm text-gray-500">คน</p>
+                    </div>
+                    
+                    <div className="bg-white p-6 rounded-lg shadow">
+                      <h3 className="text-lg font-semibold text-gray-700">👨‍💼 Admin Login</h3>
+                      <p className="text-3xl font-bold text-purple-600">{dailyLogins.stats.adminLogins}</p>
+                      <p className="text-sm text-gray-500">ครั้ง</p>
+                    </div>
+                    
+                    <div className="bg-white p-6 rounded-lg shadow">
+                      <h3 className="text-lg font-semibold text-gray-700">👤 User Login</h3>
+                      <p className="text-3xl font-bold text-orange-600">{dailyLogins.stats.userLogins}</p>
+                      <p className="text-sm text-gray-500">ครั้ง</p>
+                    </div>
+                  </div>
+
+                  {/* Unique Users List */}
+                  <div className="bg-white p-6 rounded-lg shadow">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4">👥 รายชื่อผู้ใช้ที่ Login วันนี้</h3>
+                    {dailyLogins.uniqueUsers.length === 0 ? (
+                      <p className="text-gray-500">ไม่มีผู้ใช้ Login ในวันที่เลือก</p>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full table-auto">
+                          <thead>
+                            <tr className="bg-gray-50">
+                              <th className="px-4 py-2 text-left">รหัสนักศึกษา</th>
+                              <th className="px-4 py-2 text-left">ชื่อ</th>
+                              <th className="px-4 py-2 text-left">บทบาท</th>
+                              <th className="px-4 py-2 text-left">จำนวนครั้ง</th>
+                              <th className="px-4 py-2 text-left">Login ล่าสุด</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {dailyLogins.uniqueUsers.map((user: any, index: number) => (
+                              <tr key={user.id} className="border-b">
+                                <td className="px-4 py-2">{user.student_id || '-'}</td>
+                                <td className="px-4 py-2 font-medium">{user.name}</td>
+                                <td className="px-4 py-2">
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    user.role === 'admin' 
+                                      ? 'bg-purple-100 text-purple-800' 
+                                      : 'bg-blue-100 text-blue-800'
+                                  }`}>
+                                    {user.role === 'admin' ? 'Admin' : 'User'}
+                                  </span>
+                                </td>
+                                <td className="px-4 py-2">{user.loginCount}</td>
+                                <td className="px-4 py-2">
+                                  {user.lastLoginDate 
+                                    ? new Date(user.lastLoginDate).toLocaleString('th-TH')
+                                    : '-'
+                                  }
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Login History */}
+                  <div className="bg-white p-6 rounded-lg shadow">
+                    <h3 className="text-xl font-bold text-gray-800 mb-4">📝 ประวัติการ Login ทั้งหมด</h3>
+                    {dailyLogins.loginHistory.length === 0 ? (
+                      <p className="text-gray-500">ไม่มีประวัติการ Login ในวันที่เลือก</p>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full table-auto">
+                          <thead>
+                            <tr className="bg-gray-50">
+                              <th className="px-4 py-2 text-left">เวลา</th>
+                              <th className="px-4 py-2 text-left">ชื่อผู้ใช้</th>
+                              <th className="px-4 py-2 text-left">รหัสนักศึกษา</th>
+                              <th className="px-4 py-2 text-left">บทบาท</th>
+                              <th className="px-4 py-2 text-left">IP Address</th>
+                              <th className="px-4 py-2 text-left">User Agent</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {dailyLogins.loginHistory.map((login: any) => (
+                              <tr key={login.id} className="border-b">
+                                <td className="px-4 py-2">
+                                  {new Date(login.loginDate).toLocaleString('th-TH')}
+                                </td>
+                                <td className="px-4 py-2 font-medium">{login.user.name}</td>
+                                <td className="px-4 py-2">{login.user.student_id || '-'}</td>
+                                <td className="px-4 py-2">
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    login.user.role === 'admin' 
+                                      ? 'bg-purple-100 text-purple-800' 
+                                      : 'bg-blue-100 text-blue-800'
+                                  }`}>
+                                    {login.user.role === 'admin' ? 'Admin' : 'User'}
+                                  </span>
+                                </td>
+                                <td className="px-4 py-2 text-sm">{login.ipAddress || '-'}</td>
+                                <td className="px-4 py-2 text-sm max-w-xs truncate" title={login.userAgent}>
+                                  {login.userAgent || '-'}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="bg-white p-6 rounded-lg shadow">
+                  <div className="text-center">
+                    <div className="text-xl">กำลังโหลดข้อมูลสถิติการ Login...</div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

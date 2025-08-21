@@ -53,6 +53,26 @@ export async function POST(req: NextRequest) {
     },
   });
 
+  // ✅ อัพเดท lastLoginDate และ reset maintenanceLoggedOut flag
+  const currentTime = getThailandTime()
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      lastLoginDate: currentTime,
+      maintenanceLoggedOut: false
+    }
+  })
+
+  // ✅ บันทึก login history
+  await prisma.loginHistory.create({
+    data: {
+      userId: user.id,
+      loginDate: currentTime,
+      ipAddress: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown',
+      userAgent: req.headers.get('user-agent') || 'unknown'
+    }
+  })
+
   // ✅ สร้าง JWT
   const token = jwt.sign(
     {

@@ -23,7 +23,9 @@ export async function GET(req: NextRequest) {
         student_id: true,
         dept: true,
         role: true,
-        score: true
+        score: true,
+        lastLoginDate: true,
+        maintenanceLoggedOut: true
       }
     })
 

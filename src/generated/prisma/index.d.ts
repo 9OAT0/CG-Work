@@ -93,6 +93,11 @@ export type WorkingHours = $Result.DefaultSelection<Prisma.$WorkingHoursPayload>
  * 
  */
 export type MaintenanceMode = $Result.DefaultSelection<Prisma.$MaintenanceModePayload>
+/**
+ * Model LoginHistory
+ * 
+ */
+export type LoginHistory = $Result.DefaultSelection<Prisma.$LoginHistoryPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -338,6 +343,16 @@ export class PrismaClient<
     * ```
     */
   get maintenanceMode(): Prisma.MaintenanceModeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.loginHistory`: Exposes CRUD operations for the **LoginHistory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LoginHistories
+    * const loginHistories = await prisma.loginHistory.findMany()
+    * ```
+    */
+  get loginHistory(): Prisma.LoginHistoryDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -793,7 +808,8 @@ export namespace Prisma {
     Feedback: 'Feedback',
     SystemLog: 'SystemLog',
     WorkingHours: 'WorkingHours',
-    MaintenanceMode: 'MaintenanceMode'
+    MaintenanceMode: 'MaintenanceMode',
+    LoginHistory: 'LoginHistory'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -812,7 +828,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode"
+      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode" | "loginHistory"
       txIsolationLevel: never
     }
     model: {
@@ -2000,6 +2016,80 @@ export namespace Prisma {
           }
         }
       }
+      LoginHistory: {
+        payload: Prisma.$LoginHistoryPayload<ExtArgs>
+        fields: Prisma.LoginHistoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LoginHistoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoginHistoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LoginHistoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+          }
+          findFirst: {
+            args: Prisma.LoginHistoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoginHistoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LoginHistoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+          }
+          findMany: {
+            args: Prisma.LoginHistoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoginHistoryPayload>[]
+          }
+          create: {
+            args: Prisma.LoginHistoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+          }
+          createMany: {
+            args: Prisma.LoginHistoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.LoginHistoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+          }
+          update: {
+            args: Prisma.LoginHistoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.LoginHistoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LoginHistoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.LoginHistoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LoginHistoryPayload>
+          }
+          aggregate: {
+            args: Prisma.LoginHistoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLoginHistory>
+          }
+          groupBy: {
+            args: Prisma.LoginHistoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LoginHistoryGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.LoginHistoryFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.LoginHistoryAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.LoginHistoryCountArgs<ExtArgs>
+            result: $Utils.Optional<LoginHistoryCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2095,6 +2185,7 @@ export namespace Prisma {
     systemLog?: SystemLogOmit
     workingHours?: WorkingHoursOmit
     maintenanceMode?: MaintenanceModeOmit
+    loginHistory?: LoginHistoryOmit
   }
 
   /* Types for Logging */
@@ -2188,6 +2279,7 @@ export namespace Prisma {
     systemLogs: number
     workingHoursUpdates: number
     maintenanceModeUpdates: number
+    loginHistory: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2204,6 +2296,7 @@ export namespace Prisma {
     systemLogs?: boolean | UserCountOutputTypeCountSystemLogsArgs
     workingHoursUpdates?: boolean | UserCountOutputTypeCountWorkingHoursUpdatesArgs
     maintenanceModeUpdates?: boolean | UserCountOutputTypeCountMaintenanceModeUpdatesArgs
+    loginHistory?: boolean | UserCountOutputTypeCountLoginHistoryArgs
   }
 
   // Custom InputTypes
@@ -2306,6 +2399,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountMaintenanceModeUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MaintenanceModeWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountLoginHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoginHistoryWhereInput
   }
 
 
@@ -2411,6 +2511,8 @@ export namespace Prisma {
     dept: string | null
     createdAt: Date | null
     score: number | null
+    lastLoginDate: Date | null
+    maintenanceLoggedOut: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2424,6 +2526,8 @@ export namespace Prisma {
     dept: string | null
     createdAt: Date | null
     score: number | null
+    lastLoginDate: Date | null
+    maintenanceLoggedOut: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2437,6 +2541,8 @@ export namespace Prisma {
     dept: number
     createdAt: number
     score: number
+    lastLoginDate: number
+    maintenanceLoggedOut: number
     _all: number
   }
 
@@ -2460,6 +2566,8 @@ export namespace Prisma {
     dept?: true
     createdAt?: true
     score?: true
+    lastLoginDate?: true
+    maintenanceLoggedOut?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2473,6 +2581,8 @@ export namespace Prisma {
     dept?: true
     createdAt?: true
     score?: true
+    lastLoginDate?: true
+    maintenanceLoggedOut?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2486,6 +2596,8 @@ export namespace Prisma {
     dept?: true
     createdAt?: true
     score?: true
+    lastLoginDate?: true
+    maintenanceLoggedOut?: true
     _all?: true
   }
 
@@ -2586,6 +2698,8 @@ export namespace Prisma {
     dept: string
     createdAt: Date
     score: number
+    lastLoginDate: Date | null
+    maintenanceLoggedOut: boolean
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -2618,6 +2732,8 @@ export namespace Prisma {
     dept?: boolean
     createdAt?: boolean
     score?: boolean
+    lastLoginDate?: boolean
+    maintenanceLoggedOut?: boolean
     joinedBooths?: boolean | User$joinedBoothsArgs<ExtArgs>
     ownedBooths?: boolean | User$ownedBoothsArgs<ExtArgs>
     TranscriptLog?: boolean | User$TranscriptLogArgs<ExtArgs>
@@ -2631,6 +2747,7 @@ export namespace Prisma {
     systemLogs?: boolean | User$systemLogsArgs<ExtArgs>
     workingHoursUpdates?: boolean | User$workingHoursUpdatesArgs<ExtArgs>
     maintenanceModeUpdates?: boolean | User$maintenanceModeUpdatesArgs<ExtArgs>
+    loginHistory?: boolean | User$loginHistoryArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2647,9 +2764,11 @@ export namespace Prisma {
     dept?: boolean
     createdAt?: boolean
     score?: boolean
+    lastLoginDate?: boolean
+    maintenanceLoggedOut?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "status" | "role" | "year" | "name" | "student_id" | "dept" | "createdAt" | "score", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "status" | "role" | "year" | "name" | "student_id" | "dept" | "createdAt" | "score" | "lastLoginDate" | "maintenanceLoggedOut", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     joinedBooths?: boolean | User$joinedBoothsArgs<ExtArgs>
     ownedBooths?: boolean | User$ownedBoothsArgs<ExtArgs>
@@ -2664,6 +2783,7 @@ export namespace Prisma {
     systemLogs?: boolean | User$systemLogsArgs<ExtArgs>
     workingHoursUpdates?: boolean | User$workingHoursUpdatesArgs<ExtArgs>
     maintenanceModeUpdates?: boolean | User$maintenanceModeUpdatesArgs<ExtArgs>
+    loginHistory?: boolean | User$loginHistoryArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2683,6 +2803,7 @@ export namespace Prisma {
       systemLogs: Prisma.$SystemLogPayload<ExtArgs>[]
       workingHoursUpdates: Prisma.$WorkingHoursPayload<ExtArgs>[]
       maintenanceModeUpdates: Prisma.$MaintenanceModePayload<ExtArgs>[]
+      loginHistory: Prisma.$LoginHistoryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2695,6 +2816,8 @@ export namespace Prisma {
       dept: string
       createdAt: Date
       score: number
+      lastLoginDate: Date | null
+      maintenanceLoggedOut: boolean
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -3071,6 +3194,7 @@ export namespace Prisma {
     systemLogs<T extends User$systemLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$systemLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     workingHoursUpdates<T extends User$workingHoursUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$workingHoursUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     maintenanceModeUpdates<T extends User$maintenanceModeUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$maintenanceModeUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    loginHistory<T extends User$loginHistoryArgs<ExtArgs> = {}>(args?: Subset<T, User$loginHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3110,6 +3234,8 @@ export namespace Prisma {
     readonly dept: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly score: FieldRef<"User", 'Int'>
+    readonly lastLoginDate: FieldRef<"User", 'DateTime'>
+    readonly maintenanceLoggedOut: FieldRef<"User", 'Boolean'>
   }
     
 
@@ -3789,6 +3915,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MaintenanceModeScalarFieldEnum | MaintenanceModeScalarFieldEnum[]
+  }
+
+  /**
+   * User.loginHistory
+   */
+  export type User$loginHistoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    where?: LoginHistoryWhereInput
+    orderBy?: LoginHistoryOrderByWithRelationInput | LoginHistoryOrderByWithRelationInput[]
+    cursor?: LoginHistoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LoginHistoryScalarFieldEnum | LoginHistoryScalarFieldEnum[]
   }
 
   /**
@@ -18998,6 +19148,985 @@ export namespace Prisma {
 
 
   /**
+   * Model LoginHistory
+   */
+
+  export type AggregateLoginHistory = {
+    _count: LoginHistoryCountAggregateOutputType | null
+    _min: LoginHistoryMinAggregateOutputType | null
+    _max: LoginHistoryMaxAggregateOutputType | null
+  }
+
+  export type LoginHistoryMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    loginDate: Date | null
+    ipAddress: string | null
+    userAgent: string | null
+  }
+
+  export type LoginHistoryMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    loginDate: Date | null
+    ipAddress: string | null
+    userAgent: string | null
+  }
+
+  export type LoginHistoryCountAggregateOutputType = {
+    id: number
+    userId: number
+    loginDate: number
+    ipAddress: number
+    userAgent: number
+    _all: number
+  }
+
+
+  export type LoginHistoryMinAggregateInputType = {
+    id?: true
+    userId?: true
+    loginDate?: true
+    ipAddress?: true
+    userAgent?: true
+  }
+
+  export type LoginHistoryMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    loginDate?: true
+    ipAddress?: true
+    userAgent?: true
+  }
+
+  export type LoginHistoryCountAggregateInputType = {
+    id?: true
+    userId?: true
+    loginDate?: true
+    ipAddress?: true
+    userAgent?: true
+    _all?: true
+  }
+
+  export type LoginHistoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoginHistory to aggregate.
+     */
+    where?: LoginHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginHistories to fetch.
+     */
+    orderBy?: LoginHistoryOrderByWithRelationInput | LoginHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LoginHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LoginHistories
+    **/
+    _count?: true | LoginHistoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LoginHistoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LoginHistoryMaxAggregateInputType
+  }
+
+  export type GetLoginHistoryAggregateType<T extends LoginHistoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateLoginHistory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLoginHistory[P]>
+      : GetScalarType<T[P], AggregateLoginHistory[P]>
+  }
+
+
+
+
+  export type LoginHistoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LoginHistoryWhereInput
+    orderBy?: LoginHistoryOrderByWithAggregationInput | LoginHistoryOrderByWithAggregationInput[]
+    by: LoginHistoryScalarFieldEnum[] | LoginHistoryScalarFieldEnum
+    having?: LoginHistoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LoginHistoryCountAggregateInputType | true
+    _min?: LoginHistoryMinAggregateInputType
+    _max?: LoginHistoryMaxAggregateInputType
+  }
+
+  export type LoginHistoryGroupByOutputType = {
+    id: string
+    userId: string
+    loginDate: Date
+    ipAddress: string | null
+    userAgent: string | null
+    _count: LoginHistoryCountAggregateOutputType | null
+    _min: LoginHistoryMinAggregateOutputType | null
+    _max: LoginHistoryMaxAggregateOutputType | null
+  }
+
+  type GetLoginHistoryGroupByPayload<T extends LoginHistoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LoginHistoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LoginHistoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LoginHistoryGroupByOutputType[P]>
+            : GetScalarType<T[P], LoginHistoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LoginHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    loginDate?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["loginHistory"]>
+
+
+
+  export type LoginHistorySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    loginDate?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+  }
+
+  export type LoginHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "loginDate" | "ipAddress" | "userAgent", ExtArgs["result"]["loginHistory"]>
+  export type LoginHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $LoginHistoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LoginHistory"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      loginDate: Date
+      ipAddress: string | null
+      userAgent: string | null
+    }, ExtArgs["result"]["loginHistory"]>
+    composites: {}
+  }
+
+  type LoginHistoryGetPayload<S extends boolean | null | undefined | LoginHistoryDefaultArgs> = $Result.GetResult<Prisma.$LoginHistoryPayload, S>
+
+  type LoginHistoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LoginHistoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LoginHistoryCountAggregateInputType | true
+    }
+
+  export interface LoginHistoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LoginHistory'], meta: { name: 'LoginHistory' } }
+    /**
+     * Find zero or one LoginHistory that matches the filter.
+     * @param {LoginHistoryFindUniqueArgs} args - Arguments to find a LoginHistory
+     * @example
+     * // Get one LoginHistory
+     * const loginHistory = await prisma.loginHistory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LoginHistoryFindUniqueArgs>(args: SelectSubset<T, LoginHistoryFindUniqueArgs<ExtArgs>>): Prisma__LoginHistoryClient<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LoginHistory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LoginHistoryFindUniqueOrThrowArgs} args - Arguments to find a LoginHistory
+     * @example
+     * // Get one LoginHistory
+     * const loginHistory = await prisma.loginHistory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LoginHistoryFindUniqueOrThrowArgs>(args: SelectSubset<T, LoginHistoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LoginHistoryClient<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoginHistory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginHistoryFindFirstArgs} args - Arguments to find a LoginHistory
+     * @example
+     * // Get one LoginHistory
+     * const loginHistory = await prisma.loginHistory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LoginHistoryFindFirstArgs>(args?: SelectSubset<T, LoginHistoryFindFirstArgs<ExtArgs>>): Prisma__LoginHistoryClient<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LoginHistory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginHistoryFindFirstOrThrowArgs} args - Arguments to find a LoginHistory
+     * @example
+     * // Get one LoginHistory
+     * const loginHistory = await prisma.loginHistory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LoginHistoryFindFirstOrThrowArgs>(args?: SelectSubset<T, LoginHistoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__LoginHistoryClient<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LoginHistories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginHistoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LoginHistories
+     * const loginHistories = await prisma.loginHistory.findMany()
+     * 
+     * // Get first 10 LoginHistories
+     * const loginHistories = await prisma.loginHistory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const loginHistoryWithIdOnly = await prisma.loginHistory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LoginHistoryFindManyArgs>(args?: SelectSubset<T, LoginHistoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LoginHistory.
+     * @param {LoginHistoryCreateArgs} args - Arguments to create a LoginHistory.
+     * @example
+     * // Create one LoginHistory
+     * const LoginHistory = await prisma.loginHistory.create({
+     *   data: {
+     *     // ... data to create a LoginHistory
+     *   }
+     * })
+     * 
+     */
+    create<T extends LoginHistoryCreateArgs>(args: SelectSubset<T, LoginHistoryCreateArgs<ExtArgs>>): Prisma__LoginHistoryClient<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LoginHistories.
+     * @param {LoginHistoryCreateManyArgs} args - Arguments to create many LoginHistories.
+     * @example
+     * // Create many LoginHistories
+     * const loginHistory = await prisma.loginHistory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LoginHistoryCreateManyArgs>(args?: SelectSubset<T, LoginHistoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a LoginHistory.
+     * @param {LoginHistoryDeleteArgs} args - Arguments to delete one LoginHistory.
+     * @example
+     * // Delete one LoginHistory
+     * const LoginHistory = await prisma.loginHistory.delete({
+     *   where: {
+     *     // ... filter to delete one LoginHistory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LoginHistoryDeleteArgs>(args: SelectSubset<T, LoginHistoryDeleteArgs<ExtArgs>>): Prisma__LoginHistoryClient<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LoginHistory.
+     * @param {LoginHistoryUpdateArgs} args - Arguments to update one LoginHistory.
+     * @example
+     * // Update one LoginHistory
+     * const loginHistory = await prisma.loginHistory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LoginHistoryUpdateArgs>(args: SelectSubset<T, LoginHistoryUpdateArgs<ExtArgs>>): Prisma__LoginHistoryClient<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LoginHistories.
+     * @param {LoginHistoryDeleteManyArgs} args - Arguments to filter LoginHistories to delete.
+     * @example
+     * // Delete a few LoginHistories
+     * const { count } = await prisma.loginHistory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LoginHistoryDeleteManyArgs>(args?: SelectSubset<T, LoginHistoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LoginHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginHistoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LoginHistories
+     * const loginHistory = await prisma.loginHistory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LoginHistoryUpdateManyArgs>(args: SelectSubset<T, LoginHistoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LoginHistory.
+     * @param {LoginHistoryUpsertArgs} args - Arguments to update or create a LoginHistory.
+     * @example
+     * // Update or create a LoginHistory
+     * const loginHistory = await prisma.loginHistory.upsert({
+     *   create: {
+     *     // ... data to create a LoginHistory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LoginHistory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LoginHistoryUpsertArgs>(args: SelectSubset<T, LoginHistoryUpsertArgs<ExtArgs>>): Prisma__LoginHistoryClient<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LoginHistories that matches the filter.
+     * @param {LoginHistoryFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const loginHistory = await prisma.loginHistory.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: LoginHistoryFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a LoginHistory.
+     * @param {LoginHistoryAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const loginHistory = await prisma.loginHistory.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: LoginHistoryAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of LoginHistories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginHistoryCountArgs} args - Arguments to filter LoginHistories to count.
+     * @example
+     * // Count the number of LoginHistories
+     * const count = await prisma.loginHistory.count({
+     *   where: {
+     *     // ... the filter for the LoginHistories we want to count
+     *   }
+     * })
+    **/
+    count<T extends LoginHistoryCountArgs>(
+      args?: Subset<T, LoginHistoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LoginHistoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LoginHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginHistoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LoginHistoryAggregateArgs>(args: Subset<T, LoginHistoryAggregateArgs>): Prisma.PrismaPromise<GetLoginHistoryAggregateType<T>>
+
+    /**
+     * Group by LoginHistory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LoginHistoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LoginHistoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LoginHistoryGroupByArgs['orderBy'] }
+        : { orderBy?: LoginHistoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LoginHistoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLoginHistoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LoginHistory model
+   */
+  readonly fields: LoginHistoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LoginHistory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LoginHistoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LoginHistory model
+   */
+  interface LoginHistoryFieldRefs {
+    readonly id: FieldRef<"LoginHistory", 'String'>
+    readonly userId: FieldRef<"LoginHistory", 'String'>
+    readonly loginDate: FieldRef<"LoginHistory", 'DateTime'>
+    readonly ipAddress: FieldRef<"LoginHistory", 'String'>
+    readonly userAgent: FieldRef<"LoginHistory", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LoginHistory findUnique
+   */
+  export type LoginHistoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoginHistory to fetch.
+     */
+    where: LoginHistoryWhereUniqueInput
+  }
+
+  /**
+   * LoginHistory findUniqueOrThrow
+   */
+  export type LoginHistoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoginHistory to fetch.
+     */
+    where: LoginHistoryWhereUniqueInput
+  }
+
+  /**
+   * LoginHistory findFirst
+   */
+  export type LoginHistoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoginHistory to fetch.
+     */
+    where?: LoginHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginHistories to fetch.
+     */
+    orderBy?: LoginHistoryOrderByWithRelationInput | LoginHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoginHistories.
+     */
+    cursor?: LoginHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoginHistories.
+     */
+    distinct?: LoginHistoryScalarFieldEnum | LoginHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * LoginHistory findFirstOrThrow
+   */
+  export type LoginHistoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoginHistory to fetch.
+     */
+    where?: LoginHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginHistories to fetch.
+     */
+    orderBy?: LoginHistoryOrderByWithRelationInput | LoginHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LoginHistories.
+     */
+    cursor?: LoginHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginHistories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LoginHistories.
+     */
+    distinct?: LoginHistoryScalarFieldEnum | LoginHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * LoginHistory findMany
+   */
+  export type LoginHistoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    /**
+     * Filter, which LoginHistories to fetch.
+     */
+    where?: LoginHistoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LoginHistories to fetch.
+     */
+    orderBy?: LoginHistoryOrderByWithRelationInput | LoginHistoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LoginHistories.
+     */
+    cursor?: LoginHistoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LoginHistories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LoginHistories.
+     */
+    skip?: number
+    distinct?: LoginHistoryScalarFieldEnum | LoginHistoryScalarFieldEnum[]
+  }
+
+  /**
+   * LoginHistory create
+   */
+  export type LoginHistoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LoginHistory.
+     */
+    data: XOR<LoginHistoryCreateInput, LoginHistoryUncheckedCreateInput>
+  }
+
+  /**
+   * LoginHistory createMany
+   */
+  export type LoginHistoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LoginHistories.
+     */
+    data: LoginHistoryCreateManyInput | LoginHistoryCreateManyInput[]
+  }
+
+  /**
+   * LoginHistory update
+   */
+  export type LoginHistoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LoginHistory.
+     */
+    data: XOR<LoginHistoryUpdateInput, LoginHistoryUncheckedUpdateInput>
+    /**
+     * Choose, which LoginHistory to update.
+     */
+    where: LoginHistoryWhereUniqueInput
+  }
+
+  /**
+   * LoginHistory updateMany
+   */
+  export type LoginHistoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LoginHistories.
+     */
+    data: XOR<LoginHistoryUpdateManyMutationInput, LoginHistoryUncheckedUpdateManyInput>
+    /**
+     * Filter which LoginHistories to update
+     */
+    where?: LoginHistoryWhereInput
+    /**
+     * Limit how many LoginHistories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoginHistory upsert
+   */
+  export type LoginHistoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LoginHistory to update in case it exists.
+     */
+    where: LoginHistoryWhereUniqueInput
+    /**
+     * In case the LoginHistory found by the `where` argument doesn't exist, create a new LoginHistory with this data.
+     */
+    create: XOR<LoginHistoryCreateInput, LoginHistoryUncheckedCreateInput>
+    /**
+     * In case the LoginHistory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LoginHistoryUpdateInput, LoginHistoryUncheckedUpdateInput>
+  }
+
+  /**
+   * LoginHistory delete
+   */
+  export type LoginHistoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+    /**
+     * Filter which LoginHistory to delete.
+     */
+    where: LoginHistoryWhereUniqueInput
+  }
+
+  /**
+   * LoginHistory deleteMany
+   */
+  export type LoginHistoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LoginHistories to delete
+     */
+    where?: LoginHistoryWhereInput
+    /**
+     * Limit how many LoginHistories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LoginHistory findRaw
+   */
+  export type LoginHistoryFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * LoginHistory aggregateRaw
+   */
+  export type LoginHistoryAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * LoginHistory without action
+   */
+  export type LoginHistoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LoginHistory
+     */
+    select?: LoginHistorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LoginHistory
+     */
+    omit?: LoginHistoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LoginHistoryInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -19011,7 +20140,9 @@ export namespace Prisma {
     student_id: 'student_id',
     dept: 'dept',
     createdAt: 'createdAt',
-    score: 'score'
+    score: 'score',
+    lastLoginDate: 'lastLoginDate',
+    maintenanceLoggedOut: 'maintenanceLoggedOut'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -19199,6 +20330,17 @@ export namespace Prisma {
   export type MaintenanceModeScalarFieldEnum = (typeof MaintenanceModeScalarFieldEnum)[keyof typeof MaintenanceModeScalarFieldEnum]
 
 
+  export const LoginHistoryScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    loginDate: 'loginDate',
+    ipAddress: 'ipAddress',
+    userAgent: 'userAgent'
+  };
+
+  export type LoginHistoryScalarFieldEnum = (typeof LoginHistoryScalarFieldEnum)[keyof typeof LoginHistoryScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -19300,6 +20442,8 @@ export namespace Prisma {
     dept?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     score?: IntFilter<"User"> | number
+    lastLoginDate?: DateTimeNullableFilter<"User"> | Date | string | null
+    maintenanceLoggedOut?: BoolFilter<"User"> | boolean
     joinedBooths?: BoothJoinListRelationFilter
     ownedBooths?: BoothOwnerListRelationFilter
     TranscriptLog?: TranscriptLogListRelationFilter
@@ -19313,6 +20457,7 @@ export namespace Prisma {
     systemLogs?: SystemLogListRelationFilter
     workingHoursUpdates?: WorkingHoursListRelationFilter
     maintenanceModeUpdates?: MaintenanceModeListRelationFilter
+    loginHistory?: LoginHistoryListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -19326,6 +20471,8 @@ export namespace Prisma {
     dept?: SortOrder
     createdAt?: SortOrder
     score?: SortOrder
+    lastLoginDate?: SortOrder
+    maintenanceLoggedOut?: SortOrder
     joinedBooths?: BoothJoinOrderByRelationAggregateInput
     ownedBooths?: BoothOwnerOrderByRelationAggregateInput
     TranscriptLog?: TranscriptLogOrderByRelationAggregateInput
@@ -19339,6 +20486,7 @@ export namespace Prisma {
     systemLogs?: SystemLogOrderByRelationAggregateInput
     workingHoursUpdates?: WorkingHoursOrderByRelationAggregateInput
     maintenanceModeUpdates?: MaintenanceModeOrderByRelationAggregateInput
+    loginHistory?: LoginHistoryOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -19355,6 +20503,8 @@ export namespace Prisma {
     dept?: StringFilter<"User"> | string
     createdAt?: DateTimeFilter<"User"> | Date | string
     score?: IntFilter<"User"> | number
+    lastLoginDate?: DateTimeNullableFilter<"User"> | Date | string | null
+    maintenanceLoggedOut?: BoolFilter<"User"> | boolean
     joinedBooths?: BoothJoinListRelationFilter
     ownedBooths?: BoothOwnerListRelationFilter
     TranscriptLog?: TranscriptLogListRelationFilter
@@ -19368,6 +20518,7 @@ export namespace Prisma {
     systemLogs?: SystemLogListRelationFilter
     workingHoursUpdates?: WorkingHoursListRelationFilter
     maintenanceModeUpdates?: MaintenanceModeListRelationFilter
+    loginHistory?: LoginHistoryListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -19381,6 +20532,8 @@ export namespace Prisma {
     dept?: SortOrder
     createdAt?: SortOrder
     score?: SortOrder
+    lastLoginDate?: SortOrder
+    maintenanceLoggedOut?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -19402,6 +20555,8 @@ export namespace Prisma {
     dept?: StringWithAggregatesFilter<"User"> | string
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     score?: IntWithAggregatesFilter<"User"> | number
+    lastLoginDate?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    maintenanceLoggedOut?: BoolWithAggregatesFilter<"User"> | boolean
   }
 
   export type BoothWhereInput = {
@@ -20346,6 +21501,61 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"MaintenanceMode"> | Date | string
   }
 
+  export type LoginHistoryWhereInput = {
+    AND?: LoginHistoryWhereInput | LoginHistoryWhereInput[]
+    OR?: LoginHistoryWhereInput[]
+    NOT?: LoginHistoryWhereInput | LoginHistoryWhereInput[]
+    id?: StringFilter<"LoginHistory"> | string
+    userId?: StringFilter<"LoginHistory"> | string
+    loginDate?: DateTimeFilter<"LoginHistory"> | Date | string
+    ipAddress?: StringNullableFilter<"LoginHistory"> | string | null
+    userAgent?: StringNullableFilter<"LoginHistory"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type LoginHistoryOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type LoginHistoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LoginHistoryWhereInput | LoginHistoryWhereInput[]
+    OR?: LoginHistoryWhereInput[]
+    NOT?: LoginHistoryWhereInput | LoginHistoryWhereInput[]
+    userId?: StringFilter<"LoginHistory"> | string
+    loginDate?: DateTimeFilter<"LoginHistory"> | Date | string
+    ipAddress?: StringNullableFilter<"LoginHistory"> | string | null
+    userAgent?: StringNullableFilter<"LoginHistory"> | string | null
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type LoginHistoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    _count?: LoginHistoryCountOrderByAggregateInput
+    _max?: LoginHistoryMaxOrderByAggregateInput
+    _min?: LoginHistoryMinOrderByAggregateInput
+  }
+
+  export type LoginHistoryScalarWhereWithAggregatesInput = {
+    AND?: LoginHistoryScalarWhereWithAggregatesInput | LoginHistoryScalarWhereWithAggregatesInput[]
+    OR?: LoginHistoryScalarWhereWithAggregatesInput[]
+    NOT?: LoginHistoryScalarWhereWithAggregatesInput | LoginHistoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LoginHistory"> | string
+    userId?: StringWithAggregatesFilter<"LoginHistory"> | string
+    loginDate?: DateTimeWithAggregatesFilter<"LoginHistory"> | Date | string
+    ipAddress?: StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -20357,6 +21567,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -20370,6 +21582,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -20383,6 +21596,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -20396,6 +21611,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -20408,6 +21624,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -20421,6 +21639,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -20433,6 +21652,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -20446,6 +21667,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -20459,6 +21681,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
   }
 
   export type UserUpdateManyMutationInput = {
@@ -20471,6 +21695,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -20483,6 +21709,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type BoothCreateInput = {
@@ -21386,6 +22614,57 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LoginHistoryCreateInput = {
+    id?: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    user: UserCreateNestedOneWithoutLoginHistoryInput
+  }
+
+  export type LoginHistoryUncheckedCreateInput = {
+    id?: string
+    userId: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type LoginHistoryUpdateInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    user?: UserUpdateOneRequiredWithoutLoginHistoryNestedInput
+  }
+
+  export type LoginHistoryUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LoginHistoryCreateManyInput = {
+    id?: string
+    userId: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type LoginHistoryUpdateManyMutationInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LoginHistoryUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -21437,6 +22716,23 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+    isSet?: boolean
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type BoothJoinListRelationFilter = {
@@ -21517,6 +22813,12 @@ export namespace Prisma {
     none?: MaintenanceModeWhereInput
   }
 
+  export type LoginHistoryListRelationFilter = {
+    every?: LoginHistoryWhereInput
+    some?: LoginHistoryWhereInput
+    none?: LoginHistoryWhereInput
+  }
+
   export type BoothJoinOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -21569,6 +22871,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type LoginHistoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     username?: SortOrder
@@ -21580,6 +22886,8 @@ export namespace Prisma {
     dept?: SortOrder
     createdAt?: SortOrder
     score?: SortOrder
+    lastLoginDate?: SortOrder
+    maintenanceLoggedOut?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -21597,6 +22905,8 @@ export namespace Prisma {
     dept?: SortOrder
     createdAt?: SortOrder
     score?: SortOrder
+    lastLoginDate?: SortOrder
+    maintenanceLoggedOut?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -21610,6 +22920,8 @@ export namespace Prisma {
     dept?: SortOrder
     createdAt?: SortOrder
     score?: SortOrder
+    lastLoginDate?: SortOrder
+    maintenanceLoggedOut?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -21681,6 +22993,29 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
@@ -21976,11 +23311,6 @@ export namespace Prisma {
     size?: SortOrder
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NotificationCountOrderByAggregateInput = {
     id?: SortOrder
     title?: SortOrder
@@ -22009,14 +23339,6 @@ export namespace Prisma {
     userId?: SortOrder
     isRead?: SortOrder
     createdAt?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type FeedbackCountOrderByAggregateInput = {
@@ -22122,18 +23444,6 @@ export namespace Prisma {
     endHour?: SortOrder
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-    isSet?: boolean
-  }
-
   export type MaintenanceModeCountOrderByAggregateInput = {
     id?: SortOrder
     isEnabled?: SortOrder
@@ -22170,19 +23480,28 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
-    isSet?: boolean
+  export type LoginHistoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type LoginHistoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+  }
+
+  export type LoginHistoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    loginDate?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
   }
 
   export type BoothJoinCreateNestedManyWithoutUserInput = {
@@ -22276,6 +23595,13 @@ export namespace Prisma {
     connect?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
   }
 
+  export type LoginHistoryCreateNestedManyWithoutUserInput = {
+    create?: XOR<LoginHistoryCreateWithoutUserInput, LoginHistoryUncheckedCreateWithoutUserInput> | LoginHistoryCreateWithoutUserInput[] | LoginHistoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LoginHistoryCreateOrConnectWithoutUserInput | LoginHistoryCreateOrConnectWithoutUserInput[]
+    createMany?: LoginHistoryCreateManyUserInputEnvelope
+    connect?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+  }
+
   export type BoothJoinUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -22367,6 +23693,13 @@ export namespace Prisma {
     connect?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
   }
 
+  export type LoginHistoryUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<LoginHistoryCreateWithoutUserInput, LoginHistoryUncheckedCreateWithoutUserInput> | LoginHistoryCreateWithoutUserInput[] | LoginHistoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LoginHistoryCreateOrConnectWithoutUserInput | LoginHistoryCreateOrConnectWithoutUserInput[]
+    createMany?: LoginHistoryCreateManyUserInputEnvelope
+    connect?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -22386,6 +23719,15 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+    unset?: boolean
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type BoothJoinUpdateManyWithoutUserNestedInput = {
@@ -22570,6 +23912,20 @@ export namespace Prisma {
     deleteMany?: MaintenanceModeScalarWhereInput | MaintenanceModeScalarWhereInput[]
   }
 
+  export type LoginHistoryUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LoginHistoryCreateWithoutUserInput, LoginHistoryUncheckedCreateWithoutUserInput> | LoginHistoryCreateWithoutUserInput[] | LoginHistoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LoginHistoryCreateOrConnectWithoutUserInput | LoginHistoryCreateOrConnectWithoutUserInput[]
+    upsert?: LoginHistoryUpsertWithWhereUniqueWithoutUserInput | LoginHistoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LoginHistoryCreateManyUserInputEnvelope
+    set?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+    disconnect?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+    delete?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+    connect?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+    update?: LoginHistoryUpdateWithWhereUniqueWithoutUserInput | LoginHistoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LoginHistoryUpdateManyWithWhereWithoutUserInput | LoginHistoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LoginHistoryScalarWhereInput | LoginHistoryScalarWhereInput[]
+  }
+
   export type BoothJoinUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -22750,6 +24106,20 @@ export namespace Prisma {
     update?: MaintenanceModeUpdateWithWhereUniqueWithoutUpdatedUserInput | MaintenanceModeUpdateWithWhereUniqueWithoutUpdatedUserInput[]
     updateMany?: MaintenanceModeUpdateManyWithWhereWithoutUpdatedUserInput | MaintenanceModeUpdateManyWithWhereWithoutUpdatedUserInput[]
     deleteMany?: MaintenanceModeScalarWhereInput | MaintenanceModeScalarWhereInput[]
+  }
+
+  export type LoginHistoryUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<LoginHistoryCreateWithoutUserInput, LoginHistoryUncheckedCreateWithoutUserInput> | LoginHistoryCreateWithoutUserInput[] | LoginHistoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: LoginHistoryCreateOrConnectWithoutUserInput | LoginHistoryCreateOrConnectWithoutUserInput[]
+    upsert?: LoginHistoryUpsertWithWhereUniqueWithoutUserInput | LoginHistoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: LoginHistoryCreateManyUserInputEnvelope
+    set?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+    disconnect?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+    delete?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+    connect?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+    update?: LoginHistoryUpdateWithWhereUniqueWithoutUserInput | LoginHistoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: LoginHistoryUpdateManyWithWhereWithoutUserInput | LoginHistoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: LoginHistoryScalarWhereInput | LoginHistoryScalarWhereInput[]
   }
 
   export type BoothCreatepicsInput = {
@@ -23188,10 +24558,6 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type UserUpdateOneWithoutNotificationsNestedInput = {
     create?: XOR<UserCreateWithoutNotificationsInput, UserUncheckedCreateWithoutNotificationsInput>
     connectOrCreate?: UserCreateOrConnectWithoutNotificationsInput
@@ -23256,11 +24622,6 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-    unset?: boolean
-  }
-
   export type UserUpdateOneWithoutMaintenanceModeUpdatesNestedInput = {
     create?: XOR<UserCreateWithoutMaintenanceModeUpdatesInput, UserUncheckedCreateWithoutMaintenanceModeUpdatesInput>
     connectOrCreate?: UserCreateOrConnectWithoutMaintenanceModeUpdatesInput
@@ -23269,6 +24630,20 @@ export namespace Prisma {
     delete?: UserWhereInput | boolean
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMaintenanceModeUpdatesInput, UserUpdateWithoutMaintenanceModeUpdatesInput>, UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput>
+  }
+
+  export type UserCreateNestedOneWithoutLoginHistoryInput = {
+    create?: XOR<UserCreateWithoutLoginHistoryInput, UserUncheckedCreateWithoutLoginHistoryInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLoginHistoryInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutLoginHistoryNestedInput = {
+    create?: XOR<UserCreateWithoutLoginHistoryInput, UserUncheckedCreateWithoutLoginHistoryInput>
+    connectOrCreate?: UserCreateOrConnectWithoutLoginHistoryInput
+    upsert?: UserUpsertWithoutLoginHistoryInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLoginHistoryInput, UserUpdateWithoutLoginHistoryInput>, UserUncheckedUpdateWithoutLoginHistoryInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -23320,6 +24695,23 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+    isSet?: boolean
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -23410,31 +24802,6 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-    isSet?: boolean
-  }
-
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -23448,6 +24815,14 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
     isSet?: boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type BoothJoinCreateWithoutUserInput = {
@@ -23771,6 +25146,29 @@ export namespace Prisma {
 
   export type MaintenanceModeCreateManyUpdatedUserInputEnvelope = {
     data: MaintenanceModeCreateManyUpdatedUserInput | MaintenanceModeCreateManyUpdatedUserInput[]
+  }
+
+  export type LoginHistoryCreateWithoutUserInput = {
+    id?: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type LoginHistoryUncheckedCreateWithoutUserInput = {
+    id?: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+  }
+
+  export type LoginHistoryCreateOrConnectWithoutUserInput = {
+    where: LoginHistoryWhereUniqueInput
+    create: XOR<LoginHistoryCreateWithoutUserInput, LoginHistoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type LoginHistoryCreateManyUserInputEnvelope = {
+    data: LoginHistoryCreateManyUserInput | LoginHistoryCreateManyUserInput[]
   }
 
   export type BoothJoinUpsertWithWhereUniqueWithoutUserInput = {
@@ -24136,6 +25534,33 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"MaintenanceMode"> | Date | string
   }
 
+  export type LoginHistoryUpsertWithWhereUniqueWithoutUserInput = {
+    where: LoginHistoryWhereUniqueInput
+    update: XOR<LoginHistoryUpdateWithoutUserInput, LoginHistoryUncheckedUpdateWithoutUserInput>
+    create: XOR<LoginHistoryCreateWithoutUserInput, LoginHistoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type LoginHistoryUpdateWithWhereUniqueWithoutUserInput = {
+    where: LoginHistoryWhereUniqueInput
+    data: XOR<LoginHistoryUpdateWithoutUserInput, LoginHistoryUncheckedUpdateWithoutUserInput>
+  }
+
+  export type LoginHistoryUpdateManyWithWhereWithoutUserInput = {
+    where: LoginHistoryScalarWhereInput
+    data: XOR<LoginHistoryUpdateManyMutationInput, LoginHistoryUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type LoginHistoryScalarWhereInput = {
+    AND?: LoginHistoryScalarWhereInput | LoginHistoryScalarWhereInput[]
+    OR?: LoginHistoryScalarWhereInput[]
+    NOT?: LoginHistoryScalarWhereInput | LoginHistoryScalarWhereInput[]
+    id?: StringFilter<"LoginHistory"> | string
+    userId?: StringFilter<"LoginHistory"> | string
+    loginDate?: DateTimeFilter<"LoginHistory"> | Date | string
+    ipAddress?: StringNullableFilter<"LoginHistory"> | string | null
+    userAgent?: StringNullableFilter<"LoginHistory"> | string | null
+  }
+
   export type BoothOwnerCreateWithoutBoothInput = {
     id?: string
     addedAt?: Date | string
@@ -24338,6 +25763,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
     VisitLog?: VisitLogCreateNestedManyWithoutUserInput
@@ -24350,6 +25777,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutJoinedBoothsInput = {
@@ -24363,6 +25791,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
     VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
@@ -24375,6 +25805,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutJoinedBoothsInput = {
@@ -24440,6 +25871,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
     VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
@@ -24452,6 +25885,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutJoinedBoothsInput = {
@@ -24464,6 +25898,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
     VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
@@ -24476,6 +25912,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutJoinedUsersInput = {
@@ -24530,6 +25967,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
     VisitLog?: VisitLogCreateNestedManyWithoutUserInput
@@ -24542,6 +25981,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedBoothsInput = {
@@ -24555,6 +25995,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
     VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
@@ -24567,6 +26009,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedBoothsInput = {
@@ -24632,6 +26075,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
     VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
@@ -24644,6 +26089,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedBoothsInput = {
@@ -24656,6 +26102,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
     VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
@@ -24668,6 +26116,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutBoothOwnersInput = {
@@ -24722,6 +26171,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     VisitLog?: VisitLogCreateNestedManyWithoutUserInput
@@ -24734,6 +26185,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTranscriptLogInput = {
@@ -24747,6 +26199,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
@@ -24759,6 +26213,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTranscriptLogInput = {
@@ -24787,6 +26242,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
@@ -24799,6 +26256,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTranscriptLogInput = {
@@ -24811,6 +26269,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
@@ -24823,6 +26283,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutVisitLogInput = {
@@ -24836,6 +26297,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -24848,6 +26311,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVisitLogInput = {
@@ -24861,6 +26325,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -24873,6 +26339,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVisitLogInput = {
@@ -24901,6 +26368,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -24913,6 +26382,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitLogInput = {
@@ -24925,6 +26395,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -24937,6 +26409,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBoothRatingsInput = {
@@ -24950,6 +26423,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -24962,6 +26437,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothRatingsInput = {
@@ -24975,6 +26451,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -24987,6 +26465,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothRatingsInput = {
@@ -25052,6 +26531,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -25064,6 +26545,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothRatingsInput = {
@@ -25076,6 +26558,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -25088,6 +26572,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutRatingsInput = {
@@ -25142,6 +26627,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -25154,6 +26641,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothCommentsInput = {
@@ -25167,6 +26655,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -25179,6 +26669,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothCommentsInput = {
@@ -25244,6 +26735,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -25256,6 +26749,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothCommentsInput = {
@@ -25268,6 +26762,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -25280,6 +26776,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutCommentsInput = {
@@ -25334,6 +26831,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -25346,6 +26845,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothFavoritesInput = {
@@ -25359,6 +26859,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -25371,6 +26873,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothFavoritesInput = {
@@ -25436,6 +26939,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -25448,6 +26953,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothFavoritesInput = {
@@ -25460,6 +26966,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -25472,6 +26980,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutFavoritesInput = {
@@ -25526,6 +27035,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -25538,6 +27049,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUploadedFilesInput = {
@@ -25551,6 +27063,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -25563,6 +27077,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUploadedFilesInput = {
@@ -25591,6 +27106,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -25603,6 +27120,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedFilesInput = {
@@ -25615,6 +27133,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -25627,6 +27147,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -25640,6 +27161,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -25652,6 +27175,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -25665,6 +27189,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -25677,6 +27203,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -25705,6 +27232,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -25717,6 +27246,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -25729,6 +27259,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -25741,6 +27273,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutFeedbacksInput = {
@@ -25754,6 +27287,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -25766,6 +27301,7 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFeedbacksInput = {
@@ -25779,6 +27315,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -25791,6 +27329,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFeedbacksInput = {
@@ -25819,6 +27358,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -25831,6 +27372,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFeedbacksInput = {
@@ -25843,6 +27385,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -25855,6 +27399,7 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSystemLogsInput = {
@@ -25868,6 +27413,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -25880,6 +27427,7 @@ export namespace Prisma {
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSystemLogsInput = {
@@ -25893,6 +27441,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -25905,6 +27455,7 @@ export namespace Prisma {
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSystemLogsInput = {
@@ -25933,6 +27484,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -25945,6 +27498,7 @@ export namespace Prisma {
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSystemLogsInput = {
@@ -25957,6 +27511,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -25969,6 +27525,7 @@ export namespace Prisma {
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWorkingHoursUpdatesInput = {
@@ -25982,6 +27539,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -25994,6 +27553,7 @@ export namespace Prisma {
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWorkingHoursUpdatesInput = {
@@ -26007,6 +27567,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -26019,6 +27581,7 @@ export namespace Prisma {
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWorkingHoursUpdatesInput = {
@@ -26047,6 +27610,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -26059,6 +27624,7 @@ export namespace Prisma {
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWorkingHoursUpdatesInput = {
@@ -26071,6 +27637,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -26083,6 +27651,7 @@ export namespace Prisma {
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutMaintenanceModeUpdatesInput = {
@@ -26096,6 +27665,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
@@ -26108,6 +27679,7 @@ export namespace Prisma {
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMaintenanceModeUpdatesInput = {
@@ -26121,6 +27693,8 @@ export namespace Prisma {
     dept: string
     createdAt?: Date | string
     score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
     joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
     ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
     TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
@@ -26133,6 +27707,7 @@ export namespace Prisma {
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMaintenanceModeUpdatesInput = {
@@ -26161,6 +27736,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
@@ -26173,6 +27750,7 @@ export namespace Prisma {
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput = {
@@ -26185,6 +27763,8 @@ export namespace Prisma {
     dept?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
     joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
     ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
     TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
@@ -26197,6 +27777,133 @@ export namespace Prisma {
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutLoginHistoryInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+  }
+
+  export type UserUncheckedCreateWithoutLoginHistoryInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingUncheckedCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentUncheckedCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteUncheckedCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+  }
+
+  export type UserCreateOrConnectWithoutLoginHistoryInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutLoginHistoryInput, UserUncheckedCreateWithoutLoginHistoryInput>
+  }
+
+  export type UserUpsertWithoutLoginHistoryInput = {
+    update: XOR<UserUpdateWithoutLoginHistoryInput, UserUncheckedUpdateWithoutLoginHistoryInput>
+    create: XOR<UserCreateWithoutLoginHistoryInput, UserUncheckedCreateWithoutLoginHistoryInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutLoginHistoryInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutLoginHistoryInput, UserUncheckedUpdateWithoutLoginHistoryInput>
+  }
+
+  export type UserUpdateWithoutLoginHistoryInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutLoginHistoryInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUncheckedUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUncheckedUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type BoothJoinCreateManyUserInput = {
@@ -26300,6 +28007,13 @@ export namespace Prisma {
     endTime?: Date | string | null
     updatedAt?: Date | string
     createdAt?: Date | string
+  }
+
+  export type LoginHistoryCreateManyUserInput = {
+    id?: string
+    loginDate?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
   }
 
   export type BoothJoinUpdateWithoutUserInput = {
@@ -26570,6 +28284,24 @@ export namespace Prisma {
     endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LoginHistoryUpdateWithoutUserInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LoginHistoryUncheckedUpdateWithoutUserInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LoginHistoryUncheckedUpdateManyWithoutUserInput = {
+    loginDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type BoothOwnerCreateManyBoothInput = {

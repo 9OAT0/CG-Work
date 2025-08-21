@@ -1,41 +1,45 @@
-'use client';
+"use client";
 
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import { useState, useEffect } from 'react';
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import { useState, useEffect, useRef } from "react";
 
 export default function Homepage() {
   const banners = [
-    '/banner.jpg',
-    '/banner1.jpg',
-    '/banner2.jpg',
-    '/banner3.jpg',
+    "/กำหนดการ.png",
+    "/กำหนดการเวลา27-2.png",
+    "/กำหนดการเวลา 28-2.png",
+    "/กำหนดการเวลา 29-2.png",
   ];
+
+  // สำหรับ auto-rotate และ swipe
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const [current, setCurrent] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [dragging, setDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragOffset, setDragOffset] = useState(0);
 
+  // Overlay: แสดงวันละครั้ง
   useEffect(() => {
-    // Check if overlay has been shown before (with date-based logic)
     const today = new Date().toDateString();
-    const lastShown = localStorage.getItem('overlayLastShown');
+    const lastShown = localStorage.getItem("overlayLastShown");
     const hasSeenToday = lastShown === today;
-    
-    // Only show overlay once per day
-    if (!hasSeenToday) {
-      setShowOverlay(true);
-    }
+    if (!hasSeenToday) setShowOverlay(true);
+  }, []);
 
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % banners.length);
-    }, 10000);
-    return () => clearInterval(interval);
+  // Auto-rotate: เริ่มเมื่อโหลด และเคลียร์เมื่อ unmount
+  useEffect(() => {
+    startAuto();
+    return stopAuto;
   }, [banners.length]);
 
   const handleCloseOverlay = () => {
     setShowOverlay(false);
     const today = new Date().toDateString();
-    localStorage.setItem('overlayLastShown', today);
+    localStorage.setItem("overlayLastShown", today);
   };
 
   const nextSlide = () => {
@@ -46,15 +50,57 @@ export default function Homepage() {
     setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    stopAuto();
+    setDragging(true);
+    setDragStartX(e.touches[0].clientX);
+    setDragOffset(0);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!dragging) return;
+    const x = e.touches[0].clientX;
+    setDragOffset(x - dragStartX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!dragging) return;
+    const width = sliderRef.current?.offsetWidth || 1;
+    const threshold = width * 0.15; // ปัดเกิน 15% ของความกว้างถึงจะเปลี่ยนภาพ
+
+    if (dragOffset > threshold) {
+      prevSlide();
+    } else if (dragOffset < -threshold) {
+      nextSlide();
+    }
+    setDragging(false);
+    setDragOffset(0);
+    startAuto();
+  };
+
+  // ควบคุม auto-rotate
+  const stopAuto = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+  const startAuto = () => {
+    stopAuto();
+    intervalRef.current = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % banners.length);
+    }, 10000);
+  };
+
   return (
     <>
       <Navbar />
       <div className="min-h-screen flex flex-col gap-16 px-4">
         {/* Top Background */}
-        <img 
-          src="/bg.jpg" 
-          alt="Background" 
-          className="w-full object-cover" 
+        <img
+          src="/bg.jpg"
+          alt="Background"
+          className="w-full object-cover"
           loading="eager"
           decoding="async"
         />
@@ -66,56 +112,56 @@ export default function Homepage() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-6 justify-items-center items-center">
               <a href="/category?dept=1" className="relative">
                 <div className="relative w-[117px] h-[150px]">
-                  <img 
-                    src="/sola.jpg" 
-                    alt="3D" 
-                    className="w-full h-full object-cover" 
+                  <img
+                    src="/sola.jpg"
+                    alt="3D"
+                    className="w-full h-full object-cover"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
               </a>
               <a href="/category?dept=2">
-                <img 
-                  src="/galaxy.jpg" 
-                  alt="Graphic" 
-                  className="w-[118px] h-[147px]" 
+                <img
+                  src="/galaxy.jpg"
+                  alt="Graphic"
+                  className="w-[118px] h-[147px]"
                   loading="lazy"
                   decoding="async"
                 />
               </a>
               <a href="/category?dept=3">
-                <img 
-                  src="/nebula.jpg" 
-                  alt="Product Design" 
-                  className="w-[124px] h-[141px]" 
+                <img
+                  src="/nebula.jpg"
+                  alt="Product Design"
+                  className="w-[124px] h-[141px]"
                   loading="lazy"
                   decoding="async"
                 />
               </a>
               <a href="/category?dept=4">
-                <img 
-                  src="/comet.jpg" 
-                  alt="Production" 
-                  className="w-[109px] h-[139px]" 
+                <img
+                  src="/comet.jpg"
+                  alt="Production"
+                  className="w-[109px] h-[139px]"
                   loading="lazy"
                   decoding="async"
                 />
               </a>
               <a href="/category?dept=5">
-                <img 
-                  src="/blackhole.jpg" 
-                  alt="Digital Art" 
-                  className="w-[146px] h-[147px]" 
+                <img
+                  src="/blackhole.jpg"
+                  alt="Digital Art"
+                  className="w-[146px] h-[147px]"
                   loading="lazy"
                   decoding="async"
                 />
               </a>
               <a href="/category?dept=6">
-                <img 
-                  src="/eclipse.jpg" 
-                  alt="Game Design" 
-                  className="w-[108px] h-[140px]" 
+                <img
+                  src="/eclipse.jpg"
+                  alt="Game Design"
+                  className="w-[108px] h-[140px]"
                   loading="lazy"
                   decoding="async"
                 />
@@ -133,62 +179,145 @@ export default function Homepage() {
             <p>มหาวิทยาลัยพะเยา ณ ลานอเนกประสงค์ชั้น 2</p>
             <p>อาคาร 99 ปี พระอุบาลีคุณูปมาจารย์ (ปวง ธมฺมปญฺโญ)</p>
             <p>วันที่ 27 - 29 สิงหาคม 2568 เวลา 09.00 น. – 17.00 น.</p>
-            <img 
-              src="/discritionicon.jpg" 
-              alt="" 
-              className="w-[155px] h-[154px]" 
+            <img
+              src="/discritionicon.jpg"
+              alt=""
+              className="w-[155px] h-[154px]"
               loading="lazy"
               decoding="async"
             />
           </div>
 
           {/* Header Before Slide */}
-          <h1 className="font-bold text-2xl text-blueBrand">กำหนดการของงานนิทรรศการ</h1>
+          <h1 className="font-bold text-2xl text-blueBrand">
+            กำหนดการของงานนิทรรศการ
+          </h1>
         </div>
 
-        {/* Banner Slide */}
-        <div className="relative w-full overflow-hidden mb-16">
+        {/* Enhanced Banner Slide (รองรับปัดนิ้ว) */}
+        <div className="relative w-full max-w-6xl mx-auto overflow-hidden mb-8 rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl">
+          {/* Background Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-transparent to-purple-900/10 z-10 pointer-events-none"></div>
+
           <div
-            className="flex transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${current * 100}%)` }}
+            ref={sliderRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className={`flex ${
+              dragging
+                ? "transition-none"
+                : "transition-all duration-700 ease-out"
+            }`}
+            style={{
+              // ปัดแล้วเลื่อนตามนิ้ว: เพิ่ม dragOffset (px)
+              transform: `translateX(calc(-${
+                current * 100
+              }% + ${dragOffset}px))`,
+              // อนุญาตเลื่อนแนวตั้งของหน้าได้ตามปกติ
+              touchAction: "pan-y",
+            }}
           >
             {banners.map((banner, index) => (
-              <img
-                key={index}
-                src={banner}
-                alt={`Banner ${index + 1}`}
-                className="w-full flex-shrink-0 object-cover h-64 md:h-96"
-                loading={index === 0 ? "eager" : "lazy"}
-                decoding="async"
-              />
+              <div key={index} className="relative w-full flex-shrink-0">
+                <img
+                  src={banner}
+                  alt={`กำหนดการงานนิทรรศการ วันที่ ${index + 27} สิงหาคม`}
+                  className="w-full h-[360px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px] object-contain bg-gradient-to-br from-slate-50 to-blue-50"
+                  loading={index === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+                <div className="absolute inset-0 border-2 border-white/10 rounded-lg sm:rounded-xl pointer-events-none"></div>
+              </div>
             ))}
           </div>
 
-          {/* Prev/Next Buttons */}
+          {/* ปุ่มถอย/ไปต่อ (เดิม) */}
           <button
             onClick={prevSlide}
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-blue-600 bg-opacity-70 hover:bg-opacity-90 text-white rounded-full p-2"
+            className="absolute top-1/2 left-2 sm:left-4 transform -translate-y-1/2 bg-white/80 hover:bg-white text-blue-600 hover:text-blue-800 rounded-full p-1.5 sm:p-2 shadow-md transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+            aria-label="ภาพก่อนหน้า"
           >
-            &#10094;
+            <svg
+              className="w-3 h-3 sm:w-4 sm:h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
           </button>
           <button
             onClick={nextSlide}
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-blue-600 bg-opacity-70 hover:bg-opacity-90 text-white rounded-full p-2"
+            className="absolute top-1/2 right-2 sm:right-4 transform -translate-y-1/2 bg-white/80 hover:bg-white text-blue-600 hover:text-blue-800 rounded-full p-1.5 sm:p-2 shadow-md transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+            aria-label="ภาพถัดไป"
           >
-            &#10095;
+            <svg
+              className="w-3 h-3 sm:w-4 sm:h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
           </button>
 
-          {/* Indicators */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          {/* Indicators (จุดเล็ก แต่แตะง่าย) */}
+          <div className="absolute bottom-2 sm:bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1 sm:gap-2 bg-white/15 backdrop-blur-sm rounded-full px-1.5 sm:px-3 py-0.5">
             {banners.map((_, index) => (
-              <span
+              <button
                 key={index}
                 onClick={() => setCurrent(index)}
-                className={`w-3 h-3 rounded-full cursor-pointer ${
-                  current === index ? 'bg-blue-600' : 'bg-gray-300'
-                }`}
-              ></span>
+                className="rounded-full p-1 sm:p-1.5 transition-transform duration-200"
+                aria-label={`ไปยังภาพที่ ${index + 1}`}
+              >
+                <span
+                  className={`block rounded-full transition-all duration-300 ${
+                    current === index
+                      ? "bg-white scale-110"
+                      : "bg-white/60 hover:bg-white/80"
+                  } w-1 h-1 sm:w-2 sm:h-2`}
+                />
+              </button>
             ))}
+          </div>
+
+          {/* ตัวนับภาพ */}
+          <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-black/30 text-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs backdrop-blur-sm">
+            {current + 1}/{banners.length}
+          </div>
+        </div>
+
+        {/* Compact Banner Information */}
+        <div className="max-w-3xl mx-auto text-center mb-6 px-4">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 shadow-md">
+            <h3 className="text-lg font-bold text-blue-800 mb-3">
+              📅 กำหนดการงานนิทรรศการแสดงศิลปนิพนธ์
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm text-gray-700">
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-blue-600">📍</span>
+                <span>ลานอเนกประสงค์ชั้น 2</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-green-600">📅</span>
+                <span>27-29 สิงหาคม 2568</span>
+              </div>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-orange-600">🕘</span>
+                <span>09:00 - 17:00 น.</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -15,79 +15,84 @@ datasource db {
 }
 
 model User {
-  id           String         @id @default(auto()) @map("_id") @db.ObjectId
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
   username     String
   status       String
-  role         String         // "user" หรือ "admin"
+  role         String // "user" หรือ "admin"
   year         String?
   name         String
   student_id   String?
-  dept         String         // สาขาวิชาของผู้เข้าร่วม
-  joinedBooths BoothJoin[]    // กิจกรรมที่เข้าร่วม
-  ownedBooths  BoothOwner[]   // บูธที่เป็นเจ้าของ
-  createdAt    DateTime       @default(now())
+  dept         String // สาขาวิชาของผู้เข้าร่วม
+  joinedBooths BoothJoin[] // กิจกรรมที่เข้าร่วม
+  ownedBooths  BoothOwner[] // บูธที่เป็นเจ้าของ
+  createdAt    DateTime     @default(now())
 
   TranscriptLog TranscriptLog[]
-  score        Int @default(0)
+  score         Int             @default(0)
 
   VisitLog VisitLog[]
-  
+
   // New relations
-  boothRatings   BoothRating[]
-  boothComments  BoothComment[]
-  boothFavorites BoothFavorite[]
-  uploadedFiles  File[]
-  notifications  Notification[]
-  feedbacks      Feedback[]
-  systemLogs     SystemLog[]
-  workingHoursUpdates WorkingHours[]
+  boothRatings           BoothRating[]
+  boothComments          BoothComment[]
+  boothFavorites         BoothFavorite[]
+  uploadedFiles          File[]
+  notifications          Notification[]
+  feedbacks              Feedback[]
+  systemLogs             SystemLog[]
+  workingHoursUpdates    WorkingHours[]
   maintenanceModeUpdates MaintenanceMode[]
+
+  // Enhanced maintenance and login tracking
+  lastLoginDate        DateTime? // วันที่ login ล่าสุด
+  maintenanceLoggedOut Boolean        @default(false) // ถูก force logout ในช่วง maintenance หรือไม่
+  loginHistory         LoginHistory[] // ประวัติการ login
 }
 
 model Booth {
-  id           String         @id @default(auto()) @map("_id") @db.ObjectId
-  booth_name   String
-  booth_code   String         @unique
-  dept_type    String         // หมวดหมู่ของงานนิทรรศการ
-  boothOwners  BoothOwner[]   // ผู้เป็นเจ้าของบูธ (สำหรับ user ที่ login แล้ว)
-  joinedUsers  BoothJoin[]    // ผู้เข้าร่วมบูธ
-  pics         String[]       // URL ภาพบูธ
-  description  String?        // รายละเอียดบูธ หลาย paragraph ได้
-  
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  booth_name  String
+  booth_code  String       @unique
+  dept_type   String // หมวดหมู่ของงานนิทรรศการ
+  boothOwners BoothOwner[] // ผู้เป็นเจ้าของบูธ (สำหรับ user ที่ login แล้ว)
+  joinedUsers BoothJoin[] // ผู้เข้าร่วมบูธ
+  pics        String[] // URL ภาพบูธ
+  description String? // รายละเอียดบูธ หลาย paragraph ได้
+
   // Owner information for non-authenticated registration
-  owner_names    String[]     // ชื่อเจ้าของบูธ (สำหรับการลงทะเบียนโดยไม่ต้อง auth)
-  owner_contacts String[]     // ข้อมูลติดต่อเจ้าของบูธ
-  owner_images   String[]     // รูปภาพเจ้าของบูธ (URLs)
-  
+  owner_names    String[] // ชื่อเจ้าของบูธ (สำหรับการลงทะเบียนโดยไม่ต้อง auth)
+  owner_contacts String[] // ข้อมูลติดต่อเจ้าของบูธ
+  owner_images   String[] // รูปภาพเจ้าของบูธ (URLs)
+
   // New relations
-  ratings      BoothRating[]
-  comments     BoothComment[]
-  favorites    BoothFavorite[]
+  ratings   BoothRating[]
+  comments  BoothComment[]
+  favorites BoothFavorite[]
 }
 
 model BoothJoin {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  boothId   String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  booth     Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
-  joinedAt  DateTime @default(now())
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String   @db.ObjectId
+  boothId  String   @db.ObjectId
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booth    Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
+  joinedAt DateTime @default(now())
 }
 
 model BoothOwner {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  boothId   String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  booth     Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
-  addedAt   DateTime @default(now())
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String   @db.ObjectId
+  boothId String   @db.ObjectId
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booth   Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
+  addedAt DateTime @default(now())
 }
 
 model TranscriptLog {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  date      DateTime @default(now()) // วันที่รับ transcript
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId String   @db.ObjectId
+  user   User     @relation(fields: [userId], references: [id])
+  date   DateTime @default(now()) // วันที่รับ transcript
 }
 
 model VisitLog {
@@ -110,12 +115,12 @@ model BoothRating {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   userId    String   @db.ObjectId
   boothId   String   @db.ObjectId
-  rating    Int      // 1-5 stars
+  rating    Int // 1-5 stars
   comment   String?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   booth     Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  
+
   @@unique([userId, boothId])
 }
 
@@ -136,7 +141,7 @@ model BoothFavorite {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   booth     Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  
+
   @@unique([userId, boothId])
 }
 
@@ -179,10 +184,10 @@ model Feedback {
 
 model SystemLog {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  action    String   // login, logout, join_booth, etc.
+  action    String // login, logout, join_booth, etc.
   userId    String?  @db.ObjectId
   user      User?    @relation(fields: [userId], references: [id])
-  details   String?  // JSON string with additional details
+  details   String? // JSON string with additional details
   ipAddress String?
   userAgent String?
   createdAt DateTime @default(now())
@@ -190,8 +195,8 @@ model SystemLog {
 
 model WorkingHours {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  startHour   Int      @default(6)   // เวลาเริ่มต้น (ชั่วโมง) 0-23
-  endHour     Int      @default(16)  // เวลาสิ้นสุด (ชั่วโมง) 0-23
+  startHour   Int      @default(6) // เวลาเริ่มต้น (ชั่วโมง) 0-23
+  endHour     Int      @default(16) // เวลาสิ้นสุด (ชั่วโมง) 0-23
   isEnabled   Boolean  @default(true) // เปิด/ปิดการจำกัดเวลา
   updatedBy   String?  @db.ObjectId
   updatedUser User?    @relation(fields: [updatedBy], references: [id])
@@ -200,14 +205,25 @@ model WorkingHours {
 }
 
 model MaintenanceMode {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  isEnabled   Boolean  @default(false) // เปิด/ปิด maintenance mode
-  title       String   @default("ระบบอยู่ในช่วงปรับปรุง") // หัวข้อที่แสดงในหน้า maintenance
-  message     String   @default("เว็บไซต์อยู่ในช่วงปรับปรุง กรุณากลับมาใหม่อีกครั้ง") // ข้อความที่แสดง
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  isEnabled   Boolean   @default(false) // เปิด/ปิด maintenance mode
+  title       String    @default("ระบบอยู่ในช่วงปรับปรุง") // หัวข้อที่แสดงในหน้า maintenance
+  message     String    @default("เว็บไซต์อยู่ในช่วงปรับปรุง กรุณากลับมาใหม่อีกครั้ง") // ข้อความที่แสดง
   startTime   DateTime? // เวลาเริ่มต้น maintenance (optional)
   endTime     DateTime? // เวลาสิ้นสุด maintenance (optional)
-  updatedBy   String?  @db.ObjectId
-  updatedUser User?    @relation(fields: [updatedBy], references: [id])
-  updatedAt   DateTime @default(now())
-  createdAt   DateTime @default(now())
+  updatedBy   String?   @db.ObjectId
+  updatedUser User?     @relation(fields: [updatedBy], references: [id])
+  updatedAt   DateTime  @default(now())
+  createdAt   DateTime  @default(now())
+}
+
+model LoginHistory {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  loginDate DateTime @default(now()) // วันที่และเวลาที่ login
+  ipAddress String? // IP address ของผู้ login
+  userAgent String? // User agent ของ browser
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, loginDate])
 }

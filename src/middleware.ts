@@ -118,14 +118,80 @@ function isWithinAllowedTime(startHour: number, endHour: number, isEnabled: bool
   return currentHour >= startHour && currentHour < endHour
 }
 
+// ฟังก์ชันตรวจสอบว่า user login วันนี้หรือยัง
+async function checkDailyLogin(request: NextRequest): Promise<boolean> {
+  try {
+    const token = request.cookies.get('token')?.value
+    
+    if (!token) {
+      return false
+    }
+
+    // เรียก API เพื่อตรวจสอบ daily login
+    const baseUrl = request.nextUrl.origin
+    const response = await fetch(`${baseUrl}/api/me`, {
+      headers: {
+        'Cookie': request.headers.get('cookie') || ''
+      }
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      
+      // ตรวจสอบว่า lastLoginDate เป็นวันนี้หรือไม่
+      if (data.lastLoginDate) {
+        const lastLogin = new Date(data.lastLoginDate)
+        const today = new Date()
+        const thailandToday = new Date(today.toLocaleString("en-US", {timeZone: "Asia/Bangkok"}))
+        
+        // เปรียบเทียบวันที่ (ไม่รวมเวลา)
+        const lastLoginDate = lastLogin.toDateString()
+        const todayDate = thailandToday.toDateString()
+        
+        return lastLoginDate === todayDate
+      }
+    }
+
+    return false
+  } catch (error) {
+    console.error('🔧 DAILY LOGIN CHECK ERROR:', error)
+    return false
+  }
+}
+
+// ฟังก์ชัน force logout user ในช่วง maintenance
+async function forceLogoutUser(request: NextRequest): Promise<void> {
+  try {
+    const token = request.cookies.get('token')?.value
+    
+    if (!token) {
+      return
+    }
+
+    // เรียก API เพื่อ mark user ว่าถูก force logout
+    const baseUrl = request.nextUrl.origin
+    await fetch(`${baseUrl}/api/maintenance/force-logout`, {
+      method: 'POST',
+      headers: {
+        'Cookie': request.headers.get('cookie') || '',
+        'Content-Type': 'application/json'
+      }
+    })
+  } catch (error) {
+    console.error('🔧 FORCE LOGOUT ERROR:', error)
+  }
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   
   console.log('🔧 MIDDLEWARE:', pathname)
   
-  // ไม่ตรวจสอบเวลาสำหรับหน้า maintenance, admin, และ static files
+  // ไม่ตรวจสอบเวลาสำหรับหน้า maintenance, admin, login, register และ static files
   if (
     pathname === '/maintenance' ||
+    pathname === '/login' ||
+    pathname === '/register' ||
     pathname.startsWith('/admin') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
@@ -146,24 +212,41 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next()
     }
     
-    // สำหรับ user ทั่วไป ตรวจสอบ maintenance mode ก่อน
+    // สำหรับ user ทั่วไป ตรวจสอบ daily login ก่อน (ยกเว้นหน้า login และ register)
+    if (pathname !== '/login' && pathname !== '/register') {
+      const hasValidDailyLogin = await checkDailyLogin(request)
+      console.log('🔧 DAILY LOGIN VALID:', hasValidDailyLogin)
+      
+      if (!hasValidDailyLogin) {
+        // ถ้าไม่ได้ login วันนี้ ให้ force logout และ redirect ไป login
+        console.log('🔧 REDIRECTING TO LOGIN (NO DAILY LOGIN)')
+        const response = NextResponse.redirect(new URL('/login', request.url))
+        response.cookies.delete('token') // ลบ token cookie
+        return response
+      }
+    }
+    
+    // ตรวจสอบ maintenance mode
     const maintenanceMode = await getMaintenanceMode(request)
     console.log('🔧 MAINTENANCE MODE:', maintenanceMode.isEnabled)
     
     if (maintenanceMode.isEnabled) {
-      // สำหรับ user ทั่วไป ให้ redirect ไปหน้า maintenance ทันที
-      console.log('🔧 REDIRECTING TO MAINTENANCE (MAINTENANCE MODE)')
-      return NextResponse.redirect(new URL('/maintenance', request.url))
+      // Force logout user ที่ไม่ใช่ admin และ redirect ไป maintenance
+      console.log('🔧 FORCE LOGOUT AND REDIRECT TO MAINTENANCE')
+      const response = NextResponse.redirect(new URL('/maintenance', request.url))
+      response.cookies.delete('token') // ลบ token cookie
+      // อัพเดท maintenanceLoggedOut flag ผ่าน API call
+      await forceLogoutUser(request)
+      return response
     }
     
-    // สำหรับ user ทั่วไป ตรวจสอบเวลาทำงานจากฐานข้อมูล
+    // ตรวจสอบเวลาทำงาน
     const workingHours = await getWorkingHours(request)
     const withinWorkingHours = isWithinAllowedTime(workingHours.startHour, workingHours.endHour, workingHours.isEnabled)
     
     console.log('🔧 WORKING HOURS:', workingHours, 'WITHIN:', withinWorkingHours)
     
     if (!withinWorkingHours) {
-      // ถ้าอยู่นอกเวลาที่อนุญาต ให้ redirect ไปหน้า maintenance
       console.log('🔧 REDIRECTING TO MAINTENANCE (OUTSIDE WORKING HOURS)')
       return NextResponse.redirect(new URL('/maintenance', request.url))
     }
