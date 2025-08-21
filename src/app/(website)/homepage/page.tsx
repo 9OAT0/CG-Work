@@ -14,7 +14,8 @@ export default function Homepage() {
 
   // สำหรับ auto-rotate และ swipe
   const sliderRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [current, setCurrent] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -65,8 +66,12 @@ export default function Homepage() {
 
   const handleTouchEnd = () => {
     if (!dragging) return;
-    const width = sliderRef.current?.offsetWidth || 1;
-    const threshold = width * 0.15; // ปัดเกิน 15% ของความกว้างถึงจะเปลี่ยนภาพ
+    // เดิม: const width = sliderRef.current?.offsetWidth || 1;  <-- ผิด
+    const width =
+      viewportRef.current?.offsetWidth ||
+      sliderRef.current?.parentElement?.offsetWidth ||
+      1;
+    const threshold = width * 0.15;
 
     if (dragOffset > threshold) {
       prevSlide();
@@ -195,7 +200,10 @@ export default function Homepage() {
         </div>
 
         {/* Enhanced Banner Slide (รองรับปัดนิ้ว) */}
-        <div className="relative w-full max-w-6xl mx-auto overflow-hidden mb-8 rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl">
+        <div
+          ref={viewportRef}
+          className="relative w-full max-w-6xl mx-auto overflow-hidden mb-8 rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl"
+        >
           {/* Background Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 via-transparent to-purple-900/10 z-10 pointer-events-none"></div>
 
@@ -204,17 +212,16 @@ export default function Homepage() {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
             className={`flex ${
               dragging
                 ? "transition-none"
                 : "transition-all duration-700 ease-out"
             }`}
             style={{
-              // ปัดแล้วเลื่อนตามนิ้ว: เพิ่ม dragOffset (px)
               transform: `translateX(calc(-${
                 current * 100
               }% + ${dragOffset}px))`,
-              // อนุญาตเลื่อนแนวตั้งของหน้าได้ตามปกติ
               touchAction: "pan-y",
             }}
           >
@@ -223,6 +230,7 @@ export default function Homepage() {
                 <img
                   src={banner}
                   alt={`กำหนดการงานนิทรรศการ วันที่ ${index + 27} สิงหาคม`}
+                  draggable={false}
                   className="w-full h-[360px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px] object-contain bg-gradient-to-br from-slate-50 to-blue-50"
                   loading={index === 0 ? "eager" : "lazy"}
                   decoding="async"
