@@ -103,7 +103,7 @@ export default function ErrortranscriptPage() {
         {/* Header row */}
         <div className="flex items-center justify-center gap-4 flex-wrap">
           <a href="/admin">
-            <img src="bbt.jpg" alt="back" className='w-12 h-12 md:w-[60px] md:h-[60px]' />
+            <img src="bbt.png" alt="back" className='w-12 h-12 md:w-[60px] md:h-[60px]' />
           </a>
           <h1 className="text-xl md:text-2xl font-bold text-blueBrand whitespace-nowrap text-center">
             ข้อมูลจำนวนคนเข้าร่วมงาน

@@ -102,7 +102,7 @@ function BoothContent() {
       <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
         <a href="/category">
           <img
-            src="bbt.jpg"
+            src="bbt.png"
             alt="back"
             className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px]"
           />

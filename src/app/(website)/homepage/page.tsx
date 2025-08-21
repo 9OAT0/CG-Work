@@ -207,12 +207,12 @@ export default function Homepage() {
           >
             <button
               onClick={handleCloseOverlay}
-              className="absolute top-2 right-6 text-white text-4xl"
+              className="absolute top-60 right-48 text-white text-6xl"
             >
               ×
             </button>
             <img
-              src="/overlayhome.png"
+              src="/overlay.PNG"
               alt="Overlay"
               className="w-full h-full object-contain"
             />
