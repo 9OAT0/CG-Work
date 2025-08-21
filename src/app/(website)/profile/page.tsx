@@ -215,7 +215,7 @@ export default function ProfilePage() {
               {['27', '28', '29'].map((day) => (
                 <button key={day} onClick={() => handleRedeem(day)} disabled={redeemed[day]}>
                   <img
-                    src={redeemed[day] ? `/${day}c.jpg` : `/${day}.jpg`}
+                    src={redeemed[day] ? `/${day}c.png` : `/${day}.png`}
                     className="w-[70px] sm:w-[86px] h-[70px] sm:h-[86px]"
                     alt={`day-${day}`}
                   />

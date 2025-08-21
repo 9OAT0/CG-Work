@@ -70,7 +70,7 @@ function GetTranscriptContent() {
           Transcript สำหรับ {dayText[day]}
         </h1>
         <img
-          src={`/${day}c.jpg`}
+          src={`/${day}c.png`}
           alt="transcript"
           className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-lg shadow-lg"
         />
