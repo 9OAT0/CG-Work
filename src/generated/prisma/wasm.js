@@ -241,6 +241,28 @@ exports.Prisma.SystemLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.WorkingHoursScalarFieldEnum = {
+  id: 'id',
+  startHour: 'startHour',
+  endHour: 'endHour',
+  isEnabled: 'isEnabled',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MaintenanceModeScalarFieldEnum = {
+  id: 'id',
+  isEnabled: 'isEnabled',
+  title: 'title',
+  message: 'message',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  updatedBy: 'updatedBy',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -266,7 +288,9 @@ exports.Prisma.ModelName = {
   File: 'File',
   Notification: 'Notification',
   Feedback: 'Feedback',
-  SystemLog: 'SystemLog'
+  SystemLog: 'SystemLog',
+  WorkingHours: 'WorkingHours',
+  MaintenanceMode: 'MaintenanceMode'
 };
 
 /**

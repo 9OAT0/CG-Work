@@ -72,11 +72,24 @@ interface NewBoothData {
   owner_names: string[];
 }
 
+interface WorkingHours {
+  id: string;
+  startHour: number;
+  endHour: number;
+  isEnabled: boolean;
+  updatedAt: string;
+  updatedUser?: {
+    name: string;
+    username: string;
+  };
+}
+
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [stats, setStats] = useState<StatsData | null>(null);
   const [participants, setParticipants] = useState<ParticipantsData | null>(null);
   const [transcriptIssues, setTranscriptIssues] = useState<TranscriptIssue[]>([]);
+  const [workingHours, setWorkingHours] = useState<WorkingHours | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [period, setPeriod] = useState('7d');
@@ -257,6 +270,57 @@ export default function AdminDashboard() {
     }
   };
 
+  // Working Hours functions
+  const fetchWorkingHours = async () => {
+    try {
+      const response = await fetch('/api/admin/working-hours');
+      if (response.ok) {
+        const data = await response.json();
+        setWorkingHours(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching working hours:', error);
+    }
+  };
+
+  const handleUpdateWorkingHours = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!workingHours) return;
+
+    try {
+      const response = await fetch('/api/admin/working-hours', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          startHour: workingHours.startHour,
+          endHour: workingHours.endHour,
+          isEnabled: workingHours.isEnabled
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setWorkingHours(data.data);
+        alert('อัพเดทเวลาทำงานสำเร็จ!');
+      } else {
+        const errorData = await response.json();
+        alert(`เกิดข้อผิดพลาด: ${errorData.error}`);
+      }
+    } catch (error) {
+      alert('เกิดข้อผิดพลาดในการอัพเดทเวลาทำงาน');
+    }
+  };
+
+  // Load working hours when working-hours tab is selected
+  useEffect(() => {
+    if (activeTab === 'working-hours' && !workingHours) {
+      fetchWorkingHours();
+    }
+  }, [activeTab, workingHours]);
+
   if (loading) {
     return (
       <>
@@ -294,6 +358,7 @@ export default function AdminDashboard() {
               { id: 'booths', label: '🏪 บูธยอดนิยม' },
               { id: 'users', label: '🏆 ผู้ใช้อันดับต้น' },
               { id: 'departments', label: '🏫 สถิติคณะ' },
+              { id: 'working-hours', label: '⏰ จัดการเวลาทำงาน' },
               { id: 'transcript-issues', label: '📋 ปัญหาทรานสคริปต์' }
             ].map(tab => (
               <button
@@ -604,6 +669,172 @@ export default function AdminDashboard() {
                   สร้างบูธ
                 </button>
               </form>
+            </div>
+          )}
+
+          {/* Working Hours Tab */}
+          {activeTab === 'working-hours' && (
+            <div className="space-y-6">
+              {workingHours ? (
+                <div className="bg-white p-6 rounded-lg shadow">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-6">⏰ จัดการเวลาทำงานของเว็บไซต์</h2>
+                  
+                  {/* Current Status */}
+                  <div className="mb-6 p-4 rounded-lg bg-gray-50">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-3">สถานะปัจจุบัน</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600">เวลาเปิด</p>
+                        <p className="text-2xl font-bold text-green-600">{workingHours.startHour.toString().padStart(2, '0')}:00</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600">เวลาปิด</p>
+                        <p className="text-2xl font-bold text-red-600">{workingHours.endHour.toString().padStart(2, '0')}:00</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-sm text-gray-600">สถานะ</p>
+                        <p className={`text-2xl font-bold ${workingHours.isEnabled ? 'text-green-600' : 'text-gray-400'}`}>
+                          {workingHours.isEnabled ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {workingHours.updatedUser && (
+                      <div className="mt-4 text-sm text-gray-500">
+                        อัพเดทล่าสุดโดย: {workingHours.updatedUser.name} ({workingHours.updatedUser.username})
+                        <br />
+                        เมื่อ: {new Date(workingHours.updatedAt).toLocaleString('th-TH')}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Update Form */}
+                  <form onSubmit={handleUpdateWorkingHours} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          เวลาเริ่มต้น (ชั่วโมง)
+                        </label>
+                        <select
+                          value={workingHours.startHour}
+                          onChange={(e) => setWorkingHours(prev => prev ? { ...prev, startHour: parseInt(e.target.value) } : null)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          {Array.from({ length: 24 }, (_, i) => (
+                            <option key={i} value={i}>
+                              {i.toString().padStart(2, '0')}:00
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          เวลาสิ้นสุด (ชั่วโมง)
+                        </label>
+                        <select
+                          value={workingHours.endHour}
+                          onChange={(e) => setWorkingHours(prev => prev ? { ...prev, endHour: parseInt(e.target.value) } : null)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          {Array.from({ length: 24 }, (_, i) => (
+                            <option key={i} value={i}>
+                              {i.toString().padStart(2, '0')}:00
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id="isEnabled"
+                        checked={workingHours.isEnabled}
+                        onChange={(e) => setWorkingHours(prev => prev ? { ...prev, isEnabled: e.target.checked } : null)}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <label htmlFor="isEnabled" className="ml-2 block text-sm text-gray-700">
+                        เปิดใช้งานการจำกัดเวลาเข้าใช้งาน
+                      </label>
+                    </div>
+
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="ml-3">
+                          <h3 className="text-sm font-medium text-yellow-800">คำเตือน</h3>
+                          <div className="mt-2 text-sm text-yellow-700">
+                            <ul className="list-disc list-inside space-y-1">
+                              <li>Admin สามารถเข้าใช้งานได้ตลอดเวลา แม้อยู่นอกเวลาที่กำหนด</li>
+                              <li>ผู้ใช้ทั่วไปจะถูก redirect ไปหน้า maintenance เมื่ออยู่นอกเวลาที่กำหนด</li>
+                              <li>การเปลี่ยนแปลงจะมีผลทันทีหลังจากบันทึก</li>
+                              <li>เวลาที่ใช้เป็นเวลาประเทศไทย (UTC+7)</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <button
+                        type="submit"
+                        className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-medium"
+                      >
+                        💾 บันทึกการเปลี่ยนแปลง
+                      </button>
+                      
+                      <button
+                        type="button"
+                        onClick={fetchWorkingHours}
+                        className="px-6 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 font-medium"
+                      >
+                        🔄 รีเฟรช
+                      </button>
+                    </div>
+                  </form>
+
+                  {/* Quick Actions */}
+                  <div className="mt-8 border-t pt-6">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-4">การตั้งค่าด่วน</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <button
+                        onClick={() => setWorkingHours(prev => prev ? { ...prev, startHour: 6, endHour: 16, isEnabled: true } : null)}
+                        className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-left"
+                      >
+                        <div className="font-medium text-gray-900">เวลาปกติ</div>
+                        <div className="text-sm text-gray-500">06:00 - 16:00</div>
+                      </button>
+                      
+                      <button
+                        onClick={() => setWorkingHours(prev => prev ? { ...prev, startHour: 8, endHour: 18, isEnabled: true } : null)}
+                        className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-left"
+                      >
+                        <div className="font-medium text-gray-900">เวลาทำงาน</div>
+                        <div className="text-sm text-gray-500">08:00 - 18:00</div>
+                      </button>
+                      
+                      <button
+                        onClick={() => setWorkingHours(prev => prev ? { ...prev, isEnabled: false } : null)}
+                        className="p-4 border border-gray-300 rounded-lg hover:bg-gray-50 text-left"
+                      >
+                        <div className="font-medium text-gray-900">เปิดตลอด 24 ชั่วโมง</div>
+                        <div className="text-sm text-gray-500">ปิดการจำกัดเวลา</div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-white p-6 rounded-lg shadow">
+                  <div className="text-center">
+                    <div className="text-xl">กำลังโหลดข้อมูลเวลาทำงาน...</div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

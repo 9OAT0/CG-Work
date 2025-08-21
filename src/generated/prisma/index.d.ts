@@ -83,6 +83,16 @@ export type Feedback = $Result.DefaultSelection<Prisma.$FeedbackPayload>
  * 
  */
 export type SystemLog = $Result.DefaultSelection<Prisma.$SystemLogPayload>
+/**
+ * Model WorkingHours
+ * 
+ */
+export type WorkingHours = $Result.DefaultSelection<Prisma.$WorkingHoursPayload>
+/**
+ * Model MaintenanceMode
+ * 
+ */
+export type MaintenanceMode = $Result.DefaultSelection<Prisma.$MaintenanceModePayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -308,6 +318,26 @@ export class PrismaClient<
     * ```
     */
   get systemLog(): Prisma.SystemLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.workingHours`: Exposes CRUD operations for the **WorkingHours** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WorkingHours
+    * const workingHours = await prisma.workingHours.findMany()
+    * ```
+    */
+  get workingHours(): Prisma.WorkingHoursDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.maintenanceMode`: Exposes CRUD operations for the **MaintenanceMode** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MaintenanceModes
+    * const maintenanceModes = await prisma.maintenanceMode.findMany()
+    * ```
+    */
+  get maintenanceMode(): Prisma.MaintenanceModeDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -761,7 +791,9 @@ export namespace Prisma {
     File: 'File',
     Notification: 'Notification',
     Feedback: 'Feedback',
-    SystemLog: 'SystemLog'
+    SystemLog: 'SystemLog',
+    WorkingHours: 'WorkingHours',
+    MaintenanceMode: 'MaintenanceMode'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -780,7 +812,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog"
+      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode"
       txIsolationLevel: never
     }
     model: {
@@ -1820,6 +1852,154 @@ export namespace Prisma {
           }
         }
       }
+      WorkingHours: {
+        payload: Prisma.$WorkingHoursPayload<ExtArgs>
+        fields: Prisma.WorkingHoursFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WorkingHoursFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkingHoursPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WorkingHoursFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkingHoursPayload>
+          }
+          findFirst: {
+            args: Prisma.WorkingHoursFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkingHoursPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WorkingHoursFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkingHoursPayload>
+          }
+          findMany: {
+            args: Prisma.WorkingHoursFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkingHoursPayload>[]
+          }
+          create: {
+            args: Prisma.WorkingHoursCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkingHoursPayload>
+          }
+          createMany: {
+            args: Prisma.WorkingHoursCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.WorkingHoursDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkingHoursPayload>
+          }
+          update: {
+            args: Prisma.WorkingHoursUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkingHoursPayload>
+          }
+          deleteMany: {
+            args: Prisma.WorkingHoursDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WorkingHoursUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.WorkingHoursUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WorkingHoursPayload>
+          }
+          aggregate: {
+            args: Prisma.WorkingHoursAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWorkingHours>
+          }
+          groupBy: {
+            args: Prisma.WorkingHoursGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WorkingHoursGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.WorkingHoursFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.WorkingHoursAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.WorkingHoursCountArgs<ExtArgs>
+            result: $Utils.Optional<WorkingHoursCountAggregateOutputType> | number
+          }
+        }
+      }
+      MaintenanceMode: {
+        payload: Prisma.$MaintenanceModePayload<ExtArgs>
+        fields: Prisma.MaintenanceModeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaintenanceModeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceModePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaintenanceModeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceModePayload>
+          }
+          findFirst: {
+            args: Prisma.MaintenanceModeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceModePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaintenanceModeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceModePayload>
+          }
+          findMany: {
+            args: Prisma.MaintenanceModeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceModePayload>[]
+          }
+          create: {
+            args: Prisma.MaintenanceModeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceModePayload>
+          }
+          createMany: {
+            args: Prisma.MaintenanceModeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.MaintenanceModeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceModePayload>
+          }
+          update: {
+            args: Prisma.MaintenanceModeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceModePayload>
+          }
+          deleteMany: {
+            args: Prisma.MaintenanceModeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaintenanceModeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.MaintenanceModeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaintenanceModePayload>
+          }
+          aggregate: {
+            args: Prisma.MaintenanceModeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaintenanceMode>
+          }
+          groupBy: {
+            args: Prisma.MaintenanceModeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaintenanceModeGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.MaintenanceModeFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.MaintenanceModeAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.MaintenanceModeCountArgs<ExtArgs>
+            result: $Utils.Optional<MaintenanceModeCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1913,6 +2093,8 @@ export namespace Prisma {
     notification?: NotificationOmit
     feedback?: FeedbackOmit
     systemLog?: SystemLogOmit
+    workingHours?: WorkingHoursOmit
+    maintenanceMode?: MaintenanceModeOmit
   }
 
   /* Types for Logging */
@@ -2004,6 +2186,8 @@ export namespace Prisma {
     notifications: number
     feedbacks: number
     systemLogs: number
+    workingHoursUpdates: number
+    maintenanceModeUpdates: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2018,6 +2202,8 @@ export namespace Prisma {
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
     feedbacks?: boolean | UserCountOutputTypeCountFeedbacksArgs
     systemLogs?: boolean | UserCountOutputTypeCountSystemLogsArgs
+    workingHoursUpdates?: boolean | UserCountOutputTypeCountWorkingHoursUpdatesArgs
+    maintenanceModeUpdates?: boolean | UserCountOutputTypeCountMaintenanceModeUpdatesArgs
   }
 
   // Custom InputTypes
@@ -2106,6 +2292,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountSystemLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SystemLogWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountWorkingHoursUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkingHoursWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountMaintenanceModeUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaintenanceModeWhereInput
   }
 
 
@@ -2429,6 +2629,8 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     feedbacks?: boolean | User$feedbacksArgs<ExtArgs>
     systemLogs?: boolean | User$systemLogsArgs<ExtArgs>
+    workingHoursUpdates?: boolean | User$workingHoursUpdatesArgs<ExtArgs>
+    maintenanceModeUpdates?: boolean | User$maintenanceModeUpdatesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2460,6 +2662,8 @@ export namespace Prisma {
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     feedbacks?: boolean | User$feedbacksArgs<ExtArgs>
     systemLogs?: boolean | User$systemLogsArgs<ExtArgs>
+    workingHoursUpdates?: boolean | User$workingHoursUpdatesArgs<ExtArgs>
+    maintenanceModeUpdates?: boolean | User$maintenanceModeUpdatesArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2477,6 +2681,8 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       feedbacks: Prisma.$FeedbackPayload<ExtArgs>[]
       systemLogs: Prisma.$SystemLogPayload<ExtArgs>[]
+      workingHoursUpdates: Prisma.$WorkingHoursPayload<ExtArgs>[]
+      maintenanceModeUpdates: Prisma.$MaintenanceModePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2863,6 +3069,8 @@ export namespace Prisma {
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     feedbacks<T extends User$feedbacksArgs<ExtArgs> = {}>(args?: Subset<T, User$feedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     systemLogs<T extends User$systemLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$systemLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SystemLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    workingHoursUpdates<T extends User$workingHoursUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$workingHoursUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    maintenanceModeUpdates<T extends User$maintenanceModeUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$maintenanceModeUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3533,6 +3741,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SystemLogScalarFieldEnum | SystemLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.workingHoursUpdates
+   */
+  export type User$workingHoursUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    where?: WorkingHoursWhereInput
+    orderBy?: WorkingHoursOrderByWithRelationInput | WorkingHoursOrderByWithRelationInput[]
+    cursor?: WorkingHoursWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: WorkingHoursScalarFieldEnum | WorkingHoursScalarFieldEnum[]
+  }
+
+  /**
+   * User.maintenanceModeUpdates
+   */
+  export type User$maintenanceModeUpdatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    where?: MaintenanceModeWhereInput
+    orderBy?: MaintenanceModeOrderByWithRelationInput | MaintenanceModeOrderByWithRelationInput[]
+    cursor?: MaintenanceModeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MaintenanceModeScalarFieldEnum | MaintenanceModeScalarFieldEnum[]
   }
 
   /**
@@ -16642,6 +16898,2106 @@ export namespace Prisma {
 
 
   /**
+   * Model WorkingHours
+   */
+
+  export type AggregateWorkingHours = {
+    _count: WorkingHoursCountAggregateOutputType | null
+    _avg: WorkingHoursAvgAggregateOutputType | null
+    _sum: WorkingHoursSumAggregateOutputType | null
+    _min: WorkingHoursMinAggregateOutputType | null
+    _max: WorkingHoursMaxAggregateOutputType | null
+  }
+
+  export type WorkingHoursAvgAggregateOutputType = {
+    startHour: number | null
+    endHour: number | null
+  }
+
+  export type WorkingHoursSumAggregateOutputType = {
+    startHour: number | null
+    endHour: number | null
+  }
+
+  export type WorkingHoursMinAggregateOutputType = {
+    id: string | null
+    startHour: number | null
+    endHour: number | null
+    isEnabled: boolean | null
+    updatedBy: string | null
+    updatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type WorkingHoursMaxAggregateOutputType = {
+    id: string | null
+    startHour: number | null
+    endHour: number | null
+    isEnabled: boolean | null
+    updatedBy: string | null
+    updatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type WorkingHoursCountAggregateOutputType = {
+    id: number
+    startHour: number
+    endHour: number
+    isEnabled: number
+    updatedBy: number
+    updatedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type WorkingHoursAvgAggregateInputType = {
+    startHour?: true
+    endHour?: true
+  }
+
+  export type WorkingHoursSumAggregateInputType = {
+    startHour?: true
+    endHour?: true
+  }
+
+  export type WorkingHoursMinAggregateInputType = {
+    id?: true
+    startHour?: true
+    endHour?: true
+    isEnabled?: true
+    updatedBy?: true
+    updatedAt?: true
+    createdAt?: true
+  }
+
+  export type WorkingHoursMaxAggregateInputType = {
+    id?: true
+    startHour?: true
+    endHour?: true
+    isEnabled?: true
+    updatedBy?: true
+    updatedAt?: true
+    createdAt?: true
+  }
+
+  export type WorkingHoursCountAggregateInputType = {
+    id?: true
+    startHour?: true
+    endHour?: true
+    isEnabled?: true
+    updatedBy?: true
+    updatedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type WorkingHoursAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkingHours to aggregate.
+     */
+    where?: WorkingHoursWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkingHours to fetch.
+     */
+    orderBy?: WorkingHoursOrderByWithRelationInput | WorkingHoursOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WorkingHoursWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkingHours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkingHours.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WorkingHours
+    **/
+    _count?: true | WorkingHoursCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: WorkingHoursAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: WorkingHoursSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WorkingHoursMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WorkingHoursMaxAggregateInputType
+  }
+
+  export type GetWorkingHoursAggregateType<T extends WorkingHoursAggregateArgs> = {
+        [P in keyof T & keyof AggregateWorkingHours]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWorkingHours[P]>
+      : GetScalarType<T[P], AggregateWorkingHours[P]>
+  }
+
+
+
+
+  export type WorkingHoursGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WorkingHoursWhereInput
+    orderBy?: WorkingHoursOrderByWithAggregationInput | WorkingHoursOrderByWithAggregationInput[]
+    by: WorkingHoursScalarFieldEnum[] | WorkingHoursScalarFieldEnum
+    having?: WorkingHoursScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WorkingHoursCountAggregateInputType | true
+    _avg?: WorkingHoursAvgAggregateInputType
+    _sum?: WorkingHoursSumAggregateInputType
+    _min?: WorkingHoursMinAggregateInputType
+    _max?: WorkingHoursMaxAggregateInputType
+  }
+
+  export type WorkingHoursGroupByOutputType = {
+    id: string
+    startHour: number
+    endHour: number
+    isEnabled: boolean
+    updatedBy: string | null
+    updatedAt: Date
+    createdAt: Date
+    _count: WorkingHoursCountAggregateOutputType | null
+    _avg: WorkingHoursAvgAggregateOutputType | null
+    _sum: WorkingHoursSumAggregateOutputType | null
+    _min: WorkingHoursMinAggregateOutputType | null
+    _max: WorkingHoursMaxAggregateOutputType | null
+  }
+
+  type GetWorkingHoursGroupByPayload<T extends WorkingHoursGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WorkingHoursGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WorkingHoursGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WorkingHoursGroupByOutputType[P]>
+            : GetScalarType<T[P], WorkingHoursGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WorkingHoursSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    startHour?: boolean
+    endHour?: boolean
+    isEnabled?: boolean
+    updatedBy?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+    updatedUser?: boolean | WorkingHours$updatedUserArgs<ExtArgs>
+  }, ExtArgs["result"]["workingHours"]>
+
+
+
+  export type WorkingHoursSelectScalar = {
+    id?: boolean
+    startHour?: boolean
+    endHour?: boolean
+    isEnabled?: boolean
+    updatedBy?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type WorkingHoursOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "startHour" | "endHour" | "isEnabled" | "updatedBy" | "updatedAt" | "createdAt", ExtArgs["result"]["workingHours"]>
+  export type WorkingHoursInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    updatedUser?: boolean | WorkingHours$updatedUserArgs<ExtArgs>
+  }
+
+  export type $WorkingHoursPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WorkingHours"
+    objects: {
+      updatedUser: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      startHour: number
+      endHour: number
+      isEnabled: boolean
+      updatedBy: string | null
+      updatedAt: Date
+      createdAt: Date
+    }, ExtArgs["result"]["workingHours"]>
+    composites: {}
+  }
+
+  type WorkingHoursGetPayload<S extends boolean | null | undefined | WorkingHoursDefaultArgs> = $Result.GetResult<Prisma.$WorkingHoursPayload, S>
+
+  type WorkingHoursCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WorkingHoursFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WorkingHoursCountAggregateInputType | true
+    }
+
+  export interface WorkingHoursDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WorkingHours'], meta: { name: 'WorkingHours' } }
+    /**
+     * Find zero or one WorkingHours that matches the filter.
+     * @param {WorkingHoursFindUniqueArgs} args - Arguments to find a WorkingHours
+     * @example
+     * // Get one WorkingHours
+     * const workingHours = await prisma.workingHours.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WorkingHoursFindUniqueArgs>(args: SelectSubset<T, WorkingHoursFindUniqueArgs<ExtArgs>>): Prisma__WorkingHoursClient<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WorkingHours that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WorkingHoursFindUniqueOrThrowArgs} args - Arguments to find a WorkingHours
+     * @example
+     * // Get one WorkingHours
+     * const workingHours = await prisma.workingHours.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WorkingHoursFindUniqueOrThrowArgs>(args: SelectSubset<T, WorkingHoursFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WorkingHoursClient<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkingHours that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkingHoursFindFirstArgs} args - Arguments to find a WorkingHours
+     * @example
+     * // Get one WorkingHours
+     * const workingHours = await prisma.workingHours.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WorkingHoursFindFirstArgs>(args?: SelectSubset<T, WorkingHoursFindFirstArgs<ExtArgs>>): Prisma__WorkingHoursClient<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WorkingHours that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkingHoursFindFirstOrThrowArgs} args - Arguments to find a WorkingHours
+     * @example
+     * // Get one WorkingHours
+     * const workingHours = await prisma.workingHours.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WorkingHoursFindFirstOrThrowArgs>(args?: SelectSubset<T, WorkingHoursFindFirstOrThrowArgs<ExtArgs>>): Prisma__WorkingHoursClient<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkingHours that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkingHoursFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WorkingHours
+     * const workingHours = await prisma.workingHours.findMany()
+     * 
+     * // Get first 10 WorkingHours
+     * const workingHours = await prisma.workingHours.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const workingHoursWithIdOnly = await prisma.workingHours.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WorkingHoursFindManyArgs>(args?: SelectSubset<T, WorkingHoursFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WorkingHours.
+     * @param {WorkingHoursCreateArgs} args - Arguments to create a WorkingHours.
+     * @example
+     * // Create one WorkingHours
+     * const WorkingHours = await prisma.workingHours.create({
+     *   data: {
+     *     // ... data to create a WorkingHours
+     *   }
+     * })
+     * 
+     */
+    create<T extends WorkingHoursCreateArgs>(args: SelectSubset<T, WorkingHoursCreateArgs<ExtArgs>>): Prisma__WorkingHoursClient<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WorkingHours.
+     * @param {WorkingHoursCreateManyArgs} args - Arguments to create many WorkingHours.
+     * @example
+     * // Create many WorkingHours
+     * const workingHours = await prisma.workingHours.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WorkingHoursCreateManyArgs>(args?: SelectSubset<T, WorkingHoursCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a WorkingHours.
+     * @param {WorkingHoursDeleteArgs} args - Arguments to delete one WorkingHours.
+     * @example
+     * // Delete one WorkingHours
+     * const WorkingHours = await prisma.workingHours.delete({
+     *   where: {
+     *     // ... filter to delete one WorkingHours
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WorkingHoursDeleteArgs>(args: SelectSubset<T, WorkingHoursDeleteArgs<ExtArgs>>): Prisma__WorkingHoursClient<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WorkingHours.
+     * @param {WorkingHoursUpdateArgs} args - Arguments to update one WorkingHours.
+     * @example
+     * // Update one WorkingHours
+     * const workingHours = await prisma.workingHours.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WorkingHoursUpdateArgs>(args: SelectSubset<T, WorkingHoursUpdateArgs<ExtArgs>>): Prisma__WorkingHoursClient<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WorkingHours.
+     * @param {WorkingHoursDeleteManyArgs} args - Arguments to filter WorkingHours to delete.
+     * @example
+     * // Delete a few WorkingHours
+     * const { count } = await prisma.workingHours.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WorkingHoursDeleteManyArgs>(args?: SelectSubset<T, WorkingHoursDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WorkingHours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkingHoursUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WorkingHours
+     * const workingHours = await prisma.workingHours.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WorkingHoursUpdateManyArgs>(args: SelectSubset<T, WorkingHoursUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one WorkingHours.
+     * @param {WorkingHoursUpsertArgs} args - Arguments to update or create a WorkingHours.
+     * @example
+     * // Update or create a WorkingHours
+     * const workingHours = await prisma.workingHours.upsert({
+     *   create: {
+     *     // ... data to create a WorkingHours
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WorkingHours we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WorkingHoursUpsertArgs>(args: SelectSubset<T, WorkingHoursUpsertArgs<ExtArgs>>): Prisma__WorkingHoursClient<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WorkingHours that matches the filter.
+     * @param {WorkingHoursFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const workingHours = await prisma.workingHours.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: WorkingHoursFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a WorkingHours.
+     * @param {WorkingHoursAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const workingHours = await prisma.workingHours.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: WorkingHoursAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of WorkingHours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkingHoursCountArgs} args - Arguments to filter WorkingHours to count.
+     * @example
+     * // Count the number of WorkingHours
+     * const count = await prisma.workingHours.count({
+     *   where: {
+     *     // ... the filter for the WorkingHours we want to count
+     *   }
+     * })
+    **/
+    count<T extends WorkingHoursCountArgs>(
+      args?: Subset<T, WorkingHoursCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WorkingHoursCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WorkingHours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkingHoursAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WorkingHoursAggregateArgs>(args: Subset<T, WorkingHoursAggregateArgs>): Prisma.PrismaPromise<GetWorkingHoursAggregateType<T>>
+
+    /**
+     * Group by WorkingHours.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WorkingHoursGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WorkingHoursGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WorkingHoursGroupByArgs['orderBy'] }
+        : { orderBy?: WorkingHoursGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WorkingHoursGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWorkingHoursGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WorkingHours model
+   */
+  readonly fields: WorkingHoursFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WorkingHours.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WorkingHoursClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    updatedUser<T extends WorkingHours$updatedUserArgs<ExtArgs> = {}>(args?: Subset<T, WorkingHours$updatedUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WorkingHours model
+   */
+  interface WorkingHoursFieldRefs {
+    readonly id: FieldRef<"WorkingHours", 'String'>
+    readonly startHour: FieldRef<"WorkingHours", 'Int'>
+    readonly endHour: FieldRef<"WorkingHours", 'Int'>
+    readonly isEnabled: FieldRef<"WorkingHours", 'Boolean'>
+    readonly updatedBy: FieldRef<"WorkingHours", 'String'>
+    readonly updatedAt: FieldRef<"WorkingHours", 'DateTime'>
+    readonly createdAt: FieldRef<"WorkingHours", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WorkingHours findUnique
+   */
+  export type WorkingHoursFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkingHours to fetch.
+     */
+    where: WorkingHoursWhereUniqueInput
+  }
+
+  /**
+   * WorkingHours findUniqueOrThrow
+   */
+  export type WorkingHoursFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkingHours to fetch.
+     */
+    where: WorkingHoursWhereUniqueInput
+  }
+
+  /**
+   * WorkingHours findFirst
+   */
+  export type WorkingHoursFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkingHours to fetch.
+     */
+    where?: WorkingHoursWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkingHours to fetch.
+     */
+    orderBy?: WorkingHoursOrderByWithRelationInput | WorkingHoursOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkingHours.
+     */
+    cursor?: WorkingHoursWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkingHours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkingHours.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkingHours.
+     */
+    distinct?: WorkingHoursScalarFieldEnum | WorkingHoursScalarFieldEnum[]
+  }
+
+  /**
+   * WorkingHours findFirstOrThrow
+   */
+  export type WorkingHoursFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkingHours to fetch.
+     */
+    where?: WorkingHoursWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkingHours to fetch.
+     */
+    orderBy?: WorkingHoursOrderByWithRelationInput | WorkingHoursOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WorkingHours.
+     */
+    cursor?: WorkingHoursWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkingHours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkingHours.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WorkingHours.
+     */
+    distinct?: WorkingHoursScalarFieldEnum | WorkingHoursScalarFieldEnum[]
+  }
+
+  /**
+   * WorkingHours findMany
+   */
+  export type WorkingHoursFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    /**
+     * Filter, which WorkingHours to fetch.
+     */
+    where?: WorkingHoursWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WorkingHours to fetch.
+     */
+    orderBy?: WorkingHoursOrderByWithRelationInput | WorkingHoursOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WorkingHours.
+     */
+    cursor?: WorkingHoursWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WorkingHours from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WorkingHours.
+     */
+    skip?: number
+    distinct?: WorkingHoursScalarFieldEnum | WorkingHoursScalarFieldEnum[]
+  }
+
+  /**
+   * WorkingHours create
+   */
+  export type WorkingHoursCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WorkingHours.
+     */
+    data?: XOR<WorkingHoursCreateInput, WorkingHoursUncheckedCreateInput>
+  }
+
+  /**
+   * WorkingHours createMany
+   */
+  export type WorkingHoursCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WorkingHours.
+     */
+    data: WorkingHoursCreateManyInput | WorkingHoursCreateManyInput[]
+  }
+
+  /**
+   * WorkingHours update
+   */
+  export type WorkingHoursUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WorkingHours.
+     */
+    data: XOR<WorkingHoursUpdateInput, WorkingHoursUncheckedUpdateInput>
+    /**
+     * Choose, which WorkingHours to update.
+     */
+    where: WorkingHoursWhereUniqueInput
+  }
+
+  /**
+   * WorkingHours updateMany
+   */
+  export type WorkingHoursUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WorkingHours.
+     */
+    data: XOR<WorkingHoursUpdateManyMutationInput, WorkingHoursUncheckedUpdateManyInput>
+    /**
+     * Filter which WorkingHours to update
+     */
+    where?: WorkingHoursWhereInput
+    /**
+     * Limit how many WorkingHours to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkingHours upsert
+   */
+  export type WorkingHoursUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WorkingHours to update in case it exists.
+     */
+    where: WorkingHoursWhereUniqueInput
+    /**
+     * In case the WorkingHours found by the `where` argument doesn't exist, create a new WorkingHours with this data.
+     */
+    create: XOR<WorkingHoursCreateInput, WorkingHoursUncheckedCreateInput>
+    /**
+     * In case the WorkingHours was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WorkingHoursUpdateInput, WorkingHoursUncheckedUpdateInput>
+  }
+
+  /**
+   * WorkingHours delete
+   */
+  export type WorkingHoursDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+    /**
+     * Filter which WorkingHours to delete.
+     */
+    where: WorkingHoursWhereUniqueInput
+  }
+
+  /**
+   * WorkingHours deleteMany
+   */
+  export type WorkingHoursDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WorkingHours to delete
+     */
+    where?: WorkingHoursWhereInput
+    /**
+     * Limit how many WorkingHours to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WorkingHours findRaw
+   */
+  export type WorkingHoursFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * WorkingHours aggregateRaw
+   */
+  export type WorkingHoursAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * WorkingHours.updatedUser
+   */
+  export type WorkingHours$updatedUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * WorkingHours without action
+   */
+  export type WorkingHoursDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WorkingHours
+     */
+    select?: WorkingHoursSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WorkingHours
+     */
+    omit?: WorkingHoursOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WorkingHoursInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MaintenanceMode
+   */
+
+  export type AggregateMaintenanceMode = {
+    _count: MaintenanceModeCountAggregateOutputType | null
+    _min: MaintenanceModeMinAggregateOutputType | null
+    _max: MaintenanceModeMaxAggregateOutputType | null
+  }
+
+  export type MaintenanceModeMinAggregateOutputType = {
+    id: string | null
+    isEnabled: boolean | null
+    title: string | null
+    message: string | null
+    startTime: Date | null
+    endTime: Date | null
+    updatedBy: string | null
+    updatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type MaintenanceModeMaxAggregateOutputType = {
+    id: string | null
+    isEnabled: boolean | null
+    title: string | null
+    message: string | null
+    startTime: Date | null
+    endTime: Date | null
+    updatedBy: string | null
+    updatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type MaintenanceModeCountAggregateOutputType = {
+    id: number
+    isEnabled: number
+    title: number
+    message: number
+    startTime: number
+    endTime: number
+    updatedBy: number
+    updatedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type MaintenanceModeMinAggregateInputType = {
+    id?: true
+    isEnabled?: true
+    title?: true
+    message?: true
+    startTime?: true
+    endTime?: true
+    updatedBy?: true
+    updatedAt?: true
+    createdAt?: true
+  }
+
+  export type MaintenanceModeMaxAggregateInputType = {
+    id?: true
+    isEnabled?: true
+    title?: true
+    message?: true
+    startTime?: true
+    endTime?: true
+    updatedBy?: true
+    updatedAt?: true
+    createdAt?: true
+  }
+
+  export type MaintenanceModeCountAggregateInputType = {
+    id?: true
+    isEnabled?: true
+    title?: true
+    message?: true
+    startTime?: true
+    endTime?: true
+    updatedBy?: true
+    updatedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MaintenanceModeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaintenanceMode to aggregate.
+     */
+    where?: MaintenanceModeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaintenanceModes to fetch.
+     */
+    orderBy?: MaintenanceModeOrderByWithRelationInput | MaintenanceModeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MaintenanceModeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaintenanceModes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaintenanceModes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MaintenanceModes
+    **/
+    _count?: true | MaintenanceModeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MaintenanceModeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MaintenanceModeMaxAggregateInputType
+  }
+
+  export type GetMaintenanceModeAggregateType<T extends MaintenanceModeAggregateArgs> = {
+        [P in keyof T & keyof AggregateMaintenanceMode]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaintenanceMode[P]>
+      : GetScalarType<T[P], AggregateMaintenanceMode[P]>
+  }
+
+
+
+
+  export type MaintenanceModeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaintenanceModeWhereInput
+    orderBy?: MaintenanceModeOrderByWithAggregationInput | MaintenanceModeOrderByWithAggregationInput[]
+    by: MaintenanceModeScalarFieldEnum[] | MaintenanceModeScalarFieldEnum
+    having?: MaintenanceModeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaintenanceModeCountAggregateInputType | true
+    _min?: MaintenanceModeMinAggregateInputType
+    _max?: MaintenanceModeMaxAggregateInputType
+  }
+
+  export type MaintenanceModeGroupByOutputType = {
+    id: string
+    isEnabled: boolean
+    title: string
+    message: string
+    startTime: Date | null
+    endTime: Date | null
+    updatedBy: string | null
+    updatedAt: Date
+    createdAt: Date
+    _count: MaintenanceModeCountAggregateOutputType | null
+    _min: MaintenanceModeMinAggregateOutputType | null
+    _max: MaintenanceModeMaxAggregateOutputType | null
+  }
+
+  type GetMaintenanceModeGroupByPayload<T extends MaintenanceModeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaintenanceModeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MaintenanceModeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MaintenanceModeGroupByOutputType[P]>
+            : GetScalarType<T[P], MaintenanceModeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MaintenanceModeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    isEnabled?: boolean
+    title?: boolean
+    message?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    updatedBy?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+    updatedUser?: boolean | MaintenanceMode$updatedUserArgs<ExtArgs>
+  }, ExtArgs["result"]["maintenanceMode"]>
+
+
+
+  export type MaintenanceModeSelectScalar = {
+    id?: boolean
+    isEnabled?: boolean
+    title?: boolean
+    message?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    updatedBy?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type MaintenanceModeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "isEnabled" | "title" | "message" | "startTime" | "endTime" | "updatedBy" | "updatedAt" | "createdAt", ExtArgs["result"]["maintenanceMode"]>
+  export type MaintenanceModeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    updatedUser?: boolean | MaintenanceMode$updatedUserArgs<ExtArgs>
+  }
+
+  export type $MaintenanceModePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MaintenanceMode"
+    objects: {
+      updatedUser: Prisma.$UserPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      isEnabled: boolean
+      title: string
+      message: string
+      startTime: Date | null
+      endTime: Date | null
+      updatedBy: string | null
+      updatedAt: Date
+      createdAt: Date
+    }, ExtArgs["result"]["maintenanceMode"]>
+    composites: {}
+  }
+
+  type MaintenanceModeGetPayload<S extends boolean | null | undefined | MaintenanceModeDefaultArgs> = $Result.GetResult<Prisma.$MaintenanceModePayload, S>
+
+  type MaintenanceModeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MaintenanceModeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MaintenanceModeCountAggregateInputType | true
+    }
+
+  export interface MaintenanceModeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MaintenanceMode'], meta: { name: 'MaintenanceMode' } }
+    /**
+     * Find zero or one MaintenanceMode that matches the filter.
+     * @param {MaintenanceModeFindUniqueArgs} args - Arguments to find a MaintenanceMode
+     * @example
+     * // Get one MaintenanceMode
+     * const maintenanceMode = await prisma.maintenanceMode.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaintenanceModeFindUniqueArgs>(args: SelectSubset<T, MaintenanceModeFindUniqueArgs<ExtArgs>>): Prisma__MaintenanceModeClient<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MaintenanceMode that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaintenanceModeFindUniqueOrThrowArgs} args - Arguments to find a MaintenanceMode
+     * @example
+     * // Get one MaintenanceMode
+     * const maintenanceMode = await prisma.maintenanceMode.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaintenanceModeFindUniqueOrThrowArgs>(args: SelectSubset<T, MaintenanceModeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MaintenanceModeClient<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaintenanceMode that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceModeFindFirstArgs} args - Arguments to find a MaintenanceMode
+     * @example
+     * // Get one MaintenanceMode
+     * const maintenanceMode = await prisma.maintenanceMode.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaintenanceModeFindFirstArgs>(args?: SelectSubset<T, MaintenanceModeFindFirstArgs<ExtArgs>>): Prisma__MaintenanceModeClient<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaintenanceMode that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceModeFindFirstOrThrowArgs} args - Arguments to find a MaintenanceMode
+     * @example
+     * // Get one MaintenanceMode
+     * const maintenanceMode = await prisma.maintenanceMode.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaintenanceModeFindFirstOrThrowArgs>(args?: SelectSubset<T, MaintenanceModeFindFirstOrThrowArgs<ExtArgs>>): Prisma__MaintenanceModeClient<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MaintenanceModes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceModeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaintenanceModes
+     * const maintenanceModes = await prisma.maintenanceMode.findMany()
+     * 
+     * // Get first 10 MaintenanceModes
+     * const maintenanceModes = await prisma.maintenanceMode.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const maintenanceModeWithIdOnly = await prisma.maintenanceMode.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MaintenanceModeFindManyArgs>(args?: SelectSubset<T, MaintenanceModeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MaintenanceMode.
+     * @param {MaintenanceModeCreateArgs} args - Arguments to create a MaintenanceMode.
+     * @example
+     * // Create one MaintenanceMode
+     * const MaintenanceMode = await prisma.maintenanceMode.create({
+     *   data: {
+     *     // ... data to create a MaintenanceMode
+     *   }
+     * })
+     * 
+     */
+    create<T extends MaintenanceModeCreateArgs>(args: SelectSubset<T, MaintenanceModeCreateArgs<ExtArgs>>): Prisma__MaintenanceModeClient<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MaintenanceModes.
+     * @param {MaintenanceModeCreateManyArgs} args - Arguments to create many MaintenanceModes.
+     * @example
+     * // Create many MaintenanceModes
+     * const maintenanceMode = await prisma.maintenanceMode.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MaintenanceModeCreateManyArgs>(args?: SelectSubset<T, MaintenanceModeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a MaintenanceMode.
+     * @param {MaintenanceModeDeleteArgs} args - Arguments to delete one MaintenanceMode.
+     * @example
+     * // Delete one MaintenanceMode
+     * const MaintenanceMode = await prisma.maintenanceMode.delete({
+     *   where: {
+     *     // ... filter to delete one MaintenanceMode
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MaintenanceModeDeleteArgs>(args: SelectSubset<T, MaintenanceModeDeleteArgs<ExtArgs>>): Prisma__MaintenanceModeClient<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MaintenanceMode.
+     * @param {MaintenanceModeUpdateArgs} args - Arguments to update one MaintenanceMode.
+     * @example
+     * // Update one MaintenanceMode
+     * const maintenanceMode = await prisma.maintenanceMode.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MaintenanceModeUpdateArgs>(args: SelectSubset<T, MaintenanceModeUpdateArgs<ExtArgs>>): Prisma__MaintenanceModeClient<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MaintenanceModes.
+     * @param {MaintenanceModeDeleteManyArgs} args - Arguments to filter MaintenanceModes to delete.
+     * @example
+     * // Delete a few MaintenanceModes
+     * const { count } = await prisma.maintenanceMode.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MaintenanceModeDeleteManyArgs>(args?: SelectSubset<T, MaintenanceModeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaintenanceModes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceModeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaintenanceModes
+     * const maintenanceMode = await prisma.maintenanceMode.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MaintenanceModeUpdateManyArgs>(args: SelectSubset<T, MaintenanceModeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one MaintenanceMode.
+     * @param {MaintenanceModeUpsertArgs} args - Arguments to update or create a MaintenanceMode.
+     * @example
+     * // Update or create a MaintenanceMode
+     * const maintenanceMode = await prisma.maintenanceMode.upsert({
+     *   create: {
+     *     // ... data to create a MaintenanceMode
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaintenanceMode we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaintenanceModeUpsertArgs>(args: SelectSubset<T, MaintenanceModeUpsertArgs<ExtArgs>>): Prisma__MaintenanceModeClient<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MaintenanceModes that matches the filter.
+     * @param {MaintenanceModeFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const maintenanceMode = await prisma.maintenanceMode.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: MaintenanceModeFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a MaintenanceMode.
+     * @param {MaintenanceModeAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const maintenanceMode = await prisma.maintenanceMode.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: MaintenanceModeAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of MaintenanceModes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceModeCountArgs} args - Arguments to filter MaintenanceModes to count.
+     * @example
+     * // Count the number of MaintenanceModes
+     * const count = await prisma.maintenanceMode.count({
+     *   where: {
+     *     // ... the filter for the MaintenanceModes we want to count
+     *   }
+     * })
+    **/
+    count<T extends MaintenanceModeCountArgs>(
+      args?: Subset<T, MaintenanceModeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MaintenanceModeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MaintenanceMode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceModeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MaintenanceModeAggregateArgs>(args: Subset<T, MaintenanceModeAggregateArgs>): Prisma.PrismaPromise<GetMaintenanceModeAggregateType<T>>
+
+    /**
+     * Group by MaintenanceMode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaintenanceModeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MaintenanceModeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaintenanceModeGroupByArgs['orderBy'] }
+        : { orderBy?: MaintenanceModeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MaintenanceModeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMaintenanceModeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MaintenanceMode model
+   */
+  readonly fields: MaintenanceModeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaintenanceMode.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaintenanceModeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    updatedUser<T extends MaintenanceMode$updatedUserArgs<ExtArgs> = {}>(args?: Subset<T, MaintenanceMode$updatedUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MaintenanceMode model
+   */
+  interface MaintenanceModeFieldRefs {
+    readonly id: FieldRef<"MaintenanceMode", 'String'>
+    readonly isEnabled: FieldRef<"MaintenanceMode", 'Boolean'>
+    readonly title: FieldRef<"MaintenanceMode", 'String'>
+    readonly message: FieldRef<"MaintenanceMode", 'String'>
+    readonly startTime: FieldRef<"MaintenanceMode", 'DateTime'>
+    readonly endTime: FieldRef<"MaintenanceMode", 'DateTime'>
+    readonly updatedBy: FieldRef<"MaintenanceMode", 'String'>
+    readonly updatedAt: FieldRef<"MaintenanceMode", 'DateTime'>
+    readonly createdAt: FieldRef<"MaintenanceMode", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MaintenanceMode findUnique
+   */
+  export type MaintenanceModeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceMode to fetch.
+     */
+    where: MaintenanceModeWhereUniqueInput
+  }
+
+  /**
+   * MaintenanceMode findUniqueOrThrow
+   */
+  export type MaintenanceModeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceMode to fetch.
+     */
+    where: MaintenanceModeWhereUniqueInput
+  }
+
+  /**
+   * MaintenanceMode findFirst
+   */
+  export type MaintenanceModeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceMode to fetch.
+     */
+    where?: MaintenanceModeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaintenanceModes to fetch.
+     */
+    orderBy?: MaintenanceModeOrderByWithRelationInput | MaintenanceModeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaintenanceModes.
+     */
+    cursor?: MaintenanceModeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaintenanceModes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaintenanceModes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaintenanceModes.
+     */
+    distinct?: MaintenanceModeScalarFieldEnum | MaintenanceModeScalarFieldEnum[]
+  }
+
+  /**
+   * MaintenanceMode findFirstOrThrow
+   */
+  export type MaintenanceModeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceMode to fetch.
+     */
+    where?: MaintenanceModeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaintenanceModes to fetch.
+     */
+    orderBy?: MaintenanceModeOrderByWithRelationInput | MaintenanceModeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaintenanceModes.
+     */
+    cursor?: MaintenanceModeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaintenanceModes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaintenanceModes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaintenanceModes.
+     */
+    distinct?: MaintenanceModeScalarFieldEnum | MaintenanceModeScalarFieldEnum[]
+  }
+
+  /**
+   * MaintenanceMode findMany
+   */
+  export type MaintenanceModeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    /**
+     * Filter, which MaintenanceModes to fetch.
+     */
+    where?: MaintenanceModeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaintenanceModes to fetch.
+     */
+    orderBy?: MaintenanceModeOrderByWithRelationInput | MaintenanceModeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MaintenanceModes.
+     */
+    cursor?: MaintenanceModeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaintenanceModes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaintenanceModes.
+     */
+    skip?: number
+    distinct?: MaintenanceModeScalarFieldEnum | MaintenanceModeScalarFieldEnum[]
+  }
+
+  /**
+   * MaintenanceMode create
+   */
+  export type MaintenanceModeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MaintenanceMode.
+     */
+    data?: XOR<MaintenanceModeCreateInput, MaintenanceModeUncheckedCreateInput>
+  }
+
+  /**
+   * MaintenanceMode createMany
+   */
+  export type MaintenanceModeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MaintenanceModes.
+     */
+    data: MaintenanceModeCreateManyInput | MaintenanceModeCreateManyInput[]
+  }
+
+  /**
+   * MaintenanceMode update
+   */
+  export type MaintenanceModeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MaintenanceMode.
+     */
+    data: XOR<MaintenanceModeUpdateInput, MaintenanceModeUncheckedUpdateInput>
+    /**
+     * Choose, which MaintenanceMode to update.
+     */
+    where: MaintenanceModeWhereUniqueInput
+  }
+
+  /**
+   * MaintenanceMode updateMany
+   */
+  export type MaintenanceModeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MaintenanceModes.
+     */
+    data: XOR<MaintenanceModeUpdateManyMutationInput, MaintenanceModeUncheckedUpdateManyInput>
+    /**
+     * Filter which MaintenanceModes to update
+     */
+    where?: MaintenanceModeWhereInput
+    /**
+     * Limit how many MaintenanceModes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaintenanceMode upsert
+   */
+  export type MaintenanceModeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MaintenanceMode to update in case it exists.
+     */
+    where: MaintenanceModeWhereUniqueInput
+    /**
+     * In case the MaintenanceMode found by the `where` argument doesn't exist, create a new MaintenanceMode with this data.
+     */
+    create: XOR<MaintenanceModeCreateInput, MaintenanceModeUncheckedCreateInput>
+    /**
+     * In case the MaintenanceMode was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MaintenanceModeUpdateInput, MaintenanceModeUncheckedUpdateInput>
+  }
+
+  /**
+   * MaintenanceMode delete
+   */
+  export type MaintenanceModeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+    /**
+     * Filter which MaintenanceMode to delete.
+     */
+    where: MaintenanceModeWhereUniqueInput
+  }
+
+  /**
+   * MaintenanceMode deleteMany
+   */
+  export type MaintenanceModeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaintenanceModes to delete
+     */
+    where?: MaintenanceModeWhereInput
+    /**
+     * Limit how many MaintenanceModes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaintenanceMode findRaw
+   */
+  export type MaintenanceModeFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * MaintenanceMode aggregateRaw
+   */
+  export type MaintenanceModeAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * MaintenanceMode.updatedUser
+   */
+  export type MaintenanceMode$updatedUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * MaintenanceMode without action
+   */
+  export type MaintenanceModeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaintenanceMode
+     */
+    select?: MaintenanceModeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaintenanceMode
+     */
+    omit?: MaintenanceModeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaintenanceModeInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -16815,6 +19171,34 @@ export namespace Prisma {
   export type SystemLogScalarFieldEnum = (typeof SystemLogScalarFieldEnum)[keyof typeof SystemLogScalarFieldEnum]
 
 
+  export const WorkingHoursScalarFieldEnum: {
+    id: 'id',
+    startHour: 'startHour',
+    endHour: 'endHour',
+    isEnabled: 'isEnabled',
+    updatedBy: 'updatedBy',
+    updatedAt: 'updatedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type WorkingHoursScalarFieldEnum = (typeof WorkingHoursScalarFieldEnum)[keyof typeof WorkingHoursScalarFieldEnum]
+
+
+  export const MaintenanceModeScalarFieldEnum: {
+    id: 'id',
+    isEnabled: 'isEnabled',
+    title: 'title',
+    message: 'message',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    updatedBy: 'updatedBy',
+    updatedAt: 'updatedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type MaintenanceModeScalarFieldEnum = (typeof MaintenanceModeScalarFieldEnum)[keyof typeof MaintenanceModeScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -16927,6 +19311,8 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     feedbacks?: FeedbackListRelationFilter
     systemLogs?: SystemLogListRelationFilter
+    workingHoursUpdates?: WorkingHoursListRelationFilter
+    maintenanceModeUpdates?: MaintenanceModeListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -16951,6 +19337,8 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     feedbacks?: FeedbackOrderByRelationAggregateInput
     systemLogs?: SystemLogOrderByRelationAggregateInput
+    workingHoursUpdates?: WorkingHoursOrderByRelationAggregateInput
+    maintenanceModeUpdates?: MaintenanceModeOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -16978,6 +19366,8 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     feedbacks?: FeedbackListRelationFilter
     systemLogs?: SystemLogListRelationFilter
+    workingHoursUpdates?: WorkingHoursListRelationFilter
+    maintenanceModeUpdates?: MaintenanceModeListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -17814,6 +20204,148 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"SystemLog"> | Date | string
   }
 
+  export type WorkingHoursWhereInput = {
+    AND?: WorkingHoursWhereInput | WorkingHoursWhereInput[]
+    OR?: WorkingHoursWhereInput[]
+    NOT?: WorkingHoursWhereInput | WorkingHoursWhereInput[]
+    id?: StringFilter<"WorkingHours"> | string
+    startHour?: IntFilter<"WorkingHours"> | number
+    endHour?: IntFilter<"WorkingHours"> | number
+    isEnabled?: BoolFilter<"WorkingHours"> | boolean
+    updatedBy?: StringNullableFilter<"WorkingHours"> | string | null
+    updatedAt?: DateTimeFilter<"WorkingHours"> | Date | string
+    createdAt?: DateTimeFilter<"WorkingHours"> | Date | string
+    updatedUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type WorkingHoursOrderByWithRelationInput = {
+    id?: SortOrder
+    startHour?: SortOrder
+    endHour?: SortOrder
+    isEnabled?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedUser?: UserOrderByWithRelationInput
+  }
+
+  export type WorkingHoursWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: WorkingHoursWhereInput | WorkingHoursWhereInput[]
+    OR?: WorkingHoursWhereInput[]
+    NOT?: WorkingHoursWhereInput | WorkingHoursWhereInput[]
+    startHour?: IntFilter<"WorkingHours"> | number
+    endHour?: IntFilter<"WorkingHours"> | number
+    isEnabled?: BoolFilter<"WorkingHours"> | boolean
+    updatedBy?: StringNullableFilter<"WorkingHours"> | string | null
+    updatedAt?: DateTimeFilter<"WorkingHours"> | Date | string
+    createdAt?: DateTimeFilter<"WorkingHours"> | Date | string
+    updatedUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type WorkingHoursOrderByWithAggregationInput = {
+    id?: SortOrder
+    startHour?: SortOrder
+    endHour?: SortOrder
+    isEnabled?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    _count?: WorkingHoursCountOrderByAggregateInput
+    _avg?: WorkingHoursAvgOrderByAggregateInput
+    _max?: WorkingHoursMaxOrderByAggregateInput
+    _min?: WorkingHoursMinOrderByAggregateInput
+    _sum?: WorkingHoursSumOrderByAggregateInput
+  }
+
+  export type WorkingHoursScalarWhereWithAggregatesInput = {
+    AND?: WorkingHoursScalarWhereWithAggregatesInput | WorkingHoursScalarWhereWithAggregatesInput[]
+    OR?: WorkingHoursScalarWhereWithAggregatesInput[]
+    NOT?: WorkingHoursScalarWhereWithAggregatesInput | WorkingHoursScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WorkingHours"> | string
+    startHour?: IntWithAggregatesFilter<"WorkingHours"> | number
+    endHour?: IntWithAggregatesFilter<"WorkingHours"> | number
+    isEnabled?: BoolWithAggregatesFilter<"WorkingHours"> | boolean
+    updatedBy?: StringNullableWithAggregatesFilter<"WorkingHours"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"WorkingHours"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"WorkingHours"> | Date | string
+  }
+
+  export type MaintenanceModeWhereInput = {
+    AND?: MaintenanceModeWhereInput | MaintenanceModeWhereInput[]
+    OR?: MaintenanceModeWhereInput[]
+    NOT?: MaintenanceModeWhereInput | MaintenanceModeWhereInput[]
+    id?: StringFilter<"MaintenanceMode"> | string
+    isEnabled?: BoolFilter<"MaintenanceMode"> | boolean
+    title?: StringFilter<"MaintenanceMode"> | string
+    message?: StringFilter<"MaintenanceMode"> | string
+    startTime?: DateTimeNullableFilter<"MaintenanceMode"> | Date | string | null
+    endTime?: DateTimeNullableFilter<"MaintenanceMode"> | Date | string | null
+    updatedBy?: StringNullableFilter<"MaintenanceMode"> | string | null
+    updatedAt?: DateTimeFilter<"MaintenanceMode"> | Date | string
+    createdAt?: DateTimeFilter<"MaintenanceMode"> | Date | string
+    updatedUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }
+
+  export type MaintenanceModeOrderByWithRelationInput = {
+    id?: SortOrder
+    isEnabled?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedUser?: UserOrderByWithRelationInput
+  }
+
+  export type MaintenanceModeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MaintenanceModeWhereInput | MaintenanceModeWhereInput[]
+    OR?: MaintenanceModeWhereInput[]
+    NOT?: MaintenanceModeWhereInput | MaintenanceModeWhereInput[]
+    isEnabled?: BoolFilter<"MaintenanceMode"> | boolean
+    title?: StringFilter<"MaintenanceMode"> | string
+    message?: StringFilter<"MaintenanceMode"> | string
+    startTime?: DateTimeNullableFilter<"MaintenanceMode"> | Date | string | null
+    endTime?: DateTimeNullableFilter<"MaintenanceMode"> | Date | string | null
+    updatedBy?: StringNullableFilter<"MaintenanceMode"> | string | null
+    updatedAt?: DateTimeFilter<"MaintenanceMode"> | Date | string
+    createdAt?: DateTimeFilter<"MaintenanceMode"> | Date | string
+    updatedUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+  }, "id">
+
+  export type MaintenanceModeOrderByWithAggregationInput = {
+    id?: SortOrder
+    isEnabled?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    _count?: MaintenanceModeCountOrderByAggregateInput
+    _max?: MaintenanceModeMaxOrderByAggregateInput
+    _min?: MaintenanceModeMinOrderByAggregateInput
+  }
+
+  export type MaintenanceModeScalarWhereWithAggregatesInput = {
+    AND?: MaintenanceModeScalarWhereWithAggregatesInput | MaintenanceModeScalarWhereWithAggregatesInput[]
+    OR?: MaintenanceModeScalarWhereWithAggregatesInput[]
+    NOT?: MaintenanceModeScalarWhereWithAggregatesInput | MaintenanceModeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MaintenanceMode"> | string
+    isEnabled?: BoolWithAggregatesFilter<"MaintenanceMode"> | boolean
+    title?: StringWithAggregatesFilter<"MaintenanceMode"> | string
+    message?: StringWithAggregatesFilter<"MaintenanceMode"> | string
+    startTime?: DateTimeNullableWithAggregatesFilter<"MaintenanceMode"> | Date | string | null
+    endTime?: DateTimeNullableWithAggregatesFilter<"MaintenanceMode"> | Date | string | null
+    updatedBy?: StringNullableWithAggregatesFilter<"MaintenanceMode"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"MaintenanceMode"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"MaintenanceMode"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -17836,6 +20368,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -17860,6 +20394,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUpdateInput = {
@@ -17883,6 +20419,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -17906,6 +20444,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -18702,6 +21242,150 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type WorkingHoursCreateInput = {
+    id?: string
+    startHour?: number
+    endHour?: number
+    isEnabled?: boolean
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    updatedUser?: UserCreateNestedOneWithoutWorkingHoursUpdatesInput
+  }
+
+  export type WorkingHoursUncheckedCreateInput = {
+    id?: string
+    startHour?: number
+    endHour?: number
+    isEnabled?: boolean
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type WorkingHoursUpdateInput = {
+    startHour?: IntFieldUpdateOperationsInput | number
+    endHour?: IntFieldUpdateOperationsInput | number
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedUser?: UserUpdateOneWithoutWorkingHoursUpdatesNestedInput
+  }
+
+  export type WorkingHoursUncheckedUpdateInput = {
+    startHour?: IntFieldUpdateOperationsInput | number
+    endHour?: IntFieldUpdateOperationsInput | number
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkingHoursCreateManyInput = {
+    id?: string
+    startHour?: number
+    endHour?: number
+    isEnabled?: boolean
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type WorkingHoursUpdateManyMutationInput = {
+    startHour?: IntFieldUpdateOperationsInput | number
+    endHour?: IntFieldUpdateOperationsInput | number
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkingHoursUncheckedUpdateManyInput = {
+    startHour?: IntFieldUpdateOperationsInput | number
+    endHour?: IntFieldUpdateOperationsInput | number
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaintenanceModeCreateInput = {
+    id?: string
+    isEnabled?: boolean
+    title?: string
+    message?: string
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    updatedUser?: UserCreateNestedOneWithoutMaintenanceModeUpdatesInput
+  }
+
+  export type MaintenanceModeUncheckedCreateInput = {
+    id?: string
+    isEnabled?: boolean
+    title?: string
+    message?: string
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type MaintenanceModeUpdateInput = {
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedUser?: UserUpdateOneWithoutMaintenanceModeUpdatesNestedInput
+  }
+
+  export type MaintenanceModeUncheckedUpdateInput = {
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaintenanceModeCreateManyInput = {
+    id?: string
+    isEnabled?: boolean
+    title?: string
+    message?: string
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    updatedBy?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type MaintenanceModeUpdateManyMutationInput = {
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaintenanceModeUncheckedUpdateManyInput = {
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -18821,6 +21505,18 @@ export namespace Prisma {
     none?: SystemLogWhereInput
   }
 
+  export type WorkingHoursListRelationFilter = {
+    every?: WorkingHoursWhereInput
+    some?: WorkingHoursWhereInput
+    none?: WorkingHoursWhereInput
+  }
+
+  export type MaintenanceModeListRelationFilter = {
+    every?: MaintenanceModeWhereInput
+    some?: MaintenanceModeWhereInput
+    none?: MaintenanceModeWhereInput
+  }
+
   export type BoothJoinOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -18862,6 +21558,14 @@ export namespace Prisma {
   }
 
   export type SystemLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type WorkingHoursOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MaintenanceModeOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -19378,6 +22082,109 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type WorkingHoursCountOrderByAggregateInput = {
+    id?: SortOrder
+    startHour?: SortOrder
+    endHour?: SortOrder
+    isEnabled?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WorkingHoursAvgOrderByAggregateInput = {
+    startHour?: SortOrder
+    endHour?: SortOrder
+  }
+
+  export type WorkingHoursMaxOrderByAggregateInput = {
+    id?: SortOrder
+    startHour?: SortOrder
+    endHour?: SortOrder
+    isEnabled?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WorkingHoursMinOrderByAggregateInput = {
+    id?: SortOrder
+    startHour?: SortOrder
+    endHour?: SortOrder
+    isEnabled?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type WorkingHoursSumOrderByAggregateInput = {
+    startHour?: SortOrder
+    endHour?: SortOrder
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+    isSet?: boolean
+  }
+
+  export type MaintenanceModeCountOrderByAggregateInput = {
+    id?: SortOrder
+    isEnabled?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaintenanceModeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    isEnabled?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaintenanceModeMinOrderByAggregateInput = {
+    id?: SortOrder
+    isEnabled?: SortOrder
+    title?: SortOrder
+    message?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    updatedBy?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
   export type BoothJoinCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -19455,6 +22262,20 @@ export namespace Prisma {
     connect?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
   }
 
+  export type WorkingHoursCreateNestedManyWithoutUpdatedUserInput = {
+    create?: XOR<WorkingHoursCreateWithoutUpdatedUserInput, WorkingHoursUncheckedCreateWithoutUpdatedUserInput> | WorkingHoursCreateWithoutUpdatedUserInput[] | WorkingHoursUncheckedCreateWithoutUpdatedUserInput[]
+    connectOrCreate?: WorkingHoursCreateOrConnectWithoutUpdatedUserInput | WorkingHoursCreateOrConnectWithoutUpdatedUserInput[]
+    createMany?: WorkingHoursCreateManyUpdatedUserInputEnvelope
+    connect?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+  }
+
+  export type MaintenanceModeCreateNestedManyWithoutUpdatedUserInput = {
+    create?: XOR<MaintenanceModeCreateWithoutUpdatedUserInput, MaintenanceModeUncheckedCreateWithoutUpdatedUserInput> | MaintenanceModeCreateWithoutUpdatedUserInput[] | MaintenanceModeUncheckedCreateWithoutUpdatedUserInput[]
+    connectOrCreate?: MaintenanceModeCreateOrConnectWithoutUpdatedUserInput | MaintenanceModeCreateOrConnectWithoutUpdatedUserInput[]
+    createMany?: MaintenanceModeCreateManyUpdatedUserInputEnvelope
+    connect?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
+  }
+
   export type BoothJoinUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -19530,6 +22351,20 @@ export namespace Prisma {
     connectOrCreate?: SystemLogCreateOrConnectWithoutUserInput | SystemLogCreateOrConnectWithoutUserInput[]
     createMany?: SystemLogCreateManyUserInputEnvelope
     connect?: SystemLogWhereUniqueInput | SystemLogWhereUniqueInput[]
+  }
+
+  export type WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput = {
+    create?: XOR<WorkingHoursCreateWithoutUpdatedUserInput, WorkingHoursUncheckedCreateWithoutUpdatedUserInput> | WorkingHoursCreateWithoutUpdatedUserInput[] | WorkingHoursUncheckedCreateWithoutUpdatedUserInput[]
+    connectOrCreate?: WorkingHoursCreateOrConnectWithoutUpdatedUserInput | WorkingHoursCreateOrConnectWithoutUpdatedUserInput[]
+    createMany?: WorkingHoursCreateManyUpdatedUserInputEnvelope
+    connect?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+  }
+
+  export type MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput = {
+    create?: XOR<MaintenanceModeCreateWithoutUpdatedUserInput, MaintenanceModeUncheckedCreateWithoutUpdatedUserInput> | MaintenanceModeCreateWithoutUpdatedUserInput[] | MaintenanceModeUncheckedCreateWithoutUpdatedUserInput[]
+    connectOrCreate?: MaintenanceModeCreateOrConnectWithoutUpdatedUserInput | MaintenanceModeCreateOrConnectWithoutUpdatedUserInput[]
+    createMany?: MaintenanceModeCreateManyUpdatedUserInputEnvelope
+    connect?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -19707,6 +22542,34 @@ export namespace Prisma {
     deleteMany?: SystemLogScalarWhereInput | SystemLogScalarWhereInput[]
   }
 
+  export type WorkingHoursUpdateManyWithoutUpdatedUserNestedInput = {
+    create?: XOR<WorkingHoursCreateWithoutUpdatedUserInput, WorkingHoursUncheckedCreateWithoutUpdatedUserInput> | WorkingHoursCreateWithoutUpdatedUserInput[] | WorkingHoursUncheckedCreateWithoutUpdatedUserInput[]
+    connectOrCreate?: WorkingHoursCreateOrConnectWithoutUpdatedUserInput | WorkingHoursCreateOrConnectWithoutUpdatedUserInput[]
+    upsert?: WorkingHoursUpsertWithWhereUniqueWithoutUpdatedUserInput | WorkingHoursUpsertWithWhereUniqueWithoutUpdatedUserInput[]
+    createMany?: WorkingHoursCreateManyUpdatedUserInputEnvelope
+    set?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+    disconnect?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+    delete?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+    connect?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+    update?: WorkingHoursUpdateWithWhereUniqueWithoutUpdatedUserInput | WorkingHoursUpdateWithWhereUniqueWithoutUpdatedUserInput[]
+    updateMany?: WorkingHoursUpdateManyWithWhereWithoutUpdatedUserInput | WorkingHoursUpdateManyWithWhereWithoutUpdatedUserInput[]
+    deleteMany?: WorkingHoursScalarWhereInput | WorkingHoursScalarWhereInput[]
+  }
+
+  export type MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput = {
+    create?: XOR<MaintenanceModeCreateWithoutUpdatedUserInput, MaintenanceModeUncheckedCreateWithoutUpdatedUserInput> | MaintenanceModeCreateWithoutUpdatedUserInput[] | MaintenanceModeUncheckedCreateWithoutUpdatedUserInput[]
+    connectOrCreate?: MaintenanceModeCreateOrConnectWithoutUpdatedUserInput | MaintenanceModeCreateOrConnectWithoutUpdatedUserInput[]
+    upsert?: MaintenanceModeUpsertWithWhereUniqueWithoutUpdatedUserInput | MaintenanceModeUpsertWithWhereUniqueWithoutUpdatedUserInput[]
+    createMany?: MaintenanceModeCreateManyUpdatedUserInputEnvelope
+    set?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
+    disconnect?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
+    delete?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
+    connect?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
+    update?: MaintenanceModeUpdateWithWhereUniqueWithoutUpdatedUserInput | MaintenanceModeUpdateWithWhereUniqueWithoutUpdatedUserInput[]
+    updateMany?: MaintenanceModeUpdateManyWithWhereWithoutUpdatedUserInput | MaintenanceModeUpdateManyWithWhereWithoutUpdatedUserInput[]
+    deleteMany?: MaintenanceModeScalarWhereInput | MaintenanceModeScalarWhereInput[]
+  }
+
   export type BoothJoinUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -19859,6 +22722,34 @@ export namespace Prisma {
     update?: SystemLogUpdateWithWhereUniqueWithoutUserInput | SystemLogUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SystemLogUpdateManyWithWhereWithoutUserInput | SystemLogUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SystemLogScalarWhereInput | SystemLogScalarWhereInput[]
+  }
+
+  export type WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput = {
+    create?: XOR<WorkingHoursCreateWithoutUpdatedUserInput, WorkingHoursUncheckedCreateWithoutUpdatedUserInput> | WorkingHoursCreateWithoutUpdatedUserInput[] | WorkingHoursUncheckedCreateWithoutUpdatedUserInput[]
+    connectOrCreate?: WorkingHoursCreateOrConnectWithoutUpdatedUserInput | WorkingHoursCreateOrConnectWithoutUpdatedUserInput[]
+    upsert?: WorkingHoursUpsertWithWhereUniqueWithoutUpdatedUserInput | WorkingHoursUpsertWithWhereUniqueWithoutUpdatedUserInput[]
+    createMany?: WorkingHoursCreateManyUpdatedUserInputEnvelope
+    set?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+    disconnect?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+    delete?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+    connect?: WorkingHoursWhereUniqueInput | WorkingHoursWhereUniqueInput[]
+    update?: WorkingHoursUpdateWithWhereUniqueWithoutUpdatedUserInput | WorkingHoursUpdateWithWhereUniqueWithoutUpdatedUserInput[]
+    updateMany?: WorkingHoursUpdateManyWithWhereWithoutUpdatedUserInput | WorkingHoursUpdateManyWithWhereWithoutUpdatedUserInput[]
+    deleteMany?: WorkingHoursScalarWhereInput | WorkingHoursScalarWhereInput[]
+  }
+
+  export type MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput = {
+    create?: XOR<MaintenanceModeCreateWithoutUpdatedUserInput, MaintenanceModeUncheckedCreateWithoutUpdatedUserInput> | MaintenanceModeCreateWithoutUpdatedUserInput[] | MaintenanceModeUncheckedCreateWithoutUpdatedUserInput[]
+    connectOrCreate?: MaintenanceModeCreateOrConnectWithoutUpdatedUserInput | MaintenanceModeCreateOrConnectWithoutUpdatedUserInput[]
+    upsert?: MaintenanceModeUpsertWithWhereUniqueWithoutUpdatedUserInput | MaintenanceModeUpsertWithWhereUniqueWithoutUpdatedUserInput[]
+    createMany?: MaintenanceModeCreateManyUpdatedUserInputEnvelope
+    set?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
+    disconnect?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
+    delete?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
+    connect?: MaintenanceModeWhereUniqueInput | MaintenanceModeWhereUniqueInput[]
+    update?: MaintenanceModeUpdateWithWhereUniqueWithoutUpdatedUserInput | MaintenanceModeUpdateWithWhereUniqueWithoutUpdatedUserInput[]
+    updateMany?: MaintenanceModeUpdateManyWithWhereWithoutUpdatedUserInput | MaintenanceModeUpdateManyWithWhereWithoutUpdatedUserInput[]
+    deleteMany?: MaintenanceModeScalarWhereInput | MaintenanceModeScalarWhereInput[]
   }
 
   export type BoothCreatepicsInput = {
@@ -20343,6 +23234,43 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSystemLogsInput, UserUpdateWithoutSystemLogsInput>, UserUncheckedUpdateWithoutSystemLogsInput>
   }
 
+  export type UserCreateNestedOneWithoutWorkingHoursUpdatesInput = {
+    create?: XOR<UserCreateWithoutWorkingHoursUpdatesInput, UserUncheckedCreateWithoutWorkingHoursUpdatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWorkingHoursUpdatesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneWithoutWorkingHoursUpdatesNestedInput = {
+    create?: XOR<UserCreateWithoutWorkingHoursUpdatesInput, UserUncheckedCreateWithoutWorkingHoursUpdatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWorkingHoursUpdatesInput
+    upsert?: UserUpsertWithoutWorkingHoursUpdatesInput
+    disconnect?: boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWorkingHoursUpdatesInput, UserUpdateWithoutWorkingHoursUpdatesInput>, UserUncheckedUpdateWithoutWorkingHoursUpdatesInput>
+  }
+
+  export type UserCreateNestedOneWithoutMaintenanceModeUpdatesInput = {
+    create?: XOR<UserCreateWithoutMaintenanceModeUpdatesInput, UserUncheckedCreateWithoutMaintenanceModeUpdatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMaintenanceModeUpdatesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+    unset?: boolean
+  }
+
+  export type UserUpdateOneWithoutMaintenanceModeUpdatesNestedInput = {
+    create?: XOR<UserCreateWithoutMaintenanceModeUpdatesInput, UserUncheckedCreateWithoutMaintenanceModeUpdatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutMaintenanceModeUpdatesInput
+    upsert?: UserUpsertWithoutMaintenanceModeUpdatesInput
+    disconnect?: boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutMaintenanceModeUpdatesInput, UserUpdateWithoutMaintenanceModeUpdatesInput>, UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -20493,6 +23421,33 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+    isSet?: boolean
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+    isSet?: boolean
   }
 
   export type BoothJoinCreateWithoutUserInput = {
@@ -20758,6 +23713,64 @@ export namespace Prisma {
 
   export type SystemLogCreateManyUserInputEnvelope = {
     data: SystemLogCreateManyUserInput | SystemLogCreateManyUserInput[]
+  }
+
+  export type WorkingHoursCreateWithoutUpdatedUserInput = {
+    id?: string
+    startHour?: number
+    endHour?: number
+    isEnabled?: boolean
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type WorkingHoursUncheckedCreateWithoutUpdatedUserInput = {
+    id?: string
+    startHour?: number
+    endHour?: number
+    isEnabled?: boolean
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type WorkingHoursCreateOrConnectWithoutUpdatedUserInput = {
+    where: WorkingHoursWhereUniqueInput
+    create: XOR<WorkingHoursCreateWithoutUpdatedUserInput, WorkingHoursUncheckedCreateWithoutUpdatedUserInput>
+  }
+
+  export type WorkingHoursCreateManyUpdatedUserInputEnvelope = {
+    data: WorkingHoursCreateManyUpdatedUserInput | WorkingHoursCreateManyUpdatedUserInput[]
+  }
+
+  export type MaintenanceModeCreateWithoutUpdatedUserInput = {
+    id?: string
+    isEnabled?: boolean
+    title?: string
+    message?: string
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type MaintenanceModeUncheckedCreateWithoutUpdatedUserInput = {
+    id?: string
+    isEnabled?: boolean
+    title?: string
+    message?: string
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type MaintenanceModeCreateOrConnectWithoutUpdatedUserInput = {
+    where: MaintenanceModeWhereUniqueInput
+    create: XOR<MaintenanceModeCreateWithoutUpdatedUserInput, MaintenanceModeUncheckedCreateWithoutUpdatedUserInput>
+  }
+
+  export type MaintenanceModeCreateManyUpdatedUserInputEnvelope = {
+    data: MaintenanceModeCreateManyUpdatedUserInput | MaintenanceModeCreateManyUpdatedUserInput[]
   }
 
   export type BoothJoinUpsertWithWhereUniqueWithoutUserInput = {
@@ -21063,6 +24076,66 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SystemLog"> | Date | string
   }
 
+  export type WorkingHoursUpsertWithWhereUniqueWithoutUpdatedUserInput = {
+    where: WorkingHoursWhereUniqueInput
+    update: XOR<WorkingHoursUpdateWithoutUpdatedUserInput, WorkingHoursUncheckedUpdateWithoutUpdatedUserInput>
+    create: XOR<WorkingHoursCreateWithoutUpdatedUserInput, WorkingHoursUncheckedCreateWithoutUpdatedUserInput>
+  }
+
+  export type WorkingHoursUpdateWithWhereUniqueWithoutUpdatedUserInput = {
+    where: WorkingHoursWhereUniqueInput
+    data: XOR<WorkingHoursUpdateWithoutUpdatedUserInput, WorkingHoursUncheckedUpdateWithoutUpdatedUserInput>
+  }
+
+  export type WorkingHoursUpdateManyWithWhereWithoutUpdatedUserInput = {
+    where: WorkingHoursScalarWhereInput
+    data: XOR<WorkingHoursUpdateManyMutationInput, WorkingHoursUncheckedUpdateManyWithoutUpdatedUserInput>
+  }
+
+  export type WorkingHoursScalarWhereInput = {
+    AND?: WorkingHoursScalarWhereInput | WorkingHoursScalarWhereInput[]
+    OR?: WorkingHoursScalarWhereInput[]
+    NOT?: WorkingHoursScalarWhereInput | WorkingHoursScalarWhereInput[]
+    id?: StringFilter<"WorkingHours"> | string
+    startHour?: IntFilter<"WorkingHours"> | number
+    endHour?: IntFilter<"WorkingHours"> | number
+    isEnabled?: BoolFilter<"WorkingHours"> | boolean
+    updatedBy?: StringNullableFilter<"WorkingHours"> | string | null
+    updatedAt?: DateTimeFilter<"WorkingHours"> | Date | string
+    createdAt?: DateTimeFilter<"WorkingHours"> | Date | string
+  }
+
+  export type MaintenanceModeUpsertWithWhereUniqueWithoutUpdatedUserInput = {
+    where: MaintenanceModeWhereUniqueInput
+    update: XOR<MaintenanceModeUpdateWithoutUpdatedUserInput, MaintenanceModeUncheckedUpdateWithoutUpdatedUserInput>
+    create: XOR<MaintenanceModeCreateWithoutUpdatedUserInput, MaintenanceModeUncheckedCreateWithoutUpdatedUserInput>
+  }
+
+  export type MaintenanceModeUpdateWithWhereUniqueWithoutUpdatedUserInput = {
+    where: MaintenanceModeWhereUniqueInput
+    data: XOR<MaintenanceModeUpdateWithoutUpdatedUserInput, MaintenanceModeUncheckedUpdateWithoutUpdatedUserInput>
+  }
+
+  export type MaintenanceModeUpdateManyWithWhereWithoutUpdatedUserInput = {
+    where: MaintenanceModeScalarWhereInput
+    data: XOR<MaintenanceModeUpdateManyMutationInput, MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserInput>
+  }
+
+  export type MaintenanceModeScalarWhereInput = {
+    AND?: MaintenanceModeScalarWhereInput | MaintenanceModeScalarWhereInput[]
+    OR?: MaintenanceModeScalarWhereInput[]
+    NOT?: MaintenanceModeScalarWhereInput | MaintenanceModeScalarWhereInput[]
+    id?: StringFilter<"MaintenanceMode"> | string
+    isEnabled?: BoolFilter<"MaintenanceMode"> | boolean
+    title?: StringFilter<"MaintenanceMode"> | string
+    message?: StringFilter<"MaintenanceMode"> | string
+    startTime?: DateTimeNullableFilter<"MaintenanceMode"> | Date | string | null
+    endTime?: DateTimeNullableFilter<"MaintenanceMode"> | Date | string | null
+    updatedBy?: StringNullableFilter<"MaintenanceMode"> | string | null
+    updatedAt?: DateTimeFilter<"MaintenanceMode"> | Date | string
+    createdAt?: DateTimeFilter<"MaintenanceMode"> | Date | string
+  }
+
   export type BoothOwnerCreateWithoutBoothInput = {
     id?: string
     addedAt?: Date | string
@@ -21275,6 +24348,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutJoinedBoothsInput = {
@@ -21298,6 +24373,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutJoinedBoothsInput = {
@@ -21373,6 +24450,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutJoinedBoothsInput = {
@@ -21395,6 +24474,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type BoothUpsertWithoutJoinedUsersInput = {
@@ -21459,6 +24540,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedBoothsInput = {
@@ -21482,6 +24565,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedBoothsInput = {
@@ -21557,6 +24642,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedBoothsInput = {
@@ -21579,6 +24666,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type BoothUpsertWithoutBoothOwnersInput = {
@@ -21643,6 +24732,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutTranscriptLogInput = {
@@ -21666,6 +24757,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutTranscriptLogInput = {
@@ -21704,6 +24797,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTranscriptLogInput = {
@@ -21726,6 +24821,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserCreateWithoutVisitLogInput = {
@@ -21749,6 +24846,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutVisitLogInput = {
@@ -21772,6 +24871,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutVisitLogInput = {
@@ -21810,6 +24911,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitLogInput = {
@@ -21832,6 +24935,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserCreateWithoutBoothRatingsInput = {
@@ -21855,6 +24960,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothRatingsInput = {
@@ -21878,6 +24985,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothRatingsInput = {
@@ -21953,6 +25062,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothRatingsInput = {
@@ -21975,6 +25086,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type BoothUpsertWithoutRatingsInput = {
@@ -22039,6 +25152,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothCommentsInput = {
@@ -22062,6 +25177,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothCommentsInput = {
@@ -22137,6 +25254,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothCommentsInput = {
@@ -22159,6 +25278,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type BoothUpsertWithoutCommentsInput = {
@@ -22223,6 +25344,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothFavoritesInput = {
@@ -22246,6 +25369,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothFavoritesInput = {
@@ -22321,6 +25446,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothFavoritesInput = {
@@ -22343,6 +25470,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type BoothUpsertWithoutFavoritesInput = {
@@ -22407,6 +25536,8 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutUploadedFilesInput = {
@@ -22430,6 +25561,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutUploadedFilesInput = {
@@ -22468,6 +25601,8 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedFilesInput = {
@@ -22490,6 +25625,8 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -22513,6 +25650,8 @@ export namespace Prisma {
     uploadedFiles?: FileCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -22536,6 +25675,8 @@ export namespace Prisma {
     uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -22574,6 +25715,8 @@ export namespace Prisma {
     uploadedFiles?: FileUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -22596,6 +25739,8 @@ export namespace Prisma {
     uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserCreateWithoutFeedbacksInput = {
@@ -22619,6 +25764,8 @@ export namespace Prisma {
     uploadedFiles?: FileCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutFeedbacksInput = {
@@ -22642,6 +25789,8 @@ export namespace Prisma {
     uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutFeedbacksInput = {
@@ -22680,6 +25829,8 @@ export namespace Prisma {
     uploadedFiles?: FileUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFeedbacksInput = {
@@ -22702,6 +25853,8 @@ export namespace Prisma {
     uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserCreateWithoutSystemLogsInput = {
@@ -22725,6 +25878,8 @@ export namespace Prisma {
     uploadedFiles?: FileCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserUncheckedCreateWithoutSystemLogsInput = {
@@ -22748,6 +25903,8 @@ export namespace Prisma {
     uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
   }
 
   export type UserCreateOrConnectWithoutSystemLogsInput = {
@@ -22786,6 +25943,8 @@ export namespace Prisma {
     uploadedFiles?: FileUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSystemLogsInput = {
@@ -22808,6 +25967,236 @@ export namespace Prisma {
     uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+  }
+
+  export type UserCreateWithoutWorkingHoursUpdatesInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+  }
+
+  export type UserUncheckedCreateWithoutWorkingHoursUpdatesInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingUncheckedCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentUncheckedCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteUncheckedCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+  }
+
+  export type UserCreateOrConnectWithoutWorkingHoursUpdatesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWorkingHoursUpdatesInput, UserUncheckedCreateWithoutWorkingHoursUpdatesInput>
+  }
+
+  export type UserUpsertWithoutWorkingHoursUpdatesInput = {
+    update: XOR<UserUpdateWithoutWorkingHoursUpdatesInput, UserUncheckedUpdateWithoutWorkingHoursUpdatesInput>
+    create: XOR<UserCreateWithoutWorkingHoursUpdatesInput, UserUncheckedCreateWithoutWorkingHoursUpdatesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWorkingHoursUpdatesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWorkingHoursUpdatesInput, UserUncheckedUpdateWithoutWorkingHoursUpdatesInput>
+  }
+
+  export type UserUpdateWithoutWorkingHoursUpdatesInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutWorkingHoursUpdatesInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUncheckedUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUncheckedUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+  }
+
+  export type UserCreateWithoutMaintenanceModeUpdatesInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+  }
+
+  export type UserUncheckedCreateWithoutMaintenanceModeUpdatesInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingUncheckedCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentUncheckedCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteUncheckedCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+  }
+
+  export type UserCreateOrConnectWithoutMaintenanceModeUpdatesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutMaintenanceModeUpdatesInput, UserUncheckedCreateWithoutMaintenanceModeUpdatesInput>
+  }
+
+  export type UserUpsertWithoutMaintenanceModeUpdatesInput = {
+    update: XOR<UserUpdateWithoutMaintenanceModeUpdatesInput, UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput>
+    create: XOR<UserCreateWithoutMaintenanceModeUpdatesInput, UserUncheckedCreateWithoutMaintenanceModeUpdatesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMaintenanceModeUpdatesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutMaintenanceModeUpdatesInput, UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput>
+  }
+
+  export type UserUpdateWithoutMaintenanceModeUpdatesInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUncheckedUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUncheckedUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
   }
 
   export type BoothJoinCreateManyUserInput = {
@@ -22890,6 +26279,26 @@ export namespace Prisma {
     details?: string | null
     ipAddress?: string | null
     userAgent?: string | null
+    createdAt?: Date | string
+  }
+
+  export type WorkingHoursCreateManyUpdatedUserInput = {
+    id?: string
+    startHour?: number
+    endHour?: number
+    isEnabled?: boolean
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type MaintenanceModeCreateManyUpdatedUserInput = {
+    id?: string
+    isEnabled?: boolean
+    title?: string
+    message?: string
+    startTime?: Date | string | null
+    endTime?: Date | string | null
+    updatedAt?: Date | string
     createdAt?: Date | string
   }
 
@@ -23106,6 +26515,60 @@ export namespace Prisma {
     details?: NullableStringFieldUpdateOperationsInput | string | null
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkingHoursUpdateWithoutUpdatedUserInput = {
+    startHour?: IntFieldUpdateOperationsInput | number
+    endHour?: IntFieldUpdateOperationsInput | number
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkingHoursUncheckedUpdateWithoutUpdatedUserInput = {
+    startHour?: IntFieldUpdateOperationsInput | number
+    endHour?: IntFieldUpdateOperationsInput | number
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WorkingHoursUncheckedUpdateManyWithoutUpdatedUserInput = {
+    startHour?: IntFieldUpdateOperationsInput | number
+    endHour?: IntFieldUpdateOperationsInput | number
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaintenanceModeUpdateWithoutUpdatedUserInput = {
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaintenanceModeUncheckedUpdateWithoutUpdatedUserInput = {
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserInput = {
+    isEnabled?: BoolFieldUpdateOperationsInput | boolean
+    title?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    startTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

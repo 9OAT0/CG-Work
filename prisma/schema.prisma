@@ -40,6 +40,8 @@ model User {
   notifications  Notification[]
   feedbacks      Feedback[]
   systemLogs     SystemLog[]
+  workingHoursUpdates WorkingHours[]
+  maintenanceModeUpdates MaintenanceMode[]
 }
 
 model Booth {
@@ -184,4 +186,28 @@ model SystemLog {
   ipAddress String?
   userAgent String?
   createdAt DateTime @default(now())
+}
+
+model WorkingHours {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  startHour   Int      @default(6)   // เวลาเริ่มต้น (ชั่วโมง) 0-23
+  endHour     Int      @default(16)  // เวลาสิ้นสุด (ชั่วโมง) 0-23
+  isEnabled   Boolean  @default(true) // เปิด/ปิดการจำกัดเวลา
+  updatedBy   String?  @db.ObjectId
+  updatedUser User?    @relation(fields: [updatedBy], references: [id])
+  updatedAt   DateTime @default(now())
+  createdAt   DateTime @default(now())
+}
+
+model MaintenanceMode {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  isEnabled   Boolean  @default(false) // เปิด/ปิด maintenance mode
+  title       String   @default("ระบบอยู่ในช่วงปรับปรุง") // หัวข้อที่แสดงในหน้า maintenance
+  message     String   @default("เว็บไซต์อยู่ในช่วงปรับปรุง กรุณากลับมาใหม่อีกครั้ง") // ข้อความที่แสดง
+  startTime   DateTime? // เวลาเริ่มต้น maintenance (optional)
+  endTime     DateTime? // เวลาสิ้นสุด maintenance (optional)
+  updatedBy   String?  @db.ObjectId
+  updatedUser User?    @relation(fields: [updatedBy], references: [id])
+  updatedAt   DateTime @default(now())
+  createdAt   DateTime @default(now())
 }
