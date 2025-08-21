@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const kanit = Kanit({
   variable: "--font-kanit",
@@ -34,7 +33,6 @@ export default function RootLayout({
         className={`${kanit.variable} font-kanit antialiased bg-white text-black`}
       >
         {children}
-        <SpeedInsights />
       </body>
     </html>
   );
