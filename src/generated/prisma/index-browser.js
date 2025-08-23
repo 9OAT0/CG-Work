@@ -273,6 +273,37 @@ exports.Prisma.LoginHistoryScalarFieldEnum = {
   userAgent: 'userAgent'
 };
 
+exports.Prisma.QrCodeScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  boothId: 'boothId',
+  entitlementKey: 'entitlementKey',
+  cost: 'cost',
+  rule: 'rule',
+  active: 'active',
+  expiresAt: 'expiresAt',
+  uses: 'uses',
+  maxUses: 'maxUses',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PlayPassScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  boothId: 'boothId',
+  qrCodeId: 'qrCodeId',
+  entitlementKey: 'entitlementKey',
+  issuedAt: 'issuedAt'
+};
+
+exports.Prisma.QrScanLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  qrCodeId: 'qrCodeId',
+  scannedAt: 'scannedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -282,7 +313,11 @@ exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
 };
-
+exports.RedeemRule = exports.$Enums.RedeemRule = {
+  ONCE_PER_EVENT: 'ONCE_PER_EVENT',
+  ONCE_PER_DAY: 'ONCE_PER_DAY',
+  UNLIMITED: 'UNLIMITED'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
@@ -301,7 +336,10 @@ exports.Prisma.ModelName = {
   SystemLog: 'SystemLog',
   WorkingHours: 'WorkingHours',
   MaintenanceMode: 'MaintenanceMode',
-  LoginHistory: 'LoginHistory'
+  LoginHistory: 'LoginHistory',
+  QrCode: 'QrCode',
+  PlayPass: 'PlayPass',
+  QrScanLog: 'QrScanLog'
 };
 
 /**

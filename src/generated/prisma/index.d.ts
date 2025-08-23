@@ -98,6 +98,39 @@ export type MaintenanceMode = $Result.DefaultSelection<Prisma.$MaintenanceModePa
  * 
  */
 export type LoginHistory = $Result.DefaultSelection<Prisma.$LoginHistoryPayload>
+/**
+ * Model QrCode
+ * 
+ */
+export type QrCode = $Result.DefaultSelection<Prisma.$QrCodePayload>
+/**
+ * Model PlayPass
+ * 
+ */
+export type PlayPass = $Result.DefaultSelection<Prisma.$PlayPassPayload>
+/**
+ * Model QrScanLog
+ * 
+ */
+export type QrScanLog = $Result.DefaultSelection<Prisma.$QrScanLogPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const RedeemRule: {
+  ONCE_PER_EVENT: 'ONCE_PER_EVENT',
+  ONCE_PER_DAY: 'ONCE_PER_DAY',
+  UNLIMITED: 'UNLIMITED'
+};
+
+export type RedeemRule = (typeof RedeemRule)[keyof typeof RedeemRule]
+
+}
+
+export type RedeemRule = $Enums.RedeemRule
+
+export const RedeemRule: typeof $Enums.RedeemRule
 
 /**
  * ##  Prisma Client ʲˢ
@@ -353,6 +386,36 @@ export class PrismaClient<
     * ```
     */
   get loginHistory(): Prisma.LoginHistoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.qrCode`: Exposes CRUD operations for the **QrCode** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QrCodes
+    * const qrCodes = await prisma.qrCode.findMany()
+    * ```
+    */
+  get qrCode(): Prisma.QrCodeDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.playPass`: Exposes CRUD operations for the **PlayPass** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PlayPasses
+    * const playPasses = await prisma.playPass.findMany()
+    * ```
+    */
+  get playPass(): Prisma.PlayPassDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.qrScanLog`: Exposes CRUD operations for the **QrScanLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more QrScanLogs
+    * const qrScanLogs = await prisma.qrScanLog.findMany()
+    * ```
+    */
+  get qrScanLog(): Prisma.QrScanLogDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -809,7 +872,10 @@ export namespace Prisma {
     SystemLog: 'SystemLog',
     WorkingHours: 'WorkingHours',
     MaintenanceMode: 'MaintenanceMode',
-    LoginHistory: 'LoginHistory'
+    LoginHistory: 'LoginHistory',
+    QrCode: 'QrCode',
+    PlayPass: 'PlayPass',
+    QrScanLog: 'QrScanLog'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -828,7 +894,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode" | "loginHistory"
+      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode" | "loginHistory" | "qrCode" | "playPass" | "qrScanLog"
       txIsolationLevel: never
     }
     model: {
@@ -2090,6 +2156,228 @@ export namespace Prisma {
           }
         }
       }
+      QrCode: {
+        payload: Prisma.$QrCodePayload<ExtArgs>
+        fields: Prisma.QrCodeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QrCodeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrCodePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QrCodeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrCodePayload>
+          }
+          findFirst: {
+            args: Prisma.QrCodeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrCodePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QrCodeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrCodePayload>
+          }
+          findMany: {
+            args: Prisma.QrCodeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrCodePayload>[]
+          }
+          create: {
+            args: Prisma.QrCodeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrCodePayload>
+          }
+          createMany: {
+            args: Prisma.QrCodeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.QrCodeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrCodePayload>
+          }
+          update: {
+            args: Prisma.QrCodeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrCodePayload>
+          }
+          deleteMany: {
+            args: Prisma.QrCodeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QrCodeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QrCodeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrCodePayload>
+          }
+          aggregate: {
+            args: Prisma.QrCodeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQrCode>
+          }
+          groupBy: {
+            args: Prisma.QrCodeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QrCodeGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.QrCodeFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.QrCodeAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.QrCodeCountArgs<ExtArgs>
+            result: $Utils.Optional<QrCodeCountAggregateOutputType> | number
+          }
+        }
+      }
+      PlayPass: {
+        payload: Prisma.$PlayPassPayload<ExtArgs>
+        fields: Prisma.PlayPassFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PlayPassFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlayPassPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PlayPassFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlayPassPayload>
+          }
+          findFirst: {
+            args: Prisma.PlayPassFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlayPassPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PlayPassFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlayPassPayload>
+          }
+          findMany: {
+            args: Prisma.PlayPassFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlayPassPayload>[]
+          }
+          create: {
+            args: Prisma.PlayPassCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlayPassPayload>
+          }
+          createMany: {
+            args: Prisma.PlayPassCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.PlayPassDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlayPassPayload>
+          }
+          update: {
+            args: Prisma.PlayPassUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlayPassPayload>
+          }
+          deleteMany: {
+            args: Prisma.PlayPassDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PlayPassUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PlayPassUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PlayPassPayload>
+          }
+          aggregate: {
+            args: Prisma.PlayPassAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePlayPass>
+          }
+          groupBy: {
+            args: Prisma.PlayPassGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PlayPassGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.PlayPassFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.PlayPassAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.PlayPassCountArgs<ExtArgs>
+            result: $Utils.Optional<PlayPassCountAggregateOutputType> | number
+          }
+        }
+      }
+      QrScanLog: {
+        payload: Prisma.$QrScanLogPayload<ExtArgs>
+        fields: Prisma.QrScanLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.QrScanLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrScanLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.QrScanLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrScanLogPayload>
+          }
+          findFirst: {
+            args: Prisma.QrScanLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrScanLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.QrScanLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrScanLogPayload>
+          }
+          findMany: {
+            args: Prisma.QrScanLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrScanLogPayload>[]
+          }
+          create: {
+            args: Prisma.QrScanLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrScanLogPayload>
+          }
+          createMany: {
+            args: Prisma.QrScanLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.QrScanLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrScanLogPayload>
+          }
+          update: {
+            args: Prisma.QrScanLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrScanLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.QrScanLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.QrScanLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.QrScanLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$QrScanLogPayload>
+          }
+          aggregate: {
+            args: Prisma.QrScanLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateQrScanLog>
+          }
+          groupBy: {
+            args: Prisma.QrScanLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<QrScanLogGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.QrScanLogFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.QrScanLogAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.QrScanLogCountArgs<ExtArgs>
+            result: $Utils.Optional<QrScanLogCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2186,6 +2474,9 @@ export namespace Prisma {
     workingHours?: WorkingHoursOmit
     maintenanceMode?: MaintenanceModeOmit
     loginHistory?: LoginHistoryOmit
+    qrCode?: QrCodeOmit
+    playPass?: PlayPassOmit
+    qrScanLog?: QrScanLogOmit
   }
 
   /* Types for Logging */
@@ -2280,6 +2571,8 @@ export namespace Prisma {
     workingHoursUpdates: number
     maintenanceModeUpdates: number
     loginHistory: number
+    PlayPass: number
+    QrScanLog: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2297,6 +2590,8 @@ export namespace Prisma {
     workingHoursUpdates?: boolean | UserCountOutputTypeCountWorkingHoursUpdatesArgs
     maintenanceModeUpdates?: boolean | UserCountOutputTypeCountMaintenanceModeUpdatesArgs
     loginHistory?: boolean | UserCountOutputTypeCountLoginHistoryArgs
+    PlayPass?: boolean | UserCountOutputTypeCountPlayPassArgs
+    QrScanLog?: boolean | UserCountOutputTypeCountQrScanLogArgs
   }
 
   // Custom InputTypes
@@ -2408,6 +2703,20 @@ export namespace Prisma {
     where?: LoginHistoryWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPlayPassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlayPassWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountQrScanLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QrScanLogWhereInput
+  }
+
 
   /**
    * Count Type BoothCountOutputType
@@ -2419,6 +2728,8 @@ export namespace Prisma {
     ratings: number
     comments: number
     favorites: number
+    QrCode: number
+    PlayPass: number
   }
 
   export type BoothCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2427,6 +2738,8 @@ export namespace Prisma {
     ratings?: boolean | BoothCountOutputTypeCountRatingsArgs
     comments?: boolean | BoothCountOutputTypeCountCommentsArgs
     favorites?: boolean | BoothCountOutputTypeCountFavoritesArgs
+    QrCode?: boolean | BoothCountOutputTypeCountQrCodeArgs
+    PlayPass?: boolean | BoothCountOutputTypeCountPlayPassArgs
   }
 
   // Custom InputTypes
@@ -2473,6 +2786,60 @@ export namespace Prisma {
    */
   export type BoothCountOutputTypeCountFavoritesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BoothFavoriteWhereInput
+  }
+
+  /**
+   * BoothCountOutputType without action
+   */
+  export type BoothCountOutputTypeCountQrCodeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QrCodeWhereInput
+  }
+
+  /**
+   * BoothCountOutputType without action
+   */
+  export type BoothCountOutputTypeCountPlayPassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlayPassWhereInput
+  }
+
+
+  /**
+   * Count Type QrCodeCountOutputType
+   */
+
+  export type QrCodeCountOutputType = {
+    logs: number
+    passes: number
+  }
+
+  export type QrCodeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    logs?: boolean | QrCodeCountOutputTypeCountLogsArgs
+    passes?: boolean | QrCodeCountOutputTypeCountPassesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * QrCodeCountOutputType without action
+   */
+  export type QrCodeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCodeCountOutputType
+     */
+    select?: QrCodeCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * QrCodeCountOutputType without action
+   */
+  export type QrCodeCountOutputTypeCountLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QrScanLogWhereInput
+  }
+
+  /**
+   * QrCodeCountOutputType without action
+   */
+  export type QrCodeCountOutputTypeCountPassesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlayPassWhereInput
   }
 
 
@@ -2748,6 +3115,8 @@ export namespace Prisma {
     workingHoursUpdates?: boolean | User$workingHoursUpdatesArgs<ExtArgs>
     maintenanceModeUpdates?: boolean | User$maintenanceModeUpdatesArgs<ExtArgs>
     loginHistory?: boolean | User$loginHistoryArgs<ExtArgs>
+    PlayPass?: boolean | User$PlayPassArgs<ExtArgs>
+    QrScanLog?: boolean | User$QrScanLogArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2784,6 +3153,8 @@ export namespace Prisma {
     workingHoursUpdates?: boolean | User$workingHoursUpdatesArgs<ExtArgs>
     maintenanceModeUpdates?: boolean | User$maintenanceModeUpdatesArgs<ExtArgs>
     loginHistory?: boolean | User$loginHistoryArgs<ExtArgs>
+    PlayPass?: boolean | User$PlayPassArgs<ExtArgs>
+    QrScanLog?: boolean | User$QrScanLogArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2804,6 +3175,8 @@ export namespace Prisma {
       workingHoursUpdates: Prisma.$WorkingHoursPayload<ExtArgs>[]
       maintenanceModeUpdates: Prisma.$MaintenanceModePayload<ExtArgs>[]
       loginHistory: Prisma.$LoginHistoryPayload<ExtArgs>[]
+      PlayPass: Prisma.$PlayPassPayload<ExtArgs>[]
+      QrScanLog: Prisma.$QrScanLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3195,6 +3568,8 @@ export namespace Prisma {
     workingHoursUpdates<T extends User$workingHoursUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$workingHoursUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WorkingHoursPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     maintenanceModeUpdates<T extends User$maintenanceModeUpdatesArgs<ExtArgs> = {}>(args?: Subset<T, User$maintenanceModeUpdatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaintenanceModePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     loginHistory<T extends User$loginHistoryArgs<ExtArgs> = {}>(args?: Subset<T, User$loginHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    PlayPass<T extends User$PlayPassArgs<ExtArgs> = {}>(args?: Subset<T, User$PlayPassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    QrScanLog<T extends User$QrScanLogArgs<ExtArgs> = {}>(args?: Subset<T, User$QrScanLogArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3942,6 +4317,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.PlayPass
+   */
+  export type User$PlayPassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    where?: PlayPassWhereInput
+    orderBy?: PlayPassOrderByWithRelationInput | PlayPassOrderByWithRelationInput[]
+    cursor?: PlayPassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PlayPassScalarFieldEnum | PlayPassScalarFieldEnum[]
+  }
+
+  /**
+   * User.QrScanLog
+   */
+  export type User$QrScanLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    where?: QrScanLogWhereInput
+    orderBy?: QrScanLogOrderByWithRelationInput | QrScanLogOrderByWithRelationInput[]
+    cursor?: QrScanLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QrScanLogScalarFieldEnum | QrScanLogScalarFieldEnum[]
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4145,6 +4568,8 @@ export namespace Prisma {
     ratings?: boolean | Booth$ratingsArgs<ExtArgs>
     comments?: boolean | Booth$commentsArgs<ExtArgs>
     favorites?: boolean | Booth$favoritesArgs<ExtArgs>
+    QrCode?: boolean | Booth$QrCodeArgs<ExtArgs>
+    PlayPass?: boolean | Booth$PlayPassArgs<ExtArgs>
     _count?: boolean | BoothCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["booth"]>
 
@@ -4169,6 +4594,8 @@ export namespace Prisma {
     ratings?: boolean | Booth$ratingsArgs<ExtArgs>
     comments?: boolean | Booth$commentsArgs<ExtArgs>
     favorites?: boolean | Booth$favoritesArgs<ExtArgs>
+    QrCode?: boolean | Booth$QrCodeArgs<ExtArgs>
+    PlayPass?: boolean | Booth$PlayPassArgs<ExtArgs>
     _count?: boolean | BoothCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -4180,6 +4607,8 @@ export namespace Prisma {
       ratings: Prisma.$BoothRatingPayload<ExtArgs>[]
       comments: Prisma.$BoothCommentPayload<ExtArgs>[]
       favorites: Prisma.$BoothFavoritePayload<ExtArgs>[]
+      QrCode: Prisma.$QrCodePayload<ExtArgs>[]
+      PlayPass: Prisma.$PlayPassPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4559,6 +4988,8 @@ export namespace Prisma {
     ratings<T extends Booth$ratingsArgs<ExtArgs> = {}>(args?: Subset<T, Booth$ratingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BoothRatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     comments<T extends Booth$commentsArgs<ExtArgs> = {}>(args?: Subset<T, Booth$commentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BoothCommentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     favorites<T extends Booth$favoritesArgs<ExtArgs> = {}>(args?: Subset<T, Booth$favoritesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BoothFavoritePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    QrCode<T extends Booth$QrCodeArgs<ExtArgs> = {}>(args?: Subset<T, Booth$QrCodeArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    PlayPass<T extends Booth$PlayPassArgs<ExtArgs> = {}>(args?: Subset<T, Booth$PlayPassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5084,6 +5515,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BoothFavoriteScalarFieldEnum | BoothFavoriteScalarFieldEnum[]
+  }
+
+  /**
+   * Booth.QrCode
+   */
+  export type Booth$QrCodeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    where?: QrCodeWhereInput
+    orderBy?: QrCodeOrderByWithRelationInput | QrCodeOrderByWithRelationInput[]
+    cursor?: QrCodeWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QrCodeScalarFieldEnum | QrCodeScalarFieldEnum[]
+  }
+
+  /**
+   * Booth.PlayPass
+   */
+  export type Booth$PlayPassArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    where?: PlayPassWhereInput
+    orderBy?: PlayPassOrderByWithRelationInput | PlayPassOrderByWithRelationInput[]
+    cursor?: PlayPassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PlayPassScalarFieldEnum | PlayPassScalarFieldEnum[]
   }
 
   /**
@@ -20127,6 +20606,3132 @@ export namespace Prisma {
 
 
   /**
+   * Model QrCode
+   */
+
+  export type AggregateQrCode = {
+    _count: QrCodeCountAggregateOutputType | null
+    _avg: QrCodeAvgAggregateOutputType | null
+    _sum: QrCodeSumAggregateOutputType | null
+    _min: QrCodeMinAggregateOutputType | null
+    _max: QrCodeMaxAggregateOutputType | null
+  }
+
+  export type QrCodeAvgAggregateOutputType = {
+    cost: number | null
+    uses: number | null
+    maxUses: number | null
+  }
+
+  export type QrCodeSumAggregateOutputType = {
+    cost: number | null
+    uses: number | null
+    maxUses: number | null
+  }
+
+  export type QrCodeMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    boothId: string | null
+    entitlementKey: string | null
+    cost: number | null
+    rule: $Enums.RedeemRule | null
+    active: boolean | null
+    expiresAt: Date | null
+    uses: number | null
+    maxUses: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QrCodeMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    boothId: string | null
+    entitlementKey: string | null
+    cost: number | null
+    rule: $Enums.RedeemRule | null
+    active: boolean | null
+    expiresAt: Date | null
+    uses: number | null
+    maxUses: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type QrCodeCountAggregateOutputType = {
+    id: number
+    code: number
+    boothId: number
+    entitlementKey: number
+    cost: number
+    rule: number
+    active: number
+    expiresAt: number
+    uses: number
+    maxUses: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type QrCodeAvgAggregateInputType = {
+    cost?: true
+    uses?: true
+    maxUses?: true
+  }
+
+  export type QrCodeSumAggregateInputType = {
+    cost?: true
+    uses?: true
+    maxUses?: true
+  }
+
+  export type QrCodeMinAggregateInputType = {
+    id?: true
+    code?: true
+    boothId?: true
+    entitlementKey?: true
+    cost?: true
+    rule?: true
+    active?: true
+    expiresAt?: true
+    uses?: true
+    maxUses?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QrCodeMaxAggregateInputType = {
+    id?: true
+    code?: true
+    boothId?: true
+    entitlementKey?: true
+    cost?: true
+    rule?: true
+    active?: true
+    expiresAt?: true
+    uses?: true
+    maxUses?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type QrCodeCountAggregateInputType = {
+    id?: true
+    code?: true
+    boothId?: true
+    entitlementKey?: true
+    cost?: true
+    rule?: true
+    active?: true
+    expiresAt?: true
+    uses?: true
+    maxUses?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type QrCodeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QrCode to aggregate.
+     */
+    where?: QrCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QrCodes to fetch.
+     */
+    orderBy?: QrCodeOrderByWithRelationInput | QrCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QrCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QrCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QrCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QrCodes
+    **/
+    _count?: true | QrCodeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: QrCodeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: QrCodeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QrCodeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QrCodeMaxAggregateInputType
+  }
+
+  export type GetQrCodeAggregateType<T extends QrCodeAggregateArgs> = {
+        [P in keyof T & keyof AggregateQrCode]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQrCode[P]>
+      : GetScalarType<T[P], AggregateQrCode[P]>
+  }
+
+
+
+
+  export type QrCodeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QrCodeWhereInput
+    orderBy?: QrCodeOrderByWithAggregationInput | QrCodeOrderByWithAggregationInput[]
+    by: QrCodeScalarFieldEnum[] | QrCodeScalarFieldEnum
+    having?: QrCodeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QrCodeCountAggregateInputType | true
+    _avg?: QrCodeAvgAggregateInputType
+    _sum?: QrCodeSumAggregateInputType
+    _min?: QrCodeMinAggregateInputType
+    _max?: QrCodeMaxAggregateInputType
+  }
+
+  export type QrCodeGroupByOutputType = {
+    id: string
+    code: string
+    boothId: string
+    entitlementKey: string
+    cost: number
+    rule: $Enums.RedeemRule
+    active: boolean
+    expiresAt: Date | null
+    uses: number
+    maxUses: number | null
+    createdAt: Date
+    updatedAt: Date
+    _count: QrCodeCountAggregateOutputType | null
+    _avg: QrCodeAvgAggregateOutputType | null
+    _sum: QrCodeSumAggregateOutputType | null
+    _min: QrCodeMinAggregateOutputType | null
+    _max: QrCodeMaxAggregateOutputType | null
+  }
+
+  type GetQrCodeGroupByPayload<T extends QrCodeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QrCodeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QrCodeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QrCodeGroupByOutputType[P]>
+            : GetScalarType<T[P], QrCodeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QrCodeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    boothId?: boolean
+    entitlementKey?: boolean
+    cost?: boolean
+    rule?: boolean
+    active?: boolean
+    expiresAt?: boolean
+    uses?: boolean
+    maxUses?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    booth?: boolean | BoothDefaultArgs<ExtArgs>
+    logs?: boolean | QrCode$logsArgs<ExtArgs>
+    passes?: boolean | QrCode$passesArgs<ExtArgs>
+    _count?: boolean | QrCodeCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["qrCode"]>
+
+
+
+  export type QrCodeSelectScalar = {
+    id?: boolean
+    code?: boolean
+    boothId?: boolean
+    entitlementKey?: boolean
+    cost?: boolean
+    rule?: boolean
+    active?: boolean
+    expiresAt?: boolean
+    uses?: boolean
+    maxUses?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type QrCodeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "boothId" | "entitlementKey" | "cost" | "rule" | "active" | "expiresAt" | "uses" | "maxUses" | "createdAt" | "updatedAt", ExtArgs["result"]["qrCode"]>
+  export type QrCodeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    booth?: boolean | BoothDefaultArgs<ExtArgs>
+    logs?: boolean | QrCode$logsArgs<ExtArgs>
+    passes?: boolean | QrCode$passesArgs<ExtArgs>
+    _count?: boolean | QrCodeCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $QrCodePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QrCode"
+    objects: {
+      booth: Prisma.$BoothPayload<ExtArgs>
+      logs: Prisma.$QrScanLogPayload<ExtArgs>[]
+      passes: Prisma.$PlayPassPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      boothId: string
+      entitlementKey: string
+      cost: number
+      rule: $Enums.RedeemRule
+      active: boolean
+      expiresAt: Date | null
+      uses: number
+      maxUses: number | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["qrCode"]>
+    composites: {}
+  }
+
+  type QrCodeGetPayload<S extends boolean | null | undefined | QrCodeDefaultArgs> = $Result.GetResult<Prisma.$QrCodePayload, S>
+
+  type QrCodeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<QrCodeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: QrCodeCountAggregateInputType | true
+    }
+
+  export interface QrCodeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QrCode'], meta: { name: 'QrCode' } }
+    /**
+     * Find zero or one QrCode that matches the filter.
+     * @param {QrCodeFindUniqueArgs} args - Arguments to find a QrCode
+     * @example
+     * // Get one QrCode
+     * const qrCode = await prisma.qrCode.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QrCodeFindUniqueArgs>(args: SelectSubset<T, QrCodeFindUniqueArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one QrCode that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {QrCodeFindUniqueOrThrowArgs} args - Arguments to find a QrCode
+     * @example
+     * // Get one QrCode
+     * const qrCode = await prisma.qrCode.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QrCodeFindUniqueOrThrowArgs>(args: SelectSubset<T, QrCodeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QrCode that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrCodeFindFirstArgs} args - Arguments to find a QrCode
+     * @example
+     * // Get one QrCode
+     * const qrCode = await prisma.qrCode.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QrCodeFindFirstArgs>(args?: SelectSubset<T, QrCodeFindFirstArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QrCode that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrCodeFindFirstOrThrowArgs} args - Arguments to find a QrCode
+     * @example
+     * // Get one QrCode
+     * const qrCode = await prisma.qrCode.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QrCodeFindFirstOrThrowArgs>(args?: SelectSubset<T, QrCodeFindFirstOrThrowArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more QrCodes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrCodeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QrCodes
+     * const qrCodes = await prisma.qrCode.findMany()
+     * 
+     * // Get first 10 QrCodes
+     * const qrCodes = await prisma.qrCode.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const qrCodeWithIdOnly = await prisma.qrCode.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QrCodeFindManyArgs>(args?: SelectSubset<T, QrCodeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a QrCode.
+     * @param {QrCodeCreateArgs} args - Arguments to create a QrCode.
+     * @example
+     * // Create one QrCode
+     * const QrCode = await prisma.qrCode.create({
+     *   data: {
+     *     // ... data to create a QrCode
+     *   }
+     * })
+     * 
+     */
+    create<T extends QrCodeCreateArgs>(args: SelectSubset<T, QrCodeCreateArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many QrCodes.
+     * @param {QrCodeCreateManyArgs} args - Arguments to create many QrCodes.
+     * @example
+     * // Create many QrCodes
+     * const qrCode = await prisma.qrCode.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QrCodeCreateManyArgs>(args?: SelectSubset<T, QrCodeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a QrCode.
+     * @param {QrCodeDeleteArgs} args - Arguments to delete one QrCode.
+     * @example
+     * // Delete one QrCode
+     * const QrCode = await prisma.qrCode.delete({
+     *   where: {
+     *     // ... filter to delete one QrCode
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QrCodeDeleteArgs>(args: SelectSubset<T, QrCodeDeleteArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one QrCode.
+     * @param {QrCodeUpdateArgs} args - Arguments to update one QrCode.
+     * @example
+     * // Update one QrCode
+     * const qrCode = await prisma.qrCode.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QrCodeUpdateArgs>(args: SelectSubset<T, QrCodeUpdateArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more QrCodes.
+     * @param {QrCodeDeleteManyArgs} args - Arguments to filter QrCodes to delete.
+     * @example
+     * // Delete a few QrCodes
+     * const { count } = await prisma.qrCode.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QrCodeDeleteManyArgs>(args?: SelectSubset<T, QrCodeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QrCodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrCodeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QrCodes
+     * const qrCode = await prisma.qrCode.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QrCodeUpdateManyArgs>(args: SelectSubset<T, QrCodeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QrCode.
+     * @param {QrCodeUpsertArgs} args - Arguments to update or create a QrCode.
+     * @example
+     * // Update or create a QrCode
+     * const qrCode = await prisma.qrCode.upsert({
+     *   create: {
+     *     // ... data to create a QrCode
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QrCode we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QrCodeUpsertArgs>(args: SelectSubset<T, QrCodeUpsertArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more QrCodes that matches the filter.
+     * @param {QrCodeFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const qrCode = await prisma.qrCode.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: QrCodeFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a QrCode.
+     * @param {QrCodeAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const qrCode = await prisma.qrCode.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: QrCodeAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of QrCodes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrCodeCountArgs} args - Arguments to filter QrCodes to count.
+     * @example
+     * // Count the number of QrCodes
+     * const count = await prisma.qrCode.count({
+     *   where: {
+     *     // ... the filter for the QrCodes we want to count
+     *   }
+     * })
+    **/
+    count<T extends QrCodeCountArgs>(
+      args?: Subset<T, QrCodeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QrCodeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QrCode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrCodeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QrCodeAggregateArgs>(args: Subset<T, QrCodeAggregateArgs>): Prisma.PrismaPromise<GetQrCodeAggregateType<T>>
+
+    /**
+     * Group by QrCode.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrCodeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QrCodeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QrCodeGroupByArgs['orderBy'] }
+        : { orderBy?: QrCodeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QrCodeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQrCodeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QrCode model
+   */
+  readonly fields: QrCodeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QrCode.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QrCodeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    booth<T extends BoothDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BoothDefaultArgs<ExtArgs>>): Prisma__BoothClient<$Result.GetResult<Prisma.$BoothPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    logs<T extends QrCode$logsArgs<ExtArgs> = {}>(args?: Subset<T, QrCode$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    passes<T extends QrCode$passesArgs<ExtArgs> = {}>(args?: Subset<T, QrCode$passesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QrCode model
+   */
+  interface QrCodeFieldRefs {
+    readonly id: FieldRef<"QrCode", 'String'>
+    readonly code: FieldRef<"QrCode", 'String'>
+    readonly boothId: FieldRef<"QrCode", 'String'>
+    readonly entitlementKey: FieldRef<"QrCode", 'String'>
+    readonly cost: FieldRef<"QrCode", 'Int'>
+    readonly rule: FieldRef<"QrCode", 'RedeemRule'>
+    readonly active: FieldRef<"QrCode", 'Boolean'>
+    readonly expiresAt: FieldRef<"QrCode", 'DateTime'>
+    readonly uses: FieldRef<"QrCode", 'Int'>
+    readonly maxUses: FieldRef<"QrCode", 'Int'>
+    readonly createdAt: FieldRef<"QrCode", 'DateTime'>
+    readonly updatedAt: FieldRef<"QrCode", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QrCode findUnique
+   */
+  export type QrCodeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which QrCode to fetch.
+     */
+    where: QrCodeWhereUniqueInput
+  }
+
+  /**
+   * QrCode findUniqueOrThrow
+   */
+  export type QrCodeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which QrCode to fetch.
+     */
+    where: QrCodeWhereUniqueInput
+  }
+
+  /**
+   * QrCode findFirst
+   */
+  export type QrCodeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which QrCode to fetch.
+     */
+    where?: QrCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QrCodes to fetch.
+     */
+    orderBy?: QrCodeOrderByWithRelationInput | QrCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QrCodes.
+     */
+    cursor?: QrCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QrCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QrCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QrCodes.
+     */
+    distinct?: QrCodeScalarFieldEnum | QrCodeScalarFieldEnum[]
+  }
+
+  /**
+   * QrCode findFirstOrThrow
+   */
+  export type QrCodeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which QrCode to fetch.
+     */
+    where?: QrCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QrCodes to fetch.
+     */
+    orderBy?: QrCodeOrderByWithRelationInput | QrCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QrCodes.
+     */
+    cursor?: QrCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QrCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QrCodes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QrCodes.
+     */
+    distinct?: QrCodeScalarFieldEnum | QrCodeScalarFieldEnum[]
+  }
+
+  /**
+   * QrCode findMany
+   */
+  export type QrCodeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    /**
+     * Filter, which QrCodes to fetch.
+     */
+    where?: QrCodeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QrCodes to fetch.
+     */
+    orderBy?: QrCodeOrderByWithRelationInput | QrCodeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QrCodes.
+     */
+    cursor?: QrCodeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QrCodes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QrCodes.
+     */
+    skip?: number
+    distinct?: QrCodeScalarFieldEnum | QrCodeScalarFieldEnum[]
+  }
+
+  /**
+   * QrCode create
+   */
+  export type QrCodeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    /**
+     * The data needed to create a QrCode.
+     */
+    data: XOR<QrCodeCreateInput, QrCodeUncheckedCreateInput>
+  }
+
+  /**
+   * QrCode createMany
+   */
+  export type QrCodeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QrCodes.
+     */
+    data: QrCodeCreateManyInput | QrCodeCreateManyInput[]
+  }
+
+  /**
+   * QrCode update
+   */
+  export type QrCodeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    /**
+     * The data needed to update a QrCode.
+     */
+    data: XOR<QrCodeUpdateInput, QrCodeUncheckedUpdateInput>
+    /**
+     * Choose, which QrCode to update.
+     */
+    where: QrCodeWhereUniqueInput
+  }
+
+  /**
+   * QrCode updateMany
+   */
+  export type QrCodeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QrCodes.
+     */
+    data: XOR<QrCodeUpdateManyMutationInput, QrCodeUncheckedUpdateManyInput>
+    /**
+     * Filter which QrCodes to update
+     */
+    where?: QrCodeWhereInput
+    /**
+     * Limit how many QrCodes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * QrCode upsert
+   */
+  export type QrCodeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    /**
+     * The filter to search for the QrCode to update in case it exists.
+     */
+    where: QrCodeWhereUniqueInput
+    /**
+     * In case the QrCode found by the `where` argument doesn't exist, create a new QrCode with this data.
+     */
+    create: XOR<QrCodeCreateInput, QrCodeUncheckedCreateInput>
+    /**
+     * In case the QrCode was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QrCodeUpdateInput, QrCodeUncheckedUpdateInput>
+  }
+
+  /**
+   * QrCode delete
+   */
+  export type QrCodeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+    /**
+     * Filter which QrCode to delete.
+     */
+    where: QrCodeWhereUniqueInput
+  }
+
+  /**
+   * QrCode deleteMany
+   */
+  export type QrCodeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QrCodes to delete
+     */
+    where?: QrCodeWhereInput
+    /**
+     * Limit how many QrCodes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * QrCode findRaw
+   */
+  export type QrCodeFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * QrCode aggregateRaw
+   */
+  export type QrCodeAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * QrCode.logs
+   */
+  export type QrCode$logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    where?: QrScanLogWhereInput
+    orderBy?: QrScanLogOrderByWithRelationInput | QrScanLogOrderByWithRelationInput[]
+    cursor?: QrScanLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: QrScanLogScalarFieldEnum | QrScanLogScalarFieldEnum[]
+  }
+
+  /**
+   * QrCode.passes
+   */
+  export type QrCode$passesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    where?: PlayPassWhereInput
+    orderBy?: PlayPassOrderByWithRelationInput | PlayPassOrderByWithRelationInput[]
+    cursor?: PlayPassWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PlayPassScalarFieldEnum | PlayPassScalarFieldEnum[]
+  }
+
+  /**
+   * QrCode without action
+   */
+  export type QrCodeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrCode
+     */
+    select?: QrCodeSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrCode
+     */
+    omit?: QrCodeOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrCodeInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PlayPass
+   */
+
+  export type AggregatePlayPass = {
+    _count: PlayPassCountAggregateOutputType | null
+    _min: PlayPassMinAggregateOutputType | null
+    _max: PlayPassMaxAggregateOutputType | null
+  }
+
+  export type PlayPassMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    boothId: string | null
+    qrCodeId: string | null
+    entitlementKey: string | null
+    issuedAt: Date | null
+  }
+
+  export type PlayPassMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    boothId: string | null
+    qrCodeId: string | null
+    entitlementKey: string | null
+    issuedAt: Date | null
+  }
+
+  export type PlayPassCountAggregateOutputType = {
+    id: number
+    userId: number
+    boothId: number
+    qrCodeId: number
+    entitlementKey: number
+    issuedAt: number
+    _all: number
+  }
+
+
+  export type PlayPassMinAggregateInputType = {
+    id?: true
+    userId?: true
+    boothId?: true
+    qrCodeId?: true
+    entitlementKey?: true
+    issuedAt?: true
+  }
+
+  export type PlayPassMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    boothId?: true
+    qrCodeId?: true
+    entitlementKey?: true
+    issuedAt?: true
+  }
+
+  export type PlayPassCountAggregateInputType = {
+    id?: true
+    userId?: true
+    boothId?: true
+    qrCodeId?: true
+    entitlementKey?: true
+    issuedAt?: true
+    _all?: true
+  }
+
+  export type PlayPassAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlayPass to aggregate.
+     */
+    where?: PlayPassWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlayPasses to fetch.
+     */
+    orderBy?: PlayPassOrderByWithRelationInput | PlayPassOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PlayPassWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlayPasses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlayPasses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PlayPasses
+    **/
+    _count?: true | PlayPassCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PlayPassMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PlayPassMaxAggregateInputType
+  }
+
+  export type GetPlayPassAggregateType<T extends PlayPassAggregateArgs> = {
+        [P in keyof T & keyof AggregatePlayPass]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePlayPass[P]>
+      : GetScalarType<T[P], AggregatePlayPass[P]>
+  }
+
+
+
+
+  export type PlayPassGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PlayPassWhereInput
+    orderBy?: PlayPassOrderByWithAggregationInput | PlayPassOrderByWithAggregationInput[]
+    by: PlayPassScalarFieldEnum[] | PlayPassScalarFieldEnum
+    having?: PlayPassScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PlayPassCountAggregateInputType | true
+    _min?: PlayPassMinAggregateInputType
+    _max?: PlayPassMaxAggregateInputType
+  }
+
+  export type PlayPassGroupByOutputType = {
+    id: string
+    userId: string
+    boothId: string
+    qrCodeId: string
+    entitlementKey: string
+    issuedAt: Date
+    _count: PlayPassCountAggregateOutputType | null
+    _min: PlayPassMinAggregateOutputType | null
+    _max: PlayPassMaxAggregateOutputType | null
+  }
+
+  type GetPlayPassGroupByPayload<T extends PlayPassGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PlayPassGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PlayPassGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PlayPassGroupByOutputType[P]>
+            : GetScalarType<T[P], PlayPassGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PlayPassSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    boothId?: boolean
+    qrCodeId?: boolean
+    entitlementKey?: boolean
+    issuedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    booth?: boolean | BoothDefaultArgs<ExtArgs>
+    qrCode?: boolean | QrCodeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["playPass"]>
+
+
+
+  export type PlayPassSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    boothId?: boolean
+    qrCodeId?: boolean
+    entitlementKey?: boolean
+    issuedAt?: boolean
+  }
+
+  export type PlayPassOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "boothId" | "qrCodeId" | "entitlementKey" | "issuedAt", ExtArgs["result"]["playPass"]>
+  export type PlayPassInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    booth?: boolean | BoothDefaultArgs<ExtArgs>
+    qrCode?: boolean | QrCodeDefaultArgs<ExtArgs>
+  }
+
+  export type $PlayPassPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PlayPass"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      booth: Prisma.$BoothPayload<ExtArgs>
+      qrCode: Prisma.$QrCodePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      boothId: string
+      qrCodeId: string
+      entitlementKey: string
+      issuedAt: Date
+    }, ExtArgs["result"]["playPass"]>
+    composites: {}
+  }
+
+  type PlayPassGetPayload<S extends boolean | null | undefined | PlayPassDefaultArgs> = $Result.GetResult<Prisma.$PlayPassPayload, S>
+
+  type PlayPassCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PlayPassFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PlayPassCountAggregateInputType | true
+    }
+
+  export interface PlayPassDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PlayPass'], meta: { name: 'PlayPass' } }
+    /**
+     * Find zero or one PlayPass that matches the filter.
+     * @param {PlayPassFindUniqueArgs} args - Arguments to find a PlayPass
+     * @example
+     * // Get one PlayPass
+     * const playPass = await prisma.playPass.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PlayPassFindUniqueArgs>(args: SelectSubset<T, PlayPassFindUniqueArgs<ExtArgs>>): Prisma__PlayPassClient<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PlayPass that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PlayPassFindUniqueOrThrowArgs} args - Arguments to find a PlayPass
+     * @example
+     * // Get one PlayPass
+     * const playPass = await prisma.playPass.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PlayPassFindUniqueOrThrowArgs>(args: SelectSubset<T, PlayPassFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PlayPassClient<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlayPass that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlayPassFindFirstArgs} args - Arguments to find a PlayPass
+     * @example
+     * // Get one PlayPass
+     * const playPass = await prisma.playPass.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PlayPassFindFirstArgs>(args?: SelectSubset<T, PlayPassFindFirstArgs<ExtArgs>>): Prisma__PlayPassClient<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PlayPass that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlayPassFindFirstOrThrowArgs} args - Arguments to find a PlayPass
+     * @example
+     * // Get one PlayPass
+     * const playPass = await prisma.playPass.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PlayPassFindFirstOrThrowArgs>(args?: SelectSubset<T, PlayPassFindFirstOrThrowArgs<ExtArgs>>): Prisma__PlayPassClient<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PlayPasses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlayPassFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PlayPasses
+     * const playPasses = await prisma.playPass.findMany()
+     * 
+     * // Get first 10 PlayPasses
+     * const playPasses = await prisma.playPass.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const playPassWithIdOnly = await prisma.playPass.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PlayPassFindManyArgs>(args?: SelectSubset<T, PlayPassFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PlayPass.
+     * @param {PlayPassCreateArgs} args - Arguments to create a PlayPass.
+     * @example
+     * // Create one PlayPass
+     * const PlayPass = await prisma.playPass.create({
+     *   data: {
+     *     // ... data to create a PlayPass
+     *   }
+     * })
+     * 
+     */
+    create<T extends PlayPassCreateArgs>(args: SelectSubset<T, PlayPassCreateArgs<ExtArgs>>): Prisma__PlayPassClient<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PlayPasses.
+     * @param {PlayPassCreateManyArgs} args - Arguments to create many PlayPasses.
+     * @example
+     * // Create many PlayPasses
+     * const playPass = await prisma.playPass.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PlayPassCreateManyArgs>(args?: SelectSubset<T, PlayPassCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a PlayPass.
+     * @param {PlayPassDeleteArgs} args - Arguments to delete one PlayPass.
+     * @example
+     * // Delete one PlayPass
+     * const PlayPass = await prisma.playPass.delete({
+     *   where: {
+     *     // ... filter to delete one PlayPass
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PlayPassDeleteArgs>(args: SelectSubset<T, PlayPassDeleteArgs<ExtArgs>>): Prisma__PlayPassClient<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PlayPass.
+     * @param {PlayPassUpdateArgs} args - Arguments to update one PlayPass.
+     * @example
+     * // Update one PlayPass
+     * const playPass = await prisma.playPass.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PlayPassUpdateArgs>(args: SelectSubset<T, PlayPassUpdateArgs<ExtArgs>>): Prisma__PlayPassClient<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PlayPasses.
+     * @param {PlayPassDeleteManyArgs} args - Arguments to filter PlayPasses to delete.
+     * @example
+     * // Delete a few PlayPasses
+     * const { count } = await prisma.playPass.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PlayPassDeleteManyArgs>(args?: SelectSubset<T, PlayPassDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PlayPasses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlayPassUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PlayPasses
+     * const playPass = await prisma.playPass.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PlayPassUpdateManyArgs>(args: SelectSubset<T, PlayPassUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PlayPass.
+     * @param {PlayPassUpsertArgs} args - Arguments to update or create a PlayPass.
+     * @example
+     * // Update or create a PlayPass
+     * const playPass = await prisma.playPass.upsert({
+     *   create: {
+     *     // ... data to create a PlayPass
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PlayPass we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PlayPassUpsertArgs>(args: SelectSubset<T, PlayPassUpsertArgs<ExtArgs>>): Prisma__PlayPassClient<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PlayPasses that matches the filter.
+     * @param {PlayPassFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const playPass = await prisma.playPass.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: PlayPassFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a PlayPass.
+     * @param {PlayPassAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const playPass = await prisma.playPass.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: PlayPassAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of PlayPasses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlayPassCountArgs} args - Arguments to filter PlayPasses to count.
+     * @example
+     * // Count the number of PlayPasses
+     * const count = await prisma.playPass.count({
+     *   where: {
+     *     // ... the filter for the PlayPasses we want to count
+     *   }
+     * })
+    **/
+    count<T extends PlayPassCountArgs>(
+      args?: Subset<T, PlayPassCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PlayPassCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PlayPass.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlayPassAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PlayPassAggregateArgs>(args: Subset<T, PlayPassAggregateArgs>): Prisma.PrismaPromise<GetPlayPassAggregateType<T>>
+
+    /**
+     * Group by PlayPass.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PlayPassGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PlayPassGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PlayPassGroupByArgs['orderBy'] }
+        : { orderBy?: PlayPassGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PlayPassGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPlayPassGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PlayPass model
+   */
+  readonly fields: PlayPassFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PlayPass.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PlayPassClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    booth<T extends BoothDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BoothDefaultArgs<ExtArgs>>): Prisma__BoothClient<$Result.GetResult<Prisma.$BoothPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    qrCode<T extends QrCodeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QrCodeDefaultArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PlayPass model
+   */
+  interface PlayPassFieldRefs {
+    readonly id: FieldRef<"PlayPass", 'String'>
+    readonly userId: FieldRef<"PlayPass", 'String'>
+    readonly boothId: FieldRef<"PlayPass", 'String'>
+    readonly qrCodeId: FieldRef<"PlayPass", 'String'>
+    readonly entitlementKey: FieldRef<"PlayPass", 'String'>
+    readonly issuedAt: FieldRef<"PlayPass", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PlayPass findUnique
+   */
+  export type PlayPassFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    /**
+     * Filter, which PlayPass to fetch.
+     */
+    where: PlayPassWhereUniqueInput
+  }
+
+  /**
+   * PlayPass findUniqueOrThrow
+   */
+  export type PlayPassFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    /**
+     * Filter, which PlayPass to fetch.
+     */
+    where: PlayPassWhereUniqueInput
+  }
+
+  /**
+   * PlayPass findFirst
+   */
+  export type PlayPassFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    /**
+     * Filter, which PlayPass to fetch.
+     */
+    where?: PlayPassWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlayPasses to fetch.
+     */
+    orderBy?: PlayPassOrderByWithRelationInput | PlayPassOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlayPasses.
+     */
+    cursor?: PlayPassWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlayPasses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlayPasses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlayPasses.
+     */
+    distinct?: PlayPassScalarFieldEnum | PlayPassScalarFieldEnum[]
+  }
+
+  /**
+   * PlayPass findFirstOrThrow
+   */
+  export type PlayPassFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    /**
+     * Filter, which PlayPass to fetch.
+     */
+    where?: PlayPassWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlayPasses to fetch.
+     */
+    orderBy?: PlayPassOrderByWithRelationInput | PlayPassOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PlayPasses.
+     */
+    cursor?: PlayPassWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlayPasses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlayPasses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PlayPasses.
+     */
+    distinct?: PlayPassScalarFieldEnum | PlayPassScalarFieldEnum[]
+  }
+
+  /**
+   * PlayPass findMany
+   */
+  export type PlayPassFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    /**
+     * Filter, which PlayPasses to fetch.
+     */
+    where?: PlayPassWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PlayPasses to fetch.
+     */
+    orderBy?: PlayPassOrderByWithRelationInput | PlayPassOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PlayPasses.
+     */
+    cursor?: PlayPassWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PlayPasses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PlayPasses.
+     */
+    skip?: number
+    distinct?: PlayPassScalarFieldEnum | PlayPassScalarFieldEnum[]
+  }
+
+  /**
+   * PlayPass create
+   */
+  export type PlayPassCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PlayPass.
+     */
+    data: XOR<PlayPassCreateInput, PlayPassUncheckedCreateInput>
+  }
+
+  /**
+   * PlayPass createMany
+   */
+  export type PlayPassCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PlayPasses.
+     */
+    data: PlayPassCreateManyInput | PlayPassCreateManyInput[]
+  }
+
+  /**
+   * PlayPass update
+   */
+  export type PlayPassUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PlayPass.
+     */
+    data: XOR<PlayPassUpdateInput, PlayPassUncheckedUpdateInput>
+    /**
+     * Choose, which PlayPass to update.
+     */
+    where: PlayPassWhereUniqueInput
+  }
+
+  /**
+   * PlayPass updateMany
+   */
+  export type PlayPassUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PlayPasses.
+     */
+    data: XOR<PlayPassUpdateManyMutationInput, PlayPassUncheckedUpdateManyInput>
+    /**
+     * Filter which PlayPasses to update
+     */
+    where?: PlayPassWhereInput
+    /**
+     * Limit how many PlayPasses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlayPass upsert
+   */
+  export type PlayPassUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PlayPass to update in case it exists.
+     */
+    where: PlayPassWhereUniqueInput
+    /**
+     * In case the PlayPass found by the `where` argument doesn't exist, create a new PlayPass with this data.
+     */
+    create: XOR<PlayPassCreateInput, PlayPassUncheckedCreateInput>
+    /**
+     * In case the PlayPass was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PlayPassUpdateInput, PlayPassUncheckedUpdateInput>
+  }
+
+  /**
+   * PlayPass delete
+   */
+  export type PlayPassDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+    /**
+     * Filter which PlayPass to delete.
+     */
+    where: PlayPassWhereUniqueInput
+  }
+
+  /**
+   * PlayPass deleteMany
+   */
+  export type PlayPassDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PlayPasses to delete
+     */
+    where?: PlayPassWhereInput
+    /**
+     * Limit how many PlayPasses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PlayPass findRaw
+   */
+  export type PlayPassFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * PlayPass aggregateRaw
+   */
+  export type PlayPassAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * PlayPass without action
+   */
+  export type PlayPassDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PlayPass
+     */
+    select?: PlayPassSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PlayPass
+     */
+    omit?: PlayPassOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PlayPassInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model QrScanLog
+   */
+
+  export type AggregateQrScanLog = {
+    _count: QrScanLogCountAggregateOutputType | null
+    _min: QrScanLogMinAggregateOutputType | null
+    _max: QrScanLogMaxAggregateOutputType | null
+  }
+
+  export type QrScanLogMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    qrCodeId: string | null
+    scannedAt: Date | null
+  }
+
+  export type QrScanLogMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    qrCodeId: string | null
+    scannedAt: Date | null
+  }
+
+  export type QrScanLogCountAggregateOutputType = {
+    id: number
+    userId: number
+    qrCodeId: number
+    scannedAt: number
+    _all: number
+  }
+
+
+  export type QrScanLogMinAggregateInputType = {
+    id?: true
+    userId?: true
+    qrCodeId?: true
+    scannedAt?: true
+  }
+
+  export type QrScanLogMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    qrCodeId?: true
+    scannedAt?: true
+  }
+
+  export type QrScanLogCountAggregateInputType = {
+    id?: true
+    userId?: true
+    qrCodeId?: true
+    scannedAt?: true
+    _all?: true
+  }
+
+  export type QrScanLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QrScanLog to aggregate.
+     */
+    where?: QrScanLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QrScanLogs to fetch.
+     */
+    orderBy?: QrScanLogOrderByWithRelationInput | QrScanLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: QrScanLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QrScanLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QrScanLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned QrScanLogs
+    **/
+    _count?: true | QrScanLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: QrScanLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: QrScanLogMaxAggregateInputType
+  }
+
+  export type GetQrScanLogAggregateType<T extends QrScanLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateQrScanLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateQrScanLog[P]>
+      : GetScalarType<T[P], AggregateQrScanLog[P]>
+  }
+
+
+
+
+  export type QrScanLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: QrScanLogWhereInput
+    orderBy?: QrScanLogOrderByWithAggregationInput | QrScanLogOrderByWithAggregationInput[]
+    by: QrScanLogScalarFieldEnum[] | QrScanLogScalarFieldEnum
+    having?: QrScanLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: QrScanLogCountAggregateInputType | true
+    _min?: QrScanLogMinAggregateInputType
+    _max?: QrScanLogMaxAggregateInputType
+  }
+
+  export type QrScanLogGroupByOutputType = {
+    id: string
+    userId: string
+    qrCodeId: string
+    scannedAt: Date
+    _count: QrScanLogCountAggregateOutputType | null
+    _min: QrScanLogMinAggregateOutputType | null
+    _max: QrScanLogMaxAggregateOutputType | null
+  }
+
+  type GetQrScanLogGroupByPayload<T extends QrScanLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<QrScanLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof QrScanLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], QrScanLogGroupByOutputType[P]>
+            : GetScalarType<T[P], QrScanLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type QrScanLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    qrCodeId?: boolean
+    scannedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    qrCode?: boolean | QrCodeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["qrScanLog"]>
+
+
+
+  export type QrScanLogSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    qrCodeId?: boolean
+    scannedAt?: boolean
+  }
+
+  export type QrScanLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "qrCodeId" | "scannedAt", ExtArgs["result"]["qrScanLog"]>
+  export type QrScanLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    qrCode?: boolean | QrCodeDefaultArgs<ExtArgs>
+  }
+
+  export type $QrScanLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "QrScanLog"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      qrCode: Prisma.$QrCodePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      qrCodeId: string
+      scannedAt: Date
+    }, ExtArgs["result"]["qrScanLog"]>
+    composites: {}
+  }
+
+  type QrScanLogGetPayload<S extends boolean | null | undefined | QrScanLogDefaultArgs> = $Result.GetResult<Prisma.$QrScanLogPayload, S>
+
+  type QrScanLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<QrScanLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: QrScanLogCountAggregateInputType | true
+    }
+
+  export interface QrScanLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['QrScanLog'], meta: { name: 'QrScanLog' } }
+    /**
+     * Find zero or one QrScanLog that matches the filter.
+     * @param {QrScanLogFindUniqueArgs} args - Arguments to find a QrScanLog
+     * @example
+     * // Get one QrScanLog
+     * const qrScanLog = await prisma.qrScanLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends QrScanLogFindUniqueArgs>(args: SelectSubset<T, QrScanLogFindUniqueArgs<ExtArgs>>): Prisma__QrScanLogClient<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one QrScanLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {QrScanLogFindUniqueOrThrowArgs} args - Arguments to find a QrScanLog
+     * @example
+     * // Get one QrScanLog
+     * const qrScanLog = await prisma.qrScanLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends QrScanLogFindUniqueOrThrowArgs>(args: SelectSubset<T, QrScanLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__QrScanLogClient<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QrScanLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrScanLogFindFirstArgs} args - Arguments to find a QrScanLog
+     * @example
+     * // Get one QrScanLog
+     * const qrScanLog = await prisma.qrScanLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends QrScanLogFindFirstArgs>(args?: SelectSubset<T, QrScanLogFindFirstArgs<ExtArgs>>): Prisma__QrScanLogClient<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first QrScanLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrScanLogFindFirstOrThrowArgs} args - Arguments to find a QrScanLog
+     * @example
+     * // Get one QrScanLog
+     * const qrScanLog = await prisma.qrScanLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends QrScanLogFindFirstOrThrowArgs>(args?: SelectSubset<T, QrScanLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__QrScanLogClient<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more QrScanLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrScanLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all QrScanLogs
+     * const qrScanLogs = await prisma.qrScanLog.findMany()
+     * 
+     * // Get first 10 QrScanLogs
+     * const qrScanLogs = await prisma.qrScanLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const qrScanLogWithIdOnly = await prisma.qrScanLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends QrScanLogFindManyArgs>(args?: SelectSubset<T, QrScanLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a QrScanLog.
+     * @param {QrScanLogCreateArgs} args - Arguments to create a QrScanLog.
+     * @example
+     * // Create one QrScanLog
+     * const QrScanLog = await prisma.qrScanLog.create({
+     *   data: {
+     *     // ... data to create a QrScanLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends QrScanLogCreateArgs>(args: SelectSubset<T, QrScanLogCreateArgs<ExtArgs>>): Prisma__QrScanLogClient<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many QrScanLogs.
+     * @param {QrScanLogCreateManyArgs} args - Arguments to create many QrScanLogs.
+     * @example
+     * // Create many QrScanLogs
+     * const qrScanLog = await prisma.qrScanLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends QrScanLogCreateManyArgs>(args?: SelectSubset<T, QrScanLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a QrScanLog.
+     * @param {QrScanLogDeleteArgs} args - Arguments to delete one QrScanLog.
+     * @example
+     * // Delete one QrScanLog
+     * const QrScanLog = await prisma.qrScanLog.delete({
+     *   where: {
+     *     // ... filter to delete one QrScanLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends QrScanLogDeleteArgs>(args: SelectSubset<T, QrScanLogDeleteArgs<ExtArgs>>): Prisma__QrScanLogClient<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one QrScanLog.
+     * @param {QrScanLogUpdateArgs} args - Arguments to update one QrScanLog.
+     * @example
+     * // Update one QrScanLog
+     * const qrScanLog = await prisma.qrScanLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends QrScanLogUpdateArgs>(args: SelectSubset<T, QrScanLogUpdateArgs<ExtArgs>>): Prisma__QrScanLogClient<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more QrScanLogs.
+     * @param {QrScanLogDeleteManyArgs} args - Arguments to filter QrScanLogs to delete.
+     * @example
+     * // Delete a few QrScanLogs
+     * const { count } = await prisma.qrScanLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends QrScanLogDeleteManyArgs>(args?: SelectSubset<T, QrScanLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more QrScanLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrScanLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many QrScanLogs
+     * const qrScanLog = await prisma.qrScanLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends QrScanLogUpdateManyArgs>(args: SelectSubset<T, QrScanLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one QrScanLog.
+     * @param {QrScanLogUpsertArgs} args - Arguments to update or create a QrScanLog.
+     * @example
+     * // Update or create a QrScanLog
+     * const qrScanLog = await prisma.qrScanLog.upsert({
+     *   create: {
+     *     // ... data to create a QrScanLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the QrScanLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends QrScanLogUpsertArgs>(args: SelectSubset<T, QrScanLogUpsertArgs<ExtArgs>>): Prisma__QrScanLogClient<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more QrScanLogs that matches the filter.
+     * @param {QrScanLogFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const qrScanLog = await prisma.qrScanLog.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: QrScanLogFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a QrScanLog.
+     * @param {QrScanLogAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const qrScanLog = await prisma.qrScanLog.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: QrScanLogAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of QrScanLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrScanLogCountArgs} args - Arguments to filter QrScanLogs to count.
+     * @example
+     * // Count the number of QrScanLogs
+     * const count = await prisma.qrScanLog.count({
+     *   where: {
+     *     // ... the filter for the QrScanLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends QrScanLogCountArgs>(
+      args?: Subset<T, QrScanLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], QrScanLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a QrScanLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrScanLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends QrScanLogAggregateArgs>(args: Subset<T, QrScanLogAggregateArgs>): Prisma.PrismaPromise<GetQrScanLogAggregateType<T>>
+
+    /**
+     * Group by QrScanLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {QrScanLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends QrScanLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: QrScanLogGroupByArgs['orderBy'] }
+        : { orderBy?: QrScanLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, QrScanLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQrScanLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the QrScanLog model
+   */
+  readonly fields: QrScanLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for QrScanLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__QrScanLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    qrCode<T extends QrCodeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, QrCodeDefaultArgs<ExtArgs>>): Prisma__QrCodeClient<$Result.GetResult<Prisma.$QrCodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the QrScanLog model
+   */
+  interface QrScanLogFieldRefs {
+    readonly id: FieldRef<"QrScanLog", 'String'>
+    readonly userId: FieldRef<"QrScanLog", 'String'>
+    readonly qrCodeId: FieldRef<"QrScanLog", 'String'>
+    readonly scannedAt: FieldRef<"QrScanLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * QrScanLog findUnique
+   */
+  export type QrScanLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    /**
+     * Filter, which QrScanLog to fetch.
+     */
+    where: QrScanLogWhereUniqueInput
+  }
+
+  /**
+   * QrScanLog findUniqueOrThrow
+   */
+  export type QrScanLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    /**
+     * Filter, which QrScanLog to fetch.
+     */
+    where: QrScanLogWhereUniqueInput
+  }
+
+  /**
+   * QrScanLog findFirst
+   */
+  export type QrScanLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    /**
+     * Filter, which QrScanLog to fetch.
+     */
+    where?: QrScanLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QrScanLogs to fetch.
+     */
+    orderBy?: QrScanLogOrderByWithRelationInput | QrScanLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QrScanLogs.
+     */
+    cursor?: QrScanLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QrScanLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QrScanLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QrScanLogs.
+     */
+    distinct?: QrScanLogScalarFieldEnum | QrScanLogScalarFieldEnum[]
+  }
+
+  /**
+   * QrScanLog findFirstOrThrow
+   */
+  export type QrScanLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    /**
+     * Filter, which QrScanLog to fetch.
+     */
+    where?: QrScanLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QrScanLogs to fetch.
+     */
+    orderBy?: QrScanLogOrderByWithRelationInput | QrScanLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for QrScanLogs.
+     */
+    cursor?: QrScanLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QrScanLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QrScanLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of QrScanLogs.
+     */
+    distinct?: QrScanLogScalarFieldEnum | QrScanLogScalarFieldEnum[]
+  }
+
+  /**
+   * QrScanLog findMany
+   */
+  export type QrScanLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    /**
+     * Filter, which QrScanLogs to fetch.
+     */
+    where?: QrScanLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of QrScanLogs to fetch.
+     */
+    orderBy?: QrScanLogOrderByWithRelationInput | QrScanLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing QrScanLogs.
+     */
+    cursor?: QrScanLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` QrScanLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` QrScanLogs.
+     */
+    skip?: number
+    distinct?: QrScanLogScalarFieldEnum | QrScanLogScalarFieldEnum[]
+  }
+
+  /**
+   * QrScanLog create
+   */
+  export type QrScanLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a QrScanLog.
+     */
+    data: XOR<QrScanLogCreateInput, QrScanLogUncheckedCreateInput>
+  }
+
+  /**
+   * QrScanLog createMany
+   */
+  export type QrScanLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many QrScanLogs.
+     */
+    data: QrScanLogCreateManyInput | QrScanLogCreateManyInput[]
+  }
+
+  /**
+   * QrScanLog update
+   */
+  export type QrScanLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a QrScanLog.
+     */
+    data: XOR<QrScanLogUpdateInput, QrScanLogUncheckedUpdateInput>
+    /**
+     * Choose, which QrScanLog to update.
+     */
+    where: QrScanLogWhereUniqueInput
+  }
+
+  /**
+   * QrScanLog updateMany
+   */
+  export type QrScanLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update QrScanLogs.
+     */
+    data: XOR<QrScanLogUpdateManyMutationInput, QrScanLogUncheckedUpdateManyInput>
+    /**
+     * Filter which QrScanLogs to update
+     */
+    where?: QrScanLogWhereInput
+    /**
+     * Limit how many QrScanLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * QrScanLog upsert
+   */
+  export type QrScanLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the QrScanLog to update in case it exists.
+     */
+    where: QrScanLogWhereUniqueInput
+    /**
+     * In case the QrScanLog found by the `where` argument doesn't exist, create a new QrScanLog with this data.
+     */
+    create: XOR<QrScanLogCreateInput, QrScanLogUncheckedCreateInput>
+    /**
+     * In case the QrScanLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<QrScanLogUpdateInput, QrScanLogUncheckedUpdateInput>
+  }
+
+  /**
+   * QrScanLog delete
+   */
+  export type QrScanLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+    /**
+     * Filter which QrScanLog to delete.
+     */
+    where: QrScanLogWhereUniqueInput
+  }
+
+  /**
+   * QrScanLog deleteMany
+   */
+  export type QrScanLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which QrScanLogs to delete
+     */
+    where?: QrScanLogWhereInput
+    /**
+     * Limit how many QrScanLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * QrScanLog findRaw
+   */
+  export type QrScanLogFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * QrScanLog aggregateRaw
+   */
+  export type QrScanLogAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * QrScanLog without action
+   */
+  export type QrScanLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the QrScanLog
+     */
+    select?: QrScanLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the QrScanLog
+     */
+    omit?: QrScanLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QrScanLogInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -20341,6 +23946,46 @@ export namespace Prisma {
   export type LoginHistoryScalarFieldEnum = (typeof LoginHistoryScalarFieldEnum)[keyof typeof LoginHistoryScalarFieldEnum]
 
 
+  export const QrCodeScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    boothId: 'boothId',
+    entitlementKey: 'entitlementKey',
+    cost: 'cost',
+    rule: 'rule',
+    active: 'active',
+    expiresAt: 'expiresAt',
+    uses: 'uses',
+    maxUses: 'maxUses',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type QrCodeScalarFieldEnum = (typeof QrCodeScalarFieldEnum)[keyof typeof QrCodeScalarFieldEnum]
+
+
+  export const PlayPassScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    boothId: 'boothId',
+    qrCodeId: 'qrCodeId',
+    entitlementKey: 'entitlementKey',
+    issuedAt: 'issuedAt'
+  };
+
+  export type PlayPassScalarFieldEnum = (typeof PlayPassScalarFieldEnum)[keyof typeof PlayPassScalarFieldEnum]
+
+
+  export const QrScanLogScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    qrCodeId: 'qrCodeId',
+    scannedAt: 'scannedAt'
+  };
+
+  export type QrScanLogScalarFieldEnum = (typeof QrScanLogScalarFieldEnum)[keyof typeof QrScanLogScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -20412,6 +24057,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'RedeemRule'
+   */
+  export type EnumRedeemRuleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RedeemRule'>
+    
+
+
+  /**
+   * Reference to a field of type 'RedeemRule[]'
+   */
+  export type ListEnumRedeemRuleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RedeemRule[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -20458,6 +24117,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursListRelationFilter
     maintenanceModeUpdates?: MaintenanceModeListRelationFilter
     loginHistory?: LoginHistoryListRelationFilter
+    PlayPass?: PlayPassListRelationFilter
+    QrScanLog?: QrScanLogListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -20487,6 +24148,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursOrderByRelationAggregateInput
     maintenanceModeUpdates?: MaintenanceModeOrderByRelationAggregateInput
     loginHistory?: LoginHistoryOrderByRelationAggregateInput
+    PlayPass?: PlayPassOrderByRelationAggregateInput
+    QrScanLog?: QrScanLogOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -20519,6 +24182,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursListRelationFilter
     maintenanceModeUpdates?: MaintenanceModeListRelationFilter
     loginHistory?: LoginHistoryListRelationFilter
+    PlayPass?: PlayPassListRelationFilter
+    QrScanLog?: QrScanLogListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -20577,6 +24242,8 @@ export namespace Prisma {
     ratings?: BoothRatingListRelationFilter
     comments?: BoothCommentListRelationFilter
     favorites?: BoothFavoriteListRelationFilter
+    QrCode?: QrCodeListRelationFilter
+    PlayPass?: PlayPassListRelationFilter
   }
 
   export type BoothOrderByWithRelationInput = {
@@ -20594,6 +24261,8 @@ export namespace Prisma {
     ratings?: BoothRatingOrderByRelationAggregateInput
     comments?: BoothCommentOrderByRelationAggregateInput
     favorites?: BoothFavoriteOrderByRelationAggregateInput
+    QrCode?: QrCodeOrderByRelationAggregateInput
+    PlayPass?: PlayPassOrderByRelationAggregateInput
   }
 
   export type BoothWhereUniqueInput = Prisma.AtLeast<{
@@ -20614,6 +24283,8 @@ export namespace Prisma {
     ratings?: BoothRatingListRelationFilter
     comments?: BoothCommentListRelationFilter
     favorites?: BoothFavoriteListRelationFilter
+    QrCode?: QrCodeListRelationFilter
+    PlayPass?: PlayPassListRelationFilter
   }, "id" | "booth_code">
 
   export type BoothOrderByWithAggregationInput = {
@@ -21556,6 +25227,223 @@ export namespace Prisma {
     userAgent?: StringNullableWithAggregatesFilter<"LoginHistory"> | string | null
   }
 
+  export type QrCodeWhereInput = {
+    AND?: QrCodeWhereInput | QrCodeWhereInput[]
+    OR?: QrCodeWhereInput[]
+    NOT?: QrCodeWhereInput | QrCodeWhereInput[]
+    id?: StringFilter<"QrCode"> | string
+    code?: StringFilter<"QrCode"> | string
+    boothId?: StringFilter<"QrCode"> | string
+    entitlementKey?: StringFilter<"QrCode"> | string
+    cost?: IntFilter<"QrCode"> | number
+    rule?: EnumRedeemRuleFilter<"QrCode"> | $Enums.RedeemRule
+    active?: BoolFilter<"QrCode"> | boolean
+    expiresAt?: DateTimeNullableFilter<"QrCode"> | Date | string | null
+    uses?: IntFilter<"QrCode"> | number
+    maxUses?: IntNullableFilter<"QrCode"> | number | null
+    createdAt?: DateTimeFilter<"QrCode"> | Date | string
+    updatedAt?: DateTimeFilter<"QrCode"> | Date | string
+    booth?: XOR<BoothScalarRelationFilter, BoothWhereInput>
+    logs?: QrScanLogListRelationFilter
+    passes?: PlayPassListRelationFilter
+  }
+
+  export type QrCodeOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    boothId?: SortOrder
+    entitlementKey?: SortOrder
+    cost?: SortOrder
+    rule?: SortOrder
+    active?: SortOrder
+    expiresAt?: SortOrder
+    uses?: SortOrder
+    maxUses?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    booth?: BoothOrderByWithRelationInput
+    logs?: QrScanLogOrderByRelationAggregateInput
+    passes?: PlayPassOrderByRelationAggregateInput
+  }
+
+  export type QrCodeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: QrCodeWhereInput | QrCodeWhereInput[]
+    OR?: QrCodeWhereInput[]
+    NOT?: QrCodeWhereInput | QrCodeWhereInput[]
+    boothId?: StringFilter<"QrCode"> | string
+    entitlementKey?: StringFilter<"QrCode"> | string
+    cost?: IntFilter<"QrCode"> | number
+    rule?: EnumRedeemRuleFilter<"QrCode"> | $Enums.RedeemRule
+    active?: BoolFilter<"QrCode"> | boolean
+    expiresAt?: DateTimeNullableFilter<"QrCode"> | Date | string | null
+    uses?: IntFilter<"QrCode"> | number
+    maxUses?: IntNullableFilter<"QrCode"> | number | null
+    createdAt?: DateTimeFilter<"QrCode"> | Date | string
+    updatedAt?: DateTimeFilter<"QrCode"> | Date | string
+    booth?: XOR<BoothScalarRelationFilter, BoothWhereInput>
+    logs?: QrScanLogListRelationFilter
+    passes?: PlayPassListRelationFilter
+  }, "id" | "code">
+
+  export type QrCodeOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    boothId?: SortOrder
+    entitlementKey?: SortOrder
+    cost?: SortOrder
+    rule?: SortOrder
+    active?: SortOrder
+    expiresAt?: SortOrder
+    uses?: SortOrder
+    maxUses?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: QrCodeCountOrderByAggregateInput
+    _avg?: QrCodeAvgOrderByAggregateInput
+    _max?: QrCodeMaxOrderByAggregateInput
+    _min?: QrCodeMinOrderByAggregateInput
+    _sum?: QrCodeSumOrderByAggregateInput
+  }
+
+  export type QrCodeScalarWhereWithAggregatesInput = {
+    AND?: QrCodeScalarWhereWithAggregatesInput | QrCodeScalarWhereWithAggregatesInput[]
+    OR?: QrCodeScalarWhereWithAggregatesInput[]
+    NOT?: QrCodeScalarWhereWithAggregatesInput | QrCodeScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QrCode"> | string
+    code?: StringWithAggregatesFilter<"QrCode"> | string
+    boothId?: StringWithAggregatesFilter<"QrCode"> | string
+    entitlementKey?: StringWithAggregatesFilter<"QrCode"> | string
+    cost?: IntWithAggregatesFilter<"QrCode"> | number
+    rule?: EnumRedeemRuleWithAggregatesFilter<"QrCode"> | $Enums.RedeemRule
+    active?: BoolWithAggregatesFilter<"QrCode"> | boolean
+    expiresAt?: DateTimeNullableWithAggregatesFilter<"QrCode"> | Date | string | null
+    uses?: IntWithAggregatesFilter<"QrCode"> | number
+    maxUses?: IntNullableWithAggregatesFilter<"QrCode"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"QrCode"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"QrCode"> | Date | string
+  }
+
+  export type PlayPassWhereInput = {
+    AND?: PlayPassWhereInput | PlayPassWhereInput[]
+    OR?: PlayPassWhereInput[]
+    NOT?: PlayPassWhereInput | PlayPassWhereInput[]
+    id?: StringFilter<"PlayPass"> | string
+    userId?: StringFilter<"PlayPass"> | string
+    boothId?: StringFilter<"PlayPass"> | string
+    qrCodeId?: StringFilter<"PlayPass"> | string
+    entitlementKey?: StringFilter<"PlayPass"> | string
+    issuedAt?: DateTimeFilter<"PlayPass"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    booth?: XOR<BoothScalarRelationFilter, BoothWhereInput>
+    qrCode?: XOR<QrCodeScalarRelationFilter, QrCodeWhereInput>
+  }
+
+  export type PlayPassOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    boothId?: SortOrder
+    qrCodeId?: SortOrder
+    entitlementKey?: SortOrder
+    issuedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    booth?: BoothOrderByWithRelationInput
+    qrCode?: QrCodeOrderByWithRelationInput
+  }
+
+  export type PlayPassWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PlayPassWhereInput | PlayPassWhereInput[]
+    OR?: PlayPassWhereInput[]
+    NOT?: PlayPassWhereInput | PlayPassWhereInput[]
+    userId?: StringFilter<"PlayPass"> | string
+    boothId?: StringFilter<"PlayPass"> | string
+    qrCodeId?: StringFilter<"PlayPass"> | string
+    entitlementKey?: StringFilter<"PlayPass"> | string
+    issuedAt?: DateTimeFilter<"PlayPass"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    booth?: XOR<BoothScalarRelationFilter, BoothWhereInput>
+    qrCode?: XOR<QrCodeScalarRelationFilter, QrCodeWhereInput>
+  }, "id">
+
+  export type PlayPassOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    boothId?: SortOrder
+    qrCodeId?: SortOrder
+    entitlementKey?: SortOrder
+    issuedAt?: SortOrder
+    _count?: PlayPassCountOrderByAggregateInput
+    _max?: PlayPassMaxOrderByAggregateInput
+    _min?: PlayPassMinOrderByAggregateInput
+  }
+
+  export type PlayPassScalarWhereWithAggregatesInput = {
+    AND?: PlayPassScalarWhereWithAggregatesInput | PlayPassScalarWhereWithAggregatesInput[]
+    OR?: PlayPassScalarWhereWithAggregatesInput[]
+    NOT?: PlayPassScalarWhereWithAggregatesInput | PlayPassScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PlayPass"> | string
+    userId?: StringWithAggregatesFilter<"PlayPass"> | string
+    boothId?: StringWithAggregatesFilter<"PlayPass"> | string
+    qrCodeId?: StringWithAggregatesFilter<"PlayPass"> | string
+    entitlementKey?: StringWithAggregatesFilter<"PlayPass"> | string
+    issuedAt?: DateTimeWithAggregatesFilter<"PlayPass"> | Date | string
+  }
+
+  export type QrScanLogWhereInput = {
+    AND?: QrScanLogWhereInput | QrScanLogWhereInput[]
+    OR?: QrScanLogWhereInput[]
+    NOT?: QrScanLogWhereInput | QrScanLogWhereInput[]
+    id?: StringFilter<"QrScanLog"> | string
+    userId?: StringFilter<"QrScanLog"> | string
+    qrCodeId?: StringFilter<"QrScanLog"> | string
+    scannedAt?: DateTimeFilter<"QrScanLog"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    qrCode?: XOR<QrCodeScalarRelationFilter, QrCodeWhereInput>
+  }
+
+  export type QrScanLogOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    qrCodeId?: SortOrder
+    scannedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    qrCode?: QrCodeOrderByWithRelationInput
+  }
+
+  export type QrScanLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: QrScanLogWhereInput | QrScanLogWhereInput[]
+    OR?: QrScanLogWhereInput[]
+    NOT?: QrScanLogWhereInput | QrScanLogWhereInput[]
+    userId?: StringFilter<"QrScanLog"> | string
+    qrCodeId?: StringFilter<"QrScanLog"> | string
+    scannedAt?: DateTimeFilter<"QrScanLog"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    qrCode?: XOR<QrCodeScalarRelationFilter, QrCodeWhereInput>
+  }, "id">
+
+  export type QrScanLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    qrCodeId?: SortOrder
+    scannedAt?: SortOrder
+    _count?: QrScanLogCountOrderByAggregateInput
+    _max?: QrScanLogMaxOrderByAggregateInput
+    _min?: QrScanLogMinOrderByAggregateInput
+  }
+
+  export type QrScanLogScalarWhereWithAggregatesInput = {
+    AND?: QrScanLogScalarWhereWithAggregatesInput | QrScanLogScalarWhereWithAggregatesInput[]
+    OR?: QrScanLogScalarWhereWithAggregatesInput[]
+    NOT?: QrScanLogScalarWhereWithAggregatesInput | QrScanLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"QrScanLog"> | string
+    userId?: StringWithAggregatesFilter<"QrScanLog"> | string
+    qrCodeId?: StringWithAggregatesFilter<"QrScanLog"> | string
+    scannedAt?: DateTimeWithAggregatesFilter<"QrScanLog"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -21583,6 +25471,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -21612,6 +25502,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -21640,6 +25532,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -21668,6 +25562,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -21728,6 +25624,8 @@ export namespace Prisma {
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
     comments?: BoothCommentCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassCreateNestedManyWithoutBoothInput
   }
 
   export type BoothUncheckedCreateInput = {
@@ -21745,6 +25643,8 @@ export namespace Prisma {
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
     comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteUncheckedCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeUncheckedCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutBoothInput
   }
 
   export type BoothUpdateInput = {
@@ -21761,6 +25661,8 @@ export namespace Prisma {
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutBoothNestedInput
   }
 
   export type BoothUncheckedUpdateInput = {
@@ -21777,6 +25679,8 @@ export namespace Prisma {
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUncheckedUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUncheckedUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutBoothNestedInput
   }
 
   export type BoothCreateManyInput = {
@@ -22665,6 +26569,213 @@ export namespace Prisma {
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type QrCodeCreateInput = {
+    id?: string
+    code: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    booth: BoothCreateNestedOneWithoutQrCodeInput
+    logs?: QrScanLogCreateNestedManyWithoutQrCodeInput
+    passes?: PlayPassCreateNestedManyWithoutQrCodeInput
+  }
+
+  export type QrCodeUncheckedCreateInput = {
+    id?: string
+    code: string
+    boothId: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    logs?: QrScanLogUncheckedCreateNestedManyWithoutQrCodeInput
+    passes?: PlayPassUncheckedCreateNestedManyWithoutQrCodeInput
+  }
+
+  export type QrCodeUpdateInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    booth?: BoothUpdateOneRequiredWithoutQrCodeNestedInput
+    logs?: QrScanLogUpdateManyWithoutQrCodeNestedInput
+    passes?: PlayPassUpdateManyWithoutQrCodeNestedInput
+  }
+
+  export type QrCodeUncheckedUpdateInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    boothId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logs?: QrScanLogUncheckedUpdateManyWithoutQrCodeNestedInput
+    passes?: PlayPassUncheckedUpdateManyWithoutQrCodeNestedInput
+  }
+
+  export type QrCodeCreateManyInput = {
+    id?: string
+    code: string
+    boothId: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type QrCodeUpdateManyMutationInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QrCodeUncheckedUpdateManyInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    boothId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayPassCreateInput = {
+    id?: string
+    entitlementKey: string
+    issuedAt?: Date | string
+    user: UserCreateNestedOneWithoutPlayPassInput
+    booth: BoothCreateNestedOneWithoutPlayPassInput
+    qrCode: QrCodeCreateNestedOneWithoutPassesInput
+  }
+
+  export type PlayPassUncheckedCreateInput = {
+    id?: string
+    userId: string
+    boothId: string
+    qrCodeId: string
+    entitlementKey: string
+    issuedAt?: Date | string
+  }
+
+  export type PlayPassUpdateInput = {
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPlayPassNestedInput
+    booth?: BoothUpdateOneRequiredWithoutPlayPassNestedInput
+    qrCode?: QrCodeUpdateOneRequiredWithoutPassesNestedInput
+  }
+
+  export type PlayPassUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    boothId?: StringFieldUpdateOperationsInput | string
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayPassCreateManyInput = {
+    id?: string
+    userId: string
+    boothId: string
+    qrCodeId: string
+    entitlementKey: string
+    issuedAt?: Date | string
+  }
+
+  export type PlayPassUpdateManyMutationInput = {
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayPassUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    boothId?: StringFieldUpdateOperationsInput | string
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QrScanLogCreateInput = {
+    id?: string
+    scannedAt?: Date | string
+    user: UserCreateNestedOneWithoutQrScanLogInput
+    qrCode: QrCodeCreateNestedOneWithoutLogsInput
+  }
+
+  export type QrScanLogUncheckedCreateInput = {
+    id?: string
+    userId: string
+    qrCodeId: string
+    scannedAt?: Date | string
+  }
+
+  export type QrScanLogUpdateInput = {
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutQrScanLogNestedInput
+    qrCode?: QrCodeUpdateOneRequiredWithoutLogsNestedInput
+  }
+
+  export type QrScanLogUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QrScanLogCreateManyInput = {
+    id?: string
+    userId: string
+    qrCodeId: string
+    scannedAt?: Date | string
+  }
+
+  export type QrScanLogUpdateManyMutationInput = {
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QrScanLogUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -22819,6 +26930,18 @@ export namespace Prisma {
     none?: LoginHistoryWhereInput
   }
 
+  export type PlayPassListRelationFilter = {
+    every?: PlayPassWhereInput
+    some?: PlayPassWhereInput
+    none?: PlayPassWhereInput
+  }
+
+  export type QrScanLogListRelationFilter = {
+    every?: QrScanLogWhereInput
+    some?: QrScanLogWhereInput
+    none?: QrScanLogWhereInput
+  }
+
   export type BoothJoinOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -22872,6 +26995,14 @@ export namespace Prisma {
   }
 
   export type LoginHistoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PlayPassOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type QrScanLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -23024,6 +27155,16 @@ export namespace Prisma {
     hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
     hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
     isEmpty?: boolean
+  }
+
+  export type QrCodeListRelationFilter = {
+    every?: QrCodeWhereInput
+    some?: QrCodeWhereInput
+    none?: QrCodeWhereInput
+  }
+
+  export type QrCodeOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type BoothCountOrderByAggregateInput = {
@@ -23504,6 +27645,162 @@ export namespace Prisma {
     userAgent?: SortOrder
   }
 
+  export type EnumRedeemRuleFilter<$PrismaModel = never> = {
+    equals?: $Enums.RedeemRule | EnumRedeemRuleFieldRefInput<$PrismaModel>
+    in?: $Enums.RedeemRule[] | ListEnumRedeemRuleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RedeemRule[] | ListEnumRedeemRuleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRedeemRuleFilter<$PrismaModel> | $Enums.RedeemRule
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    isSet?: boolean
+  }
+
+  export type QrCodeCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    boothId?: SortOrder
+    entitlementKey?: SortOrder
+    cost?: SortOrder
+    rule?: SortOrder
+    active?: SortOrder
+    expiresAt?: SortOrder
+    uses?: SortOrder
+    maxUses?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QrCodeAvgOrderByAggregateInput = {
+    cost?: SortOrder
+    uses?: SortOrder
+    maxUses?: SortOrder
+  }
+
+  export type QrCodeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    boothId?: SortOrder
+    entitlementKey?: SortOrder
+    cost?: SortOrder
+    rule?: SortOrder
+    active?: SortOrder
+    expiresAt?: SortOrder
+    uses?: SortOrder
+    maxUses?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QrCodeMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    boothId?: SortOrder
+    entitlementKey?: SortOrder
+    cost?: SortOrder
+    rule?: SortOrder
+    active?: SortOrder
+    expiresAt?: SortOrder
+    uses?: SortOrder
+    maxUses?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type QrCodeSumOrderByAggregateInput = {
+    cost?: SortOrder
+    uses?: SortOrder
+    maxUses?: SortOrder
+  }
+
+  export type EnumRedeemRuleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RedeemRule | EnumRedeemRuleFieldRefInput<$PrismaModel>
+    in?: $Enums.RedeemRule[] | ListEnumRedeemRuleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RedeemRule[] | ListEnumRedeemRuleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRedeemRuleWithAggregatesFilter<$PrismaModel> | $Enums.RedeemRule
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRedeemRuleFilter<$PrismaModel>
+    _max?: NestedEnumRedeemRuleFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type QrCodeScalarRelationFilter = {
+    is?: QrCodeWhereInput
+    isNot?: QrCodeWhereInput
+  }
+
+  export type PlayPassCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    boothId?: SortOrder
+    qrCodeId?: SortOrder
+    entitlementKey?: SortOrder
+    issuedAt?: SortOrder
+  }
+
+  export type PlayPassMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    boothId?: SortOrder
+    qrCodeId?: SortOrder
+    entitlementKey?: SortOrder
+    issuedAt?: SortOrder
+  }
+
+  export type PlayPassMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    boothId?: SortOrder
+    qrCodeId?: SortOrder
+    entitlementKey?: SortOrder
+    issuedAt?: SortOrder
+  }
+
+  export type QrScanLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    qrCodeId?: SortOrder
+    scannedAt?: SortOrder
+  }
+
+  export type QrScanLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    qrCodeId?: SortOrder
+    scannedAt?: SortOrder
+  }
+
+  export type QrScanLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    qrCodeId?: SortOrder
+    scannedAt?: SortOrder
+  }
+
   export type BoothJoinCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -23602,6 +27899,20 @@ export namespace Prisma {
     connect?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
   }
 
+  export type PlayPassCreateNestedManyWithoutUserInput = {
+    create?: XOR<PlayPassCreateWithoutUserInput, PlayPassUncheckedCreateWithoutUserInput> | PlayPassCreateWithoutUserInput[] | PlayPassUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutUserInput | PlayPassCreateOrConnectWithoutUserInput[]
+    createMany?: PlayPassCreateManyUserInputEnvelope
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+  }
+
+  export type QrScanLogCreateNestedManyWithoutUserInput = {
+    create?: XOR<QrScanLogCreateWithoutUserInput, QrScanLogUncheckedCreateWithoutUserInput> | QrScanLogCreateWithoutUserInput[] | QrScanLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: QrScanLogCreateOrConnectWithoutUserInput | QrScanLogCreateOrConnectWithoutUserInput[]
+    createMany?: QrScanLogCreateManyUserInputEnvelope
+    connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+  }
+
   export type BoothJoinUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -23698,6 +28009,20 @@ export namespace Prisma {
     connectOrCreate?: LoginHistoryCreateOrConnectWithoutUserInput | LoginHistoryCreateOrConnectWithoutUserInput[]
     createMany?: LoginHistoryCreateManyUserInputEnvelope
     connect?: LoginHistoryWhereUniqueInput | LoginHistoryWhereUniqueInput[]
+  }
+
+  export type PlayPassUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PlayPassCreateWithoutUserInput, PlayPassUncheckedCreateWithoutUserInput> | PlayPassCreateWithoutUserInput[] | PlayPassUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutUserInput | PlayPassCreateOrConnectWithoutUserInput[]
+    createMany?: PlayPassCreateManyUserInputEnvelope
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+  }
+
+  export type QrScanLogUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<QrScanLogCreateWithoutUserInput, QrScanLogUncheckedCreateWithoutUserInput> | QrScanLogCreateWithoutUserInput[] | QrScanLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: QrScanLogCreateOrConnectWithoutUserInput | QrScanLogCreateOrConnectWithoutUserInput[]
+    createMany?: QrScanLogCreateManyUserInputEnvelope
+    connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -23926,6 +28251,34 @@ export namespace Prisma {
     deleteMany?: LoginHistoryScalarWhereInput | LoginHistoryScalarWhereInput[]
   }
 
+  export type PlayPassUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PlayPassCreateWithoutUserInput, PlayPassUncheckedCreateWithoutUserInput> | PlayPassCreateWithoutUserInput[] | PlayPassUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutUserInput | PlayPassCreateOrConnectWithoutUserInput[]
+    upsert?: PlayPassUpsertWithWhereUniqueWithoutUserInput | PlayPassUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PlayPassCreateManyUserInputEnvelope
+    set?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    disconnect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    delete?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    update?: PlayPassUpdateWithWhereUniqueWithoutUserInput | PlayPassUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PlayPassUpdateManyWithWhereWithoutUserInput | PlayPassUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PlayPassScalarWhereInput | PlayPassScalarWhereInput[]
+  }
+
+  export type QrScanLogUpdateManyWithoutUserNestedInput = {
+    create?: XOR<QrScanLogCreateWithoutUserInput, QrScanLogUncheckedCreateWithoutUserInput> | QrScanLogCreateWithoutUserInput[] | QrScanLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: QrScanLogCreateOrConnectWithoutUserInput | QrScanLogCreateOrConnectWithoutUserInput[]
+    upsert?: QrScanLogUpsertWithWhereUniqueWithoutUserInput | QrScanLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: QrScanLogCreateManyUserInputEnvelope
+    set?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    disconnect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    delete?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    update?: QrScanLogUpdateWithWhereUniqueWithoutUserInput | QrScanLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: QrScanLogUpdateManyWithWhereWithoutUserInput | QrScanLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: QrScanLogScalarWhereInput | QrScanLogScalarWhereInput[]
+  }
+
   export type BoothJoinUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -24122,6 +28475,34 @@ export namespace Prisma {
     deleteMany?: LoginHistoryScalarWhereInput | LoginHistoryScalarWhereInput[]
   }
 
+  export type PlayPassUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PlayPassCreateWithoutUserInput, PlayPassUncheckedCreateWithoutUserInput> | PlayPassCreateWithoutUserInput[] | PlayPassUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutUserInput | PlayPassCreateOrConnectWithoutUserInput[]
+    upsert?: PlayPassUpsertWithWhereUniqueWithoutUserInput | PlayPassUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PlayPassCreateManyUserInputEnvelope
+    set?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    disconnect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    delete?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    update?: PlayPassUpdateWithWhereUniqueWithoutUserInput | PlayPassUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PlayPassUpdateManyWithWhereWithoutUserInput | PlayPassUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PlayPassScalarWhereInput | PlayPassScalarWhereInput[]
+  }
+
+  export type QrScanLogUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<QrScanLogCreateWithoutUserInput, QrScanLogUncheckedCreateWithoutUserInput> | QrScanLogCreateWithoutUserInput[] | QrScanLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: QrScanLogCreateOrConnectWithoutUserInput | QrScanLogCreateOrConnectWithoutUserInput[]
+    upsert?: QrScanLogUpsertWithWhereUniqueWithoutUserInput | QrScanLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: QrScanLogCreateManyUserInputEnvelope
+    set?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    disconnect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    delete?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    update?: QrScanLogUpdateWithWhereUniqueWithoutUserInput | QrScanLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: QrScanLogUpdateManyWithWhereWithoutUserInput | QrScanLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: QrScanLogScalarWhereInput | QrScanLogScalarWhereInput[]
+  }
+
   export type BoothCreatepicsInput = {
     set: string[]
   }
@@ -24173,6 +28554,20 @@ export namespace Prisma {
     connect?: BoothFavoriteWhereUniqueInput | BoothFavoriteWhereUniqueInput[]
   }
 
+  export type QrCodeCreateNestedManyWithoutBoothInput = {
+    create?: XOR<QrCodeCreateWithoutBoothInput, QrCodeUncheckedCreateWithoutBoothInput> | QrCodeCreateWithoutBoothInput[] | QrCodeUncheckedCreateWithoutBoothInput[]
+    connectOrCreate?: QrCodeCreateOrConnectWithoutBoothInput | QrCodeCreateOrConnectWithoutBoothInput[]
+    createMany?: QrCodeCreateManyBoothInputEnvelope
+    connect?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+  }
+
+  export type PlayPassCreateNestedManyWithoutBoothInput = {
+    create?: XOR<PlayPassCreateWithoutBoothInput, PlayPassUncheckedCreateWithoutBoothInput> | PlayPassCreateWithoutBoothInput[] | PlayPassUncheckedCreateWithoutBoothInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutBoothInput | PlayPassCreateOrConnectWithoutBoothInput[]
+    createMany?: PlayPassCreateManyBoothInputEnvelope
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+  }
+
   export type BoothOwnerUncheckedCreateNestedManyWithoutBoothInput = {
     create?: XOR<BoothOwnerCreateWithoutBoothInput, BoothOwnerUncheckedCreateWithoutBoothInput> | BoothOwnerCreateWithoutBoothInput[] | BoothOwnerUncheckedCreateWithoutBoothInput[]
     connectOrCreate?: BoothOwnerCreateOrConnectWithoutBoothInput | BoothOwnerCreateOrConnectWithoutBoothInput[]
@@ -24206,6 +28601,20 @@ export namespace Prisma {
     connectOrCreate?: BoothFavoriteCreateOrConnectWithoutBoothInput | BoothFavoriteCreateOrConnectWithoutBoothInput[]
     createMany?: BoothFavoriteCreateManyBoothInputEnvelope
     connect?: BoothFavoriteWhereUniqueInput | BoothFavoriteWhereUniqueInput[]
+  }
+
+  export type QrCodeUncheckedCreateNestedManyWithoutBoothInput = {
+    create?: XOR<QrCodeCreateWithoutBoothInput, QrCodeUncheckedCreateWithoutBoothInput> | QrCodeCreateWithoutBoothInput[] | QrCodeUncheckedCreateWithoutBoothInput[]
+    connectOrCreate?: QrCodeCreateOrConnectWithoutBoothInput | QrCodeCreateOrConnectWithoutBoothInput[]
+    createMany?: QrCodeCreateManyBoothInputEnvelope
+    connect?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+  }
+
+  export type PlayPassUncheckedCreateNestedManyWithoutBoothInput = {
+    create?: XOR<PlayPassCreateWithoutBoothInput, PlayPassUncheckedCreateWithoutBoothInput> | PlayPassCreateWithoutBoothInput[] | PlayPassUncheckedCreateWithoutBoothInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutBoothInput | PlayPassCreateOrConnectWithoutBoothInput[]
+    createMany?: PlayPassCreateManyBoothInputEnvelope
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
   }
 
   export type BoothUpdatepicsInput = {
@@ -24298,6 +28707,34 @@ export namespace Prisma {
     deleteMany?: BoothFavoriteScalarWhereInput | BoothFavoriteScalarWhereInput[]
   }
 
+  export type QrCodeUpdateManyWithoutBoothNestedInput = {
+    create?: XOR<QrCodeCreateWithoutBoothInput, QrCodeUncheckedCreateWithoutBoothInput> | QrCodeCreateWithoutBoothInput[] | QrCodeUncheckedCreateWithoutBoothInput[]
+    connectOrCreate?: QrCodeCreateOrConnectWithoutBoothInput | QrCodeCreateOrConnectWithoutBoothInput[]
+    upsert?: QrCodeUpsertWithWhereUniqueWithoutBoothInput | QrCodeUpsertWithWhereUniqueWithoutBoothInput[]
+    createMany?: QrCodeCreateManyBoothInputEnvelope
+    set?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+    disconnect?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+    delete?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+    connect?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+    update?: QrCodeUpdateWithWhereUniqueWithoutBoothInput | QrCodeUpdateWithWhereUniqueWithoutBoothInput[]
+    updateMany?: QrCodeUpdateManyWithWhereWithoutBoothInput | QrCodeUpdateManyWithWhereWithoutBoothInput[]
+    deleteMany?: QrCodeScalarWhereInput | QrCodeScalarWhereInput[]
+  }
+
+  export type PlayPassUpdateManyWithoutBoothNestedInput = {
+    create?: XOR<PlayPassCreateWithoutBoothInput, PlayPassUncheckedCreateWithoutBoothInput> | PlayPassCreateWithoutBoothInput[] | PlayPassUncheckedCreateWithoutBoothInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutBoothInput | PlayPassCreateOrConnectWithoutBoothInput[]
+    upsert?: PlayPassUpsertWithWhereUniqueWithoutBoothInput | PlayPassUpsertWithWhereUniqueWithoutBoothInput[]
+    createMany?: PlayPassCreateManyBoothInputEnvelope
+    set?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    disconnect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    delete?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    update?: PlayPassUpdateWithWhereUniqueWithoutBoothInput | PlayPassUpdateWithWhereUniqueWithoutBoothInput[]
+    updateMany?: PlayPassUpdateManyWithWhereWithoutBoothInput | PlayPassUpdateManyWithWhereWithoutBoothInput[]
+    deleteMany?: PlayPassScalarWhereInput | PlayPassScalarWhereInput[]
+  }
+
   export type BoothOwnerUncheckedUpdateManyWithoutBoothNestedInput = {
     create?: XOR<BoothOwnerCreateWithoutBoothInput, BoothOwnerUncheckedCreateWithoutBoothInput> | BoothOwnerCreateWithoutBoothInput[] | BoothOwnerUncheckedCreateWithoutBoothInput[]
     connectOrCreate?: BoothOwnerCreateOrConnectWithoutBoothInput | BoothOwnerCreateOrConnectWithoutBoothInput[]
@@ -24366,6 +28803,34 @@ export namespace Prisma {
     update?: BoothFavoriteUpdateWithWhereUniqueWithoutBoothInput | BoothFavoriteUpdateWithWhereUniqueWithoutBoothInput[]
     updateMany?: BoothFavoriteUpdateManyWithWhereWithoutBoothInput | BoothFavoriteUpdateManyWithWhereWithoutBoothInput[]
     deleteMany?: BoothFavoriteScalarWhereInput | BoothFavoriteScalarWhereInput[]
+  }
+
+  export type QrCodeUncheckedUpdateManyWithoutBoothNestedInput = {
+    create?: XOR<QrCodeCreateWithoutBoothInput, QrCodeUncheckedCreateWithoutBoothInput> | QrCodeCreateWithoutBoothInput[] | QrCodeUncheckedCreateWithoutBoothInput[]
+    connectOrCreate?: QrCodeCreateOrConnectWithoutBoothInput | QrCodeCreateOrConnectWithoutBoothInput[]
+    upsert?: QrCodeUpsertWithWhereUniqueWithoutBoothInput | QrCodeUpsertWithWhereUniqueWithoutBoothInput[]
+    createMany?: QrCodeCreateManyBoothInputEnvelope
+    set?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+    disconnect?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+    delete?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+    connect?: QrCodeWhereUniqueInput | QrCodeWhereUniqueInput[]
+    update?: QrCodeUpdateWithWhereUniqueWithoutBoothInput | QrCodeUpdateWithWhereUniqueWithoutBoothInput[]
+    updateMany?: QrCodeUpdateManyWithWhereWithoutBoothInput | QrCodeUpdateManyWithWhereWithoutBoothInput[]
+    deleteMany?: QrCodeScalarWhereInput | QrCodeScalarWhereInput[]
+  }
+
+  export type PlayPassUncheckedUpdateManyWithoutBoothNestedInput = {
+    create?: XOR<PlayPassCreateWithoutBoothInput, PlayPassUncheckedCreateWithoutBoothInput> | PlayPassCreateWithoutBoothInput[] | PlayPassUncheckedCreateWithoutBoothInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutBoothInput | PlayPassCreateOrConnectWithoutBoothInput[]
+    upsert?: PlayPassUpsertWithWhereUniqueWithoutBoothInput | PlayPassUpsertWithWhereUniqueWithoutBoothInput[]
+    createMany?: PlayPassCreateManyBoothInputEnvelope
+    set?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    disconnect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    delete?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    update?: PlayPassUpdateWithWhereUniqueWithoutBoothInput | PlayPassUpdateWithWhereUniqueWithoutBoothInput[]
+    updateMany?: PlayPassUpdateManyWithWhereWithoutBoothInput | PlayPassUpdateManyWithWhereWithoutBoothInput[]
+    deleteMany?: PlayPassScalarWhereInput | PlayPassScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutJoinedBoothsInput = {
@@ -24646,6 +29111,187 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLoginHistoryInput, UserUpdateWithoutLoginHistoryInput>, UserUncheckedUpdateWithoutLoginHistoryInput>
   }
 
+  export type BoothCreateNestedOneWithoutQrCodeInput = {
+    create?: XOR<BoothCreateWithoutQrCodeInput, BoothUncheckedCreateWithoutQrCodeInput>
+    connectOrCreate?: BoothCreateOrConnectWithoutQrCodeInput
+    connect?: BoothWhereUniqueInput
+  }
+
+  export type QrScanLogCreateNestedManyWithoutQrCodeInput = {
+    create?: XOR<QrScanLogCreateWithoutQrCodeInput, QrScanLogUncheckedCreateWithoutQrCodeInput> | QrScanLogCreateWithoutQrCodeInput[] | QrScanLogUncheckedCreateWithoutQrCodeInput[]
+    connectOrCreate?: QrScanLogCreateOrConnectWithoutQrCodeInput | QrScanLogCreateOrConnectWithoutQrCodeInput[]
+    createMany?: QrScanLogCreateManyQrCodeInputEnvelope
+    connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+  }
+
+  export type PlayPassCreateNestedManyWithoutQrCodeInput = {
+    create?: XOR<PlayPassCreateWithoutQrCodeInput, PlayPassUncheckedCreateWithoutQrCodeInput> | PlayPassCreateWithoutQrCodeInput[] | PlayPassUncheckedCreateWithoutQrCodeInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutQrCodeInput | PlayPassCreateOrConnectWithoutQrCodeInput[]
+    createMany?: PlayPassCreateManyQrCodeInputEnvelope
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+  }
+
+  export type QrScanLogUncheckedCreateNestedManyWithoutQrCodeInput = {
+    create?: XOR<QrScanLogCreateWithoutQrCodeInput, QrScanLogUncheckedCreateWithoutQrCodeInput> | QrScanLogCreateWithoutQrCodeInput[] | QrScanLogUncheckedCreateWithoutQrCodeInput[]
+    connectOrCreate?: QrScanLogCreateOrConnectWithoutQrCodeInput | QrScanLogCreateOrConnectWithoutQrCodeInput[]
+    createMany?: QrScanLogCreateManyQrCodeInputEnvelope
+    connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+  }
+
+  export type PlayPassUncheckedCreateNestedManyWithoutQrCodeInput = {
+    create?: XOR<PlayPassCreateWithoutQrCodeInput, PlayPassUncheckedCreateWithoutQrCodeInput> | PlayPassCreateWithoutQrCodeInput[] | PlayPassUncheckedCreateWithoutQrCodeInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutQrCodeInput | PlayPassCreateOrConnectWithoutQrCodeInput[]
+    createMany?: PlayPassCreateManyQrCodeInputEnvelope
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+  }
+
+  export type EnumRedeemRuleFieldUpdateOperationsInput = {
+    set?: $Enums.RedeemRule
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+    unset?: boolean
+  }
+
+  export type BoothUpdateOneRequiredWithoutQrCodeNestedInput = {
+    create?: XOR<BoothCreateWithoutQrCodeInput, BoothUncheckedCreateWithoutQrCodeInput>
+    connectOrCreate?: BoothCreateOrConnectWithoutQrCodeInput
+    upsert?: BoothUpsertWithoutQrCodeInput
+    connect?: BoothWhereUniqueInput
+    update?: XOR<XOR<BoothUpdateToOneWithWhereWithoutQrCodeInput, BoothUpdateWithoutQrCodeInput>, BoothUncheckedUpdateWithoutQrCodeInput>
+  }
+
+  export type QrScanLogUpdateManyWithoutQrCodeNestedInput = {
+    create?: XOR<QrScanLogCreateWithoutQrCodeInput, QrScanLogUncheckedCreateWithoutQrCodeInput> | QrScanLogCreateWithoutQrCodeInput[] | QrScanLogUncheckedCreateWithoutQrCodeInput[]
+    connectOrCreate?: QrScanLogCreateOrConnectWithoutQrCodeInput | QrScanLogCreateOrConnectWithoutQrCodeInput[]
+    upsert?: QrScanLogUpsertWithWhereUniqueWithoutQrCodeInput | QrScanLogUpsertWithWhereUniqueWithoutQrCodeInput[]
+    createMany?: QrScanLogCreateManyQrCodeInputEnvelope
+    set?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    disconnect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    delete?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    update?: QrScanLogUpdateWithWhereUniqueWithoutQrCodeInput | QrScanLogUpdateWithWhereUniqueWithoutQrCodeInput[]
+    updateMany?: QrScanLogUpdateManyWithWhereWithoutQrCodeInput | QrScanLogUpdateManyWithWhereWithoutQrCodeInput[]
+    deleteMany?: QrScanLogScalarWhereInput | QrScanLogScalarWhereInput[]
+  }
+
+  export type PlayPassUpdateManyWithoutQrCodeNestedInput = {
+    create?: XOR<PlayPassCreateWithoutQrCodeInput, PlayPassUncheckedCreateWithoutQrCodeInput> | PlayPassCreateWithoutQrCodeInput[] | PlayPassUncheckedCreateWithoutQrCodeInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutQrCodeInput | PlayPassCreateOrConnectWithoutQrCodeInput[]
+    upsert?: PlayPassUpsertWithWhereUniqueWithoutQrCodeInput | PlayPassUpsertWithWhereUniqueWithoutQrCodeInput[]
+    createMany?: PlayPassCreateManyQrCodeInputEnvelope
+    set?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    disconnect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    delete?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    update?: PlayPassUpdateWithWhereUniqueWithoutQrCodeInput | PlayPassUpdateWithWhereUniqueWithoutQrCodeInput[]
+    updateMany?: PlayPassUpdateManyWithWhereWithoutQrCodeInput | PlayPassUpdateManyWithWhereWithoutQrCodeInput[]
+    deleteMany?: PlayPassScalarWhereInput | PlayPassScalarWhereInput[]
+  }
+
+  export type QrScanLogUncheckedUpdateManyWithoutQrCodeNestedInput = {
+    create?: XOR<QrScanLogCreateWithoutQrCodeInput, QrScanLogUncheckedCreateWithoutQrCodeInput> | QrScanLogCreateWithoutQrCodeInput[] | QrScanLogUncheckedCreateWithoutQrCodeInput[]
+    connectOrCreate?: QrScanLogCreateOrConnectWithoutQrCodeInput | QrScanLogCreateOrConnectWithoutQrCodeInput[]
+    upsert?: QrScanLogUpsertWithWhereUniqueWithoutQrCodeInput | QrScanLogUpsertWithWhereUniqueWithoutQrCodeInput[]
+    createMany?: QrScanLogCreateManyQrCodeInputEnvelope
+    set?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    disconnect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    delete?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+    update?: QrScanLogUpdateWithWhereUniqueWithoutQrCodeInput | QrScanLogUpdateWithWhereUniqueWithoutQrCodeInput[]
+    updateMany?: QrScanLogUpdateManyWithWhereWithoutQrCodeInput | QrScanLogUpdateManyWithWhereWithoutQrCodeInput[]
+    deleteMany?: QrScanLogScalarWhereInput | QrScanLogScalarWhereInput[]
+  }
+
+  export type PlayPassUncheckedUpdateManyWithoutQrCodeNestedInput = {
+    create?: XOR<PlayPassCreateWithoutQrCodeInput, PlayPassUncheckedCreateWithoutQrCodeInput> | PlayPassCreateWithoutQrCodeInput[] | PlayPassUncheckedCreateWithoutQrCodeInput[]
+    connectOrCreate?: PlayPassCreateOrConnectWithoutQrCodeInput | PlayPassCreateOrConnectWithoutQrCodeInput[]
+    upsert?: PlayPassUpsertWithWhereUniqueWithoutQrCodeInput | PlayPassUpsertWithWhereUniqueWithoutQrCodeInput[]
+    createMany?: PlayPassCreateManyQrCodeInputEnvelope
+    set?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    disconnect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    delete?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    connect?: PlayPassWhereUniqueInput | PlayPassWhereUniqueInput[]
+    update?: PlayPassUpdateWithWhereUniqueWithoutQrCodeInput | PlayPassUpdateWithWhereUniqueWithoutQrCodeInput[]
+    updateMany?: PlayPassUpdateManyWithWhereWithoutQrCodeInput | PlayPassUpdateManyWithWhereWithoutQrCodeInput[]
+    deleteMany?: PlayPassScalarWhereInput | PlayPassScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutPlayPassInput = {
+    create?: XOR<UserCreateWithoutPlayPassInput, UserUncheckedCreateWithoutPlayPassInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPlayPassInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type BoothCreateNestedOneWithoutPlayPassInput = {
+    create?: XOR<BoothCreateWithoutPlayPassInput, BoothUncheckedCreateWithoutPlayPassInput>
+    connectOrCreate?: BoothCreateOrConnectWithoutPlayPassInput
+    connect?: BoothWhereUniqueInput
+  }
+
+  export type QrCodeCreateNestedOneWithoutPassesInput = {
+    create?: XOR<QrCodeCreateWithoutPassesInput, QrCodeUncheckedCreateWithoutPassesInput>
+    connectOrCreate?: QrCodeCreateOrConnectWithoutPassesInput
+    connect?: QrCodeWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutPlayPassNestedInput = {
+    create?: XOR<UserCreateWithoutPlayPassInput, UserUncheckedCreateWithoutPlayPassInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPlayPassInput
+    upsert?: UserUpsertWithoutPlayPassInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPlayPassInput, UserUpdateWithoutPlayPassInput>, UserUncheckedUpdateWithoutPlayPassInput>
+  }
+
+  export type BoothUpdateOneRequiredWithoutPlayPassNestedInput = {
+    create?: XOR<BoothCreateWithoutPlayPassInput, BoothUncheckedCreateWithoutPlayPassInput>
+    connectOrCreate?: BoothCreateOrConnectWithoutPlayPassInput
+    upsert?: BoothUpsertWithoutPlayPassInput
+    connect?: BoothWhereUniqueInput
+    update?: XOR<XOR<BoothUpdateToOneWithWhereWithoutPlayPassInput, BoothUpdateWithoutPlayPassInput>, BoothUncheckedUpdateWithoutPlayPassInput>
+  }
+
+  export type QrCodeUpdateOneRequiredWithoutPassesNestedInput = {
+    create?: XOR<QrCodeCreateWithoutPassesInput, QrCodeUncheckedCreateWithoutPassesInput>
+    connectOrCreate?: QrCodeCreateOrConnectWithoutPassesInput
+    upsert?: QrCodeUpsertWithoutPassesInput
+    connect?: QrCodeWhereUniqueInput
+    update?: XOR<XOR<QrCodeUpdateToOneWithWhereWithoutPassesInput, QrCodeUpdateWithoutPassesInput>, QrCodeUncheckedUpdateWithoutPassesInput>
+  }
+
+  export type UserCreateNestedOneWithoutQrScanLogInput = {
+    create?: XOR<UserCreateWithoutQrScanLogInput, UserUncheckedCreateWithoutQrScanLogInput>
+    connectOrCreate?: UserCreateOrConnectWithoutQrScanLogInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type QrCodeCreateNestedOneWithoutLogsInput = {
+    create?: XOR<QrCodeCreateWithoutLogsInput, QrCodeUncheckedCreateWithoutLogsInput>
+    connectOrCreate?: QrCodeCreateOrConnectWithoutLogsInput
+    connect?: QrCodeWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutQrScanLogNestedInput = {
+    create?: XOR<UserCreateWithoutQrScanLogInput, UserUncheckedCreateWithoutQrScanLogInput>
+    connectOrCreate?: UserCreateOrConnectWithoutQrScanLogInput
+    upsert?: UserUpsertWithoutQrScanLogInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutQrScanLogInput, UserUpdateWithoutQrScanLogInput>, UserUncheckedUpdateWithoutQrScanLogInput>
+  }
+
+  export type QrCodeUpdateOneRequiredWithoutLogsNestedInput = {
+    create?: XOR<QrCodeCreateWithoutLogsInput, QrCodeUncheckedCreateWithoutLogsInput>
+    connectOrCreate?: QrCodeCreateOrConnectWithoutLogsInput
+    upsert?: QrCodeUpsertWithoutLogsInput
+    connect?: QrCodeWhereUniqueInput
+    update?: XOR<XOR<QrCodeUpdateToOneWithWhereWithoutLogsInput, QrCodeUpdateWithoutLogsInput>, QrCodeUncheckedUpdateWithoutLogsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -24823,6 +29469,52 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRedeemRuleFilter<$PrismaModel = never> = {
+    equals?: $Enums.RedeemRule | EnumRedeemRuleFieldRefInput<$PrismaModel>
+    in?: $Enums.RedeemRule[] | ListEnumRedeemRuleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RedeemRule[] | ListEnumRedeemRuleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRedeemRuleFilter<$PrismaModel> | $Enums.RedeemRule
+  }
+
+  export type NestedEnumRedeemRuleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RedeemRule | EnumRedeemRuleFieldRefInput<$PrismaModel>
+    in?: $Enums.RedeemRule[] | ListEnumRedeemRuleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RedeemRule[] | ListEnumRedeemRuleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRedeemRuleWithAggregatesFilter<$PrismaModel> | $Enums.RedeemRule
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRedeemRuleFilter<$PrismaModel>
+    _max?: NestedEnumRedeemRuleFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+    isSet?: boolean
   }
 
   export type BoothJoinCreateWithoutUserInput = {
@@ -25169,6 +29861,52 @@ export namespace Prisma {
 
   export type LoginHistoryCreateManyUserInputEnvelope = {
     data: LoginHistoryCreateManyUserInput | LoginHistoryCreateManyUserInput[]
+  }
+
+  export type PlayPassCreateWithoutUserInput = {
+    id?: string
+    entitlementKey: string
+    issuedAt?: Date | string
+    booth: BoothCreateNestedOneWithoutPlayPassInput
+    qrCode: QrCodeCreateNestedOneWithoutPassesInput
+  }
+
+  export type PlayPassUncheckedCreateWithoutUserInput = {
+    id?: string
+    boothId: string
+    qrCodeId: string
+    entitlementKey: string
+    issuedAt?: Date | string
+  }
+
+  export type PlayPassCreateOrConnectWithoutUserInput = {
+    where: PlayPassWhereUniqueInput
+    create: XOR<PlayPassCreateWithoutUserInput, PlayPassUncheckedCreateWithoutUserInput>
+  }
+
+  export type PlayPassCreateManyUserInputEnvelope = {
+    data: PlayPassCreateManyUserInput | PlayPassCreateManyUserInput[]
+  }
+
+  export type QrScanLogCreateWithoutUserInput = {
+    id?: string
+    scannedAt?: Date | string
+    qrCode: QrCodeCreateNestedOneWithoutLogsInput
+  }
+
+  export type QrScanLogUncheckedCreateWithoutUserInput = {
+    id?: string
+    qrCodeId: string
+    scannedAt?: Date | string
+  }
+
+  export type QrScanLogCreateOrConnectWithoutUserInput = {
+    where: QrScanLogWhereUniqueInput
+    create: XOR<QrScanLogCreateWithoutUserInput, QrScanLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type QrScanLogCreateManyUserInputEnvelope = {
+    data: QrScanLogCreateManyUserInput | QrScanLogCreateManyUserInput[]
   }
 
   export type BoothJoinUpsertWithWhereUniqueWithoutUserInput = {
@@ -25561,6 +30299,60 @@ export namespace Prisma {
     userAgent?: StringNullableFilter<"LoginHistory"> | string | null
   }
 
+  export type PlayPassUpsertWithWhereUniqueWithoutUserInput = {
+    where: PlayPassWhereUniqueInput
+    update: XOR<PlayPassUpdateWithoutUserInput, PlayPassUncheckedUpdateWithoutUserInput>
+    create: XOR<PlayPassCreateWithoutUserInput, PlayPassUncheckedCreateWithoutUserInput>
+  }
+
+  export type PlayPassUpdateWithWhereUniqueWithoutUserInput = {
+    where: PlayPassWhereUniqueInput
+    data: XOR<PlayPassUpdateWithoutUserInput, PlayPassUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PlayPassUpdateManyWithWhereWithoutUserInput = {
+    where: PlayPassScalarWhereInput
+    data: XOR<PlayPassUpdateManyMutationInput, PlayPassUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PlayPassScalarWhereInput = {
+    AND?: PlayPassScalarWhereInput | PlayPassScalarWhereInput[]
+    OR?: PlayPassScalarWhereInput[]
+    NOT?: PlayPassScalarWhereInput | PlayPassScalarWhereInput[]
+    id?: StringFilter<"PlayPass"> | string
+    userId?: StringFilter<"PlayPass"> | string
+    boothId?: StringFilter<"PlayPass"> | string
+    qrCodeId?: StringFilter<"PlayPass"> | string
+    entitlementKey?: StringFilter<"PlayPass"> | string
+    issuedAt?: DateTimeFilter<"PlayPass"> | Date | string
+  }
+
+  export type QrScanLogUpsertWithWhereUniqueWithoutUserInput = {
+    where: QrScanLogWhereUniqueInput
+    update: XOR<QrScanLogUpdateWithoutUserInput, QrScanLogUncheckedUpdateWithoutUserInput>
+    create: XOR<QrScanLogCreateWithoutUserInput, QrScanLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type QrScanLogUpdateWithWhereUniqueWithoutUserInput = {
+    where: QrScanLogWhereUniqueInput
+    data: XOR<QrScanLogUpdateWithoutUserInput, QrScanLogUncheckedUpdateWithoutUserInput>
+  }
+
+  export type QrScanLogUpdateManyWithWhereWithoutUserInput = {
+    where: QrScanLogScalarWhereInput
+    data: XOR<QrScanLogUpdateManyMutationInput, QrScanLogUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type QrScanLogScalarWhereInput = {
+    AND?: QrScanLogScalarWhereInput | QrScanLogScalarWhereInput[]
+    OR?: QrScanLogScalarWhereInput[]
+    NOT?: QrScanLogScalarWhereInput | QrScanLogScalarWhereInput[]
+    id?: StringFilter<"QrScanLog"> | string
+    userId?: StringFilter<"QrScanLog"> | string
+    qrCodeId?: StringFilter<"QrScanLog"> | string
+    scannedAt?: DateTimeFilter<"QrScanLog"> | Date | string
+  }
+
   export type BoothOwnerCreateWithoutBoothInput = {
     id?: string
     addedAt?: Date | string
@@ -25672,6 +30464,72 @@ export namespace Prisma {
     data: BoothFavoriteCreateManyBoothInput | BoothFavoriteCreateManyBoothInput[]
   }
 
+  export type QrCodeCreateWithoutBoothInput = {
+    id?: string
+    code: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    logs?: QrScanLogCreateNestedManyWithoutQrCodeInput
+    passes?: PlayPassCreateNestedManyWithoutQrCodeInput
+  }
+
+  export type QrCodeUncheckedCreateWithoutBoothInput = {
+    id?: string
+    code: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    logs?: QrScanLogUncheckedCreateNestedManyWithoutQrCodeInput
+    passes?: PlayPassUncheckedCreateNestedManyWithoutQrCodeInput
+  }
+
+  export type QrCodeCreateOrConnectWithoutBoothInput = {
+    where: QrCodeWhereUniqueInput
+    create: XOR<QrCodeCreateWithoutBoothInput, QrCodeUncheckedCreateWithoutBoothInput>
+  }
+
+  export type QrCodeCreateManyBoothInputEnvelope = {
+    data: QrCodeCreateManyBoothInput | QrCodeCreateManyBoothInput[]
+  }
+
+  export type PlayPassCreateWithoutBoothInput = {
+    id?: string
+    entitlementKey: string
+    issuedAt?: Date | string
+    user: UserCreateNestedOneWithoutPlayPassInput
+    qrCode: QrCodeCreateNestedOneWithoutPassesInput
+  }
+
+  export type PlayPassUncheckedCreateWithoutBoothInput = {
+    id?: string
+    userId: string
+    qrCodeId: string
+    entitlementKey: string
+    issuedAt?: Date | string
+  }
+
+  export type PlayPassCreateOrConnectWithoutBoothInput = {
+    where: PlayPassWhereUniqueInput
+    create: XOR<PlayPassCreateWithoutBoothInput, PlayPassUncheckedCreateWithoutBoothInput>
+  }
+
+  export type PlayPassCreateManyBoothInputEnvelope = {
+    data: PlayPassCreateManyBoothInput | PlayPassCreateManyBoothInput[]
+  }
+
   export type BoothOwnerUpsertWithWhereUniqueWithoutBoothInput = {
     where: BoothOwnerWhereUniqueInput
     update: XOR<BoothOwnerUpdateWithoutBoothInput, BoothOwnerUncheckedUpdateWithoutBoothInput>
@@ -25752,6 +30610,56 @@ export namespace Prisma {
     data: XOR<BoothFavoriteUpdateManyMutationInput, BoothFavoriteUncheckedUpdateManyWithoutBoothInput>
   }
 
+  export type QrCodeUpsertWithWhereUniqueWithoutBoothInput = {
+    where: QrCodeWhereUniqueInput
+    update: XOR<QrCodeUpdateWithoutBoothInput, QrCodeUncheckedUpdateWithoutBoothInput>
+    create: XOR<QrCodeCreateWithoutBoothInput, QrCodeUncheckedCreateWithoutBoothInput>
+  }
+
+  export type QrCodeUpdateWithWhereUniqueWithoutBoothInput = {
+    where: QrCodeWhereUniqueInput
+    data: XOR<QrCodeUpdateWithoutBoothInput, QrCodeUncheckedUpdateWithoutBoothInput>
+  }
+
+  export type QrCodeUpdateManyWithWhereWithoutBoothInput = {
+    where: QrCodeScalarWhereInput
+    data: XOR<QrCodeUpdateManyMutationInput, QrCodeUncheckedUpdateManyWithoutBoothInput>
+  }
+
+  export type QrCodeScalarWhereInput = {
+    AND?: QrCodeScalarWhereInput | QrCodeScalarWhereInput[]
+    OR?: QrCodeScalarWhereInput[]
+    NOT?: QrCodeScalarWhereInput | QrCodeScalarWhereInput[]
+    id?: StringFilter<"QrCode"> | string
+    code?: StringFilter<"QrCode"> | string
+    boothId?: StringFilter<"QrCode"> | string
+    entitlementKey?: StringFilter<"QrCode"> | string
+    cost?: IntFilter<"QrCode"> | number
+    rule?: EnumRedeemRuleFilter<"QrCode"> | $Enums.RedeemRule
+    active?: BoolFilter<"QrCode"> | boolean
+    expiresAt?: DateTimeNullableFilter<"QrCode"> | Date | string | null
+    uses?: IntFilter<"QrCode"> | number
+    maxUses?: IntNullableFilter<"QrCode"> | number | null
+    createdAt?: DateTimeFilter<"QrCode"> | Date | string
+    updatedAt?: DateTimeFilter<"QrCode"> | Date | string
+  }
+
+  export type PlayPassUpsertWithWhereUniqueWithoutBoothInput = {
+    where: PlayPassWhereUniqueInput
+    update: XOR<PlayPassUpdateWithoutBoothInput, PlayPassUncheckedUpdateWithoutBoothInput>
+    create: XOR<PlayPassCreateWithoutBoothInput, PlayPassUncheckedCreateWithoutBoothInput>
+  }
+
+  export type PlayPassUpdateWithWhereUniqueWithoutBoothInput = {
+    where: PlayPassWhereUniqueInput
+    data: XOR<PlayPassUpdateWithoutBoothInput, PlayPassUncheckedUpdateWithoutBoothInput>
+  }
+
+  export type PlayPassUpdateManyWithWhereWithoutBoothInput = {
+    where: PlayPassScalarWhereInput
+    data: XOR<PlayPassUpdateManyMutationInput, PlayPassUncheckedUpdateManyWithoutBoothInput>
+  }
+
   export type UserCreateWithoutJoinedBoothsInput = {
     id?: string
     username: string
@@ -25778,6 +30686,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutJoinedBoothsInput = {
@@ -25806,6 +30716,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutJoinedBoothsInput = {
@@ -25827,6 +30739,8 @@ export namespace Prisma {
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
     comments?: BoothCommentCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassCreateNestedManyWithoutBoothInput
   }
 
   export type BoothUncheckedCreateWithoutJoinedUsersInput = {
@@ -25843,6 +30757,8 @@ export namespace Prisma {
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
     comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteUncheckedCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeUncheckedCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutBoothInput
   }
 
   export type BoothCreateOrConnectWithoutJoinedUsersInput = {
@@ -25886,6 +30802,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutJoinedBoothsInput = {
@@ -25913,6 +30831,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutJoinedUsersInput = {
@@ -25939,6 +30859,8 @@ export namespace Prisma {
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutBoothNestedInput
   }
 
   export type BoothUncheckedUpdateWithoutJoinedUsersInput = {
@@ -25954,6 +30876,8 @@ export namespace Prisma {
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUncheckedUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUncheckedUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutBoothNestedInput
   }
 
   export type UserCreateWithoutOwnedBoothsInput = {
@@ -25982,6 +30906,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedBoothsInput = {
@@ -26010,6 +30936,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedBoothsInput = {
@@ -26031,6 +30959,8 @@ export namespace Prisma {
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
     comments?: BoothCommentCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassCreateNestedManyWithoutBoothInput
   }
 
   export type BoothUncheckedCreateWithoutBoothOwnersInput = {
@@ -26047,6 +30977,8 @@ export namespace Prisma {
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
     comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteUncheckedCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeUncheckedCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutBoothInput
   }
 
   export type BoothCreateOrConnectWithoutBoothOwnersInput = {
@@ -26090,6 +31022,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedBoothsInput = {
@@ -26117,6 +31051,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutBoothOwnersInput = {
@@ -26143,6 +31079,8 @@ export namespace Prisma {
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutBoothNestedInput
   }
 
   export type BoothUncheckedUpdateWithoutBoothOwnersInput = {
@@ -26158,6 +31096,8 @@ export namespace Prisma {
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUncheckedUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUncheckedUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutBoothNestedInput
   }
 
   export type UserCreateWithoutTranscriptLogInput = {
@@ -26186,6 +31126,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTranscriptLogInput = {
@@ -26214,6 +31156,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTranscriptLogInput = {
@@ -26257,6 +31201,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTranscriptLogInput = {
@@ -26284,6 +31230,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutVisitLogInput = {
@@ -26312,6 +31260,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVisitLogInput = {
@@ -26340,6 +31290,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVisitLogInput = {
@@ -26383,6 +31335,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitLogInput = {
@@ -26410,6 +31364,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBoothRatingsInput = {
@@ -26438,6 +31394,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothRatingsInput = {
@@ -26466,6 +31424,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothRatingsInput = {
@@ -26487,6 +31447,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
     comments?: BoothCommentCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassCreateNestedManyWithoutBoothInput
   }
 
   export type BoothUncheckedCreateWithoutRatingsInput = {
@@ -26503,6 +31465,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
     comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteUncheckedCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeUncheckedCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutBoothInput
   }
 
   export type BoothCreateOrConnectWithoutRatingsInput = {
@@ -26546,6 +31510,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothRatingsInput = {
@@ -26573,6 +31539,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutRatingsInput = {
@@ -26599,6 +31567,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutBoothNestedInput
   }
 
   export type BoothUncheckedUpdateWithoutRatingsInput = {
@@ -26614,6 +31584,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUncheckedUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUncheckedUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutBoothNestedInput
   }
 
   export type UserCreateWithoutBoothCommentsInput = {
@@ -26642,6 +31614,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothCommentsInput = {
@@ -26670,6 +31644,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothCommentsInput = {
@@ -26691,6 +31667,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassCreateNestedManyWithoutBoothInput
   }
 
   export type BoothUncheckedCreateWithoutCommentsInput = {
@@ -26707,6 +31685,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
     favorites?: BoothFavoriteUncheckedCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeUncheckedCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutBoothInput
   }
 
   export type BoothCreateOrConnectWithoutCommentsInput = {
@@ -26750,6 +31730,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothCommentsInput = {
@@ -26777,6 +31759,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutCommentsInput = {
@@ -26803,6 +31787,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutBoothNestedInput
   }
 
   export type BoothUncheckedUpdateWithoutCommentsInput = {
@@ -26818,6 +31804,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
     favorites?: BoothFavoriteUncheckedUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUncheckedUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutBoothNestedInput
   }
 
   export type UserCreateWithoutBoothFavoritesInput = {
@@ -26846,6 +31834,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothFavoritesInput = {
@@ -26874,6 +31864,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothFavoritesInput = {
@@ -26895,6 +31887,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingCreateNestedManyWithoutBoothInput
     comments?: BoothCommentCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassCreateNestedManyWithoutBoothInput
   }
 
   export type BoothUncheckedCreateWithoutFavoritesInput = {
@@ -26911,6 +31905,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
     ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
     comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeUncheckedCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutBoothInput
   }
 
   export type BoothCreateOrConnectWithoutFavoritesInput = {
@@ -26954,6 +31950,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothFavoritesInput = {
@@ -26981,6 +31979,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutFavoritesInput = {
@@ -27007,6 +32007,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutBoothNestedInput
   }
 
   export type BoothUncheckedUpdateWithoutFavoritesInput = {
@@ -27022,6 +32024,8 @@ export namespace Prisma {
     joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
     ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
     comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUncheckedUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutBoothNestedInput
   }
 
   export type UserCreateWithoutUploadedFilesInput = {
@@ -27050,6 +32054,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUploadedFilesInput = {
@@ -27078,6 +32084,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUploadedFilesInput = {
@@ -27121,6 +32129,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedFilesInput = {
@@ -27148,6 +32158,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -27176,6 +32188,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -27204,6 +32218,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -27247,6 +32263,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -27274,6 +32292,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutFeedbacksInput = {
@@ -27302,6 +32322,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFeedbacksInput = {
@@ -27330,6 +32352,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFeedbacksInput = {
@@ -27373,6 +32397,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFeedbacksInput = {
@@ -27400,6 +32426,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSystemLogsInput = {
@@ -27428,6 +32456,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSystemLogsInput = {
@@ -27456,6 +32486,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSystemLogsInput = {
@@ -27499,6 +32531,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSystemLogsInput = {
@@ -27526,6 +32560,8 @@ export namespace Prisma {
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWorkingHoursUpdatesInput = {
@@ -27554,6 +32590,8 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWorkingHoursUpdatesInput = {
@@ -27582,6 +32620,8 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWorkingHoursUpdatesInput = {
@@ -27625,6 +32665,8 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWorkingHoursUpdatesInput = {
@@ -27652,6 +32694,8 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutMaintenanceModeUpdatesInput = {
@@ -27680,6 +32724,8 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMaintenanceModeUpdatesInput = {
@@ -27708,6 +32754,8 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMaintenanceModeUpdatesInput = {
@@ -27751,6 +32799,8 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput = {
@@ -27778,6 +32828,8 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutLoginHistoryInput = {
@@ -27806,6 +32858,8 @@ export namespace Prisma {
     systemLogs?: SystemLogCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLoginHistoryInput = {
@@ -27834,6 +32888,8 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
     workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLoginHistoryInput = {
@@ -27877,6 +32933,8 @@ export namespace Prisma {
     systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLoginHistoryInput = {
@@ -27904,6 +32962,682 @@ export namespace Prisma {
     systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
     workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BoothCreateWithoutQrCodeInput = {
+    id?: string
+    booth_name: string
+    booth_code: string
+    dept_type: string
+    pics?: BoothCreatepicsInput | string[]
+    description?: string | null
+    owner_names?: BoothCreateowner_namesInput | string[]
+    owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
+    boothOwners?: BoothOwnerCreateNestedManyWithoutBoothInput
+    joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
+    ratings?: BoothRatingCreateNestedManyWithoutBoothInput
+    comments?: BoothCommentCreateNestedManyWithoutBoothInput
+    favorites?: BoothFavoriteCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassCreateNestedManyWithoutBoothInput
+  }
+
+  export type BoothUncheckedCreateWithoutQrCodeInput = {
+    id?: string
+    booth_name: string
+    booth_code: string
+    dept_type: string
+    pics?: BoothCreatepicsInput | string[]
+    description?: string | null
+    owner_names?: BoothCreateowner_namesInput | string[]
+    owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
+    boothOwners?: BoothOwnerUncheckedCreateNestedManyWithoutBoothInput
+    joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
+    ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
+    comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
+    favorites?: BoothFavoriteUncheckedCreateNestedManyWithoutBoothInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutBoothInput
+  }
+
+  export type BoothCreateOrConnectWithoutQrCodeInput = {
+    where: BoothWhereUniqueInput
+    create: XOR<BoothCreateWithoutQrCodeInput, BoothUncheckedCreateWithoutQrCodeInput>
+  }
+
+  export type QrScanLogCreateWithoutQrCodeInput = {
+    id?: string
+    scannedAt?: Date | string
+    user: UserCreateNestedOneWithoutQrScanLogInput
+  }
+
+  export type QrScanLogUncheckedCreateWithoutQrCodeInput = {
+    id?: string
+    userId: string
+    scannedAt?: Date | string
+  }
+
+  export type QrScanLogCreateOrConnectWithoutQrCodeInput = {
+    where: QrScanLogWhereUniqueInput
+    create: XOR<QrScanLogCreateWithoutQrCodeInput, QrScanLogUncheckedCreateWithoutQrCodeInput>
+  }
+
+  export type QrScanLogCreateManyQrCodeInputEnvelope = {
+    data: QrScanLogCreateManyQrCodeInput | QrScanLogCreateManyQrCodeInput[]
+  }
+
+  export type PlayPassCreateWithoutQrCodeInput = {
+    id?: string
+    entitlementKey: string
+    issuedAt?: Date | string
+    user: UserCreateNestedOneWithoutPlayPassInput
+    booth: BoothCreateNestedOneWithoutPlayPassInput
+  }
+
+  export type PlayPassUncheckedCreateWithoutQrCodeInput = {
+    id?: string
+    userId: string
+    boothId: string
+    entitlementKey: string
+    issuedAt?: Date | string
+  }
+
+  export type PlayPassCreateOrConnectWithoutQrCodeInput = {
+    where: PlayPassWhereUniqueInput
+    create: XOR<PlayPassCreateWithoutQrCodeInput, PlayPassUncheckedCreateWithoutQrCodeInput>
+  }
+
+  export type PlayPassCreateManyQrCodeInputEnvelope = {
+    data: PlayPassCreateManyQrCodeInput | PlayPassCreateManyQrCodeInput[]
+  }
+
+  export type BoothUpsertWithoutQrCodeInput = {
+    update: XOR<BoothUpdateWithoutQrCodeInput, BoothUncheckedUpdateWithoutQrCodeInput>
+    create: XOR<BoothCreateWithoutQrCodeInput, BoothUncheckedCreateWithoutQrCodeInput>
+    where?: BoothWhereInput
+  }
+
+  export type BoothUpdateToOneWithWhereWithoutQrCodeInput = {
+    where?: BoothWhereInput
+    data: XOR<BoothUpdateWithoutQrCodeInput, BoothUncheckedUpdateWithoutQrCodeInput>
+  }
+
+  export type BoothUpdateWithoutQrCodeInput = {
+    booth_name?: StringFieldUpdateOperationsInput | string
+    booth_code?: StringFieldUpdateOperationsInput | string
+    dept_type?: StringFieldUpdateOperationsInput | string
+    pics?: BoothUpdatepicsInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    owner_names?: BoothUpdateowner_namesInput | string[]
+    owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
+    boothOwners?: BoothOwnerUpdateManyWithoutBoothNestedInput
+    joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
+    ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
+    comments?: BoothCommentUpdateManyWithoutBoothNestedInput
+    favorites?: BoothFavoriteUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutBoothNestedInput
+  }
+
+  export type BoothUncheckedUpdateWithoutQrCodeInput = {
+    booth_name?: StringFieldUpdateOperationsInput | string
+    booth_code?: StringFieldUpdateOperationsInput | string
+    dept_type?: StringFieldUpdateOperationsInput | string
+    pics?: BoothUpdatepicsInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    owner_names?: BoothUpdateowner_namesInput | string[]
+    owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
+    boothOwners?: BoothOwnerUncheckedUpdateManyWithoutBoothNestedInput
+    joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
+    ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
+    comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
+    favorites?: BoothFavoriteUncheckedUpdateManyWithoutBoothNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutBoothNestedInput
+  }
+
+  export type QrScanLogUpsertWithWhereUniqueWithoutQrCodeInput = {
+    where: QrScanLogWhereUniqueInput
+    update: XOR<QrScanLogUpdateWithoutQrCodeInput, QrScanLogUncheckedUpdateWithoutQrCodeInput>
+    create: XOR<QrScanLogCreateWithoutQrCodeInput, QrScanLogUncheckedCreateWithoutQrCodeInput>
+  }
+
+  export type QrScanLogUpdateWithWhereUniqueWithoutQrCodeInput = {
+    where: QrScanLogWhereUniqueInput
+    data: XOR<QrScanLogUpdateWithoutQrCodeInput, QrScanLogUncheckedUpdateWithoutQrCodeInput>
+  }
+
+  export type QrScanLogUpdateManyWithWhereWithoutQrCodeInput = {
+    where: QrScanLogScalarWhereInput
+    data: XOR<QrScanLogUpdateManyMutationInput, QrScanLogUncheckedUpdateManyWithoutQrCodeInput>
+  }
+
+  export type PlayPassUpsertWithWhereUniqueWithoutQrCodeInput = {
+    where: PlayPassWhereUniqueInput
+    update: XOR<PlayPassUpdateWithoutQrCodeInput, PlayPassUncheckedUpdateWithoutQrCodeInput>
+    create: XOR<PlayPassCreateWithoutQrCodeInput, PlayPassUncheckedCreateWithoutQrCodeInput>
+  }
+
+  export type PlayPassUpdateWithWhereUniqueWithoutQrCodeInput = {
+    where: PlayPassWhereUniqueInput
+    data: XOR<PlayPassUpdateWithoutQrCodeInput, PlayPassUncheckedUpdateWithoutQrCodeInput>
+  }
+
+  export type PlayPassUpdateManyWithWhereWithoutQrCodeInput = {
+    where: PlayPassScalarWhereInput
+    data: XOR<PlayPassUpdateManyMutationInput, PlayPassUncheckedUpdateManyWithoutQrCodeInput>
+  }
+
+  export type UserCreateWithoutPlayPassInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPlayPassInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingUncheckedCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentUncheckedCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteUncheckedCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPlayPassInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPlayPassInput, UserUncheckedCreateWithoutPlayPassInput>
+  }
+
+  export type BoothCreateWithoutPlayPassInput = {
+    id?: string
+    booth_name: string
+    booth_code: string
+    dept_type: string
+    pics?: BoothCreatepicsInput | string[]
+    description?: string | null
+    owner_names?: BoothCreateowner_namesInput | string[]
+    owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
+    boothOwners?: BoothOwnerCreateNestedManyWithoutBoothInput
+    joinedUsers?: BoothJoinCreateNestedManyWithoutBoothInput
+    ratings?: BoothRatingCreateNestedManyWithoutBoothInput
+    comments?: BoothCommentCreateNestedManyWithoutBoothInput
+    favorites?: BoothFavoriteCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeCreateNestedManyWithoutBoothInput
+  }
+
+  export type BoothUncheckedCreateWithoutPlayPassInput = {
+    id?: string
+    booth_name: string
+    booth_code: string
+    dept_type: string
+    pics?: BoothCreatepicsInput | string[]
+    description?: string | null
+    owner_names?: BoothCreateowner_namesInput | string[]
+    owner_contacts?: BoothCreateowner_contactsInput | string[]
+    owner_images?: BoothCreateowner_imagesInput | string[]
+    boothOwners?: BoothOwnerUncheckedCreateNestedManyWithoutBoothInput
+    joinedUsers?: BoothJoinUncheckedCreateNestedManyWithoutBoothInput
+    ratings?: BoothRatingUncheckedCreateNestedManyWithoutBoothInput
+    comments?: BoothCommentUncheckedCreateNestedManyWithoutBoothInput
+    favorites?: BoothFavoriteUncheckedCreateNestedManyWithoutBoothInput
+    QrCode?: QrCodeUncheckedCreateNestedManyWithoutBoothInput
+  }
+
+  export type BoothCreateOrConnectWithoutPlayPassInput = {
+    where: BoothWhereUniqueInput
+    create: XOR<BoothCreateWithoutPlayPassInput, BoothUncheckedCreateWithoutPlayPassInput>
+  }
+
+  export type QrCodeCreateWithoutPassesInput = {
+    id?: string
+    code: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    booth: BoothCreateNestedOneWithoutQrCodeInput
+    logs?: QrScanLogCreateNestedManyWithoutQrCodeInput
+  }
+
+  export type QrCodeUncheckedCreateWithoutPassesInput = {
+    id?: string
+    code: string
+    boothId: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    logs?: QrScanLogUncheckedCreateNestedManyWithoutQrCodeInput
+  }
+
+  export type QrCodeCreateOrConnectWithoutPassesInput = {
+    where: QrCodeWhereUniqueInput
+    create: XOR<QrCodeCreateWithoutPassesInput, QrCodeUncheckedCreateWithoutPassesInput>
+  }
+
+  export type UserUpsertWithoutPlayPassInput = {
+    update: XOR<UserUpdateWithoutPlayPassInput, UserUncheckedUpdateWithoutPlayPassInput>
+    create: XOR<UserCreateWithoutPlayPassInput, UserUncheckedCreateWithoutPlayPassInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPlayPassInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPlayPassInput, UserUncheckedUpdateWithoutPlayPassInput>
+  }
+
+  export type UserUpdateWithoutPlayPassInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPlayPassInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUncheckedUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUncheckedUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BoothUpsertWithoutPlayPassInput = {
+    update: XOR<BoothUpdateWithoutPlayPassInput, BoothUncheckedUpdateWithoutPlayPassInput>
+    create: XOR<BoothCreateWithoutPlayPassInput, BoothUncheckedCreateWithoutPlayPassInput>
+    where?: BoothWhereInput
+  }
+
+  export type BoothUpdateToOneWithWhereWithoutPlayPassInput = {
+    where?: BoothWhereInput
+    data: XOR<BoothUpdateWithoutPlayPassInput, BoothUncheckedUpdateWithoutPlayPassInput>
+  }
+
+  export type BoothUpdateWithoutPlayPassInput = {
+    booth_name?: StringFieldUpdateOperationsInput | string
+    booth_code?: StringFieldUpdateOperationsInput | string
+    dept_type?: StringFieldUpdateOperationsInput | string
+    pics?: BoothUpdatepicsInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    owner_names?: BoothUpdateowner_namesInput | string[]
+    owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
+    boothOwners?: BoothOwnerUpdateManyWithoutBoothNestedInput
+    joinedUsers?: BoothJoinUpdateManyWithoutBoothNestedInput
+    ratings?: BoothRatingUpdateManyWithoutBoothNestedInput
+    comments?: BoothCommentUpdateManyWithoutBoothNestedInput
+    favorites?: BoothFavoriteUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUpdateManyWithoutBoothNestedInput
+  }
+
+  export type BoothUncheckedUpdateWithoutPlayPassInput = {
+    booth_name?: StringFieldUpdateOperationsInput | string
+    booth_code?: StringFieldUpdateOperationsInput | string
+    dept_type?: StringFieldUpdateOperationsInput | string
+    pics?: BoothUpdatepicsInput | string[]
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    owner_names?: BoothUpdateowner_namesInput | string[]
+    owner_contacts?: BoothUpdateowner_contactsInput | string[]
+    owner_images?: BoothUpdateowner_imagesInput | string[]
+    boothOwners?: BoothOwnerUncheckedUpdateManyWithoutBoothNestedInput
+    joinedUsers?: BoothJoinUncheckedUpdateManyWithoutBoothNestedInput
+    ratings?: BoothRatingUncheckedUpdateManyWithoutBoothNestedInput
+    comments?: BoothCommentUncheckedUpdateManyWithoutBoothNestedInput
+    favorites?: BoothFavoriteUncheckedUpdateManyWithoutBoothNestedInput
+    QrCode?: QrCodeUncheckedUpdateManyWithoutBoothNestedInput
+  }
+
+  export type QrCodeUpsertWithoutPassesInput = {
+    update: XOR<QrCodeUpdateWithoutPassesInput, QrCodeUncheckedUpdateWithoutPassesInput>
+    create: XOR<QrCodeCreateWithoutPassesInput, QrCodeUncheckedCreateWithoutPassesInput>
+    where?: QrCodeWhereInput
+  }
+
+  export type QrCodeUpdateToOneWithWhereWithoutPassesInput = {
+    where?: QrCodeWhereInput
+    data: XOR<QrCodeUpdateWithoutPassesInput, QrCodeUncheckedUpdateWithoutPassesInput>
+  }
+
+  export type QrCodeUpdateWithoutPassesInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    booth?: BoothUpdateOneRequiredWithoutQrCodeNestedInput
+    logs?: QrScanLogUpdateManyWithoutQrCodeNestedInput
+  }
+
+  export type QrCodeUncheckedUpdateWithoutPassesInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    boothId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logs?: QrScanLogUncheckedUpdateManyWithoutQrCodeNestedInput
+  }
+
+  export type UserCreateWithoutQrScanLogInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutQrScanLogInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingUncheckedCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentUncheckedCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteUncheckedCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutQrScanLogInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutQrScanLogInput, UserUncheckedCreateWithoutQrScanLogInput>
+  }
+
+  export type QrCodeCreateWithoutLogsInput = {
+    id?: string
+    code: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    booth: BoothCreateNestedOneWithoutQrCodeInput
+    passes?: PlayPassCreateNestedManyWithoutQrCodeInput
+  }
+
+  export type QrCodeUncheckedCreateWithoutLogsInput = {
+    id?: string
+    code: string
+    boothId: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    passes?: PlayPassUncheckedCreateNestedManyWithoutQrCodeInput
+  }
+
+  export type QrCodeCreateOrConnectWithoutLogsInput = {
+    where: QrCodeWhereUniqueInput
+    create: XOR<QrCodeCreateWithoutLogsInput, QrCodeUncheckedCreateWithoutLogsInput>
+  }
+
+  export type UserUpsertWithoutQrScanLogInput = {
+    update: XOR<UserUpdateWithoutQrScanLogInput, UserUncheckedUpdateWithoutQrScanLogInput>
+    create: XOR<UserCreateWithoutQrScanLogInput, UserUncheckedCreateWithoutQrScanLogInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutQrScanLogInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutQrScanLogInput, UserUncheckedUpdateWithoutQrScanLogInput>
+  }
+
+  export type UserUpdateWithoutQrScanLogInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutQrScanLogInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUncheckedUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUncheckedUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type QrCodeUpsertWithoutLogsInput = {
+    update: XOR<QrCodeUpdateWithoutLogsInput, QrCodeUncheckedUpdateWithoutLogsInput>
+    create: XOR<QrCodeCreateWithoutLogsInput, QrCodeUncheckedCreateWithoutLogsInput>
+    where?: QrCodeWhereInput
+  }
+
+  export type QrCodeUpdateToOneWithWhereWithoutLogsInput = {
+    where?: QrCodeWhereInput
+    data: XOR<QrCodeUpdateWithoutLogsInput, QrCodeUncheckedUpdateWithoutLogsInput>
+  }
+
+  export type QrCodeUpdateWithoutLogsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    booth?: BoothUpdateOneRequiredWithoutQrCodeNestedInput
+    passes?: PlayPassUpdateManyWithoutQrCodeNestedInput
+  }
+
+  export type QrCodeUncheckedUpdateWithoutLogsInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    boothId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    passes?: PlayPassUncheckedUpdateManyWithoutQrCodeNestedInput
   }
 
   export type BoothJoinCreateManyUserInput = {
@@ -28014,6 +33748,20 @@ export namespace Prisma {
     loginDate?: Date | string
     ipAddress?: string | null
     userAgent?: string | null
+  }
+
+  export type PlayPassCreateManyUserInput = {
+    id?: string
+    boothId: string
+    qrCodeId: string
+    entitlementKey: string
+    issuedAt?: Date | string
+  }
+
+  export type QrScanLogCreateManyUserInput = {
+    id?: string
+    qrCodeId: string
+    scannedAt?: Date | string
   }
 
   export type BoothJoinUpdateWithoutUserInput = {
@@ -28304,6 +34052,42 @@ export namespace Prisma {
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type PlayPassUpdateWithoutUserInput = {
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    booth?: BoothUpdateOneRequiredWithoutPlayPassNestedInput
+    qrCode?: QrCodeUpdateOneRequiredWithoutPassesNestedInput
+  }
+
+  export type PlayPassUncheckedUpdateWithoutUserInput = {
+    boothId?: StringFieldUpdateOperationsInput | string
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayPassUncheckedUpdateManyWithoutUserInput = {
+    boothId?: StringFieldUpdateOperationsInput | string
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QrScanLogUpdateWithoutUserInput = {
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    qrCode?: QrCodeUpdateOneRequiredWithoutLogsNestedInput
+  }
+
+  export type QrScanLogUncheckedUpdateWithoutUserInput = {
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QrScanLogUncheckedUpdateManyWithoutUserInput = {
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BoothOwnerCreateManyBoothInput = {
     id?: string
     userId: string
@@ -28335,6 +34119,28 @@ export namespace Prisma {
     id?: string
     userId: string
     createdAt?: Date | string
+  }
+
+  export type QrCodeCreateManyBoothInput = {
+    id?: string
+    code: string
+    entitlementKey: string
+    cost: number
+    rule?: $Enums.RedeemRule
+    active?: boolean
+    expiresAt?: Date | string | null
+    uses?: number
+    maxUses?: number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PlayPassCreateManyBoothInput = {
+    id?: string
+    userId: string
+    qrCodeId: string
+    entitlementKey: string
+    issuedAt?: Date | string
   }
 
   export type BoothOwnerUpdateWithoutBoothInput = {
@@ -28419,6 +34225,120 @@ export namespace Prisma {
   export type BoothFavoriteUncheckedUpdateManyWithoutBoothInput = {
     userId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QrCodeUpdateWithoutBoothInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logs?: QrScanLogUpdateManyWithoutQrCodeNestedInput
+    passes?: PlayPassUpdateManyWithoutQrCodeNestedInput
+  }
+
+  export type QrCodeUncheckedUpdateWithoutBoothInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logs?: QrScanLogUncheckedUpdateManyWithoutQrCodeNestedInput
+    passes?: PlayPassUncheckedUpdateManyWithoutQrCodeNestedInput
+  }
+
+  export type QrCodeUncheckedUpdateManyWithoutBoothInput = {
+    code?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    cost?: IntFieldUpdateOperationsInput | number
+    rule?: EnumRedeemRuleFieldUpdateOperationsInput | $Enums.RedeemRule
+    active?: BoolFieldUpdateOperationsInput | boolean
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    uses?: IntFieldUpdateOperationsInput | number
+    maxUses?: NullableIntFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayPassUpdateWithoutBoothInput = {
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPlayPassNestedInput
+    qrCode?: QrCodeUpdateOneRequiredWithoutPassesNestedInput
+  }
+
+  export type PlayPassUncheckedUpdateWithoutBoothInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayPassUncheckedUpdateManyWithoutBoothInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    qrCodeId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QrScanLogCreateManyQrCodeInput = {
+    id?: string
+    userId: string
+    scannedAt?: Date | string
+  }
+
+  export type PlayPassCreateManyQrCodeInput = {
+    id?: string
+    userId: string
+    boothId: string
+    entitlementKey: string
+    issuedAt?: Date | string
+  }
+
+  export type QrScanLogUpdateWithoutQrCodeInput = {
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutQrScanLogNestedInput
+  }
+
+  export type QrScanLogUncheckedUpdateWithoutQrCodeInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type QrScanLogUncheckedUpdateManyWithoutQrCodeInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayPassUpdateWithoutQrCodeInput = {
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPlayPassNestedInput
+    booth?: BoothUpdateOneRequiredWithoutPlayPassNestedInput
+  }
+
+  export type PlayPassUncheckedUpdateWithoutQrCodeInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    boothId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PlayPassUncheckedUpdateManyWithoutQrCodeInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    boothId?: StringFieldUpdateOperationsInput | string
+    entitlementKey?: StringFieldUpdateOperationsInput | string
+    issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

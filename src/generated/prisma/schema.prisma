@@ -47,6 +47,8 @@ model User {
   lastLoginDate        DateTime? // วันที่ login ล่าสุด
   maintenanceLoggedOut Boolean        @default(false) // ถูก force logout ในช่วง maintenance หรือไม่
   loginHistory         LoginHistory[] // ประวัติการ login
+  PlayPass             PlayPass[]
+  QrScanLog            QrScanLog[]
 }
 
 model Booth {
@@ -68,6 +70,9 @@ model Booth {
   ratings   BoothRating[]
   comments  BoothComment[]
   favorites BoothFavorite[]
+
+  QrCode   QrCode[]
+  PlayPass PlayPass[]
 }
 
 model BoothJoin {
@@ -226,4 +231,64 @@ model LoginHistory {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, loginDate])
+}
+
+enum RedeemRule {
+  ONCE_PER_EVENT // ทำครั้งเดียวต่อกิจกรรม
+  ONCE_PER_DAY // ทำครั้งเดียวต่อวัน
+  UNLIMITED // ไม่จำกัดจำนวนการใช้งาน  
+}
+
+model QrCode {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  code    String @unique // ค่าที่ฝังใน QR หรือใช้เป็น mapping
+  boothId String @db.ObjectId
+  booth   Booth  @relation(fields: [boothId], references: [id], onDelete: Cascade)
+
+  entitlementKey String // คีย์สิทธิ์ เช่น "boothA-play"
+  cost           Int // คะแนนที่ต้องหัก
+  rule           RedeemRule @default(ONCE_PER_EVENT)
+  active         Boolean    @default(true)
+  expiresAt      DateTime?
+  uses           Int        @default(0)
+  maxUses        Int? // จำกัดจำนวนใช้รวม (null = ไม่จำกัด)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  logs   QrScanLog[]
+  passes PlayPass[]
+
+  @@index([boothId])
+  @@index([entitlementKey])
+}
+
+model PlayPass {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @db.ObjectId
+  boothId  String @db.ObjectId
+  qrCodeId String @db.ObjectId
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booth  Booth  @relation(fields: [boothId], references: [id], onDelete: Cascade)
+  qrCode QrCode @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+
+  entitlementKey String
+  issuedAt       DateTime @default(now()) // “จบกระบวนการ” ตรงนี้: ออกสิทธิ์แล้ว
+
+  @@index([userId, entitlementKey]) // ใช้เช็กซ้ำเร็ว (event/day)
+  @@index([userId, issuedAt])
+  @@index([boothId])
+}
+
+model QrScanLog {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @db.ObjectId
+  qrCodeId String @db.ObjectId
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  qrCode    QrCode   @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+  scannedAt DateTime @default(now())
+
+  @@index([userId, qrCodeId])
 }
