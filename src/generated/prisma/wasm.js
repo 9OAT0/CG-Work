@@ -157,7 +157,8 @@ exports.Prisma.BoothOwnerScalarFieldEnum = {
 exports.Prisma.TranscriptLogScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  date: 'date'
+  date: 'date',
+  dayKey: 'dayKey'
 };
 
 exports.Prisma.VisitLogScalarFieldEnum = {
@@ -324,6 +325,14 @@ exports.Prisma.UserSessionScalarFieldEnum = {
   isActive: 'isActive'
 };
 
+exports.Prisma.PointAdjustmentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  reason: 'reason',
+  appliedAt: 'appliedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -369,7 +378,8 @@ exports.Prisma.ModelName = {
   PlayPass: 'PlayPass',
   QrScanLog: 'QrScanLog',
   UserOverlayLog: 'UserOverlayLog',
-  UserSession: 'UserSession'
+  UserSession: 'UserSession',
+  PointAdjustment: 'PointAdjustment'
 };
 
 /**

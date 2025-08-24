@@ -1,7 +1,8 @@
+// app/api/login/route.ts (หรือไฟล์ที่คุณใช้สำหรับ POST login)
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from '@/generated/prisma';
+import { PrismaClient } from "@/generated/prisma";
 import jwt from "jsonwebtoken";
-import { getThailandTime } from "@/lib/time";
+// ❌ ลบ: import { getThailandTime } from "@/lib/time";
 
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET!;
@@ -17,63 +18,61 @@ export async function POST(req: NextRequest) {
   }
 
   let user;
-
-  // ✅ ถ้ามีรหัสนิสิต ค้นหาด้วยรหัสนิสิตและชื่อ (สำหรับนิสิต)
-  if (student_id && student_id.trim() !== '') {
+  if (student_id && student_id.trim() !== "") {
     user = await prisma.user.findFirst({
-      where: { 
-        student_id: student_id.trim(), 
+      where: {
+        student_id: student_id.trim(),
         name: name.trim(),
-        status: 'นิสิต'
+        status: "นิสิต",
       },
     });
   } else {
-    // ✅ ถ้าไม่มีรหัสนิสิต ค้นหาด้วยชื่อเท่านั้น (สำหรับไม่ใช่นิสิต)
-    // ค้นหาผู้ใช้ที่ไม่ใช่นิสิต โดยไม่สนใจ student_id field
     user = await prisma.user.findFirst({
-      where: { 
-        name: name.trim(),
-        status: { not: 'นิสิต' }
-      },
+      where: { name: name.trim(), status: { not: "นิสิต" } },
     });
   }
 
   if (!user) {
-    const errorMsg = student_id 
-      ? "ไม่พบข้อมูลนิสิตที่ตรงกับรหัสนิสิตและชื่อที่กรอก" 
+    const errorMsg = student_id
+      ? "ไม่พบข้อมูลนิสิตที่ตรงกับรหัสนิสิตและชื่อที่กรอก"
       : "ไม่พบข้อมูลผู้ใช้งานที่ตรงกับชื่อที่กรอก";
     return NextResponse.json({ error: errorMsg }, { status: 404 });
   }
 
-  // ✅ บันทึก visit log หลังพบ user
+  // ✅ ใช้เวลาปัจจุบันแบบ UTC ตรง ๆ
+  const now = new Date();
+
+  // บันทึก visit log
   await prisma.visitLog.create({
     data: {
       userId: user.id,
-      visitedAt: getThailandTime()
+      visitedAt: now, // ❗ เก็บ UTC
     },
   });
 
-  // ✅ อัพเดท lastLoginDate และ reset maintenanceLoggedOut flag
-  const currentTime = getThailandTime()
+  // อัปเดต lastLoginDate
   await prisma.user.update({
     where: { id: user.id },
     data: {
-      lastLoginDate: currentTime,
-      maintenanceLoggedOut: false
-    }
-  })
+      lastLoginDate: now, // ❗ เก็บ UTC
+      maintenanceLoggedOut: false,
+    },
+  });
 
-  // ✅ บันทึก login history
+  // บันทึก login history
   await prisma.loginHistory.create({
     data: {
       userId: user.id,
-      loginDate: currentTime,
-      ipAddress: req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown',
-      userAgent: req.headers.get('user-agent') || 'unknown'
-    }
-  })
+      loginDate: now, // ❗ เก็บ UTC
+      ipAddress:
+        req.headers.get("x-forwarded-for") ||
+        req.headers.get("x-real-ip") ||
+        "unknown",
+      userAgent: req.headers.get("user-agent") || "unknown",
+    },
+  });
 
-  // ✅ สร้าง JWT
+  // สร้าง JWT
   const token = jwt.sign(
     {
       id: user.id,
@@ -85,18 +84,20 @@ export async function POST(req: NextRequest) {
     { expiresIn: "7d" }
   );
 
-  const res = NextResponse.json({ 
-    message: "เข้าสู่ระบบสำเร็จ", 
+  const res = NextResponse.json({
+    message: "เข้าสู่ระบบสำเร็จ",
     user,
-    isNewLogin: true // Flag to indicate this is a fresh login
+    isNewLogin: true,
   });
+
   res.cookies.set({
     name: "token",
     value: token,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 วัน
+    path: "/", // แนะนำใส่ให้แน่ใจว่า cookie เห็นทั้งไซต์
+    maxAge: 60 * 60 * 24 * 7,
   });
 
   return res;

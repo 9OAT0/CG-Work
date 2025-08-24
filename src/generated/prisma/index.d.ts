@@ -123,6 +123,11 @@ export type UserOverlayLog = $Result.DefaultSelection<Prisma.$UserOverlayLogPayl
  * 
  */
 export type UserSession = $Result.DefaultSelection<Prisma.$UserSessionPayload>
+/**
+ * Model PointAdjustment
+ * 
+ */
+export type PointAdjustment = $Result.DefaultSelection<Prisma.$PointAdjustmentPayload>
 
 /**
  * Enums
@@ -461,6 +466,16 @@ export class PrismaClient<
     * ```
     */
   get userSession(): Prisma.UserSessionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.pointAdjustment`: Exposes CRUD operations for the **PointAdjustment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PointAdjustments
+    * const pointAdjustments = await prisma.pointAdjustment.findMany()
+    * ```
+    */
+  get pointAdjustment(): Prisma.PointAdjustmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -922,7 +937,8 @@ export namespace Prisma {
     PlayPass: 'PlayPass',
     QrScanLog: 'QrScanLog',
     UserOverlayLog: 'UserOverlayLog',
-    UserSession: 'UserSession'
+    UserSession: 'UserSession',
+    PointAdjustment: 'PointAdjustment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -941,7 +957,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode" | "loginHistory" | "qrCode" | "playPass" | "qrScanLog" | "userOverlayLog" | "userSession"
+      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode" | "loginHistory" | "qrCode" | "playPass" | "qrScanLog" | "userOverlayLog" | "userSession" | "pointAdjustment"
       txIsolationLevel: never
     }
     model: {
@@ -2573,6 +2589,80 @@ export namespace Prisma {
           }
         }
       }
+      PointAdjustment: {
+        payload: Prisma.$PointAdjustmentPayload<ExtArgs>
+        fields: Prisma.PointAdjustmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PointAdjustmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointAdjustmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PointAdjustmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointAdjustmentPayload>
+          }
+          findFirst: {
+            args: Prisma.PointAdjustmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointAdjustmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PointAdjustmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointAdjustmentPayload>
+          }
+          findMany: {
+            args: Prisma.PointAdjustmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointAdjustmentPayload>[]
+          }
+          create: {
+            args: Prisma.PointAdjustmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointAdjustmentPayload>
+          }
+          createMany: {
+            args: Prisma.PointAdjustmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.PointAdjustmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointAdjustmentPayload>
+          }
+          update: {
+            args: Prisma.PointAdjustmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointAdjustmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.PointAdjustmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PointAdjustmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PointAdjustmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PointAdjustmentPayload>
+          }
+          aggregate: {
+            args: Prisma.PointAdjustmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePointAdjustment>
+          }
+          groupBy: {
+            args: Prisma.PointAdjustmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PointAdjustmentGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.PointAdjustmentFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.PointAdjustmentAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.PointAdjustmentCountArgs<ExtArgs>
+            result: $Utils.Optional<PointAdjustmentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2674,6 +2764,7 @@ export namespace Prisma {
     qrScanLog?: QrScanLogOmit
     userOverlayLog?: UserOverlayLogOmit
     userSession?: UserSessionOmit
+    pointAdjustment?: PointAdjustmentOmit
   }
 
   /* Types for Logging */
@@ -2772,6 +2863,7 @@ export namespace Prisma {
     QrScanLog: number
     overlayLogs: number
     sessions: number
+    PointAdjustment: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2793,6 +2885,7 @@ export namespace Prisma {
     QrScanLog?: boolean | UserCountOutputTypeCountQrScanLogArgs
     overlayLogs?: boolean | UserCountOutputTypeCountOverlayLogsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
+    PointAdjustment?: boolean | UserCountOutputTypeCountPointAdjustmentArgs
   }
 
   // Custom InputTypes
@@ -2930,6 +3023,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserSessionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPointAdjustmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PointAdjustmentWhereInput
   }
 
 
@@ -3334,6 +3434,7 @@ export namespace Prisma {
     QrScanLog?: boolean | User$QrScanLogArgs<ExtArgs>
     overlayLogs?: boolean | User$overlayLogsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    PointAdjustment?: boolean | User$PointAdjustmentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3374,6 +3475,7 @@ export namespace Prisma {
     QrScanLog?: boolean | User$QrScanLogArgs<ExtArgs>
     overlayLogs?: boolean | User$overlayLogsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
+    PointAdjustment?: boolean | User$PointAdjustmentArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -3398,6 +3500,7 @@ export namespace Prisma {
       QrScanLog: Prisma.$QrScanLogPayload<ExtArgs>[]
       overlayLogs: Prisma.$UserOverlayLogPayload<ExtArgs>[]
       sessions: Prisma.$UserSessionPayload<ExtArgs>[]
+      PointAdjustment: Prisma.$PointAdjustmentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3793,6 +3896,7 @@ export namespace Prisma {
     QrScanLog<T extends User$QrScanLogArgs<ExtArgs> = {}>(args?: Subset<T, User$QrScanLogArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     overlayLogs<T extends User$overlayLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$overlayLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    PointAdjustment<T extends User$PointAdjustmentArgs<ExtArgs> = {}>(args?: Subset<T, User$PointAdjustmentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4633,6 +4737,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserSessionScalarFieldEnum | UserSessionScalarFieldEnum[]
+  }
+
+  /**
+   * User.PointAdjustment
+   */
+  export type User$PointAdjustmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    where?: PointAdjustmentWhereInput
+    orderBy?: PointAdjustmentOrderByWithRelationInput | PointAdjustmentOrderByWithRelationInput[]
+    cursor?: PointAdjustmentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PointAdjustmentScalarFieldEnum | PointAdjustmentScalarFieldEnum[]
   }
 
   /**
@@ -7813,18 +7941,21 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     date: Date | null
+    dayKey: string | null
   }
 
   export type TranscriptLogMaxAggregateOutputType = {
     id: string | null
     userId: string | null
     date: Date | null
+    dayKey: string | null
   }
 
   export type TranscriptLogCountAggregateOutputType = {
     id: number
     userId: number
     date: number
+    dayKey: number
     _all: number
   }
 
@@ -7833,18 +7964,21 @@ export namespace Prisma {
     id?: true
     userId?: true
     date?: true
+    dayKey?: true
   }
 
   export type TranscriptLogMaxAggregateInputType = {
     id?: true
     userId?: true
     date?: true
+    dayKey?: true
   }
 
   export type TranscriptLogCountAggregateInputType = {
     id?: true
     userId?: true
     date?: true
+    dayKey?: true
     _all?: true
   }
 
@@ -7924,6 +8058,7 @@ export namespace Prisma {
     id: string
     userId: string
     date: Date
+    dayKey: string
     _count: TranscriptLogCountAggregateOutputType | null
     _min: TranscriptLogMinAggregateOutputType | null
     _max: TranscriptLogMaxAggregateOutputType | null
@@ -7947,6 +8082,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     date?: boolean
+    dayKey?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transcriptLog"]>
 
@@ -7956,9 +8092,10 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     date?: boolean
+    dayKey?: boolean
   }
 
-  export type TranscriptLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "date", ExtArgs["result"]["transcriptLog"]>
+  export type TranscriptLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "date" | "dayKey", ExtArgs["result"]["transcriptLog"]>
   export type TranscriptLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -7972,6 +8109,7 @@ export namespace Prisma {
       id: string
       userId: string
       date: Date
+      dayKey: string
     }, ExtArgs["result"]["transcriptLog"]>
     composites: {}
   }
@@ -8368,6 +8506,7 @@ export namespace Prisma {
     readonly id: FieldRef<"TranscriptLog", 'String'>
     readonly userId: FieldRef<"TranscriptLog", 'String'>
     readonly date: FieldRef<"TranscriptLog", 'DateTime'>
+    readonly dayKey: FieldRef<"TranscriptLog", 'String'>
   }
     
 
@@ -26005,6 +26144,1019 @@ export namespace Prisma {
 
 
   /**
+   * Model PointAdjustment
+   */
+
+  export type AggregatePointAdjustment = {
+    _count: PointAdjustmentCountAggregateOutputType | null
+    _avg: PointAdjustmentAvgAggregateOutputType | null
+    _sum: PointAdjustmentSumAggregateOutputType | null
+    _min: PointAdjustmentMinAggregateOutputType | null
+    _max: PointAdjustmentMaxAggregateOutputType | null
+  }
+
+  export type PointAdjustmentAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type PointAdjustmentSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type PointAdjustmentMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    amount: number | null
+    reason: string | null
+    appliedAt: Date | null
+  }
+
+  export type PointAdjustmentMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    amount: number | null
+    reason: string | null
+    appliedAt: Date | null
+  }
+
+  export type PointAdjustmentCountAggregateOutputType = {
+    id: number
+    userId: number
+    amount: number
+    reason: number
+    appliedAt: number
+    _all: number
+  }
+
+
+  export type PointAdjustmentAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type PointAdjustmentSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type PointAdjustmentMinAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    reason?: true
+    appliedAt?: true
+  }
+
+  export type PointAdjustmentMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    reason?: true
+    appliedAt?: true
+  }
+
+  export type PointAdjustmentCountAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    reason?: true
+    appliedAt?: true
+    _all?: true
+  }
+
+  export type PointAdjustmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PointAdjustment to aggregate.
+     */
+    where?: PointAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PointAdjustments to fetch.
+     */
+    orderBy?: PointAdjustmentOrderByWithRelationInput | PointAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PointAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PointAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PointAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PointAdjustments
+    **/
+    _count?: true | PointAdjustmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PointAdjustmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PointAdjustmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PointAdjustmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PointAdjustmentMaxAggregateInputType
+  }
+
+  export type GetPointAdjustmentAggregateType<T extends PointAdjustmentAggregateArgs> = {
+        [P in keyof T & keyof AggregatePointAdjustment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePointAdjustment[P]>
+      : GetScalarType<T[P], AggregatePointAdjustment[P]>
+  }
+
+
+
+
+  export type PointAdjustmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PointAdjustmentWhereInput
+    orderBy?: PointAdjustmentOrderByWithAggregationInput | PointAdjustmentOrderByWithAggregationInput[]
+    by: PointAdjustmentScalarFieldEnum[] | PointAdjustmentScalarFieldEnum
+    having?: PointAdjustmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PointAdjustmentCountAggregateInputType | true
+    _avg?: PointAdjustmentAvgAggregateInputType
+    _sum?: PointAdjustmentSumAggregateInputType
+    _min?: PointAdjustmentMinAggregateInputType
+    _max?: PointAdjustmentMaxAggregateInputType
+  }
+
+  export type PointAdjustmentGroupByOutputType = {
+    id: string
+    userId: string
+    amount: number
+    reason: string | null
+    appliedAt: Date
+    _count: PointAdjustmentCountAggregateOutputType | null
+    _avg: PointAdjustmentAvgAggregateOutputType | null
+    _sum: PointAdjustmentSumAggregateOutputType | null
+    _min: PointAdjustmentMinAggregateOutputType | null
+    _max: PointAdjustmentMaxAggregateOutputType | null
+  }
+
+  type GetPointAdjustmentGroupByPayload<T extends PointAdjustmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PointAdjustmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PointAdjustmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PointAdjustmentGroupByOutputType[P]>
+            : GetScalarType<T[P], PointAdjustmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PointAdjustmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    reason?: boolean
+    appliedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pointAdjustment"]>
+
+
+
+  export type PointAdjustmentSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    reason?: boolean
+    appliedAt?: boolean
+  }
+
+  export type PointAdjustmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "amount" | "reason" | "appliedAt", ExtArgs["result"]["pointAdjustment"]>
+  export type PointAdjustmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $PointAdjustmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PointAdjustment"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      amount: number
+      reason: string | null
+      appliedAt: Date
+    }, ExtArgs["result"]["pointAdjustment"]>
+    composites: {}
+  }
+
+  type PointAdjustmentGetPayload<S extends boolean | null | undefined | PointAdjustmentDefaultArgs> = $Result.GetResult<Prisma.$PointAdjustmentPayload, S>
+
+  type PointAdjustmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PointAdjustmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PointAdjustmentCountAggregateInputType | true
+    }
+
+  export interface PointAdjustmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PointAdjustment'], meta: { name: 'PointAdjustment' } }
+    /**
+     * Find zero or one PointAdjustment that matches the filter.
+     * @param {PointAdjustmentFindUniqueArgs} args - Arguments to find a PointAdjustment
+     * @example
+     * // Get one PointAdjustment
+     * const pointAdjustment = await prisma.pointAdjustment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PointAdjustmentFindUniqueArgs>(args: SelectSubset<T, PointAdjustmentFindUniqueArgs<ExtArgs>>): Prisma__PointAdjustmentClient<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PointAdjustment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PointAdjustmentFindUniqueOrThrowArgs} args - Arguments to find a PointAdjustment
+     * @example
+     * // Get one PointAdjustment
+     * const pointAdjustment = await prisma.pointAdjustment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PointAdjustmentFindUniqueOrThrowArgs>(args: SelectSubset<T, PointAdjustmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PointAdjustmentClient<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PointAdjustment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointAdjustmentFindFirstArgs} args - Arguments to find a PointAdjustment
+     * @example
+     * // Get one PointAdjustment
+     * const pointAdjustment = await prisma.pointAdjustment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PointAdjustmentFindFirstArgs>(args?: SelectSubset<T, PointAdjustmentFindFirstArgs<ExtArgs>>): Prisma__PointAdjustmentClient<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PointAdjustment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointAdjustmentFindFirstOrThrowArgs} args - Arguments to find a PointAdjustment
+     * @example
+     * // Get one PointAdjustment
+     * const pointAdjustment = await prisma.pointAdjustment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PointAdjustmentFindFirstOrThrowArgs>(args?: SelectSubset<T, PointAdjustmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__PointAdjustmentClient<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PointAdjustments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointAdjustmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PointAdjustments
+     * const pointAdjustments = await prisma.pointAdjustment.findMany()
+     * 
+     * // Get first 10 PointAdjustments
+     * const pointAdjustments = await prisma.pointAdjustment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pointAdjustmentWithIdOnly = await prisma.pointAdjustment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PointAdjustmentFindManyArgs>(args?: SelectSubset<T, PointAdjustmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PointAdjustment.
+     * @param {PointAdjustmentCreateArgs} args - Arguments to create a PointAdjustment.
+     * @example
+     * // Create one PointAdjustment
+     * const PointAdjustment = await prisma.pointAdjustment.create({
+     *   data: {
+     *     // ... data to create a PointAdjustment
+     *   }
+     * })
+     * 
+     */
+    create<T extends PointAdjustmentCreateArgs>(args: SelectSubset<T, PointAdjustmentCreateArgs<ExtArgs>>): Prisma__PointAdjustmentClient<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PointAdjustments.
+     * @param {PointAdjustmentCreateManyArgs} args - Arguments to create many PointAdjustments.
+     * @example
+     * // Create many PointAdjustments
+     * const pointAdjustment = await prisma.pointAdjustment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PointAdjustmentCreateManyArgs>(args?: SelectSubset<T, PointAdjustmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a PointAdjustment.
+     * @param {PointAdjustmentDeleteArgs} args - Arguments to delete one PointAdjustment.
+     * @example
+     * // Delete one PointAdjustment
+     * const PointAdjustment = await prisma.pointAdjustment.delete({
+     *   where: {
+     *     // ... filter to delete one PointAdjustment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PointAdjustmentDeleteArgs>(args: SelectSubset<T, PointAdjustmentDeleteArgs<ExtArgs>>): Prisma__PointAdjustmentClient<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PointAdjustment.
+     * @param {PointAdjustmentUpdateArgs} args - Arguments to update one PointAdjustment.
+     * @example
+     * // Update one PointAdjustment
+     * const pointAdjustment = await prisma.pointAdjustment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PointAdjustmentUpdateArgs>(args: SelectSubset<T, PointAdjustmentUpdateArgs<ExtArgs>>): Prisma__PointAdjustmentClient<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PointAdjustments.
+     * @param {PointAdjustmentDeleteManyArgs} args - Arguments to filter PointAdjustments to delete.
+     * @example
+     * // Delete a few PointAdjustments
+     * const { count } = await prisma.pointAdjustment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PointAdjustmentDeleteManyArgs>(args?: SelectSubset<T, PointAdjustmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PointAdjustments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointAdjustmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PointAdjustments
+     * const pointAdjustment = await prisma.pointAdjustment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PointAdjustmentUpdateManyArgs>(args: SelectSubset<T, PointAdjustmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one PointAdjustment.
+     * @param {PointAdjustmentUpsertArgs} args - Arguments to update or create a PointAdjustment.
+     * @example
+     * // Update or create a PointAdjustment
+     * const pointAdjustment = await prisma.pointAdjustment.upsert({
+     *   create: {
+     *     // ... data to create a PointAdjustment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PointAdjustment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PointAdjustmentUpsertArgs>(args: SelectSubset<T, PointAdjustmentUpsertArgs<ExtArgs>>): Prisma__PointAdjustmentClient<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PointAdjustments that matches the filter.
+     * @param {PointAdjustmentFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const pointAdjustment = await prisma.pointAdjustment.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: PointAdjustmentFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a PointAdjustment.
+     * @param {PointAdjustmentAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const pointAdjustment = await prisma.pointAdjustment.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: PointAdjustmentAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of PointAdjustments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointAdjustmentCountArgs} args - Arguments to filter PointAdjustments to count.
+     * @example
+     * // Count the number of PointAdjustments
+     * const count = await prisma.pointAdjustment.count({
+     *   where: {
+     *     // ... the filter for the PointAdjustments we want to count
+     *   }
+     * })
+    **/
+    count<T extends PointAdjustmentCountArgs>(
+      args?: Subset<T, PointAdjustmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PointAdjustmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PointAdjustment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointAdjustmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PointAdjustmentAggregateArgs>(args: Subset<T, PointAdjustmentAggregateArgs>): Prisma.PrismaPromise<GetPointAdjustmentAggregateType<T>>
+
+    /**
+     * Group by PointAdjustment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PointAdjustmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PointAdjustmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PointAdjustmentGroupByArgs['orderBy'] }
+        : { orderBy?: PointAdjustmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PointAdjustmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPointAdjustmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PointAdjustment model
+   */
+  readonly fields: PointAdjustmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PointAdjustment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PointAdjustmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PointAdjustment model
+   */
+  interface PointAdjustmentFieldRefs {
+    readonly id: FieldRef<"PointAdjustment", 'String'>
+    readonly userId: FieldRef<"PointAdjustment", 'String'>
+    readonly amount: FieldRef<"PointAdjustment", 'Int'>
+    readonly reason: FieldRef<"PointAdjustment", 'String'>
+    readonly appliedAt: FieldRef<"PointAdjustment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PointAdjustment findUnique
+   */
+  export type PointAdjustmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    /**
+     * Filter, which PointAdjustment to fetch.
+     */
+    where: PointAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * PointAdjustment findUniqueOrThrow
+   */
+  export type PointAdjustmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    /**
+     * Filter, which PointAdjustment to fetch.
+     */
+    where: PointAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * PointAdjustment findFirst
+   */
+  export type PointAdjustmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    /**
+     * Filter, which PointAdjustment to fetch.
+     */
+    where?: PointAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PointAdjustments to fetch.
+     */
+    orderBy?: PointAdjustmentOrderByWithRelationInput | PointAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PointAdjustments.
+     */
+    cursor?: PointAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PointAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PointAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PointAdjustments.
+     */
+    distinct?: PointAdjustmentScalarFieldEnum | PointAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * PointAdjustment findFirstOrThrow
+   */
+  export type PointAdjustmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    /**
+     * Filter, which PointAdjustment to fetch.
+     */
+    where?: PointAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PointAdjustments to fetch.
+     */
+    orderBy?: PointAdjustmentOrderByWithRelationInput | PointAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PointAdjustments.
+     */
+    cursor?: PointAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PointAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PointAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PointAdjustments.
+     */
+    distinct?: PointAdjustmentScalarFieldEnum | PointAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * PointAdjustment findMany
+   */
+  export type PointAdjustmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    /**
+     * Filter, which PointAdjustments to fetch.
+     */
+    where?: PointAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PointAdjustments to fetch.
+     */
+    orderBy?: PointAdjustmentOrderByWithRelationInput | PointAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PointAdjustments.
+     */
+    cursor?: PointAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PointAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PointAdjustments.
+     */
+    skip?: number
+    distinct?: PointAdjustmentScalarFieldEnum | PointAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * PointAdjustment create
+   */
+  export type PointAdjustmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PointAdjustment.
+     */
+    data: XOR<PointAdjustmentCreateInput, PointAdjustmentUncheckedCreateInput>
+  }
+
+  /**
+   * PointAdjustment createMany
+   */
+  export type PointAdjustmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PointAdjustments.
+     */
+    data: PointAdjustmentCreateManyInput | PointAdjustmentCreateManyInput[]
+  }
+
+  /**
+   * PointAdjustment update
+   */
+  export type PointAdjustmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PointAdjustment.
+     */
+    data: XOR<PointAdjustmentUpdateInput, PointAdjustmentUncheckedUpdateInput>
+    /**
+     * Choose, which PointAdjustment to update.
+     */
+    where: PointAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * PointAdjustment updateMany
+   */
+  export type PointAdjustmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PointAdjustments.
+     */
+    data: XOR<PointAdjustmentUpdateManyMutationInput, PointAdjustmentUncheckedUpdateManyInput>
+    /**
+     * Filter which PointAdjustments to update
+     */
+    where?: PointAdjustmentWhereInput
+    /**
+     * Limit how many PointAdjustments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PointAdjustment upsert
+   */
+  export type PointAdjustmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PointAdjustment to update in case it exists.
+     */
+    where: PointAdjustmentWhereUniqueInput
+    /**
+     * In case the PointAdjustment found by the `where` argument doesn't exist, create a new PointAdjustment with this data.
+     */
+    create: XOR<PointAdjustmentCreateInput, PointAdjustmentUncheckedCreateInput>
+    /**
+     * In case the PointAdjustment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PointAdjustmentUpdateInput, PointAdjustmentUncheckedUpdateInput>
+  }
+
+  /**
+   * PointAdjustment delete
+   */
+  export type PointAdjustmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+    /**
+     * Filter which PointAdjustment to delete.
+     */
+    where: PointAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * PointAdjustment deleteMany
+   */
+  export type PointAdjustmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PointAdjustments to delete
+     */
+    where?: PointAdjustmentWhereInput
+    /**
+     * Limit how many PointAdjustments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PointAdjustment findRaw
+   */
+  export type PointAdjustmentFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * PointAdjustment aggregateRaw
+   */
+  export type PointAdjustmentAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * PointAdjustment without action
+   */
+  export type PointAdjustmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PointAdjustment
+     */
+    select?: PointAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PointAdjustment
+     */
+    omit?: PointAdjustmentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PointAdjustmentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -26064,7 +27216,8 @@ export namespace Prisma {
   export const TranscriptLogScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
-    date: 'date'
+    date: 'date',
+    dayKey: 'dayKey'
   };
 
   export type TranscriptLogScalarFieldEnum = (typeof TranscriptLogScalarFieldEnum)[keyof typeof TranscriptLogScalarFieldEnum]
@@ -26285,6 +27438,17 @@ export namespace Prisma {
   export type UserSessionScalarFieldEnum = (typeof UserSessionScalarFieldEnum)[keyof typeof UserSessionScalarFieldEnum]
 
 
+  export const PointAdjustmentScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    amount: 'amount',
+    reason: 'reason',
+    appliedAt: 'appliedAt'
+  };
+
+  export type PointAdjustmentScalarFieldEnum = (typeof PointAdjustmentScalarFieldEnum)[keyof typeof PointAdjustmentScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -26434,6 +27598,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogListRelationFilter
     overlayLogs?: UserOverlayLogListRelationFilter
     sessions?: UserSessionListRelationFilter
+    PointAdjustment?: PointAdjustmentListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -26467,6 +27632,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogOrderByRelationAggregateInput
     overlayLogs?: UserOverlayLogOrderByRelationAggregateInput
     sessions?: UserSessionOrderByRelationAggregateInput
+    PointAdjustment?: PointAdjustmentOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -26503,6 +27669,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogListRelationFilter
     overlayLogs?: UserOverlayLogListRelationFilter
     sessions?: UserSessionListRelationFilter
+    PointAdjustment?: PointAdjustmentListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -26749,6 +27916,7 @@ export namespace Prisma {
     id?: StringFilter<"TranscriptLog"> | string
     userId?: StringFilter<"TranscriptLog"> | string
     date?: DateTimeFilter<"TranscriptLog"> | Date | string
+    dayKey?: StringFilter<"TranscriptLog"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -26756,23 +27924,27 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     date?: SortOrder
+    dayKey?: SortOrder
     user?: UserOrderByWithRelationInput
   }
 
   export type TranscriptLogWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    userId_dayKey?: TranscriptLogUserIdDayKeyCompoundUniqueInput
     AND?: TranscriptLogWhereInput | TranscriptLogWhereInput[]
     OR?: TranscriptLogWhereInput[]
     NOT?: TranscriptLogWhereInput | TranscriptLogWhereInput[]
     userId?: StringFilter<"TranscriptLog"> | string
     date?: DateTimeFilter<"TranscriptLog"> | Date | string
+    dayKey?: StringFilter<"TranscriptLog"> | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
+  }, "id" | "userId_dayKey">
 
   export type TranscriptLogOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
     date?: SortOrder
+    dayKey?: SortOrder
     _count?: TranscriptLogCountOrderByAggregateInput
     _max?: TranscriptLogMaxOrderByAggregateInput
     _min?: TranscriptLogMinOrderByAggregateInput
@@ -26785,6 +27957,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"TranscriptLog"> | string
     userId?: StringWithAggregatesFilter<"TranscriptLog"> | string
     date?: DateTimeWithAggregatesFilter<"TranscriptLog"> | Date | string
+    dayKey?: StringWithAggregatesFilter<"TranscriptLog"> | string
   }
 
   export type VisitLogWhereInput = {
@@ -27893,6 +29066,63 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"UserSession"> | boolean
   }
 
+  export type PointAdjustmentWhereInput = {
+    AND?: PointAdjustmentWhereInput | PointAdjustmentWhereInput[]
+    OR?: PointAdjustmentWhereInput[]
+    NOT?: PointAdjustmentWhereInput | PointAdjustmentWhereInput[]
+    id?: StringFilter<"PointAdjustment"> | string
+    userId?: StringFilter<"PointAdjustment"> | string
+    amount?: IntFilter<"PointAdjustment"> | number
+    reason?: StringNullableFilter<"PointAdjustment"> | string | null
+    appliedAt?: DateTimeFilter<"PointAdjustment"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type PointAdjustmentOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    appliedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type PointAdjustmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PointAdjustmentWhereInput | PointAdjustmentWhereInput[]
+    OR?: PointAdjustmentWhereInput[]
+    NOT?: PointAdjustmentWhereInput | PointAdjustmentWhereInput[]
+    userId?: StringFilter<"PointAdjustment"> | string
+    amount?: IntFilter<"PointAdjustment"> | number
+    reason?: StringNullableFilter<"PointAdjustment"> | string | null
+    appliedAt?: DateTimeFilter<"PointAdjustment"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type PointAdjustmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    appliedAt?: SortOrder
+    _count?: PointAdjustmentCountOrderByAggregateInput
+    _avg?: PointAdjustmentAvgOrderByAggregateInput
+    _max?: PointAdjustmentMaxOrderByAggregateInput
+    _min?: PointAdjustmentMinOrderByAggregateInput
+    _sum?: PointAdjustmentSumOrderByAggregateInput
+  }
+
+  export type PointAdjustmentScalarWhereWithAggregatesInput = {
+    AND?: PointAdjustmentScalarWhereWithAggregatesInput | PointAdjustmentScalarWhereWithAggregatesInput[]
+    OR?: PointAdjustmentScalarWhereWithAggregatesInput[]
+    NOT?: PointAdjustmentScalarWhereWithAggregatesInput | PointAdjustmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PointAdjustment"> | string
+    userId?: StringWithAggregatesFilter<"PointAdjustment"> | string
+    amount?: IntWithAggregatesFilter<"PointAdjustment"> | number
+    reason?: StringNullableWithAggregatesFilter<"PointAdjustment"> | string | null
+    appliedAt?: DateTimeWithAggregatesFilter<"PointAdjustment"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -27924,6 +29154,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -27957,6 +29188,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -27989,6 +29221,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -28021,6 +29254,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -28263,6 +29497,7 @@ export namespace Prisma {
   export type TranscriptLogCreateInput = {
     id?: string
     date?: Date | string
+    dayKey: string
     user: UserCreateNestedOneWithoutTranscriptLogInput
   }
 
@@ -28270,31 +29505,37 @@ export namespace Prisma {
     id?: string
     userId: string
     date?: Date | string
+    dayKey: string
   }
 
   export type TranscriptLogUpdateInput = {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dayKey?: StringFieldUpdateOperationsInput | string
     user?: UserUpdateOneRequiredWithoutTranscriptLogNestedInput
   }
 
   export type TranscriptLogUncheckedUpdateInput = {
     userId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dayKey?: StringFieldUpdateOperationsInput | string
   }
 
   export type TranscriptLogCreateManyInput = {
     id?: string
     userId: string
     date?: Date | string
+    dayKey: string
   }
 
   export type TranscriptLogUpdateManyMutationInput = {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dayKey?: StringFieldUpdateOperationsInput | string
   }
 
   export type TranscriptLogUncheckedUpdateManyInput = {
     userId?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dayKey?: StringFieldUpdateOperationsInput | string
   }
 
   export type VisitLogCreateInput = {
@@ -29363,6 +30604,57 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
+  export type PointAdjustmentCreateInput = {
+    id?: string
+    amount: number
+    reason?: string | null
+    appliedAt?: Date | string
+    user: UserCreateNestedOneWithoutPointAdjustmentInput
+  }
+
+  export type PointAdjustmentUncheckedCreateInput = {
+    id?: string
+    userId: string
+    amount: number
+    reason?: string | null
+    appliedAt?: Date | string
+  }
+
+  export type PointAdjustmentUpdateInput = {
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutPointAdjustmentNestedInput
+  }
+
+  export type PointAdjustmentUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PointAdjustmentCreateManyInput = {
+    id?: string
+    userId: string
+    amount: number
+    reason?: string | null
+    appliedAt?: Date | string
+  }
+
+  export type PointAdjustmentUpdateManyMutationInput = {
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PointAdjustmentUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -29541,6 +30833,12 @@ export namespace Prisma {
     none?: UserSessionWhereInput
   }
 
+  export type PointAdjustmentListRelationFilter = {
+    every?: PointAdjustmentWhereInput
+    some?: PointAdjustmentWhereInput
+    none?: PointAdjustmentWhereInput
+  }
+
   export type BoothJoinOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -29610,6 +30908,10 @@ export namespace Prisma {
   }
 
   export type UserSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PointAdjustmentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -29854,22 +31156,30 @@ export namespace Prisma {
     addedAt?: SortOrder
   }
 
+  export type TranscriptLogUserIdDayKeyCompoundUniqueInput = {
+    userId: string
+    dayKey: string
+  }
+
   export type TranscriptLogCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     date?: SortOrder
+    dayKey?: SortOrder
   }
 
   export type TranscriptLogMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     date?: SortOrder
+    dayKey?: SortOrder
   }
 
   export type TranscriptLogMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     date?: SortOrder
+    dayKey?: SortOrder
   }
 
   export type UserNullableScalarRelationFilter = {
@@ -30485,6 +31795,38 @@ export namespace Prisma {
     isActive?: SortOrder
   }
 
+  export type PointAdjustmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    appliedAt?: SortOrder
+  }
+
+  export type PointAdjustmentAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type PointAdjustmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    appliedAt?: SortOrder
+  }
+
+  export type PointAdjustmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    reason?: SortOrder
+    appliedAt?: SortOrder
+  }
+
+  export type PointAdjustmentSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
   export type BoothJoinCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -30611,6 +31953,13 @@ export namespace Prisma {
     connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
   }
 
+  export type PointAdjustmentCreateNestedManyWithoutUserInput = {
+    create?: XOR<PointAdjustmentCreateWithoutUserInput, PointAdjustmentUncheckedCreateWithoutUserInput> | PointAdjustmentCreateWithoutUserInput[] | PointAdjustmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PointAdjustmentCreateOrConnectWithoutUserInput | PointAdjustmentCreateOrConnectWithoutUserInput[]
+    createMany?: PointAdjustmentCreateManyUserInputEnvelope
+    connect?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+  }
+
   export type BoothJoinUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -30735,6 +32084,13 @@ export namespace Prisma {
     connectOrCreate?: UserSessionCreateOrConnectWithoutUserInput | UserSessionCreateOrConnectWithoutUserInput[]
     createMany?: UserSessionCreateManyUserInputEnvelope
     connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+  }
+
+  export type PointAdjustmentUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<PointAdjustmentCreateWithoutUserInput, PointAdjustmentUncheckedCreateWithoutUserInput> | PointAdjustmentCreateWithoutUserInput[] | PointAdjustmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PointAdjustmentCreateOrConnectWithoutUserInput | PointAdjustmentCreateOrConnectWithoutUserInput[]
+    createMany?: PointAdjustmentCreateManyUserInputEnvelope
+    connect?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -31019,6 +32375,20 @@ export namespace Prisma {
     deleteMany?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[]
   }
 
+  export type PointAdjustmentUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PointAdjustmentCreateWithoutUserInput, PointAdjustmentUncheckedCreateWithoutUserInput> | PointAdjustmentCreateWithoutUserInput[] | PointAdjustmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PointAdjustmentCreateOrConnectWithoutUserInput | PointAdjustmentCreateOrConnectWithoutUserInput[]
+    upsert?: PointAdjustmentUpsertWithWhereUniqueWithoutUserInput | PointAdjustmentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PointAdjustmentCreateManyUserInputEnvelope
+    set?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+    disconnect?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+    delete?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+    connect?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+    update?: PointAdjustmentUpdateWithWhereUniqueWithoutUserInput | PointAdjustmentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PointAdjustmentUpdateManyWithWhereWithoutUserInput | PointAdjustmentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PointAdjustmentScalarWhereInput | PointAdjustmentScalarWhereInput[]
+  }
+
   export type BoothJoinUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -31269,6 +32639,20 @@ export namespace Prisma {
     update?: UserSessionUpdateWithWhereUniqueWithoutUserInput | UserSessionUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserSessionUpdateManyWithWhereWithoutUserInput | UserSessionUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[]
+  }
+
+  export type PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<PointAdjustmentCreateWithoutUserInput, PointAdjustmentUncheckedCreateWithoutUserInput> | PointAdjustmentCreateWithoutUserInput[] | PointAdjustmentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: PointAdjustmentCreateOrConnectWithoutUserInput | PointAdjustmentCreateOrConnectWithoutUserInput[]
+    upsert?: PointAdjustmentUpsertWithWhereUniqueWithoutUserInput | PointAdjustmentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: PointAdjustmentCreateManyUserInputEnvelope
+    set?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+    disconnect?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+    delete?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+    connect?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+    update?: PointAdjustmentUpdateWithWhereUniqueWithoutUserInput | PointAdjustmentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: PointAdjustmentUpdateManyWithWhereWithoutUserInput | PointAdjustmentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: PointAdjustmentScalarWhereInput | PointAdjustmentScalarWhereInput[]
   }
 
   export type BoothCreatepicsInput = {
@@ -32092,6 +33476,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSessionsInput, UserUpdateWithoutSessionsInput>, UserUncheckedUpdateWithoutSessionsInput>
   }
 
+  export type UserCreateNestedOneWithoutPointAdjustmentInput = {
+    create?: XOR<UserCreateWithoutPointAdjustmentInput, UserUncheckedCreateWithoutPointAdjustmentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPointAdjustmentInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutPointAdjustmentNestedInput = {
+    create?: XOR<UserCreateWithoutPointAdjustmentInput, UserUncheckedCreateWithoutPointAdjustmentInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPointAdjustmentInput
+    upsert?: UserUpsertWithoutPointAdjustmentInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPointAdjustmentInput, UserUpdateWithoutPointAdjustmentInput>, UserUncheckedUpdateWithoutPointAdjustmentInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -32379,11 +33777,13 @@ export namespace Prisma {
   export type TranscriptLogCreateWithoutUserInput = {
     id?: string
     date?: Date | string
+    dayKey: string
   }
 
   export type TranscriptLogUncheckedCreateWithoutUserInput = {
     id?: string
     date?: Date | string
+    dayKey: string
   }
 
   export type TranscriptLogCreateOrConnectWithoutUserInput = {
@@ -32780,6 +34180,29 @@ export namespace Prisma {
     data: UserSessionCreateManyUserInput | UserSessionCreateManyUserInput[]
   }
 
+  export type PointAdjustmentCreateWithoutUserInput = {
+    id?: string
+    amount: number
+    reason?: string | null
+    appliedAt?: Date | string
+  }
+
+  export type PointAdjustmentUncheckedCreateWithoutUserInput = {
+    id?: string
+    amount: number
+    reason?: string | null
+    appliedAt?: Date | string
+  }
+
+  export type PointAdjustmentCreateOrConnectWithoutUserInput = {
+    where: PointAdjustmentWhereUniqueInput
+    create: XOR<PointAdjustmentCreateWithoutUserInput, PointAdjustmentUncheckedCreateWithoutUserInput>
+  }
+
+  export type PointAdjustmentCreateManyUserInputEnvelope = {
+    data: PointAdjustmentCreateManyUserInput | PointAdjustmentCreateManyUserInput[]
+  }
+
   export type BoothJoinUpsertWithWhereUniqueWithoutUserInput = {
     where: BoothJoinWhereUniqueInput
     update: XOR<BoothJoinUpdateWithoutUserInput, BoothJoinUncheckedUpdateWithoutUserInput>
@@ -32855,6 +34278,7 @@ export namespace Prisma {
     id?: StringFilter<"TranscriptLog"> | string
     userId?: StringFilter<"TranscriptLog"> | string
     date?: DateTimeFilter<"TranscriptLog"> | Date | string
+    dayKey?: StringFilter<"TranscriptLog"> | string
   }
 
   export type VisitLogUpsertWithWhereUniqueWithoutUserInput = {
@@ -33282,6 +34706,33 @@ export namespace Prisma {
     isActive?: BoolFilter<"UserSession"> | boolean
   }
 
+  export type PointAdjustmentUpsertWithWhereUniqueWithoutUserInput = {
+    where: PointAdjustmentWhereUniqueInput
+    update: XOR<PointAdjustmentUpdateWithoutUserInput, PointAdjustmentUncheckedUpdateWithoutUserInput>
+    create: XOR<PointAdjustmentCreateWithoutUserInput, PointAdjustmentUncheckedCreateWithoutUserInput>
+  }
+
+  export type PointAdjustmentUpdateWithWhereUniqueWithoutUserInput = {
+    where: PointAdjustmentWhereUniqueInput
+    data: XOR<PointAdjustmentUpdateWithoutUserInput, PointAdjustmentUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PointAdjustmentUpdateManyWithWhereWithoutUserInput = {
+    where: PointAdjustmentScalarWhereInput
+    data: XOR<PointAdjustmentUpdateManyMutationInput, PointAdjustmentUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type PointAdjustmentScalarWhereInput = {
+    AND?: PointAdjustmentScalarWhereInput | PointAdjustmentScalarWhereInput[]
+    OR?: PointAdjustmentScalarWhereInput[]
+    NOT?: PointAdjustmentScalarWhereInput | PointAdjustmentScalarWhereInput[]
+    id?: StringFilter<"PointAdjustment"> | string
+    userId?: StringFilter<"PointAdjustment"> | string
+    amount?: IntFilter<"PointAdjustment"> | number
+    reason?: StringNullableFilter<"PointAdjustment"> | string | null
+    appliedAt?: DateTimeFilter<"PointAdjustment"> | Date | string
+  }
+
   export type BoothOwnerCreateWithoutBoothInput = {
     id?: string
     addedAt?: Date | string
@@ -33619,6 +35070,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutJoinedBoothsInput = {
@@ -33651,6 +35103,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutJoinedBoothsInput = {
@@ -33739,6 +35192,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutJoinedBoothsInput = {
@@ -33770,6 +35224,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutJoinedUsersInput = {
@@ -33847,6 +35302,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedBoothsInput = {
@@ -33879,6 +35335,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedBoothsInput = {
@@ -33967,6 +35424,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedBoothsInput = {
@@ -33998,6 +35456,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutBoothOwnersInput = {
@@ -34075,6 +35534,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTranscriptLogInput = {
@@ -34107,6 +35567,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTranscriptLogInput = {
@@ -34154,6 +35615,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTranscriptLogInput = {
@@ -34185,6 +35647,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutVisitLogInput = {
@@ -34217,6 +35680,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVisitLogInput = {
@@ -34249,6 +35713,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVisitLogInput = {
@@ -34296,6 +35761,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitLogInput = {
@@ -34327,6 +35793,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBoothRatingsInput = {
@@ -34359,6 +35826,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothRatingsInput = {
@@ -34391,6 +35859,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothRatingsInput = {
@@ -34479,6 +35948,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothRatingsInput = {
@@ -34510,6 +35980,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutRatingsInput = {
@@ -34587,6 +36058,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothCommentsInput = {
@@ -34619,6 +36091,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothCommentsInput = {
@@ -34707,6 +36180,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothCommentsInput = {
@@ -34738,6 +36212,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutCommentsInput = {
@@ -34815,6 +36290,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothFavoritesInput = {
@@ -34847,6 +36323,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothFavoritesInput = {
@@ -34935,6 +36412,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothFavoritesInput = {
@@ -34966,6 +36444,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutFavoritesInput = {
@@ -35043,6 +36522,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUploadedFilesInput = {
@@ -35075,6 +36555,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUploadedFilesInput = {
@@ -35122,6 +36603,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedFilesInput = {
@@ -35153,6 +36635,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -35185,6 +36668,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -35217,6 +36701,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -35264,6 +36749,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -35295,6 +36781,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutFeedbacksInput = {
@@ -35327,6 +36814,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFeedbacksInput = {
@@ -35359,6 +36847,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFeedbacksInput = {
@@ -35406,6 +36895,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFeedbacksInput = {
@@ -35437,6 +36927,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSystemLogsInput = {
@@ -35469,6 +36960,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSystemLogsInput = {
@@ -35501,6 +36993,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSystemLogsInput = {
@@ -35548,6 +37041,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSystemLogsInput = {
@@ -35579,6 +37073,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWorkingHoursUpdatesInput = {
@@ -35611,6 +37106,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWorkingHoursUpdatesInput = {
@@ -35643,6 +37139,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWorkingHoursUpdatesInput = {
@@ -35690,6 +37187,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWorkingHoursUpdatesInput = {
@@ -35721,6 +37219,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutMaintenanceModeUpdatesInput = {
@@ -35753,6 +37252,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMaintenanceModeUpdatesInput = {
@@ -35785,6 +37285,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMaintenanceModeUpdatesInput = {
@@ -35832,6 +37333,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput = {
@@ -35863,6 +37365,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutLoginHistoryInput = {
@@ -35895,6 +37398,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLoginHistoryInput = {
@@ -35927,6 +37431,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLoginHistoryInput = {
@@ -35974,6 +37479,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLoginHistoryInput = {
@@ -36005,6 +37511,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothCreateWithoutQrCodeInput = {
@@ -36201,6 +37708,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPlayPassInput = {
@@ -36233,6 +37741,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPlayPassInput = {
@@ -36358,6 +37867,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlayPassInput = {
@@ -36389,6 +37899,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutPlayPassInput = {
@@ -36507,6 +38018,7 @@ export namespace Prisma {
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQrScanLogInput = {
@@ -36539,6 +38051,7 @@ export namespace Prisma {
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQrScanLogInput = {
@@ -36623,6 +38136,7 @@ export namespace Prisma {
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQrScanLogInput = {
@@ -36654,6 +38168,7 @@ export namespace Prisma {
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QrCodeUpsertWithoutLogsInput = {
@@ -36727,6 +38242,7 @@ export namespace Prisma {
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOverlayLogsInput = {
@@ -36759,6 +38275,7 @@ export namespace Prisma {
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOverlayLogsInput = {
@@ -36806,6 +38323,7 @@ export namespace Prisma {
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOverlayLogsInput = {
@@ -36837,6 +38355,7 @@ export namespace Prisma {
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -36869,6 +38388,7 @@ export namespace Prisma {
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -36901,6 +38421,7 @@ export namespace Prisma {
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -36948,6 +38469,7 @@ export namespace Prisma {
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -36979,6 +38501,153 @@ export namespace Prisma {
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutPointAdjustmentInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutPointAdjustmentInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingUncheckedCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentUncheckedCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteUncheckedCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutPointAdjustmentInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPointAdjustmentInput, UserUncheckedCreateWithoutPointAdjustmentInput>
+  }
+
+  export type UserUpsertWithoutPointAdjustmentInput = {
+    update: XOR<UserUpdateWithoutPointAdjustmentInput, UserUncheckedUpdateWithoutPointAdjustmentInput>
+    create: XOR<UserCreateWithoutPointAdjustmentInput, UserUncheckedCreateWithoutPointAdjustmentInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPointAdjustmentInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPointAdjustmentInput, UserUncheckedUpdateWithoutPointAdjustmentInput>
+  }
+
+  export type UserUpdateWithoutPointAdjustmentInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPointAdjustmentInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUncheckedUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUncheckedUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothJoinCreateManyUserInput = {
@@ -36996,6 +38665,7 @@ export namespace Prisma {
   export type TranscriptLogCreateManyUserInput = {
     id?: string
     date?: Date | string
+    dayKey: string
   }
 
   export type VisitLogCreateManyUserInput = {
@@ -37123,6 +38793,13 @@ export namespace Prisma {
     isActive?: boolean
   }
 
+  export type PointAdjustmentCreateManyUserInput = {
+    id?: string
+    amount: number
+    reason?: string | null
+    appliedAt?: Date | string
+  }
+
   export type BoothJoinUpdateWithoutUserInput = {
     joinedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     booth?: BoothUpdateOneRequiredWithoutJoinedUsersNestedInput
@@ -37155,14 +38832,17 @@ export namespace Prisma {
 
   export type TranscriptLogUpdateWithoutUserInput = {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dayKey?: StringFieldUpdateOperationsInput | string
   }
 
   export type TranscriptLogUncheckedUpdateWithoutUserInput = {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dayKey?: StringFieldUpdateOperationsInput | string
   }
 
   export type TranscriptLogUncheckedUpdateManyWithoutUserInput = {
     date?: DateTimeFieldUpdateOperationsInput | Date | string
+    dayKey?: StringFieldUpdateOperationsInput | string
   }
 
   export type VisitLogUpdateWithoutUserInput = {
@@ -37493,6 +39173,24 @@ export namespace Prisma {
     ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
     userAgent?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PointAdjustmentUpdateWithoutUserInput = {
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PointAdjustmentUncheckedUpdateWithoutUserInput = {
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PointAdjustmentUncheckedUpdateManyWithoutUserInput = {
+    amount?: IntFieldUpdateOperationsInput | number
+    reason?: NullableStringFieldUpdateOperationsInput | string | null
+    appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BoothOwnerCreateManyBoothInput = {

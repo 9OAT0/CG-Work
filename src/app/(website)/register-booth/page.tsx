@@ -276,7 +276,7 @@ export default function RegisterBooth() {
   };
 
   const handleGoToHomepage = () => {
-    router.push("/homepage");
+    router.push("/admin");
   };
 
   return (

@@ -53,6 +53,8 @@ model User {
   // Overlay and session tracking
   overlayLogs          UserOverlayLog[]
   sessions             UserSession[]
+
+  PointAdjustment PointAdjustment[]
 }
 
 model Booth {
@@ -101,8 +103,13 @@ model TranscriptLog {
   id     String   @id @default(auto()) @map("_id") @db.ObjectId
   userId String   @db.ObjectId
   user   User     @relation(fields: [userId], references: [id])
-  date   DateTime @default(now()) // วันที่รับ transcript
+  date   DateTime @default(now())
+  dayKey String   // YYYY-MM-DD (โซนเวลาไทย)
+
+  @@index([userId, date])
+  @@unique([userId, dayKey]) // ✅ กันซ้ำ user+วัน
 }
+
 
 model VisitLog {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -334,4 +341,16 @@ model UserSession {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   @@index([userId, isActive])
+}
+
+model PointAdjustment {
+  id        String   @id @default(cuid()) @map("_id")          // คงเดิมได้
+  userId    String   @db.ObjectId                               // << สำคัญ
+  amount    Int
+  reason    String?
+  appliedAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, appliedAt])
 }

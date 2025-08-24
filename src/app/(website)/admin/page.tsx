@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "../components/Navbar";
 
 interface StatsData {
@@ -85,6 +85,23 @@ interface WorkingHours {
 }
 
 export default function AdminDashboard() {
+  // helper: always send cookies + avoid cache for admin APIs
+  const authedFetch: typeof fetch = (input, init) =>
+    fetch(input as any, {
+      credentials: "include",
+      cache: "no-store",
+      ...(init || {}),
+    });
+
+  // helper: YYYY-MM-DD ตามโซนเวลาไทย
+  const dayStrTH = (d = new Date()) => {
+    const t = new Date(d.toLocaleString("en-US", { timeZone: "Asia/Bangkok" }));
+    const y = t.getFullYear();
+    const m = String(t.getMonth() + 1).padStart(2, "0");
+    const dd = String(t.getDate()).padStart(2, "0");
+    return `${y}-${m}-${dd}`;
+  };
+
   const [activeTab, setActiveTab] = useState("overview");
   const [stats, setStats] = useState<StatsData | null>(null);
   const [participants, setParticipants] = useState<ParticipantsData | null>(
@@ -101,6 +118,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [period, setPeriod] = useState("7d");
+  const controllerRef = useRef<AbortController | null>(null);
 
   // New booth form state
   const [newBooth, setNewBooth] = useState<NewBoothData>({
@@ -157,7 +175,7 @@ export default function AdminDashboard() {
   } | null>(null);
 
   async function fetchBoothsMini() {
-    const res = await fetch("/api/admin/booths");
+    const res = await authedFetch("/api/admin/booths");
     if (res.ok) {
       const j = await res.json();
       setBoothsMini(j.data || []);
@@ -170,7 +188,7 @@ export default function AdminDashboard() {
   async function fetchQrCodes(boothId?: string) {
     const url = new URL("/api/admin/qrcodes", window.location.origin);
     if (boothId) url.searchParams.set("boothId", boothId);
-    const res = await fetch(url.toString());
+    const res = await authedFetch(url.toString());
     if (res.ok) {
       const j = await res.json();
       setQrList(j.data || []);
@@ -232,9 +250,9 @@ export default function AdminDashboard() {
 
     try {
       const [statsRes, participantsRes, issuesRes] = await Promise.all([
-        fetch(`/api/admin/stats?period=${period}`),
-        fetch("/api/admin/participants"),
-        fetch("/api/admin/transcript-issues"),
+        authedFetch(`/api/admin/stats?period=${period}`),
+        authedFetch("/api/admin/participants"),
+        authedFetch("/api/admin/transcript-issues"),
       ]);
 
       if (!statsRes.ok || !participantsRes.ok || !issuesRes.ok) {
@@ -438,29 +456,59 @@ export default function AdminDashboard() {
     }
   }, [activeTab, workingHours]);
 
-  // Fetch daily logins data
+  // --- Daily Logins states ---
+  const dailyLoginsControllerRef = useRef<AbortController | null>(null);
+  const [dailyLoginsLoading, setDailyLoginsLoading] = useState(false);
+  const [dailyLoginsError, setDailyLoginsError] = useState<string | null>(null);
+
+  // ดึงสถิติ login รายวัน (ส่งคุกกี้ + กัน request เก่าทับใหม่)
   const fetchDailyLogins = async (date?: string) => {
+    const targetDate = date || selectedDate || dayStrTH();
+
+    dailyLoginsControllerRef.current?.abort();
+    const ac = new AbortController();
+    dailyLoginsControllerRef.current = ac;
+
+    setDailyLoginsLoading(true);
+    setDailyLoginsError(null);
+
     try {
-      const targetDate = date || selectedDate;
-      const response = await fetch(
-        `/api/admin/daily-logins?date=${targetDate}`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        setDailyLogins(data.data);
-      } else {
-        console.error("Failed to fetch daily logins");
+      const qs = new URLSearchParams({ date: targetDate });
+      const res = await authedFetch(`/api/admin/daily-logins?${qs}`, {
+        signal: ac.signal,
+      });
+
+      if (res.status === 401) {
+        setDailyLoginsError("ยังไม่ได้เข้าสู่ระบบ");
+        return;
       }
-    } catch (error) {
-      console.error("Error fetching daily logins:", error);
+      if (res.status === 403) {
+        setDailyLoginsError("ต้องเป็นผู้ดูแลระบบ");
+        return;
+      }
+      if (!res.ok) {
+        setDailyLoginsError("โหลดข้อมูลไม่สำเร็จ");
+        return;
+      }
+
+      const json = await res.json();
+      setDailyLogins(json.data);
+    } catch (e: any) {
+      if (e?.name !== "AbortError") {
+        setDailyLoginsError("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+        console.error(e);
+      }
+    } finally {
+      setDailyLoginsLoading(false);
     }
   };
 
-  // Load daily logins when daily-logins tab is selected
+  // โหลดเมื่อเปิดแท็บหรือเปลี่ยนวันที่
   useEffect(() => {
     if (activeTab === "daily-logins") {
-      fetchDailyLogins();
+      fetchDailyLogins(selectedDate);
     }
+    return () => dailyLoginsControllerRef.current?.abort();
   }, [activeTab, selectedDate]);
 
   // 3.3: เมื่อเปิดแท็บกิจกรรม ให้โหลดบูธ (และตามด้วย QR ของบูธเริ่มต้น)
@@ -838,6 +886,22 @@ export default function AdminDashboard() {
 
               {dailyLogins ? (
                 <>
+                  {dailyLoginsLoading && (
+                    <div className="bg-white p-6 rounded-lg shadow">
+                      <div className="text-center text-xl">
+                        กำลังโหลดข้อมูลสถิติการ Login...
+                      </div>
+                    </div>
+                  )}
+
+                  {dailyLoginsError && (
+                    <div className="bg-white p-6 rounded-lg shadow">
+                      <div className="text-center text-red-600 text-xl">
+                        เกิดข้อผิดพลาด: {dailyLoginsError}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Statistics Cards */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     <div className="bg-white p-6 rounded-lg shadow">

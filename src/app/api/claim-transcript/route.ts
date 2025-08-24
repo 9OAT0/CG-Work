@@ -1,71 +1,152 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { PrismaClient } from '@/generated/prisma'
-import { verify } from 'jsonwebtoken'
-import { getThailandTime } from '@/lib/time'
+// app/api/claim-transcript/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@/generated/prisma";
+import jwt from "jsonwebtoken";
 
-const prisma = new PrismaClient()
-const JWT_SECRET = process.env.JWT_SECRET!
+export const runtime = "nodejs";
+
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log:
+      process.env.NODE_ENV === "development"
+        ? ["query", "warn", "error"]
+        : ["error"],
+  });
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+const JWT_SECRET = process.env.JWT_SECRET!;
+const TRANSCRIPT_COST = 6;
+
+function getBangkokDay() {
+  const th = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
+  );
+  const y = th.getFullYear();
+  const m = String(th.getMonth() + 1).padStart(2, "0");
+  const d = String(th.getDate()).padStart(2, "0");
+  const dayKey = `${y}-${m}-${d}`;
+  return {
+    dayKey,
+    startUtc: new Date(`${dayKey}T00:00:00.000+07:00`),
+    endUtc: new Date(`${dayKey}T23:59:59.999+07:00`),
+  };
+}
+
+async function withTxRetry<T>(
+  fn: (tx: PrismaClient) => Promise<T>,
+  max = 5
+): Promise<T> {
+  let i = 0;
+  while (true) {
+    try {
+      // @ts-ignore
+      return await prisma.$transaction((tx) =>
+        fn(tx as unknown as PrismaClient)
+      );
+    } catch (e: any) {
+      const conflict =
+        e?.code === "P2034" ||
+        /write conflict|deadlock/i.test(e?.message || "");
+      if (conflict && ++i < max) {
+        await new Promise((r) => setTimeout(r, 100 * i));
+        continue;
+      }
+      throw e;
+    }
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const token = req.cookies.get('token')?.value
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const token = req.cookies.get("token")?.value;
+    if (!token)
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    let payload: { id: string };
+    try {
+      payload = jwt.verify(token, JWT_SECRET) as { id: string };
+    } catch {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
-    const decoded: any = verify(token, JWT_SECRET)
-    const userId = decoded.id
-    const transcript_score = 6
+    const userId = payload.id;
+    const { startUtc, endUtc, dayKey } = getBangkokDay();
 
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+    const result = await withTxRetry(async (tx) => {
+      // กันเคลมซ้ำแบบอ่านเร็วก่อน
+      const already = await tx.transcriptLog.findFirst({
+        where: { userId, date: { gte: startUtc, lt: endUtc } },
+        select: { id: true },
+      });
+      if (already) {
+        return {
+          ok: false,
+          code: 400,
+          msg: "คุณรับ transcript วันนี้แล้ว",
+        } as const;
+      }
 
-    // ✅ ตรวจสอบว่ารับ transcript วันนี้ไปแล้วหรือยัง
-    const alreadyClaimed = await prisma.transcriptLog.findFirst({
-      where: {
-        userId,
-        date: {
-          gte: new Date(`${today}T00:00:00Z`),
-          lte: new Date(`${today}T23:59:59Z`)
+      // แต้มรายวันวันนี้ (join + adjustments)
+      const [joinsToday, adjSum] = await Promise.all([
+        tx.boothJoin.count({
+          where: { userId, joinedAt: { gte: startUtc, lt: endUtc } },
+        }),
+        tx.pointAdjustment.aggregate({
+          _sum: { amount: true },
+          where: { userId, appliedAt: { gte: startUtc, lt: endUtc } },
+        }),
+      ]);
+      const todaysPoints = joinsToday + (adjSum._sum.amount ?? 0);
+
+      if (todaysPoints < TRANSCRIPT_COST) {
+        return { ok: false, code: 400, msg: "คะแนนรายวันไม่เพียงพอ" } as const;
+      }
+
+      // สร้าง TranscriptLog โดยมี dayKey (unique กันซ้ำ)
+      try {
+        await tx.transcriptLog.create({
+          data: { userId, date: new Date(), dayKey },
+        });
+      } catch (e: any) {
+        // P2002 = unique constraint (userId+dayKey) → ถือว่าเคลมไปแล้ว
+        if (e?.code === "P2002") {
+          return {
+            ok: false,
+            code: 400,
+            msg: "คุณรับ transcript วันนี้แล้ว",
+          } as const;
         }
+        throw e;
       }
-    })
 
-    if (alreadyClaimed) {
-      return NextResponse.json({ error: 'คุณรับ transcript วันนี้แล้ว' }, { status: 400 })
+      // หักคะแนนรายวัน: บันทึก PointAdjustment = -6 (ไม่แตะ totalPoints)
+      await tx.pointAdjustment.create({
+        data: {
+          userId,
+          amount: -TRANSCRIPT_COST,
+          reason: "CLAIM_TRANSCRIPT",
+          appliedAt: new Date(),
+        },
+      });
+
+      const after = Math.max(0, todaysPoints - TRANSCRIPT_COST);
+      return { ok: true, todaysPoints: after } as const;
+    });
+
+    if (!result.ok) {
+      return NextResponse.json({ error: result.msg }, { status: result.code });
     }
-
-    // ✅ ตรวจสอบคะแนนผู้ใช้
-    const user = await prisma.user.findUnique({
-      where: { id: userId }
-    })
-
-    if (!user) {
-      return NextResponse.json({ error: 'ไม่พบผู้ใช้งาน' }, { status: 404 })
-    }
-
-    if (user.score < transcript_score) {
-      return NextResponse.json({ error: 'คะแนนไม่เพียงพอในการรับ transcript วันนี้' }, { status: 400 })
-    }
-
-    // ✅ บันทึกการรับ transcript
-    await prisma.transcriptLog.create({
-      data: {
-        userId : userId,
-        date : getThailandTime() 
-       }
-    })
-
-    // ✅ หักคะแนน 6
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        score: { decrement: transcript_score }
-      }
-    })
-
-    return NextResponse.json({ message: 'รับ transcript สำเร็จ และหัก 6 คะแนนแล้ว' })
-  } catch (err) {
-    console.error(err)
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 })
+    return NextResponse.json({
+      message: `รับ transcript สำเร็จ และหัก ${TRANSCRIPT_COST} คะแนนรายวันแล้ว`,
+      todaysPoints: result.todaysPoints,
+    });
+  } catch (err: any) {
+    console.error("claim-transcript error:", err);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

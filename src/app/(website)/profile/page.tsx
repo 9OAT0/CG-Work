@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import Navbar from '../components/Navbar';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Navbar from "../components/Navbar";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface ProfileData {
   name: string;
@@ -20,53 +20,58 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [redeemed, setRedeemed] = useState<{ [key: string]: boolean }>({
-    '27': false,
-    '28': false,
-    '29': false,
+    "27": false,
+    "28": false,
+    "29": false,
   });
-  const [popupMessage, setPopupMessage] = useState('');
+  const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [redeeming, setRedeeming] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const fetchProfile = async () => {
       try {
         if (isMounted) {
           setLoading(true);
           setError(null);
         }
-        
-        const res = await fetch('/api/profile', { 
-          credentials: 'include',
-          cache: 'no-store' // Ensure fresh data
+
+        const res = await fetch("/api/profile", {
+          credentials: "include",
+          cache: "no-store", // Ensure fresh data
         });
-        
+
         if (!isMounted) return; // Prevent state updates if component unmounted
-        
+
         const data = await res.json();
 
         if (!res.ok) {
-          setError(data.error || 'Failed to load profile');
-          console.error('Error:', data.error);
+          setError(data.error || "Failed to load profile");
+          console.error("Error:", data.error);
           return;
         }
 
         // Ensure data has the expected structure
-        if (!data || typeof data !== 'object') {
-          setError('Invalid response format');
-          console.error('Invalid data format:', data);
+        if (!data || typeof data !== "object") {
+          setError("Invalid response format");
+          console.error("Invalid data format:", data);
           return;
         }
 
-        const claimedMap: { [key: string]: boolean } = { '27': false, '28': false, '29': false };
-        
+        const claimedMap: { [key: string]: boolean } = {
+          "27": false,
+          "28": false,
+          "29": false,
+        };
+
         // Safely access transcriptDates with proper null checking
         if (data.transcriptDates && Array.isArray(data.transcriptDates)) {
           data.transcriptDates.forEach((date: string) => {
-            if (typeof date === 'string') {
-              const day = date.split('-')[2];
-              if (['27', '28', '29'].includes(day)) claimedMap[day] = true;
+            if (typeof date === "string") {
+              const day = date.split("-")[2];
+              if (["27", "28", "29"].includes(day)) claimedMap[day] = true;
             }
           });
         }
@@ -84,8 +89,8 @@ export default function ProfilePage() {
         setRedeemed(claimedMap);
       } catch (err) {
         if (isMounted) {
-          setError('Failed to load profile');
-          console.error('Failed to load profile:', err);
+          setError("Failed to load profile");
+          console.error("Failed to load profile:", err);
         }
       } finally {
         if (isMounted) {
@@ -95,24 +100,81 @@ export default function ProfilePage() {
     };
 
     fetchProfile();
-    
+
     return () => {
       isMounted = false;
     };
   }, []);
 
-  const handleRedeem = (day: string) => {
+  const [redeemingDay, setRedeemingDay] = useState<string | null>(null);
+
+  // แทนที่ฟังก์ชันเดิม
+  const handleRedeem = async (day: string) => {
     if (!user) return;
-    if (redeemed[day]) return;
+    if (redeemed[day]) return; // กดวันเดิมซ้ำไม่ให้ทำงาน
+    if (redeemingDay) return; // กันดับเบิลคลิก/ยิงซ้ำ
 
     if (user.dailyPoints < 6) {
       const missing = 6 - user.dailyPoints;
-      setPopupMessage(`ท่านยังขาดคะแนนอีก ${missing} คะแนนในการแลกรับทรานสคริปต์`);
+      setPopupMessage(
+        `ท่านยังขาดคะแนนอีก ${missing} คะแนนในการแลกรับทรานสคริปต์`
+      );
       setShowPopup(true);
       return;
     }
 
-    router.push(`/gettranscript?day=${day}`);
+    try {
+      setRedeemingDay(day);
+
+      // เรียก API หัก "คะแนนรายวัน" ในฐานข้อมูล (PointAdjustment = -6)
+      const res = await fetch("/api/claim-transcript", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // เคสเคลมไปแล้ว / คะแนนไม่พอ ฯลฯ
+        const msg = data?.error || "รับทรานสคริปต์ไม่สำเร็จ";
+        setPopupMessage(msg);
+        setShowPopup(true);
+
+        // ถ้าข้อความบอกว่าเคลมไปแล้ว ให้ mark วันนั้นว่า redeemed
+        if (
+          typeof msg === "string" &&
+          msg.includes("รับ transcript วันนี้แล้ว")
+        ) {
+          setRedeemed((prev) => ({ ...prev, [day]: true }));
+        }
+        return;
+      }
+
+      // ✅ สำเร็จ: อัปเดตคะแนนรายวันจากค่าที่ API ส่งกลับมา (todaysPoints)
+      setUser((prev) =>
+        prev
+          ? {
+              ...prev,
+              dailyPoints:
+                typeof data.todaysPoints === "number"
+                  ? data.todaysPoints
+                  : Math.max(0, prev.dailyPoints - 6),
+            }
+          : prev
+      );
+
+      // ✅ mark ว่าวันนี้รับแล้ว (เพื่อให้รูปเป็นเวอร์ชัน c.png)
+      setRedeemed((prev) => ({ ...prev, [day]: true }));
+
+      // ไปหน้ารับทรานสคริปต์ (คงพฤติกรรมเดิมไว้)
+      router.push(`/gettranscript?day=${day}`);
+    } catch (err) {
+      console.error(err);
+      setPopupMessage("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+      setShowPopup(true);
+    } finally {
+      setRedeemingDay(null);
+    }
   };
 
   // Loading state
@@ -168,7 +230,9 @@ export default function ProfilePage() {
         <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10">
           <img src="/prog.jpg" alt="profile" className="w-[110px] h-[110px]" />
           <div className="text-blueBrand flex flex-col gap-1 text-center sm:text-left">
-            <h1 className="text-[22px] sm:text-[24px] font-bold">{user.name}</h1>
+            <h1 className="text-[22px] sm:text-[24px] font-bold">
+              {user.name}
+            </h1>
             <h1 className="text-[16px]">
               {user.student_id} สถานะ : {user.status}
             </h1>
@@ -178,7 +242,9 @@ export default function ProfilePage() {
 
         {/* คะแนนประจำวัน */}
         <div className="border border-gray-300 w-full flex flex-col items-center py-6 px-4 rounded-xl">
-          <h1 className="text-blueBrand text-[14px]">คะแนนประจำวันของการร่วมกิจกรรม</h1>
+          <h1 className="text-blueBrand text-[14px]">
+            คะแนนประจำวันของการร่วมกิจกรรม
+          </h1>
           <div className="w-full max-w-[366px] h-auto bg-blueBrand rounded-[20px] flex flex-col justify-center items-center text-white gap-3 mt-4 py-6 px-4">
             <div className="flex flex-col items-center">
               <h1 className="text-[40px] sm:text-[50px] font-bold">
@@ -191,7 +257,7 @@ export default function ProfilePage() {
             <button
               className="w-[250px] h-[49px] rounded-[30px] bg-pinkBrand"
               onClick={() => {
-                  router.push('/transferpoint')
+                router.push("/transferpoint");
               }}
             >
               แลกรับของรางวัล
@@ -207,8 +273,8 @@ export default function ProfilePage() {
               *ต้องมีอย่างน้อย 6 คะแนนจึงจะรับทรานสคริปต์ได้*
             </h1>
             <div className="flex gap-4 sm:gap-8 mt-2">
-              {['27', '28', '29'].map((day) => (
-                <button key={day} onClick={() => handleRedeem(day)} disabled={redeemed[day]}>
+              {["27", "28", "29"].map((day) => (
+                <button onClick={() => handleRedeem(day)} disabled={redeemed[day] || redeeming} >
                   <img
                     src={redeemed[day] ? `/${day}c.png` : `/${day}.png`}
                     className="w-[70px] sm:w-[86px] h-[70px] sm:h-[86px]"

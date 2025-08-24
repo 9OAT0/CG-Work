@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@/generated/prisma'
 import jwt from 'jsonwebtoken'
-import { getThailandTime } from '@/lib/time'
 
 const prisma = new PrismaClient()
 const JWT_SECRET = process.env.JWT_SECRET!
@@ -9,6 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET!
 export async function POST(req: NextRequest) {
   try {
     const { status, studentId, name, dept } = await req.json()
+    const now = new Date();
 
     console.log('Registration attempt:', { status, studentId: studentId || 'N/A', name, dept })
 
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
     await prisma.visitLog.create({
       data: {
         userId: newUser.id,
-        visitedAt: getThailandTime()
+        visitedAt: now
       },
     })
 
@@ -128,6 +128,7 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      path: "/",                    
       maxAge: 60 * 60 * 24 * 7, // 7 วัน
     })
 

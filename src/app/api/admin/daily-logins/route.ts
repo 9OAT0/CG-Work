@@ -1,144 +1,146 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import jwt from 'jsonwebtoken';
+// app/api/admin/daily-logins/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+
+// รันบน Node.js runtime เพื่อความเข้ากันได้ของ Prisma/ไลบรารี
+export const runtime = "nodejs";
+
+// ใช้ /api/me เพื่อตรวจ session + role แทนการ verify JWT เอง
+async function getMe(request: NextRequest) {
+  const res = await fetch(new URL("/api/me", request.url), {
+    headers: { Cookie: request.headers.get("cookie") || "" },
+    cache: "no-store",
+  });
+  if (!res.ok) return null;
+  return res.json();
+}
+
+// ตรวจรูปแบบวันที่ให้เป็น YYYY-MM-DD เท่านั้น
+function isValidDateParam(s?: string | null) {
+  if (!s) return true; // ไม่ส่งมา = ใช้วันนี้ได้
+  return /^\d{4}-\d{2}-\d{2}$/.test(s);
+}
+
+// กำหนดช่วงวัน (เริ่ม/จบ) ตามเวลาไทย แล้วแปลงเป็น UTC สำหรับ query DB
+function getBangkokDayRangeFromParam(dateParam?: string) {
+  if (dateParam) {
+    const startUtc = new Date(`${dateParam}T00:00:00.000+07:00`);
+    const endUtc   = new Date(`${dateParam}T23:59:59.999+07:00`);
+    return { startUtc, endUtc, dayStr: dateParam };
+  }
+
+  const nowTH = new Date(
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
+  );
+  const y = nowTH.getFullYear();
+  const m = String(nowTH.getMonth() + 1).padStart(2, "0");
+  const d = String(nowTH.getDate()).padStart(2, "0");
+  const dayStr = `${y}-${m}-${d}`;
+
+  const startUtc = new Date(`${dayStr}T00:00:00.000+07:00`);
+  const endUtc   = new Date(`${dayStr}T23:59:59.999+07:00`);
+  return { startUtc, endUtc, dayStr };
+}
 
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication
-    const token = request.cookies.get('token')?.value;
-    if (!token) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // 1) ตรวจ session/role
+    const me = await getMe(request);
+    if (!me) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (me.role !== "admin") {
+      return NextResponse.json(
+        { error: "Admin access required" },
+        { status: 403 }
+      );
     }
 
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
-    } catch (error) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
-    // Check if decoded token has userId
-    if (!decoded || !decoded.userId) {
-      return NextResponse.json({ error: 'Invalid token payload' }, { status: 401 });
-    }
-
-    // Check if user is admin
-    const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
-      select: { role: true }
-    });
-
-    if (!user || user.role !== 'admin') {
-      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
-    }
-
-    // Get query parameters for date filtering
+    // 2) รับ/ตรวจพารามิเตอร์วันที่
     const url = new URL(request.url);
-    const dateParam = url.searchParams.get('date');
-    
-    // Default to today if no date specified
-    const targetDate = dateParam ? new Date(dateParam) : new Date();
-    
-    // Set to start and end of day in Thai timezone (UTC+7)
-    const startOfDay = new Date(targetDate);
-    startOfDay.setHours(0, 0, 0, 0);
-    startOfDay.setTime(startOfDay.getTime() - (7 * 60 * 60 * 1000)); // Convert to UTC
-    
-    const endOfDay = new Date(targetDate);
-    endOfDay.setHours(23, 59, 59, 999);
-    endOfDay.setTime(endOfDay.getTime() - (7 * 60 * 60 * 1000)); // Convert to UTC
+    const dateParamRaw = url.searchParams.get("date");
+    if (!isValidDateParam(dateParamRaw)) {
+      return NextResponse.json(
+        { error: "Invalid date format. Use YYYY-MM-DD" },
+        { status: 400 }
+      );
+    }
 
-    // Get daily login statistics
+    // 3) คำนวณช่วงวันตามเวลาไทย
+    const { startUtc, endUtc, dayStr } = getBangkokDayRangeFromParam(
+      dateParamRaw || undefined
+    );
+
+    // 4) ดึงประวัติการล็อกอิน
     const dailyLogins = await prisma.loginHistory.findMany({
-      where: {
-        loginDate: {
-          gte: startOfDay,
-          lte: endOfDay
-        }
-      },
+      where: { loginDate: { gte: startUtc, lte: endUtc } },
       include: {
         user: {
-          select: {
-            id: true,
-            student_id: true,
-            name: true,
-            role: true
-          }
-        }
+          select: { id: true, student_id: true, name: true, role: true },
+        },
       },
-      orderBy: {
-        loginDate: 'desc'
-      }
+      orderBy: { loginDate: "desc" },
     });
 
-    // Get unique users who logged in today
+    // 5) หา unique users ของวันนั้น
     const uniqueUsers = await prisma.loginHistory.groupBy({
-      by: ['userId'],
-      where: {
-        loginDate: {
-          gte: startOfDay,
-          lte: endOfDay
-        }
-      },
-      _count: {
-        userId: true
-      }
+      by: ["userId"],
+      where: { loginDate: { gte: startUtc, lte: endUtc } },
+      _count: { userId: true },
     });
 
-    // Get user details for unique users
-    const userIds = uniqueUsers.map(u => u.userId);
+    // 6) เติมรายละเอียดผู้ใช้ (กันกรณี user ถูกลบ)
     const users = await prisma.user.findMany({
-      where: {
-        id: {
-          in: userIds
-        }
-      },
+      where: { id: { in: uniqueUsers.map((u) => u.userId) } },
       select: {
         id: true,
         student_id: true,
         name: true,
         role: true,
-        lastLoginDate: true
-      }
+        lastLoginDate: true,
+      },
     });
 
-    // Combine data
-    const uniqueUsersWithDetails = uniqueUsers.map(uniqueUser => {
-      const userDetail = users.find(u => u.id === uniqueUser.userId);
+    const uniqueUsersWithDetails = uniqueUsers.map((u) => {
+      const detail = users.find((x) => x.id === u.userId);
       return {
-        ...userDetail,
-        loginCount: uniqueUser._count.userId
+        id: u.userId,
+        student_id: detail?.student_id ?? null,
+        name: detail?.name ?? "(ไม่พบผู้ใช้)",
+        role: detail?.role ?? "user",
+        lastLoginDate: detail?.lastLoginDate ?? null,
+        loginCount: u._count.userId,
       };
     });
 
-    // Get statistics
+    // 7) รวมสถิติ
     const stats = {
       totalLogins: dailyLogins.length,
-      uniqueUsers: uniqueUsers.length,
-      adminLogins: dailyLogins.filter(login => login.user?.role === 'admin').length,
-      userLogins: dailyLogins.filter(login => login.user?.role === 'user').length,
-      date: targetDate.toISOString().split('T')[0]
+      uniqueUsers: uniqueUsersWithDetails.length,
+      adminLogins: dailyLogins.filter((l) => l.user?.role === "admin").length,
+      userLogins: dailyLogins.filter((l) => l.user?.role === "user").length,
+      date: dayStr,
     };
 
+    // 8) ตอบกลับ
     return NextResponse.json({
       success: true,
       data: {
         stats,
-        loginHistory: dailyLogins.map(login => ({
-          id: login.id,
-          loginDate: login.loginDate,
-          ipAddress: login.ipAddress,
-          userAgent: login.userAgent,
-          user: login.user
+        loginHistory: dailyLogins.map((l) => ({
+          id: l.id,
+          loginDate: l.loginDate,
+          ipAddress: l.ipAddress,
+          userAgent: l.userAgent,
+          user: l.user,
         })),
-        uniqueUsers: uniqueUsersWithDetails
-      }
+        uniqueUsers: uniqueUsersWithDetails,
+      },
     });
-
-  } catch (error) {
-    console.error('Daily logins API error:', error);
+  } catch (err) {
+    console.error("Daily logins API error:", err);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
