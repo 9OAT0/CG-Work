@@ -191,12 +191,7 @@ export default function ProfilePage() {
             <button
               className="w-[250px] h-[49px] rounded-[30px] bg-pinkBrand"
               onClick={() => {
-                if (user.dailyPoints > 0) {
-                  router.push('/transferpoint');
-                } else {
-                  setPopupMessage('คุณยังไม่มีคะแนนสำหรับแลกในวันนี้');
-                  setShowPopup(true);
-                }
+                  router.push('/transferpoint')
               }}
             >
               แลกรับของรางวัล

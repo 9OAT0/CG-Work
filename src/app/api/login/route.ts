@@ -85,7 +85,11 @@ export async function POST(req: NextRequest) {
     { expiresIn: "7d" }
   );
 
-  const res = NextResponse.json({ message: "เข้าสู่ระบบสำเร็จ", user });
+  const res = NextResponse.json({ 
+    message: "เข้าสู่ระบบสำเร็จ", 
+    user,
+    isNewLogin: true // Flag to indicate this is a fresh login
+  });
   res.cookies.set({
     name: "token",
     value: token,

@@ -27,6 +27,9 @@ export default function LoginPage() {
         return;
       }
 
+      // Store login flag for overlay system - ALWAYS set for every login
+      sessionStorage.setItem('isNewLogin', 'true');
+
       alert(data.message || "เข้าสู่ระบบสำเร็จ");
       router.push("/homepage");
     } catch (err) {

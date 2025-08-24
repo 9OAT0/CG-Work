@@ -3,6 +3,7 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useState, useEffect, useRef } from "react";
+import { useOverlay } from "../hooks/useOverlay";
 
 export default function Homepage() {
   const banners = [
@@ -12,78 +13,84 @@ export default function Homepage() {
     "/กำหนดการเวลา 29-2.png",
   ];
 
-  // สำหรับ auto-rotate และ swipe
+  // ---- Slider / swipe refs ----
   const sliderRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // ---- Slider states ----
   const [current, setCurrent] = useState(0);
-  const [showOverlay, setShowOverlay] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
 
-  // Overlay: แสดงวันละครั้ง
+  // ---- New-login flag (จาก sessionStorage) ----
+  const [isNewLogin, setIsNewLogin] = useState(false);
   useEffect(() => {
-    const today = new Date().toDateString();
-    const lastShown = localStorage.getItem("overlayLastShown");
-    const hasSeenToday = lastShown === today;
-    if (!hasSeenToday) setShowOverlay(true);
+    const newLoginFlag = sessionStorage.getItem("isNewLogin");
+    if (newLoginFlag === "true") {
+      setIsNewLogin(true);
+      sessionStorage.removeItem("isNewLogin");
+    }
   }, []);
 
-  // Auto-rotate: เริ่มเมื่อโหลด และเคลียร์เมื่อ unmount
+  // ---- Overlay hook ----
+  const { overlayData, loading, dismissOverlay } = useOverlay(isNewLogin);
+
+  // ---- Fast-close overlay: เปิด overlay ก่อน (พื้นหลังเป็นหน้า Home), ปิดไวทันที ----
+  // ให้ overlay แสดงมาก่อนทุกอย่างโดยยังเห็นหน้า Home ด้านหลัง:
+  // เริ่มต้น open = true แล้วค่อยปิดเองถ้าไม่ควรแสดง
+  const [overlayOpen, setOverlayOpen] = useState(true);
+  const closedRef = useRef(false);
+
+  // เมื่อ hook ตัดสินใจเสร็จ อัปเดตสถานะ overlay
+  useEffect(() => {
+    if (!loading) {
+      const should = !!overlayData?.shouldShow && !closedRef.current;
+      setOverlayOpen(should);
+    }
+  }, [loading, overlayData?.shouldShow]);
+
+  // ล็อกสกอร์ลตอน overlay เปิด
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    if (overlayOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = prev || "";
+    }
+    return () => {
+      document.body.style.overflow = prev || "";
+    };
+  }, [overlayOpen]);
+
+  // ปิด overlay "ทันที" แล้วค่อย persist ภายหลัง
+  const handleCloseOverlay = () => {
+    closedRef.current = true; // กันเด้งกลับระหว่าง hook ยังอัปเดตไม่ทัน
+    setOverlayOpen(false); // ปิดทันที
+    setTimeout(() => {
+      try {
+        dismissOverlay();
+      } catch {}
+    }, 0);
+  };
+
+  // ปิดด้วยคีย์ Esc
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && overlayOpen) handleCloseOverlay();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [overlayOpen]);
+
+  // ---- Slider auto-rotate ----
   useEffect(() => {
     startAuto();
     return stopAuto;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [banners.length]);
 
-  const handleCloseOverlay = () => {
-    setShowOverlay(false);
-    const today = new Date().toDateString();
-    localStorage.setItem("overlayLastShown", today);
-  };
-
-  const nextSlide = () => {
-    setCurrent((prev) => (prev + 1) % banners.length);
-  };
-
-  const prevSlide = () => {
-    setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    stopAuto();
-    setDragging(true);
-    setDragStartX(e.touches[0].clientX);
-    setDragOffset(0);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!dragging) return;
-    const x = e.touches[0].clientX;
-    setDragOffset(x - dragStartX);
-  };
-
-  const handleTouchEnd = () => {
-    if (!dragging) return;
-    // เดิม: const width = sliderRef.current?.offsetWidth || 1;  <-- ผิด
-    const width =
-      viewportRef.current?.offsetWidth ||
-      sliderRef.current?.parentElement?.offsetWidth ||
-      1;
-    const threshold = width * 0.15;
-
-    if (dragOffset > threshold) {
-      prevSlide();
-    } else if (dragOffset < -threshold) {
-      nextSlide();
-    }
-    setDragging(false);
-    setDragOffset(0);
-    startAuto();
-  };
-
-  // ควบคุม auto-rotate
   const stopAuto = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -97,8 +104,41 @@ export default function Homepage() {
     }, 10000);
   };
 
+  // ---- Slider touch handlers ----
+  const nextSlide = () => setCurrent((prev) => (prev + 1) % banners.length);
+  const prevSlide = () =>
+    setCurrent((prev) => (prev - 1 + banners.length) % banners.length);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    stopAuto();
+    setDragging(true);
+    setDragStartX(e.touches[0].clientX);
+    setDragOffset(0);
+  };
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!dragging) return;
+    const x = e.touches[0].clientX;
+    setDragOffset(x - dragStartX);
+  };
+  const handleTouchEnd = () => {
+    if (!dragging) return;
+    const width =
+      viewportRef.current?.offsetWidth ||
+      sliderRef.current?.parentElement?.offsetWidth ||
+      1;
+    const threshold = width * 0.15;
+
+    if (dragOffset > threshold) prevSlide();
+    else if (dragOffset < -threshold) nextSlide();
+
+    setDragging(false);
+    setDragOffset(0);
+    startAuto();
+  };
+
+  // ---- เนื้อหาเพจหลัก (render เสมอ เพื่อให้เห็นเป็นพื้นหลังของ overlay) ----
   return (
-    <>
+    <div className="relative">
       <Navbar />
       <div className="min-h-screen flex flex-col gap-16 px-4">
         {/* Top Background */}
@@ -240,7 +280,7 @@ export default function Homepage() {
             ))}
           </div>
 
-          {/* ปุ่มถอย/ไปต่อ (เดิม) */}
+          {/* Prev / Next */}
           <button
             onClick={prevSlide}
             className="absolute top-1/2 left-2 sm:left-4 transform -translate-y-1/2 bg-white/80 hover:bg-white text-blue-600 hover:text-blue-800 rounded-full p-1.5 sm:p-2 shadow-md transition-all duration-300 hover:scale-105 backdrop-blur-sm"
@@ -280,7 +320,7 @@ export default function Homepage() {
             </svg>
           </button>
 
-          {/* Indicators (จุดเล็ก แต่แตะง่าย) */}
+          {/* Indicators */}
           <div className="absolute bottom-2 sm:bottom-3 left-1/2 transform -translate-x-1/2 flex gap-1 sm:gap-2 bg-white/15 backdrop-blur-sm rounded-full px-1.5 sm:px-3 py-0.5">
             {banners.map((_, index) => (
               <button
@@ -300,7 +340,7 @@ export default function Homepage() {
             ))}
           </div>
 
-          {/* ตัวนับภาพ */}
+          {/* Counter */}
           <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-black/30 text-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs backdrop-blur-sm">
             {current + 1}/{banners.length}
           </div>
@@ -332,30 +372,47 @@ export default function Homepage() {
 
       <Footer />
 
-      {/* Overlay */}
-      {showOverlay && (
+      {/* ---- Overlay Layer (อยู่บนสุด, พื้นหลังคือหน้า Home จริง) ---- */}
+      {overlayOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-[2px] flex items-center justify-center"
           onClick={handleCloseOverlay}
+          role="dialog"
+          aria-modal="true"
         >
+          {/* กันคลิกทะลุไปหลังบ้าน */}
           <div
-            className="relative max-w-[90%] max-h-[90%] rounded-2xl overflow-hidden"
+            className="relative inline-block"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={handleCloseOverlay}
-              className="absolute top-60 right-48 text-white text-6xl"
-            >
-              ×
-            </button>
-            <img
-              src="/overlay.PNG"
-              alt="Overlay"
-              className="w-full h-full object-contain"
-            />
+            {loading ? (
+              <div className="w-24 h-24 rounded-2xl bg-black/50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-white" />
+              </div>
+            ) : (
+              <>
+                <img
+                  src={overlayData?.imageUrl || "/overlay.PNG"}
+                  alt="แจ้งเตือน"
+                  className="block rounded-2xl w-auto h-auto max-w-[90vw] max-h-[90vh] object-contain shadow-2xl"
+                  loading="eager"
+                  decoding="async"
+                />
+                <button
+                  type="button"
+                  onClick={handleCloseOverlay}
+                  className="absolute top-2 right-2 w-10 h-10 rounded-full bg-black/70 text-white text-2xl leading-none
+                             flex items-center justify-center hover:bg-black/80 transition shadow-lg
+                             focus:outline-none focus:ring-2 focus:ring-white/60"
+                  aria-label="ปิด overlay"
+                >
+                  ×
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

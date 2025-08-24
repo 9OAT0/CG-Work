@@ -223,7 +223,7 @@ export default function TransferpointPage() {
             onClick={restartScan}
             className="px-5 py-2 rounded-[30px] bg-blueBrand text-white text-[16px]"
           >
-            🔄 สแกนอีกครั้ง
+            สแกนอีกครั้ง
           </button>
           <a
             href="/profile"

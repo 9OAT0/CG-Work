@@ -304,6 +304,26 @@ exports.Prisma.QrScanLogScalarFieldEnum = {
   scannedAt: 'scannedAt'
 };
 
+exports.Prisma.UserOverlayLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  triggerType: 'triggerType',
+  shownAt: 'shownAt',
+  sessionId: 'sessionId',
+  dismissed: 'dismissed'
+};
+
+exports.Prisma.UserSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sessionId: 'sessionId',
+  startedAt: 'startedAt',
+  lastActiveAt: 'lastActiveAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  isActive: 'isActive'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -317,6 +337,14 @@ exports.RedeemRule = exports.$Enums.RedeemRule = {
   ONCE_PER_EVENT: 'ONCE_PER_EVENT',
   ONCE_PER_DAY: 'ONCE_PER_DAY',
   UNLIMITED: 'UNLIMITED'
+};
+
+exports.OverlayTriggerType = exports.$Enums.OverlayTriggerType = {
+  DAILY_FIRST_VISIT: 'DAILY_FIRST_VISIT',
+  EVERY_LOGIN: 'EVERY_LOGIN',
+  NEW_SESSION: 'NEW_SESSION',
+  FIRST_TIME_USER: 'FIRST_TIME_USER',
+  RETURN_USER: 'RETURN_USER'
 };
 
 exports.Prisma.ModelName = {
@@ -339,7 +367,9 @@ exports.Prisma.ModelName = {
   LoginHistory: 'LoginHistory',
   QrCode: 'QrCode',
   PlayPass: 'PlayPass',
-  QrScanLog: 'QrScanLog'
+  QrScanLog: 'QrScanLog',
+  UserOverlayLog: 'UserOverlayLog',
+  UserSession: 'UserSession'
 };
 
 /**

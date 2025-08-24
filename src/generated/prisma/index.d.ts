@@ -113,6 +113,16 @@ export type PlayPass = $Result.DefaultSelection<Prisma.$PlayPassPayload>
  * 
  */
 export type QrScanLog = $Result.DefaultSelection<Prisma.$QrScanLogPayload>
+/**
+ * Model UserOverlayLog
+ * 
+ */
+export type UserOverlayLog = $Result.DefaultSelection<Prisma.$UserOverlayLogPayload>
+/**
+ * Model UserSession
+ * 
+ */
+export type UserSession = $Result.DefaultSelection<Prisma.$UserSessionPayload>
 
 /**
  * Enums
@@ -126,11 +136,26 @@ export namespace $Enums {
 
 export type RedeemRule = (typeof RedeemRule)[keyof typeof RedeemRule]
 
+
+export const OverlayTriggerType: {
+  DAILY_FIRST_VISIT: 'DAILY_FIRST_VISIT',
+  EVERY_LOGIN: 'EVERY_LOGIN',
+  NEW_SESSION: 'NEW_SESSION',
+  FIRST_TIME_USER: 'FIRST_TIME_USER',
+  RETURN_USER: 'RETURN_USER'
+};
+
+export type OverlayTriggerType = (typeof OverlayTriggerType)[keyof typeof OverlayTriggerType]
+
 }
 
 export type RedeemRule = $Enums.RedeemRule
 
 export const RedeemRule: typeof $Enums.RedeemRule
+
+export type OverlayTriggerType = $Enums.OverlayTriggerType
+
+export const OverlayTriggerType: typeof $Enums.OverlayTriggerType
 
 /**
  * ##  Prisma Client ʲˢ
@@ -416,6 +441,26 @@ export class PrismaClient<
     * ```
     */
   get qrScanLog(): Prisma.QrScanLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userOverlayLog`: Exposes CRUD operations for the **UserOverlayLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserOverlayLogs
+    * const userOverlayLogs = await prisma.userOverlayLog.findMany()
+    * ```
+    */
+  get userOverlayLog(): Prisma.UserOverlayLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userSession`: Exposes CRUD operations for the **UserSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserSessions
+    * const userSessions = await prisma.userSession.findMany()
+    * ```
+    */
+  get userSession(): Prisma.UserSessionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -875,7 +920,9 @@ export namespace Prisma {
     LoginHistory: 'LoginHistory',
     QrCode: 'QrCode',
     PlayPass: 'PlayPass',
-    QrScanLog: 'QrScanLog'
+    QrScanLog: 'QrScanLog',
+    UserOverlayLog: 'UserOverlayLog',
+    UserSession: 'UserSession'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -894,7 +941,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode" | "loginHistory" | "qrCode" | "playPass" | "qrScanLog"
+      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode" | "loginHistory" | "qrCode" | "playPass" | "qrScanLog" | "userOverlayLog" | "userSession"
       txIsolationLevel: never
     }
     model: {
@@ -2378,6 +2425,154 @@ export namespace Prisma {
           }
         }
       }
+      UserOverlayLog: {
+        payload: Prisma.$UserOverlayLogPayload<ExtArgs>
+        fields: Prisma.UserOverlayLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserOverlayLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOverlayLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserOverlayLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOverlayLogPayload>
+          }
+          findFirst: {
+            args: Prisma.UserOverlayLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOverlayLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserOverlayLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOverlayLogPayload>
+          }
+          findMany: {
+            args: Prisma.UserOverlayLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOverlayLogPayload>[]
+          }
+          create: {
+            args: Prisma.UserOverlayLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOverlayLogPayload>
+          }
+          createMany: {
+            args: Prisma.UserOverlayLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.UserOverlayLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOverlayLogPayload>
+          }
+          update: {
+            args: Prisma.UserOverlayLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOverlayLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserOverlayLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserOverlayLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserOverlayLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserOverlayLogPayload>
+          }
+          aggregate: {
+            args: Prisma.UserOverlayLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserOverlayLog>
+          }
+          groupBy: {
+            args: Prisma.UserOverlayLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserOverlayLogGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.UserOverlayLogFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.UserOverlayLogAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.UserOverlayLogCountArgs<ExtArgs>
+            result: $Utils.Optional<UserOverlayLogCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserSession: {
+        payload: Prisma.$UserSessionPayload<ExtArgs>
+        fields: Prisma.UserSessionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserSessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserSessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>
+          }
+          findFirst: {
+            args: Prisma.UserSessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserSessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>
+          }
+          findMany: {
+            args: Prisma.UserSessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>[]
+          }
+          create: {
+            args: Prisma.UserSessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>
+          }
+          createMany: {
+            args: Prisma.UserSessionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.UserSessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>
+          }
+          update: {
+            args: Prisma.UserSessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserSessionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserSessionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserSessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserSessionPayload>
+          }
+          aggregate: {
+            args: Prisma.UserSessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserSession>
+          }
+          groupBy: {
+            args: Prisma.UserSessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserSessionGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.UserSessionFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.UserSessionAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.UserSessionCountArgs<ExtArgs>
+            result: $Utils.Optional<UserSessionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2477,6 +2672,8 @@ export namespace Prisma {
     qrCode?: QrCodeOmit
     playPass?: PlayPassOmit
     qrScanLog?: QrScanLogOmit
+    userOverlayLog?: UserOverlayLogOmit
+    userSession?: UserSessionOmit
   }
 
   /* Types for Logging */
@@ -2573,6 +2770,8 @@ export namespace Prisma {
     loginHistory: number
     PlayPass: number
     QrScanLog: number
+    overlayLogs: number
+    sessions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2592,6 +2791,8 @@ export namespace Prisma {
     loginHistory?: boolean | UserCountOutputTypeCountLoginHistoryArgs
     PlayPass?: boolean | UserCountOutputTypeCountPlayPassArgs
     QrScanLog?: boolean | UserCountOutputTypeCountQrScanLogArgs
+    overlayLogs?: boolean | UserCountOutputTypeCountOverlayLogsArgs
+    sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   }
 
   // Custom InputTypes
@@ -2715,6 +2916,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountQrScanLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: QrScanLogWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountOverlayLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserOverlayLogWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserSessionWhereInput
   }
 
 
@@ -3117,6 +3332,8 @@ export namespace Prisma {
     loginHistory?: boolean | User$loginHistoryArgs<ExtArgs>
     PlayPass?: boolean | User$PlayPassArgs<ExtArgs>
     QrScanLog?: boolean | User$QrScanLogArgs<ExtArgs>
+    overlayLogs?: boolean | User$overlayLogsArgs<ExtArgs>
+    sessions?: boolean | User$sessionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3155,6 +3372,8 @@ export namespace Prisma {
     loginHistory?: boolean | User$loginHistoryArgs<ExtArgs>
     PlayPass?: boolean | User$PlayPassArgs<ExtArgs>
     QrScanLog?: boolean | User$QrScanLogArgs<ExtArgs>
+    overlayLogs?: boolean | User$overlayLogsArgs<ExtArgs>
+    sessions?: boolean | User$sessionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -3177,6 +3396,8 @@ export namespace Prisma {
       loginHistory: Prisma.$LoginHistoryPayload<ExtArgs>[]
       PlayPass: Prisma.$PlayPassPayload<ExtArgs>[]
       QrScanLog: Prisma.$QrScanLogPayload<ExtArgs>[]
+      overlayLogs: Prisma.$UserOverlayLogPayload<ExtArgs>[]
+      sessions: Prisma.$UserSessionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3570,6 +3791,8 @@ export namespace Prisma {
     loginHistory<T extends User$loginHistoryArgs<ExtArgs> = {}>(args?: Subset<T, User$loginHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LoginHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     PlayPass<T extends User$PlayPassArgs<ExtArgs> = {}>(args?: Subset<T, User$PlayPassArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PlayPassPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     QrScanLog<T extends User$QrScanLogArgs<ExtArgs> = {}>(args?: Subset<T, User$QrScanLogArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QrScanLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    overlayLogs<T extends User$overlayLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$overlayLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4362,6 +4585,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: QrScanLogScalarFieldEnum | QrScanLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.overlayLogs
+   */
+  export type User$overlayLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    where?: UserOverlayLogWhereInput
+    orderBy?: UserOverlayLogOrderByWithRelationInput | UserOverlayLogOrderByWithRelationInput[]
+    cursor?: UserOverlayLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserOverlayLogScalarFieldEnum | UserOverlayLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.sessions
+   */
+  export type User$sessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    where?: UserSessionWhereInput
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[]
+    cursor?: UserSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserSessionScalarFieldEnum | UserSessionScalarFieldEnum[]
   }
 
   /**
@@ -23732,6 +24003,2008 @@ export namespace Prisma {
 
 
   /**
+   * Model UserOverlayLog
+   */
+
+  export type AggregateUserOverlayLog = {
+    _count: UserOverlayLogCountAggregateOutputType | null
+    _min: UserOverlayLogMinAggregateOutputType | null
+    _max: UserOverlayLogMaxAggregateOutputType | null
+  }
+
+  export type UserOverlayLogMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    triggerType: $Enums.OverlayTriggerType | null
+    shownAt: Date | null
+    sessionId: string | null
+    dismissed: boolean | null
+  }
+
+  export type UserOverlayLogMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    triggerType: $Enums.OverlayTriggerType | null
+    shownAt: Date | null
+    sessionId: string | null
+    dismissed: boolean | null
+  }
+
+  export type UserOverlayLogCountAggregateOutputType = {
+    id: number
+    userId: number
+    triggerType: number
+    shownAt: number
+    sessionId: number
+    dismissed: number
+    _all: number
+  }
+
+
+  export type UserOverlayLogMinAggregateInputType = {
+    id?: true
+    userId?: true
+    triggerType?: true
+    shownAt?: true
+    sessionId?: true
+    dismissed?: true
+  }
+
+  export type UserOverlayLogMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    triggerType?: true
+    shownAt?: true
+    sessionId?: true
+    dismissed?: true
+  }
+
+  export type UserOverlayLogCountAggregateInputType = {
+    id?: true
+    userId?: true
+    triggerType?: true
+    shownAt?: true
+    sessionId?: true
+    dismissed?: true
+    _all?: true
+  }
+
+  export type UserOverlayLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserOverlayLog to aggregate.
+     */
+    where?: UserOverlayLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserOverlayLogs to fetch.
+     */
+    orderBy?: UserOverlayLogOrderByWithRelationInput | UserOverlayLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserOverlayLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserOverlayLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserOverlayLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserOverlayLogs
+    **/
+    _count?: true | UserOverlayLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserOverlayLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserOverlayLogMaxAggregateInputType
+  }
+
+  export type GetUserOverlayLogAggregateType<T extends UserOverlayLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserOverlayLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserOverlayLog[P]>
+      : GetScalarType<T[P], AggregateUserOverlayLog[P]>
+  }
+
+
+
+
+  export type UserOverlayLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserOverlayLogWhereInput
+    orderBy?: UserOverlayLogOrderByWithAggregationInput | UserOverlayLogOrderByWithAggregationInput[]
+    by: UserOverlayLogScalarFieldEnum[] | UserOverlayLogScalarFieldEnum
+    having?: UserOverlayLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserOverlayLogCountAggregateInputType | true
+    _min?: UserOverlayLogMinAggregateInputType
+    _max?: UserOverlayLogMaxAggregateInputType
+  }
+
+  export type UserOverlayLogGroupByOutputType = {
+    id: string
+    userId: string
+    triggerType: $Enums.OverlayTriggerType
+    shownAt: Date
+    sessionId: string | null
+    dismissed: boolean
+    _count: UserOverlayLogCountAggregateOutputType | null
+    _min: UserOverlayLogMinAggregateOutputType | null
+    _max: UserOverlayLogMaxAggregateOutputType | null
+  }
+
+  type GetUserOverlayLogGroupByPayload<T extends UserOverlayLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserOverlayLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserOverlayLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserOverlayLogGroupByOutputType[P]>
+            : GetScalarType<T[P], UserOverlayLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserOverlayLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    triggerType?: boolean
+    shownAt?: boolean
+    sessionId?: boolean
+    dismissed?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userOverlayLog"]>
+
+
+
+  export type UserOverlayLogSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    triggerType?: boolean
+    shownAt?: boolean
+    sessionId?: boolean
+    dismissed?: boolean
+  }
+
+  export type UserOverlayLogOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "triggerType" | "shownAt" | "sessionId" | "dismissed", ExtArgs["result"]["userOverlayLog"]>
+  export type UserOverlayLogInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserOverlayLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserOverlayLog"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      triggerType: $Enums.OverlayTriggerType
+      shownAt: Date
+      sessionId: string | null
+      dismissed: boolean
+    }, ExtArgs["result"]["userOverlayLog"]>
+    composites: {}
+  }
+
+  type UserOverlayLogGetPayload<S extends boolean | null | undefined | UserOverlayLogDefaultArgs> = $Result.GetResult<Prisma.$UserOverlayLogPayload, S>
+
+  type UserOverlayLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserOverlayLogFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserOverlayLogCountAggregateInputType | true
+    }
+
+  export interface UserOverlayLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserOverlayLog'], meta: { name: 'UserOverlayLog' } }
+    /**
+     * Find zero or one UserOverlayLog that matches the filter.
+     * @param {UserOverlayLogFindUniqueArgs} args - Arguments to find a UserOverlayLog
+     * @example
+     * // Get one UserOverlayLog
+     * const userOverlayLog = await prisma.userOverlayLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserOverlayLogFindUniqueArgs>(args: SelectSubset<T, UserOverlayLogFindUniqueArgs<ExtArgs>>): Prisma__UserOverlayLogClient<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserOverlayLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserOverlayLogFindUniqueOrThrowArgs} args - Arguments to find a UserOverlayLog
+     * @example
+     * // Get one UserOverlayLog
+     * const userOverlayLog = await prisma.userOverlayLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserOverlayLogFindUniqueOrThrowArgs>(args: SelectSubset<T, UserOverlayLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserOverlayLogClient<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserOverlayLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOverlayLogFindFirstArgs} args - Arguments to find a UserOverlayLog
+     * @example
+     * // Get one UserOverlayLog
+     * const userOverlayLog = await prisma.userOverlayLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserOverlayLogFindFirstArgs>(args?: SelectSubset<T, UserOverlayLogFindFirstArgs<ExtArgs>>): Prisma__UserOverlayLogClient<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserOverlayLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOverlayLogFindFirstOrThrowArgs} args - Arguments to find a UserOverlayLog
+     * @example
+     * // Get one UserOverlayLog
+     * const userOverlayLog = await prisma.userOverlayLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserOverlayLogFindFirstOrThrowArgs>(args?: SelectSubset<T, UserOverlayLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserOverlayLogClient<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserOverlayLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOverlayLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserOverlayLogs
+     * const userOverlayLogs = await prisma.userOverlayLog.findMany()
+     * 
+     * // Get first 10 UserOverlayLogs
+     * const userOverlayLogs = await prisma.userOverlayLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userOverlayLogWithIdOnly = await prisma.userOverlayLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserOverlayLogFindManyArgs>(args?: SelectSubset<T, UserOverlayLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserOverlayLog.
+     * @param {UserOverlayLogCreateArgs} args - Arguments to create a UserOverlayLog.
+     * @example
+     * // Create one UserOverlayLog
+     * const UserOverlayLog = await prisma.userOverlayLog.create({
+     *   data: {
+     *     // ... data to create a UserOverlayLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserOverlayLogCreateArgs>(args: SelectSubset<T, UserOverlayLogCreateArgs<ExtArgs>>): Prisma__UserOverlayLogClient<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserOverlayLogs.
+     * @param {UserOverlayLogCreateManyArgs} args - Arguments to create many UserOverlayLogs.
+     * @example
+     * // Create many UserOverlayLogs
+     * const userOverlayLog = await prisma.userOverlayLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserOverlayLogCreateManyArgs>(args?: SelectSubset<T, UserOverlayLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a UserOverlayLog.
+     * @param {UserOverlayLogDeleteArgs} args - Arguments to delete one UserOverlayLog.
+     * @example
+     * // Delete one UserOverlayLog
+     * const UserOverlayLog = await prisma.userOverlayLog.delete({
+     *   where: {
+     *     // ... filter to delete one UserOverlayLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserOverlayLogDeleteArgs>(args: SelectSubset<T, UserOverlayLogDeleteArgs<ExtArgs>>): Prisma__UserOverlayLogClient<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserOverlayLog.
+     * @param {UserOverlayLogUpdateArgs} args - Arguments to update one UserOverlayLog.
+     * @example
+     * // Update one UserOverlayLog
+     * const userOverlayLog = await prisma.userOverlayLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserOverlayLogUpdateArgs>(args: SelectSubset<T, UserOverlayLogUpdateArgs<ExtArgs>>): Prisma__UserOverlayLogClient<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserOverlayLogs.
+     * @param {UserOverlayLogDeleteManyArgs} args - Arguments to filter UserOverlayLogs to delete.
+     * @example
+     * // Delete a few UserOverlayLogs
+     * const { count } = await prisma.userOverlayLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserOverlayLogDeleteManyArgs>(args?: SelectSubset<T, UserOverlayLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserOverlayLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOverlayLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserOverlayLogs
+     * const userOverlayLog = await prisma.userOverlayLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserOverlayLogUpdateManyArgs>(args: SelectSubset<T, UserOverlayLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserOverlayLog.
+     * @param {UserOverlayLogUpsertArgs} args - Arguments to update or create a UserOverlayLog.
+     * @example
+     * // Update or create a UserOverlayLog
+     * const userOverlayLog = await prisma.userOverlayLog.upsert({
+     *   create: {
+     *     // ... data to create a UserOverlayLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserOverlayLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserOverlayLogUpsertArgs>(args: SelectSubset<T, UserOverlayLogUpsertArgs<ExtArgs>>): Prisma__UserOverlayLogClient<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserOverlayLogs that matches the filter.
+     * @param {UserOverlayLogFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const userOverlayLog = await prisma.userOverlayLog.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: UserOverlayLogFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a UserOverlayLog.
+     * @param {UserOverlayLogAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const userOverlayLog = await prisma.userOverlayLog.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: UserOverlayLogAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of UserOverlayLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOverlayLogCountArgs} args - Arguments to filter UserOverlayLogs to count.
+     * @example
+     * // Count the number of UserOverlayLogs
+     * const count = await prisma.userOverlayLog.count({
+     *   where: {
+     *     // ... the filter for the UserOverlayLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserOverlayLogCountArgs>(
+      args?: Subset<T, UserOverlayLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserOverlayLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserOverlayLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOverlayLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserOverlayLogAggregateArgs>(args: Subset<T, UserOverlayLogAggregateArgs>): Prisma.PrismaPromise<GetUserOverlayLogAggregateType<T>>
+
+    /**
+     * Group by UserOverlayLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserOverlayLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserOverlayLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserOverlayLogGroupByArgs['orderBy'] }
+        : { orderBy?: UserOverlayLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserOverlayLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserOverlayLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserOverlayLog model
+   */
+  readonly fields: UserOverlayLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserOverlayLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserOverlayLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserOverlayLog model
+   */
+  interface UserOverlayLogFieldRefs {
+    readonly id: FieldRef<"UserOverlayLog", 'String'>
+    readonly userId: FieldRef<"UserOverlayLog", 'String'>
+    readonly triggerType: FieldRef<"UserOverlayLog", 'OverlayTriggerType'>
+    readonly shownAt: FieldRef<"UserOverlayLog", 'DateTime'>
+    readonly sessionId: FieldRef<"UserOverlayLog", 'String'>
+    readonly dismissed: FieldRef<"UserOverlayLog", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserOverlayLog findUnique
+   */
+  export type UserOverlayLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOverlayLog to fetch.
+     */
+    where: UserOverlayLogWhereUniqueInput
+  }
+
+  /**
+   * UserOverlayLog findUniqueOrThrow
+   */
+  export type UserOverlayLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOverlayLog to fetch.
+     */
+    where: UserOverlayLogWhereUniqueInput
+  }
+
+  /**
+   * UserOverlayLog findFirst
+   */
+  export type UserOverlayLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOverlayLog to fetch.
+     */
+    where?: UserOverlayLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserOverlayLogs to fetch.
+     */
+    orderBy?: UserOverlayLogOrderByWithRelationInput | UserOverlayLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserOverlayLogs.
+     */
+    cursor?: UserOverlayLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserOverlayLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserOverlayLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserOverlayLogs.
+     */
+    distinct?: UserOverlayLogScalarFieldEnum | UserOverlayLogScalarFieldEnum[]
+  }
+
+  /**
+   * UserOverlayLog findFirstOrThrow
+   */
+  export type UserOverlayLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOverlayLog to fetch.
+     */
+    where?: UserOverlayLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserOverlayLogs to fetch.
+     */
+    orderBy?: UserOverlayLogOrderByWithRelationInput | UserOverlayLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserOverlayLogs.
+     */
+    cursor?: UserOverlayLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserOverlayLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserOverlayLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserOverlayLogs.
+     */
+    distinct?: UserOverlayLogScalarFieldEnum | UserOverlayLogScalarFieldEnum[]
+  }
+
+  /**
+   * UserOverlayLog findMany
+   */
+  export type UserOverlayLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    /**
+     * Filter, which UserOverlayLogs to fetch.
+     */
+    where?: UserOverlayLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserOverlayLogs to fetch.
+     */
+    orderBy?: UserOverlayLogOrderByWithRelationInput | UserOverlayLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserOverlayLogs.
+     */
+    cursor?: UserOverlayLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserOverlayLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserOverlayLogs.
+     */
+    skip?: number
+    distinct?: UserOverlayLogScalarFieldEnum | UserOverlayLogScalarFieldEnum[]
+  }
+
+  /**
+   * UserOverlayLog create
+   */
+  export type UserOverlayLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserOverlayLog.
+     */
+    data: XOR<UserOverlayLogCreateInput, UserOverlayLogUncheckedCreateInput>
+  }
+
+  /**
+   * UserOverlayLog createMany
+   */
+  export type UserOverlayLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserOverlayLogs.
+     */
+    data: UserOverlayLogCreateManyInput | UserOverlayLogCreateManyInput[]
+  }
+
+  /**
+   * UserOverlayLog update
+   */
+  export type UserOverlayLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserOverlayLog.
+     */
+    data: XOR<UserOverlayLogUpdateInput, UserOverlayLogUncheckedUpdateInput>
+    /**
+     * Choose, which UserOverlayLog to update.
+     */
+    where: UserOverlayLogWhereUniqueInput
+  }
+
+  /**
+   * UserOverlayLog updateMany
+   */
+  export type UserOverlayLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserOverlayLogs.
+     */
+    data: XOR<UserOverlayLogUpdateManyMutationInput, UserOverlayLogUncheckedUpdateManyInput>
+    /**
+     * Filter which UserOverlayLogs to update
+     */
+    where?: UserOverlayLogWhereInput
+    /**
+     * Limit how many UserOverlayLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserOverlayLog upsert
+   */
+  export type UserOverlayLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserOverlayLog to update in case it exists.
+     */
+    where: UserOverlayLogWhereUniqueInput
+    /**
+     * In case the UserOverlayLog found by the `where` argument doesn't exist, create a new UserOverlayLog with this data.
+     */
+    create: XOR<UserOverlayLogCreateInput, UserOverlayLogUncheckedCreateInput>
+    /**
+     * In case the UserOverlayLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserOverlayLogUpdateInput, UserOverlayLogUncheckedUpdateInput>
+  }
+
+  /**
+   * UserOverlayLog delete
+   */
+  export type UserOverlayLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+    /**
+     * Filter which UserOverlayLog to delete.
+     */
+    where: UserOverlayLogWhereUniqueInput
+  }
+
+  /**
+   * UserOverlayLog deleteMany
+   */
+  export type UserOverlayLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserOverlayLogs to delete
+     */
+    where?: UserOverlayLogWhereInput
+    /**
+     * Limit how many UserOverlayLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserOverlayLog findRaw
+   */
+  export type UserOverlayLogFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * UserOverlayLog aggregateRaw
+   */
+  export type UserOverlayLogAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * UserOverlayLog without action
+   */
+  export type UserOverlayLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserOverlayLog
+     */
+    select?: UserOverlayLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserOverlayLog
+     */
+    omit?: UserOverlayLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserOverlayLogInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserSession
+   */
+
+  export type AggregateUserSession = {
+    _count: UserSessionCountAggregateOutputType | null
+    _min: UserSessionMinAggregateOutputType | null
+    _max: UserSessionMaxAggregateOutputType | null
+  }
+
+  export type UserSessionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    sessionId: string | null
+    startedAt: Date | null
+    lastActiveAt: Date | null
+    ipAddress: string | null
+    userAgent: string | null
+    isActive: boolean | null
+  }
+
+  export type UserSessionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    sessionId: string | null
+    startedAt: Date | null
+    lastActiveAt: Date | null
+    ipAddress: string | null
+    userAgent: string | null
+    isActive: boolean | null
+  }
+
+  export type UserSessionCountAggregateOutputType = {
+    id: number
+    userId: number
+    sessionId: number
+    startedAt: number
+    lastActiveAt: number
+    ipAddress: number
+    userAgent: number
+    isActive: number
+    _all: number
+  }
+
+
+  export type UserSessionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    sessionId?: true
+    startedAt?: true
+    lastActiveAt?: true
+    ipAddress?: true
+    userAgent?: true
+    isActive?: true
+  }
+
+  export type UserSessionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    sessionId?: true
+    startedAt?: true
+    lastActiveAt?: true
+    ipAddress?: true
+    userAgent?: true
+    isActive?: true
+  }
+
+  export type UserSessionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    sessionId?: true
+    startedAt?: true
+    lastActiveAt?: true
+    ipAddress?: true
+    userAgent?: true
+    isActive?: true
+    _all?: true
+  }
+
+  export type UserSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSession to aggregate.
+     */
+    where?: UserSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSessions to fetch.
+     */
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserSessions
+    **/
+    _count?: true | UserSessionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserSessionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserSessionMaxAggregateInputType
+  }
+
+  export type GetUserSessionAggregateType<T extends UserSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserSession]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserSession[P]>
+      : GetScalarType<T[P], AggregateUserSession[P]>
+  }
+
+
+
+
+  export type UserSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserSessionWhereInput
+    orderBy?: UserSessionOrderByWithAggregationInput | UserSessionOrderByWithAggregationInput[]
+    by: UserSessionScalarFieldEnum[] | UserSessionScalarFieldEnum
+    having?: UserSessionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserSessionCountAggregateInputType | true
+    _min?: UserSessionMinAggregateInputType
+    _max?: UserSessionMaxAggregateInputType
+  }
+
+  export type UserSessionGroupByOutputType = {
+    id: string
+    userId: string
+    sessionId: string
+    startedAt: Date
+    lastActiveAt: Date
+    ipAddress: string | null
+    userAgent: string | null
+    isActive: boolean
+    _count: UserSessionCountAggregateOutputType | null
+    _min: UserSessionMinAggregateOutputType | null
+    _max: UserSessionMaxAggregateOutputType | null
+  }
+
+  type GetUserSessionGroupByPayload<T extends UserSessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserSessionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserSessionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserSessionGroupByOutputType[P]>
+            : GetScalarType<T[P], UserSessionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    sessionId?: boolean
+    startedAt?: boolean
+    lastActiveAt?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    isActive?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userSession"]>
+
+
+
+  export type UserSessionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    sessionId?: boolean
+    startedAt?: boolean
+    lastActiveAt?: boolean
+    ipAddress?: boolean
+    userAgent?: boolean
+    isActive?: boolean
+  }
+
+  export type UserSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "sessionId" | "startedAt" | "lastActiveAt" | "ipAddress" | "userAgent" | "isActive", ExtArgs["result"]["userSession"]>
+  export type UserSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $UserSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserSession"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      sessionId: string
+      startedAt: Date
+      lastActiveAt: Date
+      ipAddress: string | null
+      userAgent: string | null
+      isActive: boolean
+    }, ExtArgs["result"]["userSession"]>
+    composites: {}
+  }
+
+  type UserSessionGetPayload<S extends boolean | null | undefined | UserSessionDefaultArgs> = $Result.GetResult<Prisma.$UserSessionPayload, S>
+
+  type UserSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserSessionCountAggregateInputType | true
+    }
+
+  export interface UserSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserSession'], meta: { name: 'UserSession' } }
+    /**
+     * Find zero or one UserSession that matches the filter.
+     * @param {UserSessionFindUniqueArgs} args - Arguments to find a UserSession
+     * @example
+     * // Get one UserSession
+     * const userSession = await prisma.userSession.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserSessionFindUniqueArgs>(args: SelectSubset<T, UserSessionFindUniqueArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserSession that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserSessionFindUniqueOrThrowArgs} args - Arguments to find a UserSession
+     * @example
+     * // Get one UserSession
+     * const userSession = await prisma.userSession.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, UserSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserSession that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionFindFirstArgs} args - Arguments to find a UserSession
+     * @example
+     * // Get one UserSession
+     * const userSession = await prisma.userSession.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserSessionFindFirstArgs>(args?: SelectSubset<T, UserSessionFindFirstArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserSession that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionFindFirstOrThrowArgs} args - Arguments to find a UserSession
+     * @example
+     * // Get one UserSession
+     * const userSession = await prisma.userSession.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, UserSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserSessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserSessions
+     * const userSessions = await prisma.userSession.findMany()
+     * 
+     * // Get first 10 UserSessions
+     * const userSessions = await prisma.userSession.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userSessionWithIdOnly = await prisma.userSession.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserSessionFindManyArgs>(args?: SelectSubset<T, UserSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserSession.
+     * @param {UserSessionCreateArgs} args - Arguments to create a UserSession.
+     * @example
+     * // Create one UserSession
+     * const UserSession = await prisma.userSession.create({
+     *   data: {
+     *     // ... data to create a UserSession
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserSessionCreateArgs>(args: SelectSubset<T, UserSessionCreateArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserSessions.
+     * @param {UserSessionCreateManyArgs} args - Arguments to create many UserSessions.
+     * @example
+     * // Create many UserSessions
+     * const userSession = await prisma.userSession.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserSessionCreateManyArgs>(args?: SelectSubset<T, UserSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a UserSession.
+     * @param {UserSessionDeleteArgs} args - Arguments to delete one UserSession.
+     * @example
+     * // Delete one UserSession
+     * const UserSession = await prisma.userSession.delete({
+     *   where: {
+     *     // ... filter to delete one UserSession
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserSessionDeleteArgs>(args: SelectSubset<T, UserSessionDeleteArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserSession.
+     * @param {UserSessionUpdateArgs} args - Arguments to update one UserSession.
+     * @example
+     * // Update one UserSession
+     * const userSession = await prisma.userSession.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserSessionUpdateArgs>(args: SelectSubset<T, UserSessionUpdateArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserSessions.
+     * @param {UserSessionDeleteManyArgs} args - Arguments to filter UserSessions to delete.
+     * @example
+     * // Delete a few UserSessions
+     * const { count } = await prisma.userSession.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserSessionDeleteManyArgs>(args?: SelectSubset<T, UserSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserSessions
+     * const userSession = await prisma.userSession.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserSessionUpdateManyArgs>(args: SelectSubset<T, UserSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserSession.
+     * @param {UserSessionUpsertArgs} args - Arguments to update or create a UserSession.
+     * @example
+     * // Update or create a UserSession
+     * const userSession = await prisma.userSession.upsert({
+     *   create: {
+     *     // ... data to create a UserSession
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserSession we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserSessionUpsertArgs>(args: SelectSubset<T, UserSessionUpsertArgs<ExtArgs>>): Prisma__UserSessionClient<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserSessions that matches the filter.
+     * @param {UserSessionFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const userSession = await prisma.userSession.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: UserSessionFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a UserSession.
+     * @param {UserSessionAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const userSession = await prisma.userSession.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: UserSessionAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of UserSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionCountArgs} args - Arguments to filter UserSessions to count.
+     * @example
+     * // Count the number of UserSessions
+     * const count = await prisma.userSession.count({
+     *   where: {
+     *     // ... the filter for the UserSessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserSessionCountArgs>(
+      args?: Subset<T, UserSessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserSessionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserSessionAggregateArgs>(args: Subset<T, UserSessionAggregateArgs>): Prisma.PrismaPromise<GetUserSessionAggregateType<T>>
+
+    /**
+     * Group by UserSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserSessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserSessionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserSessionGroupByArgs['orderBy'] }
+        : { orderBy?: UserSessionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserSession model
+   */
+  readonly fields: UserSessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserSession.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserSession model
+   */
+  interface UserSessionFieldRefs {
+    readonly id: FieldRef<"UserSession", 'String'>
+    readonly userId: FieldRef<"UserSession", 'String'>
+    readonly sessionId: FieldRef<"UserSession", 'String'>
+    readonly startedAt: FieldRef<"UserSession", 'DateTime'>
+    readonly lastActiveAt: FieldRef<"UserSession", 'DateTime'>
+    readonly ipAddress: FieldRef<"UserSession", 'String'>
+    readonly userAgent: FieldRef<"UserSession", 'String'>
+    readonly isActive: FieldRef<"UserSession", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserSession findUnique
+   */
+  export type UserSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSession to fetch.
+     */
+    where: UserSessionWhereUniqueInput
+  }
+
+  /**
+   * UserSession findUniqueOrThrow
+   */
+  export type UserSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSession to fetch.
+     */
+    where: UserSessionWhereUniqueInput
+  }
+
+  /**
+   * UserSession findFirst
+   */
+  export type UserSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSession to fetch.
+     */
+    where?: UserSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSessions to fetch.
+     */
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserSessions.
+     */
+    cursor?: UserSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserSessions.
+     */
+    distinct?: UserSessionScalarFieldEnum | UserSessionScalarFieldEnum[]
+  }
+
+  /**
+   * UserSession findFirstOrThrow
+   */
+  export type UserSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSession to fetch.
+     */
+    where?: UserSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSessions to fetch.
+     */
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserSessions.
+     */
+    cursor?: UserSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserSessions.
+     */
+    distinct?: UserSessionScalarFieldEnum | UserSessionScalarFieldEnum[]
+  }
+
+  /**
+   * UserSession findMany
+   */
+  export type UserSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which UserSessions to fetch.
+     */
+    where?: UserSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserSessions to fetch.
+     */
+    orderBy?: UserSessionOrderByWithRelationInput | UserSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserSessions.
+     */
+    cursor?: UserSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserSessions.
+     */
+    skip?: number
+    distinct?: UserSessionScalarFieldEnum | UserSessionScalarFieldEnum[]
+  }
+
+  /**
+   * UserSession create
+   */
+  export type UserSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserSession.
+     */
+    data: XOR<UserSessionCreateInput, UserSessionUncheckedCreateInput>
+  }
+
+  /**
+   * UserSession createMany
+   */
+  export type UserSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserSessions.
+     */
+    data: UserSessionCreateManyInput | UserSessionCreateManyInput[]
+  }
+
+  /**
+   * UserSession update
+   */
+  export type UserSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserSession.
+     */
+    data: XOR<UserSessionUpdateInput, UserSessionUncheckedUpdateInput>
+    /**
+     * Choose, which UserSession to update.
+     */
+    where: UserSessionWhereUniqueInput
+  }
+
+  /**
+   * UserSession updateMany
+   */
+  export type UserSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserSessions.
+     */
+    data: XOR<UserSessionUpdateManyMutationInput, UserSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which UserSessions to update
+     */
+    where?: UserSessionWhereInput
+    /**
+     * Limit how many UserSessions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserSession upsert
+   */
+  export type UserSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserSession to update in case it exists.
+     */
+    where: UserSessionWhereUniqueInput
+    /**
+     * In case the UserSession found by the `where` argument doesn't exist, create a new UserSession with this data.
+     */
+    create: XOR<UserSessionCreateInput, UserSessionUncheckedCreateInput>
+    /**
+     * In case the UserSession was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserSessionUpdateInput, UserSessionUncheckedUpdateInput>
+  }
+
+  /**
+   * UserSession delete
+   */
+  export type UserSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+    /**
+     * Filter which UserSession to delete.
+     */
+    where: UserSessionWhereUniqueInput
+  }
+
+  /**
+   * UserSession deleteMany
+   */
+  export type UserSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserSessions to delete
+     */
+    where?: UserSessionWhereInput
+    /**
+     * Limit how many UserSessions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserSession findRaw
+   */
+  export type UserSessionFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * UserSession aggregateRaw
+   */
+  export type UserSessionAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * UserSession without action
+   */
+  export type UserSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserSession
+     */
+    select?: UserSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserSession
+     */
+    omit?: UserSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserSessionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -23986,6 +26259,32 @@ export namespace Prisma {
   export type QrScanLogScalarFieldEnum = (typeof QrScanLogScalarFieldEnum)[keyof typeof QrScanLogScalarFieldEnum]
 
 
+  export const UserOverlayLogScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    triggerType: 'triggerType',
+    shownAt: 'shownAt',
+    sessionId: 'sessionId',
+    dismissed: 'dismissed'
+  };
+
+  export type UserOverlayLogScalarFieldEnum = (typeof UserOverlayLogScalarFieldEnum)[keyof typeof UserOverlayLogScalarFieldEnum]
+
+
+  export const UserSessionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    sessionId: 'sessionId',
+    startedAt: 'startedAt',
+    lastActiveAt: 'lastActiveAt',
+    ipAddress: 'ipAddress',
+    userAgent: 'userAgent',
+    isActive: 'isActive'
+  };
+
+  export type UserSessionScalarFieldEnum = (typeof UserSessionScalarFieldEnum)[keyof typeof UserSessionScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -24071,6 +26370,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'OverlayTriggerType'
+   */
+  export type EnumOverlayTriggerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OverlayTriggerType'>
+    
+
+
+  /**
+   * Reference to a field of type 'OverlayTriggerType[]'
+   */
+  export type ListEnumOverlayTriggerTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OverlayTriggerType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -24119,6 +26432,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryListRelationFilter
     PlayPass?: PlayPassListRelationFilter
     QrScanLog?: QrScanLogListRelationFilter
+    overlayLogs?: UserOverlayLogListRelationFilter
+    sessions?: UserSessionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -24150,6 +26465,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryOrderByRelationAggregateInput
     PlayPass?: PlayPassOrderByRelationAggregateInput
     QrScanLog?: QrScanLogOrderByRelationAggregateInput
+    overlayLogs?: UserOverlayLogOrderByRelationAggregateInput
+    sessions?: UserSessionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -24184,6 +26501,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryListRelationFilter
     PlayPass?: PlayPassListRelationFilter
     QrScanLog?: QrScanLogListRelationFilter
+    overlayLogs?: UserOverlayLogListRelationFilter
+    sessions?: UserSessionListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -25444,6 +27763,136 @@ export namespace Prisma {
     scannedAt?: DateTimeWithAggregatesFilter<"QrScanLog"> | Date | string
   }
 
+  export type UserOverlayLogWhereInput = {
+    AND?: UserOverlayLogWhereInput | UserOverlayLogWhereInput[]
+    OR?: UserOverlayLogWhereInput[]
+    NOT?: UserOverlayLogWhereInput | UserOverlayLogWhereInput[]
+    id?: StringFilter<"UserOverlayLog"> | string
+    userId?: StringFilter<"UserOverlayLog"> | string
+    triggerType?: EnumOverlayTriggerTypeFilter<"UserOverlayLog"> | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFilter<"UserOverlayLog"> | Date | string
+    sessionId?: StringNullableFilter<"UserOverlayLog"> | string | null
+    dismissed?: BoolFilter<"UserOverlayLog"> | boolean
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserOverlayLogOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    triggerType?: SortOrder
+    shownAt?: SortOrder
+    sessionId?: SortOrder
+    dismissed?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserOverlayLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UserOverlayLogWhereInput | UserOverlayLogWhereInput[]
+    OR?: UserOverlayLogWhereInput[]
+    NOT?: UserOverlayLogWhereInput | UserOverlayLogWhereInput[]
+    userId?: StringFilter<"UserOverlayLog"> | string
+    triggerType?: EnumOverlayTriggerTypeFilter<"UserOverlayLog"> | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFilter<"UserOverlayLog"> | Date | string
+    sessionId?: StringNullableFilter<"UserOverlayLog"> | string | null
+    dismissed?: BoolFilter<"UserOverlayLog"> | boolean
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type UserOverlayLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    triggerType?: SortOrder
+    shownAt?: SortOrder
+    sessionId?: SortOrder
+    dismissed?: SortOrder
+    _count?: UserOverlayLogCountOrderByAggregateInput
+    _max?: UserOverlayLogMaxOrderByAggregateInput
+    _min?: UserOverlayLogMinOrderByAggregateInput
+  }
+
+  export type UserOverlayLogScalarWhereWithAggregatesInput = {
+    AND?: UserOverlayLogScalarWhereWithAggregatesInput | UserOverlayLogScalarWhereWithAggregatesInput[]
+    OR?: UserOverlayLogScalarWhereWithAggregatesInput[]
+    NOT?: UserOverlayLogScalarWhereWithAggregatesInput | UserOverlayLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserOverlayLog"> | string
+    userId?: StringWithAggregatesFilter<"UserOverlayLog"> | string
+    triggerType?: EnumOverlayTriggerTypeWithAggregatesFilter<"UserOverlayLog"> | $Enums.OverlayTriggerType
+    shownAt?: DateTimeWithAggregatesFilter<"UserOverlayLog"> | Date | string
+    sessionId?: StringNullableWithAggregatesFilter<"UserOverlayLog"> | string | null
+    dismissed?: BoolWithAggregatesFilter<"UserOverlayLog"> | boolean
+  }
+
+  export type UserSessionWhereInput = {
+    AND?: UserSessionWhereInput | UserSessionWhereInput[]
+    OR?: UserSessionWhereInput[]
+    NOT?: UserSessionWhereInput | UserSessionWhereInput[]
+    id?: StringFilter<"UserSession"> | string
+    userId?: StringFilter<"UserSession"> | string
+    sessionId?: StringFilter<"UserSession"> | string
+    startedAt?: DateTimeFilter<"UserSession"> | Date | string
+    lastActiveAt?: DateTimeFilter<"UserSession"> | Date | string
+    ipAddress?: StringNullableFilter<"UserSession"> | string | null
+    userAgent?: StringNullableFilter<"UserSession"> | string | null
+    isActive?: BoolFilter<"UserSession"> | boolean
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type UserSessionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sessionId?: SortOrder
+    startedAt?: SortOrder
+    lastActiveAt?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    isActive?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type UserSessionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    sessionId?: string
+    AND?: UserSessionWhereInput | UserSessionWhereInput[]
+    OR?: UserSessionWhereInput[]
+    NOT?: UserSessionWhereInput | UserSessionWhereInput[]
+    userId?: StringFilter<"UserSession"> | string
+    startedAt?: DateTimeFilter<"UserSession"> | Date | string
+    lastActiveAt?: DateTimeFilter<"UserSession"> | Date | string
+    ipAddress?: StringNullableFilter<"UserSession"> | string | null
+    userAgent?: StringNullableFilter<"UserSession"> | string | null
+    isActive?: BoolFilter<"UserSession"> | boolean
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "sessionId">
+
+  export type UserSessionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sessionId?: SortOrder
+    startedAt?: SortOrder
+    lastActiveAt?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    isActive?: SortOrder
+    _count?: UserSessionCountOrderByAggregateInput
+    _max?: UserSessionMaxOrderByAggregateInput
+    _min?: UserSessionMinOrderByAggregateInput
+  }
+
+  export type UserSessionScalarWhereWithAggregatesInput = {
+    AND?: UserSessionScalarWhereWithAggregatesInput | UserSessionScalarWhereWithAggregatesInput[]
+    OR?: UserSessionScalarWhereWithAggregatesInput[]
+    NOT?: UserSessionScalarWhereWithAggregatesInput | UserSessionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserSession"> | string
+    userId?: StringWithAggregatesFilter<"UserSession"> | string
+    sessionId?: StringWithAggregatesFilter<"UserSession"> | string
+    startedAt?: DateTimeWithAggregatesFilter<"UserSession"> | Date | string
+    lastActiveAt?: DateTimeWithAggregatesFilter<"UserSession"> | Date | string
+    ipAddress?: StringNullableWithAggregatesFilter<"UserSession"> | string | null
+    userAgent?: StringNullableWithAggregatesFilter<"UserSession"> | string | null
+    isActive?: BoolWithAggregatesFilter<"UserSession"> | boolean
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -25473,6 +27922,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -25504,6 +27955,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -25534,6 +27987,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -25564,6 +28019,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -26776,6 +29233,136 @@ export namespace Prisma {
     scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserOverlayLogCreateInput = {
+    id?: string
+    triggerType: $Enums.OverlayTriggerType
+    shownAt?: Date | string
+    sessionId?: string | null
+    dismissed?: boolean
+    user: UserCreateNestedOneWithoutOverlayLogsInput
+  }
+
+  export type UserOverlayLogUncheckedCreateInput = {
+    id?: string
+    userId: string
+    triggerType: $Enums.OverlayTriggerType
+    shownAt?: Date | string
+    sessionId?: string | null
+    dismissed?: boolean
+  }
+
+  export type UserOverlayLogUpdateInput = {
+    triggerType?: EnumOverlayTriggerTypeFieldUpdateOperationsInput | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    dismissed?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutOverlayLogsNestedInput
+  }
+
+  export type UserOverlayLogUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    triggerType?: EnumOverlayTriggerTypeFieldUpdateOperationsInput | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    dismissed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserOverlayLogCreateManyInput = {
+    id?: string
+    userId: string
+    triggerType: $Enums.OverlayTriggerType
+    shownAt?: Date | string
+    sessionId?: string | null
+    dismissed?: boolean
+  }
+
+  export type UserOverlayLogUpdateManyMutationInput = {
+    triggerType?: EnumOverlayTriggerTypeFieldUpdateOperationsInput | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    dismissed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserOverlayLogUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    triggerType?: EnumOverlayTriggerTypeFieldUpdateOperationsInput | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    dismissed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserSessionCreateInput = {
+    id?: string
+    sessionId: string
+    startedAt?: Date | string
+    lastActiveAt?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    isActive?: boolean
+    user: UserCreateNestedOneWithoutSessionsInput
+  }
+
+  export type UserSessionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    sessionId: string
+    startedAt?: Date | string
+    lastActiveAt?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    isActive?: boolean
+  }
+
+  export type UserSessionUpdateInput = {
+    sessionId?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    user?: UserUpdateOneRequiredWithoutSessionsNestedInput
+  }
+
+  export type UserSessionUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserSessionCreateManyInput = {
+    id?: string
+    userId: string
+    sessionId: string
+    startedAt?: Date | string
+    lastActiveAt?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    isActive?: boolean
+  }
+
+  export type UserSessionUpdateManyMutationInput = {
+    sessionId?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserSessionUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -26942,6 +29529,18 @@ export namespace Prisma {
     none?: QrScanLogWhereInput
   }
 
+  export type UserOverlayLogListRelationFilter = {
+    every?: UserOverlayLogWhereInput
+    some?: UserOverlayLogWhereInput
+    none?: UserOverlayLogWhereInput
+  }
+
+  export type UserSessionListRelationFilter = {
+    every?: UserSessionWhereInput
+    some?: UserSessionWhereInput
+    none?: UserSessionWhereInput
+  }
+
   export type BoothJoinOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -27003,6 +29602,14 @@ export namespace Prisma {
   }
 
   export type QrScanLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserOverlayLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserSessionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -27801,6 +30408,83 @@ export namespace Prisma {
     scannedAt?: SortOrder
   }
 
+  export type EnumOverlayTriggerTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.OverlayTriggerType | EnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OverlayTriggerType[] | ListEnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OverlayTriggerType[] | ListEnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOverlayTriggerTypeFilter<$PrismaModel> | $Enums.OverlayTriggerType
+  }
+
+  export type UserOverlayLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    triggerType?: SortOrder
+    shownAt?: SortOrder
+    sessionId?: SortOrder
+    dismissed?: SortOrder
+  }
+
+  export type UserOverlayLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    triggerType?: SortOrder
+    shownAt?: SortOrder
+    sessionId?: SortOrder
+    dismissed?: SortOrder
+  }
+
+  export type UserOverlayLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    triggerType?: SortOrder
+    shownAt?: SortOrder
+    sessionId?: SortOrder
+    dismissed?: SortOrder
+  }
+
+  export type EnumOverlayTriggerTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OverlayTriggerType | EnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OverlayTriggerType[] | ListEnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OverlayTriggerType[] | ListEnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOverlayTriggerTypeWithAggregatesFilter<$PrismaModel> | $Enums.OverlayTriggerType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOverlayTriggerTypeFilter<$PrismaModel>
+    _max?: NestedEnumOverlayTriggerTypeFilter<$PrismaModel>
+  }
+
+  export type UserSessionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sessionId?: SortOrder
+    startedAt?: SortOrder
+    lastActiveAt?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    isActive?: SortOrder
+  }
+
+  export type UserSessionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sessionId?: SortOrder
+    startedAt?: SortOrder
+    lastActiveAt?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    isActive?: SortOrder
+  }
+
+  export type UserSessionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    sessionId?: SortOrder
+    startedAt?: SortOrder
+    lastActiveAt?: SortOrder
+    ipAddress?: SortOrder
+    userAgent?: SortOrder
+    isActive?: SortOrder
+  }
+
   export type BoothJoinCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -27913,6 +30597,20 @@ export namespace Prisma {
     connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
   }
 
+  export type UserOverlayLogCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserOverlayLogCreateWithoutUserInput, UserOverlayLogUncheckedCreateWithoutUserInput> | UserOverlayLogCreateWithoutUserInput[] | UserOverlayLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserOverlayLogCreateOrConnectWithoutUserInput | UserOverlayLogCreateOrConnectWithoutUserInput[]
+    createMany?: UserOverlayLogCreateManyUserInputEnvelope
+    connect?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+  }
+
+  export type UserSessionCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput> | UserSessionCreateWithoutUserInput[] | UserSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserSessionCreateOrConnectWithoutUserInput | UserSessionCreateOrConnectWithoutUserInput[]
+    createMany?: UserSessionCreateManyUserInputEnvelope
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+  }
+
   export type BoothJoinUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -28023,6 +30721,20 @@ export namespace Prisma {
     connectOrCreate?: QrScanLogCreateOrConnectWithoutUserInput | QrScanLogCreateOrConnectWithoutUserInput[]
     createMany?: QrScanLogCreateManyUserInputEnvelope
     connect?: QrScanLogWhereUniqueInput | QrScanLogWhereUniqueInput[]
+  }
+
+  export type UserOverlayLogUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserOverlayLogCreateWithoutUserInput, UserOverlayLogUncheckedCreateWithoutUserInput> | UserOverlayLogCreateWithoutUserInput[] | UserOverlayLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserOverlayLogCreateOrConnectWithoutUserInput | UserOverlayLogCreateOrConnectWithoutUserInput[]
+    createMany?: UserOverlayLogCreateManyUserInputEnvelope
+    connect?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+  }
+
+  export type UserSessionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput> | UserSessionCreateWithoutUserInput[] | UserSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserSessionCreateOrConnectWithoutUserInput | UserSessionCreateOrConnectWithoutUserInput[]
+    createMany?: UserSessionCreateManyUserInputEnvelope
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -28279,6 +30991,34 @@ export namespace Prisma {
     deleteMany?: QrScanLogScalarWhereInput | QrScanLogScalarWhereInput[]
   }
 
+  export type UserOverlayLogUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserOverlayLogCreateWithoutUserInput, UserOverlayLogUncheckedCreateWithoutUserInput> | UserOverlayLogCreateWithoutUserInput[] | UserOverlayLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserOverlayLogCreateOrConnectWithoutUserInput | UserOverlayLogCreateOrConnectWithoutUserInput[]
+    upsert?: UserOverlayLogUpsertWithWhereUniqueWithoutUserInput | UserOverlayLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserOverlayLogCreateManyUserInputEnvelope
+    set?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+    disconnect?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+    delete?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+    connect?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+    update?: UserOverlayLogUpdateWithWhereUniqueWithoutUserInput | UserOverlayLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserOverlayLogUpdateManyWithWhereWithoutUserInput | UserOverlayLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserOverlayLogScalarWhereInput | UserOverlayLogScalarWhereInput[]
+  }
+
+  export type UserSessionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput> | UserSessionCreateWithoutUserInput[] | UserSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserSessionCreateOrConnectWithoutUserInput | UserSessionCreateOrConnectWithoutUserInput[]
+    upsert?: UserSessionUpsertWithWhereUniqueWithoutUserInput | UserSessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserSessionCreateManyUserInputEnvelope
+    set?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    disconnect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    delete?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    update?: UserSessionUpdateWithWhereUniqueWithoutUserInput | UserSessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserSessionUpdateManyWithWhereWithoutUserInput | UserSessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[]
+  }
+
   export type BoothJoinUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -28501,6 +31241,34 @@ export namespace Prisma {
     update?: QrScanLogUpdateWithWhereUniqueWithoutUserInput | QrScanLogUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: QrScanLogUpdateManyWithWhereWithoutUserInput | QrScanLogUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: QrScanLogScalarWhereInput | QrScanLogScalarWhereInput[]
+  }
+
+  export type UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserOverlayLogCreateWithoutUserInput, UserOverlayLogUncheckedCreateWithoutUserInput> | UserOverlayLogCreateWithoutUserInput[] | UserOverlayLogUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserOverlayLogCreateOrConnectWithoutUserInput | UserOverlayLogCreateOrConnectWithoutUserInput[]
+    upsert?: UserOverlayLogUpsertWithWhereUniqueWithoutUserInput | UserOverlayLogUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserOverlayLogCreateManyUserInputEnvelope
+    set?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+    disconnect?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+    delete?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+    connect?: UserOverlayLogWhereUniqueInput | UserOverlayLogWhereUniqueInput[]
+    update?: UserOverlayLogUpdateWithWhereUniqueWithoutUserInput | UserOverlayLogUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserOverlayLogUpdateManyWithWhereWithoutUserInput | UserOverlayLogUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserOverlayLogScalarWhereInput | UserOverlayLogScalarWhereInput[]
+  }
+
+  export type UserSessionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput> | UserSessionCreateWithoutUserInput[] | UserSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserSessionCreateOrConnectWithoutUserInput | UserSessionCreateOrConnectWithoutUserInput[]
+    upsert?: UserSessionUpsertWithWhereUniqueWithoutUserInput | UserSessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserSessionCreateManyUserInputEnvelope
+    set?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    disconnect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    delete?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    connect?: UserSessionWhereUniqueInput | UserSessionWhereUniqueInput[]
+    update?: UserSessionUpdateWithWhereUniqueWithoutUserInput | UserSessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserSessionUpdateManyWithWhereWithoutUserInput | UserSessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[]
   }
 
   export type BoothCreatepicsInput = {
@@ -29292,6 +32060,38 @@ export namespace Prisma {
     update?: XOR<XOR<QrCodeUpdateToOneWithWhereWithoutLogsInput, QrCodeUpdateWithoutLogsInput>, QrCodeUncheckedUpdateWithoutLogsInput>
   }
 
+  export type UserCreateNestedOneWithoutOverlayLogsInput = {
+    create?: XOR<UserCreateWithoutOverlayLogsInput, UserUncheckedCreateWithoutOverlayLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOverlayLogsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumOverlayTriggerTypeFieldUpdateOperationsInput = {
+    set?: $Enums.OverlayTriggerType
+  }
+
+  export type UserUpdateOneRequiredWithoutOverlayLogsNestedInput = {
+    create?: XOR<UserCreateWithoutOverlayLogsInput, UserUncheckedCreateWithoutOverlayLogsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutOverlayLogsInput
+    upsert?: UserUpsertWithoutOverlayLogsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutOverlayLogsInput, UserUpdateWithoutOverlayLogsInput>, UserUncheckedUpdateWithoutOverlayLogsInput>
+  }
+
+  export type UserCreateNestedOneWithoutSessionsInput = {
+    create?: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSessionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
+    create?: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSessionsInput
+    upsert?: UserUpsertWithoutSessionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSessionsInput, UserUpdateWithoutSessionsInput>, UserUncheckedUpdateWithoutSessionsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -29515,6 +32315,23 @@ export namespace Prisma {
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
     isSet?: boolean
+  }
+
+  export type NestedEnumOverlayTriggerTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.OverlayTriggerType | EnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OverlayTriggerType[] | ListEnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OverlayTriggerType[] | ListEnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOverlayTriggerTypeFilter<$PrismaModel> | $Enums.OverlayTriggerType
+  }
+
+  export type NestedEnumOverlayTriggerTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OverlayTriggerType | EnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OverlayTriggerType[] | ListEnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OverlayTriggerType[] | ListEnumOverlayTriggerTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOverlayTriggerTypeWithAggregatesFilter<$PrismaModel> | $Enums.OverlayTriggerType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOverlayTriggerTypeFilter<$PrismaModel>
+    _max?: NestedEnumOverlayTriggerTypeFilter<$PrismaModel>
   }
 
   export type BoothJoinCreateWithoutUserInput = {
@@ -29907,6 +32724,60 @@ export namespace Prisma {
 
   export type QrScanLogCreateManyUserInputEnvelope = {
     data: QrScanLogCreateManyUserInput | QrScanLogCreateManyUserInput[]
+  }
+
+  export type UserOverlayLogCreateWithoutUserInput = {
+    id?: string
+    triggerType: $Enums.OverlayTriggerType
+    shownAt?: Date | string
+    sessionId?: string | null
+    dismissed?: boolean
+  }
+
+  export type UserOverlayLogUncheckedCreateWithoutUserInput = {
+    id?: string
+    triggerType: $Enums.OverlayTriggerType
+    shownAt?: Date | string
+    sessionId?: string | null
+    dismissed?: boolean
+  }
+
+  export type UserOverlayLogCreateOrConnectWithoutUserInput = {
+    where: UserOverlayLogWhereUniqueInput
+    create: XOR<UserOverlayLogCreateWithoutUserInput, UserOverlayLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserOverlayLogCreateManyUserInputEnvelope = {
+    data: UserOverlayLogCreateManyUserInput | UserOverlayLogCreateManyUserInput[]
+  }
+
+  export type UserSessionCreateWithoutUserInput = {
+    id?: string
+    sessionId: string
+    startedAt?: Date | string
+    lastActiveAt?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    isActive?: boolean
+  }
+
+  export type UserSessionUncheckedCreateWithoutUserInput = {
+    id?: string
+    sessionId: string
+    startedAt?: Date | string
+    lastActiveAt?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    isActive?: boolean
+  }
+
+  export type UserSessionCreateOrConnectWithoutUserInput = {
+    where: UserSessionWhereUniqueInput
+    create: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserSessionCreateManyUserInputEnvelope = {
+    data: UserSessionCreateManyUserInput | UserSessionCreateManyUserInput[]
   }
 
   export type BoothJoinUpsertWithWhereUniqueWithoutUserInput = {
@@ -30353,6 +33224,64 @@ export namespace Prisma {
     scannedAt?: DateTimeFilter<"QrScanLog"> | Date | string
   }
 
+  export type UserOverlayLogUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserOverlayLogWhereUniqueInput
+    update: XOR<UserOverlayLogUpdateWithoutUserInput, UserOverlayLogUncheckedUpdateWithoutUserInput>
+    create: XOR<UserOverlayLogCreateWithoutUserInput, UserOverlayLogUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserOverlayLogUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserOverlayLogWhereUniqueInput
+    data: XOR<UserOverlayLogUpdateWithoutUserInput, UserOverlayLogUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserOverlayLogUpdateManyWithWhereWithoutUserInput = {
+    where: UserOverlayLogScalarWhereInput
+    data: XOR<UserOverlayLogUpdateManyMutationInput, UserOverlayLogUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserOverlayLogScalarWhereInput = {
+    AND?: UserOverlayLogScalarWhereInput | UserOverlayLogScalarWhereInput[]
+    OR?: UserOverlayLogScalarWhereInput[]
+    NOT?: UserOverlayLogScalarWhereInput | UserOverlayLogScalarWhereInput[]
+    id?: StringFilter<"UserOverlayLog"> | string
+    userId?: StringFilter<"UserOverlayLog"> | string
+    triggerType?: EnumOverlayTriggerTypeFilter<"UserOverlayLog"> | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFilter<"UserOverlayLog"> | Date | string
+    sessionId?: StringNullableFilter<"UserOverlayLog"> | string | null
+    dismissed?: BoolFilter<"UserOverlayLog"> | boolean
+  }
+
+  export type UserSessionUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserSessionWhereUniqueInput
+    update: XOR<UserSessionUpdateWithoutUserInput, UserSessionUncheckedUpdateWithoutUserInput>
+    create: XOR<UserSessionCreateWithoutUserInput, UserSessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserSessionUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserSessionWhereUniqueInput
+    data: XOR<UserSessionUpdateWithoutUserInput, UserSessionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserSessionUpdateManyWithWhereWithoutUserInput = {
+    where: UserSessionScalarWhereInput
+    data: XOR<UserSessionUpdateManyMutationInput, UserSessionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserSessionScalarWhereInput = {
+    AND?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[]
+    OR?: UserSessionScalarWhereInput[]
+    NOT?: UserSessionScalarWhereInput | UserSessionScalarWhereInput[]
+    id?: StringFilter<"UserSession"> | string
+    userId?: StringFilter<"UserSession"> | string
+    sessionId?: StringFilter<"UserSession"> | string
+    startedAt?: DateTimeFilter<"UserSession"> | Date | string
+    lastActiveAt?: DateTimeFilter<"UserSession"> | Date | string
+    ipAddress?: StringNullableFilter<"UserSession"> | string | null
+    userAgent?: StringNullableFilter<"UserSession"> | string | null
+    isActive?: BoolFilter<"UserSession"> | boolean
+  }
+
   export type BoothOwnerCreateWithoutBoothInput = {
     id?: string
     addedAt?: Date | string
@@ -30688,6 +33617,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutJoinedBoothsInput = {
@@ -30718,6 +33649,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutJoinedBoothsInput = {
@@ -30804,6 +33737,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutJoinedBoothsInput = {
@@ -30833,6 +33768,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutJoinedUsersInput = {
@@ -30908,6 +33845,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedBoothsInput = {
@@ -30938,6 +33877,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedBoothsInput = {
@@ -31024,6 +33965,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedBoothsInput = {
@@ -31053,6 +33996,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutBoothOwnersInput = {
@@ -31128,6 +34073,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTranscriptLogInput = {
@@ -31158,6 +34105,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTranscriptLogInput = {
@@ -31203,6 +34152,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTranscriptLogInput = {
@@ -31232,6 +34183,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutVisitLogInput = {
@@ -31262,6 +34215,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVisitLogInput = {
@@ -31292,6 +34247,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVisitLogInput = {
@@ -31337,6 +34294,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitLogInput = {
@@ -31366,6 +34325,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBoothRatingsInput = {
@@ -31396,6 +34357,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothRatingsInput = {
@@ -31426,6 +34389,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothRatingsInput = {
@@ -31512,6 +34477,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothRatingsInput = {
@@ -31541,6 +34508,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutRatingsInput = {
@@ -31616,6 +34585,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothCommentsInput = {
@@ -31646,6 +34617,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothCommentsInput = {
@@ -31732,6 +34705,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothCommentsInput = {
@@ -31761,6 +34736,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutCommentsInput = {
@@ -31836,6 +34813,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothFavoritesInput = {
@@ -31866,6 +34845,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothFavoritesInput = {
@@ -31952,6 +34933,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothFavoritesInput = {
@@ -31981,6 +34964,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutFavoritesInput = {
@@ -32056,6 +35041,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUploadedFilesInput = {
@@ -32086,6 +35073,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUploadedFilesInput = {
@@ -32131,6 +35120,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedFilesInput = {
@@ -32160,6 +35151,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -32190,6 +35183,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -32220,6 +35215,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -32265,6 +35262,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -32294,6 +35293,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutFeedbacksInput = {
@@ -32324,6 +35325,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFeedbacksInput = {
@@ -32354,6 +35357,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFeedbacksInput = {
@@ -32399,6 +35404,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFeedbacksInput = {
@@ -32428,6 +35435,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSystemLogsInput = {
@@ -32458,6 +35467,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSystemLogsInput = {
@@ -32488,6 +35499,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSystemLogsInput = {
@@ -32533,6 +35546,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSystemLogsInput = {
@@ -32562,6 +35577,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWorkingHoursUpdatesInput = {
@@ -32592,6 +35609,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWorkingHoursUpdatesInput = {
@@ -32622,6 +35641,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWorkingHoursUpdatesInput = {
@@ -32667,6 +35688,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWorkingHoursUpdatesInput = {
@@ -32696,6 +35719,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutMaintenanceModeUpdatesInput = {
@@ -32726,6 +35751,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMaintenanceModeUpdatesInput = {
@@ -32756,6 +35783,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMaintenanceModeUpdatesInput = {
@@ -32801,6 +35830,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput = {
@@ -32830,6 +35861,8 @@ export namespace Prisma {
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutLoginHistoryInput = {
@@ -32860,6 +35893,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLoginHistoryInput = {
@@ -32890,6 +35925,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLoginHistoryInput = {
@@ -32935,6 +35972,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLoginHistoryInput = {
@@ -32964,6 +36003,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothCreateWithoutQrCodeInput = {
@@ -33158,6 +36199,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPlayPassInput = {
@@ -33188,6 +36231,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPlayPassInput = {
@@ -33311,6 +36356,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlayPassInput = {
@@ -33340,6 +36387,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutPlayPassInput = {
@@ -33456,6 +36505,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQrScanLogInput = {
@@ -33486,6 +36537,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
     loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
     PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQrScanLogInput = {
@@ -33568,6 +36621,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQrScanLogInput = {
@@ -33597,6 +36652,8 @@ export namespace Prisma {
     maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
     loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
     PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QrCodeUpsertWithoutLogsInput = {
@@ -33638,6 +36695,290 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     passes?: PlayPassUncheckedUpdateManyWithoutQrCodeNestedInput
+  }
+
+  export type UserCreateWithoutOverlayLogsInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutOverlayLogsInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingUncheckedCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentUncheckedCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteUncheckedCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutOverlayLogsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutOverlayLogsInput, UserUncheckedCreateWithoutOverlayLogsInput>
+  }
+
+  export type UserUpsertWithoutOverlayLogsInput = {
+    update: XOR<UserUpdateWithoutOverlayLogsInput, UserUncheckedUpdateWithoutOverlayLogsInput>
+    create: XOR<UserCreateWithoutOverlayLogsInput, UserUncheckedCreateWithoutOverlayLogsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutOverlayLogsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutOverlayLogsInput, UserUncheckedUpdateWithoutOverlayLogsInput>
+  }
+
+  export type UserUpdateWithoutOverlayLogsInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutOverlayLogsInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUncheckedUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUncheckedUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutSessionsInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSessionsInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingUncheckedCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentUncheckedCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteUncheckedCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSessionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
+  }
+
+  export type UserUpsertWithoutSessionsInput = {
+    update: XOR<UserUpdateWithoutSessionsInput, UserUncheckedUpdateWithoutSessionsInput>
+    create: XOR<UserCreateWithoutSessionsInput, UserUncheckedCreateWithoutSessionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSessionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSessionsInput, UserUncheckedUpdateWithoutSessionsInput>
+  }
+
+  export type UserUpdateWithoutSessionsInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSessionsInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUncheckedUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUncheckedUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothJoinCreateManyUserInput = {
@@ -33762,6 +37103,24 @@ export namespace Prisma {
     id?: string
     qrCodeId: string
     scannedAt?: Date | string
+  }
+
+  export type UserOverlayLogCreateManyUserInput = {
+    id?: string
+    triggerType: $Enums.OverlayTriggerType
+    shownAt?: Date | string
+    sessionId?: string | null
+    dismissed?: boolean
+  }
+
+  export type UserSessionCreateManyUserInput = {
+    id?: string
+    sessionId: string
+    startedAt?: Date | string
+    lastActiveAt?: Date | string
+    ipAddress?: string | null
+    userAgent?: string | null
+    isActive?: boolean
   }
 
   export type BoothJoinUpdateWithoutUserInput = {
@@ -34086,6 +37445,54 @@ export namespace Prisma {
   export type QrScanLogUncheckedUpdateManyWithoutUserInput = {
     qrCodeId?: StringFieldUpdateOperationsInput | string
     scannedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserOverlayLogUpdateWithoutUserInput = {
+    triggerType?: EnumOverlayTriggerTypeFieldUpdateOperationsInput | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    dismissed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserOverlayLogUncheckedUpdateWithoutUserInput = {
+    triggerType?: EnumOverlayTriggerTypeFieldUpdateOperationsInput | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    dismissed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserOverlayLogUncheckedUpdateManyWithoutUserInput = {
+    triggerType?: EnumOverlayTriggerTypeFieldUpdateOperationsInput | $Enums.OverlayTriggerType
+    shownAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    dismissed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserSessionUpdateWithoutUserInput = {
+    sessionId?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserSessionUncheckedUpdateWithoutUserInput = {
+    sessionId?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type UserSessionUncheckedUpdateManyWithoutUserInput = {
+    sessionId?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastActiveAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ipAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    userAgent?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type BoothOwnerCreateManyBoothInput = {

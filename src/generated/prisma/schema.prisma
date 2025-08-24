@@ -49,6 +49,10 @@ model User {
   loginHistory         LoginHistory[] // ประวัติการ login
   PlayPass             PlayPass[]
   QrScanLog            QrScanLog[]
+
+  // Overlay and session tracking
+  overlayLogs UserOverlayLog[]
+  sessions    UserSession[]
 }
 
 model Booth {
@@ -291,4 +295,43 @@ model QrScanLog {
   scannedAt DateTime @default(now())
 
   @@index([userId, qrCodeId])
+}
+
+enum OverlayTriggerType {
+  DAILY_FIRST_VISIT // ครั้งแรกของวัน
+  EVERY_LOGIN // ทุกครั้งที่ login
+  NEW_SESSION // เปิด browser/tab ใหม่
+  FIRST_TIME_USER // ผู้ใช้ใหม่
+  RETURN_USER // ผู้ใช้ที่กลับมา
+}
+
+model UserOverlayLog {
+  id          String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String             @db.ObjectId
+  triggerType OverlayTriggerType
+  shownAt     DateTime           @default(now())
+  sessionId   String? // session identifier
+  dismissed   Boolean            @default(false) // ผู้ใช้ปิดหรือไม่
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, triggerType])
+  @@index([userId, shownAt])
+}
+
+model UserSession {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  sessionId    String   @unique // unique session identifier
+  startedAt    DateTime @default(now())
+  lastActiveAt DateTime @default(now())
+  ipAddress    String?
+  userAgent    String?
+  isActive     Boolean  @default(true)
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isActive])
 }
