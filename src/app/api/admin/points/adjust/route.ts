@@ -1,6 +1,6 @@
 // app/api/admin/points/adjust/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient, Prisma } from "@/generated/prisma";
 import jwt from "jsonwebtoken";
 
 export const runtime = "nodejs";
@@ -10,36 +10,47 @@ const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log:
-      process.env.NODE_ENV === "development"
-        ? ["query", "warn", "error"]
-        : ["error"],
+    log: process.env.NODE_ENV === "development" ? ["query", "warn", "error"] : ["error"],
   });
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const JWT_SECRET = process.env.JWT_SECRET!;
+const MAX_DAILY_SCORE = 30; // ใช้ clamp ตอนส่งกลับ (ฝั่ง DB ยังเก็บค่าจริง)
 
-// วันไทย (+07:00) → สร้างช่วงเวลา UTC สำหรับ query
+// วันไทย (+07:00) → ช่วงเวลา UTC สำหรับ query
 function getBangkokDayRange(base: Date = new Date()) {
-  const th = new Date(
-    base.toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
-  );
+  const th = new Date(base.toLocaleString("en-US", { timeZone: "Asia/Bangkok" }));
   const y = th.getFullYear();
   const m = String(th.getMonth() + 1).padStart(2, "0");
   const d = String(th.getDate()).padStart(2, "0");
   const dayStr = `${y}-${m}-${d}`;
   return {
     startUtc: new Date(`${dayStr}T00:00:00.000+07:00`),
-    endUtc: new Date(`${dayStr}T23:59:59.999+07:00`),
+    endUtc:   new Date(`${dayStr}T23:59:59.999+07:00`),
   };
+}
+
+async function withTxRetry<T>(fn: (tx: Prisma.TransactionClient) => Promise<T>, max = 5): Promise<T> {
+  let i = 0;
+  while (true) {
+    try {
+      return await prisma.$transaction((tx) => fn(tx));
+    } catch (e: any) {
+      const conflict = e?.code === "P2034" || /write conflict|deadlock/i.test(e?.message || "");
+      if (conflict && ++i < max) {
+        await new Promise((r) => setTimeout(r, 100 * i)); // backoff
+        continue;
+      }
+      throw e;
+    }
+  }
 }
 
 export async function POST(req: NextRequest) {
   try {
     // auth แอดมิน
     const token = req.cookies.get("token")?.value;
-    if (!token)
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     let payload: { id: string };
     try {
@@ -48,15 +59,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
-    const me = await prisma.user.findUnique({
-      where: { id: payload.id },
-      select: { role: true },
-    });
+    const me = await prisma.user.findUnique({ where: { id: payload.id }, select: { role: true } });
     if (!me || me.role !== "admin") {
-      return NextResponse.json(
-        { error: "Admin access required" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Admin access required" }, { status: 403 });
     }
 
     // body
@@ -65,65 +70,61 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "กรุณาระบุ userId" }, { status: 400 });
     }
     if (!Number.isInteger(amount)) {
-      return NextResponse.json(
-        { error: "amount ต้องเป็นจำนวนเต็ม" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "amount ต้องเป็นจำนวนเต็ม" }, { status: 400 });
     }
     if (amount === 0) {
-      return NextResponse.json(
-        { error: "amount ต้องไม่เท่ากับ 0" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "amount ต้องไม่เท่ากับ 0" }, { status: 400 });
     }
-
-    // ตรวจผู้ใช้ปลายทาง
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, score: true },
-    });
-    if (!user)
-      return NextResponse.json({ error: "ไม่พบผู้ใช้" }, { status: 404 });
 
     const { startUtc, endUtc } = getBangkokDayRange();
 
-    // ✅ บันทึกการปรับเฉพาะรายวัน (PointAdjustment) — ไม่แตะ user.score
-    await prisma.pointAdjustment.create({
-      data: {
-        userId,
-        amount, // บวก/ลบได้
-        reason: reason || undefined,
-        appliedAt: new Date(), // เก็บ UTC
-      },
+    const result = await withTxRetry(async (tx) => {
+      // ตรวจผู้ใช้ + คะแนนปัจจุบัน
+      const u = await tx.user.findUnique({ where: { id: userId }, select: { id: true, score: true } });
+      if (!u) return { ok: false as const, code: 404, msg: "ไม่พบผู้ใช้" };
+
+      // 1) บันทึกการปรับ “รายวัน” (PointAdjustment) บวก/ลบได้
+      await tx.pointAdjustment.create({
+        data: {
+          userId,
+          amount,
+          reason: reason || undefined,
+          appliedAt: new Date(), // UTC
+        },
+      });
+
+      // 2) เชื่อมกับคะแนนสะสม (score) โดยตรง และไม่ให้ติดลบ
+      const newScore = Math.max(0, (u.score ?? 0) + amount);
+      await tx.user.update({ where: { id: userId }, data: { score: newScore } });
+
+      // 3) คำนวณ dailyPoints วันนี้ (ไทย) = joinsToday + sum(adjustmentsToday)
+      const [joinsToday, adjSum] = await Promise.all([
+        tx.boothJoin.count({ where: { userId, joinedAt: { gte: startUtc, lt: endUtc } } }),
+        tx.pointAdjustment.aggregate({
+          _sum: { amount: true },
+          where: { userId, appliedAt: { gte: startUtc, lt: endUtc } },
+        }),
+      ]);
+
+      const rawDaily = joinsToday + (adjSum._sum.amount ?? 0);
+      const dailyPoints = Math.max(0, Math.min(MAX_DAILY_SCORE, rawDaily)); // clamp 0..30 เฉพาะค่าส่งกลับ
+
+      return { ok: true as const, dailyPoints, totalScore: newScore, delta: amount };
     });
 
-    // คำนวณ dailyPoints ล่าสุด (ไทยวันปัจจุบัน)
-    const [joinsToday, adjSum] = await Promise.all([
-      prisma.boothJoin.count({
-        where: { userId, joinedAt: { gte: startUtc, lt: endUtc } },
-      }),
-      prisma.pointAdjustment.aggregate({
-        _sum: { amount: true },
-        where: { userId, appliedAt: { gte: startUtc, lt: endUtc } },
-      }),
-    ]);
-    const dailyPoints = joinsToday + (adjSum._sum.amount ?? 0);
+    if (!result.ok) {
+      return NextResponse.json({ error: result.msg }, { status: result.code });
+    }
 
     return NextResponse.json({
-      message:
-        amount >= 0
-          ? `เพิ่มคะแนนรายวัน +${amount} สำเร็จ`
-          : `ลดคะแนนรายวัน ${amount} สำเร็จ`,
+      message: result.delta >= 0 ? `เพิ่มคะแนนรายวัน +${result.delta} สำเร็จ` : `ลดคะแนนรายวัน ${result.delta} สำเร็จ`,
       data: {
-        dailyPoints, // ✅ ใช้แสดง “คะแนนวันนี้”
-        totalScore: user.score, // ❌ ไม่เปลี่ยน totalScore
+        dailyPoints: result.dailyPoints, // สำหรับโชว์ “คะแนนวันนี้”
+        totalScore: result.totalScore,   // คะแนนสะสมหลังเชื่อม
       },
     });
   } catch (err: any) {
     console.error("points/adjust error:", err);
-    return NextResponse.json(
-      { error: "Internal Server Error", detail: err?.message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal Server Error", detail: err?.message }, { status: 500 });
   }
 }

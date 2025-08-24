@@ -26,7 +26,7 @@ export default function ProfilePage() {
   });
   const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-  const [redeeming, setRedeeming] = useState(false);
+  const [redeemingDay, setRedeemingDay] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -106,8 +106,6 @@ export default function ProfilePage() {
     };
   }, []);
 
-  const [redeemingDay, setRedeemingDay] = useState<string | null>(null);
-
   // แทนที่ฟังก์ชันเดิม
   const handleRedeem = async (day: string) => {
     if (!user) return;
@@ -156,8 +154,8 @@ export default function ProfilePage() {
           ? {
               ...prev,
               dailyPoints:
-                typeof data.todaysPoints === "number"
-                  ? data.todaysPoints
+                typeof data.dailyPoints === "number"
+                  ? data.dailyPoints
                   : Math.max(0, prev.dailyPoints - 6),
             }
           : prev
@@ -278,6 +276,7 @@ export default function ProfilePage() {
                   <button
                     onClick={() => handleRedeem(day)}
                     disabled={redeemed[day] || redeemingDay === day} // ถ้ามี redeemingDay ตามที่เราแนะนำก่อนหน้า
+                    className={`${redeemed[day] || redeemingDay === day ? "opacity-60 cursor-not-allowed" : ""}`}
                     aria-label={`รับทรานสคริปต์วันที่ ${day}`}
                   >
                     <img

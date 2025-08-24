@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
     const { startUtc, endUtc, dayKey } = getBangkokDay();
 
     const result = await withTxRetry(async (tx) => {
-      // กันเคลมซ้ำแบบอ่านเร็วก่อน
+      // กันเคลมซ้ำวันนี้
       const already = await tx.transcriptLog.findFirst({
         where: { userId, date: { gte: startUtc, lt: endUtc } },
         select: { id: true },
@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
         };
       }
 
-      // คะแนนวันนี้ (join + adjustments)
+      // แต้มรายวันวันนี้ (join + adjustments)
       const [joinsToday, adjSum] = await Promise.all([
         tx.boothJoin.count({
           where: { userId, joinedAt: { gte: startUtc, lt: endUtc } },
@@ -96,14 +96,15 @@ export async function POST(req: NextRequest) {
         }),
       ]);
       const todaysPoints = joinsToday + (adjSum._sum.amount ?? 0);
+
       if (todaysPoints < TRANSCRIPT_COST) {
         return { ok: false as const, code: 400, msg: "คะแนนรายวันไม่เพียงพอ" };
       }
 
-      // บันทึก log พร้อม dayKey (พึ่ง unique constraint ป้องกัน race)
+      // บันทึก Log (แนะนำมี unique ที่ (userId, dayKey) เพื่อกัน race)
       try {
         await tx.transcriptLog.create({
-          data: { userId, date: new Date(), dayKey },
+          data: { userId, date: new Date(), dayKey }, // ต้องมี field dayKey ใน schema ด้วยถ้าใช้บรรทัดนี้
         });
       } catch (e: any) {
         if (e?.code === "P2002") {
@@ -116,7 +117,7 @@ export async function POST(req: NextRequest) {
         throw e;
       }
 
-      // หัก “คะแนนรายวัน” ด้วย PointAdjustment = -6 (ไม่แตะ total score)
+      // 1) หัก "แต้มรายวัน" ด้วย PointAdjustment = -6
       await tx.pointAdjustment.create({
         data: {
           userId,
@@ -126,16 +127,31 @@ export async function POST(req: NextRequest) {
         },
       });
 
+      // 2) หัก "score (แต้มสะสม)" ให้เชื่อมกับ dailyPoints ด้วยจำนวนเดียวกัน และไม่ให้ติดลบ
+      const current = await tx.user.findUnique({
+        where: { id: userId },
+        select: { score: true },
+      });
+      const currentScore = current?.score ?? 0;
+      const newScore = Math.max(0, currentScore - TRANSCRIPT_COST);
+      await tx.user.update({
+        where: { id: userId },
+        data: { score: newScore },
+      });
+
       const dailyPoints = Math.max(0, todaysPoints - TRANSCRIPT_COST);
-      return { ok: true as const, dailyPoints };
+      return { ok: true as const, dailyPoints, totalScore: newScore };
     });
 
     if (!result.ok) {
       return NextResponse.json({ error: result.msg }, { status: result.code });
     }
+
+    // ส่งกลับให้ FE อัปเดต state ได้ทั้งสองค่าพร้อมกัน
     return NextResponse.json({
-      message: `รับ transcript สำเร็จ และหัก ${TRANSCRIPT_COST} คะแนนรายวันแล้ว`,
+      message: `รับ transcript สำเร็จ และหัก ${TRANSCRIPT_COST} คะแนนรายวัน + คะแนนสะสมแล้ว`,
       dailyPoints: result.dailyPoints,
+      totalScore: result.totalScore,
     });
   } catch (err: any) {
     console.error("claim-transcript error:", err);
