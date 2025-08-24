@@ -72,6 +72,39 @@ export default function TransferpointPage() {
     };
   }, []);
 
+  // 3.1 แก้ 100vh บนมือถือ (iOS)
+  useEffect(() => {
+    const setVh = () =>
+      document.documentElement.style.setProperty(
+        "--vh",
+        `${window.innerHeight * 0.01}px`
+      );
+    setVh();
+    window.addEventListener("resize", setVh);
+    window.addEventListener("orientationchange", setVh);
+    return () => {
+      window.removeEventListener("resize", setVh);
+      window.removeEventListener("orientationchange", setVh);
+    };
+  }, []);
+
+  // 3.2 เมื่อจอเปลี่ยนขนาด ให้รีสตาร์ตกล้อง (ถ้าไม่ได้มี popup/result เปิดอยู่)
+  useEffect(() => {
+    const onResize = () => {
+      const hasOverlay = confirmPopup || !!result;
+      if (!hasOverlay) {
+        // ฟังก์ชันที่คุณมีอยู่แล้ว
+        restartScan();
+      }
+    };
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+    };
+  }, [confirmPopup, result]);
+
   const restartScan = async () => {
     setConfirmPopup(false);
     setScannedQR(null);
@@ -86,7 +119,25 @@ export default function TransferpointPage() {
       }
       await qrScannerRef.current.start(
         { facingMode: "environment" },
-        { fps: 10, qrbox: { width: 220, height: 220 } },
+        {
+          fps: 10,
+          aspectRatio: 1, // กรอบสแกนสี่เหลี่ยมจัตุรัส
+          qrbox: (vw: number, vh: number) => {
+            const minSide = Math.min(vw, vh);
+
+            // จอเล็ก (มือถือ) ใช้ 92% ของพื้นที่, กลาง 80%, ใหญ่ 70%
+            let scale = 0.92;
+            if (minSide > 700) scale = 0.8; // tablet/เล็ก-กลาง
+            if (minSide > 1000) scale = 0.7; // desktop/จอใหญ่
+
+            // จำกัดไม่เล็ก/ไม่ใหญ่เกินไป
+            const size = Math.max(
+              180,
+              Math.min(Math.floor(minSide * scale), 640)
+            );
+            return { width: size, height: size };
+          },
+        },
         async (decodedText) => {
           try {
             await qrScannerRef.current?.stop();
@@ -146,8 +197,8 @@ export default function TransferpointPage() {
           <img src="/prog.jpg" alt="โปรไฟล์" className="w-[110px] h-[110px]" />
         </div>
 
-        {/* QR Scanner */}
-        <div className="w-full max-w-[320px]">
+        {/* QR Scanner (responsive) */}
+        <div className="w-[min(92vw,560px)] md:w-[min(70vw,560px)]">
           <div className="relative aspect-square rounded-[20px] border-2 border-blueBrand overflow-hidden">
             {/* html5-qrcode จะใส่ <video> ลงใน div นี้ */}
             <div
@@ -158,7 +209,7 @@ export default function TransferpointPage() {
         [&_video]:rounded-[20px]
       "
             />
-            {/* มุมกรอบสีน้ำเงิน (คงไว้ได้) */}
+            {/* มุมกรอบ */}
             <div className="pointer-events-none absolute top-4 left-4 w-[40px] h-[40px] border-t-[6px] border-l-[6px] border-blueBrand rounded-tl-[12px]" />
             <div className="pointer-events-none absolute top-4 right-4 w-[40px] h-[40px] border-t-[6px] border-r-[6px] border-blueBrand rounded-tr-[12px]" />
             <div className="pointer-events-none absolute bottom-4 left-4 w-[40px] h-[40px] border-b-[6px] border-l-[6px] border-blueBrand rounded-bl-[12px]" />
