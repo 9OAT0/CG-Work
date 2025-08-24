@@ -273,14 +273,20 @@ export default function ProfilePage() {
               *ต้องมีอย่างน้อย 6 คะแนนจึงจะรับทรานสคริปต์ได้*
             </h1>
             <div className="flex gap-4 sm:gap-8 mt-2">
-              {["27", "28", "29"].map((day) => (
-                <button onClick={() => handleRedeem(day)} disabled={redeemed[day] || redeeming} >
-                  <img
-                    src={redeemed[day] ? `/${day}c.png` : `/${day}.png`}
-                    className="w-[70px] sm:w-[86px] h-[70px] sm:h-[86px]"
-                    alt={`day-${day}`}
-                  />
-                </button>
+              {(["27", "28", "29"] as const).map((day) => (
+                <div key={`day-${day}`}>
+                  <button
+                    onClick={() => handleRedeem(day)}
+                    disabled={redeemed[day] || redeemingDay === day} // ถ้ามี redeemingDay ตามที่เราแนะนำก่อนหน้า
+                    aria-label={`รับทรานสคริปต์วันที่ ${day}`}
+                  >
+                    <img
+                      src={redeemed[day] ? `/${day}c.png` : `/${day}.png`}
+                      className="w-[70px] sm:w-[86px] h-[70px] sm:h-[86px]"
+                      alt={`day-${day}`}
+                    />
+                  </button>
+                </div>
               ))}
             </div>
           </div>

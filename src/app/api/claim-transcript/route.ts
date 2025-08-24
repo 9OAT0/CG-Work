@@ -1,6 +1,6 @@
 // app/api/claim-transcript/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient, Prisma } from "@/generated/prisma";
 import jwt from "jsonwebtoken";
 
 export const runtime = "nodejs";
@@ -35,16 +35,13 @@ function getBangkokDay() {
 }
 
 async function withTxRetry<T>(
-  fn: (tx: PrismaClient) => Promise<T>,
+  fn: (tx: Prisma.TransactionClient) => Promise<T>,
   max = 5
 ): Promise<T> {
   let i = 0;
   while (true) {
     try {
-      // @ts-ignore
-      return await prisma.$transaction((tx) =>
-        fn(tx as unknown as PrismaClient)
-      );
+      return await prisma.$transaction((tx) => fn(tx));
     } catch (e: any) {
       const conflict =
         e?.code === "P2034" ||
@@ -82,13 +79,13 @@ export async function POST(req: NextRequest) {
       });
       if (already) {
         return {
-          ok: false,
+          ok: false as const,
           code: 400,
           msg: "คุณรับ transcript วันนี้แล้ว",
-        } as const;
+        };
       }
 
-      // แต้มรายวันวันนี้ (join + adjustments)
+      // คะแนนวันนี้ (join + adjustments)
       const [joinsToday, adjSum] = await Promise.all([
         tx.boothJoin.count({
           where: { userId, joinedAt: { gte: startUtc, lt: endUtc } },
@@ -99,29 +96,27 @@ export async function POST(req: NextRequest) {
         }),
       ]);
       const todaysPoints = joinsToday + (adjSum._sum.amount ?? 0);
-
       if (todaysPoints < TRANSCRIPT_COST) {
-        return { ok: false, code: 400, msg: "คะแนนรายวันไม่เพียงพอ" } as const;
+        return { ok: false as const, code: 400, msg: "คะแนนรายวันไม่เพียงพอ" };
       }
 
-      // สร้าง TranscriptLog โดยมี dayKey (unique กันซ้ำ)
+      // บันทึก log พร้อม dayKey (พึ่ง unique constraint ป้องกัน race)
       try {
         await tx.transcriptLog.create({
           data: { userId, date: new Date(), dayKey },
         });
       } catch (e: any) {
-        // P2002 = unique constraint (userId+dayKey) → ถือว่าเคลมไปแล้ว
         if (e?.code === "P2002") {
           return {
-            ok: false,
+            ok: false as const,
             code: 400,
             msg: "คุณรับ transcript วันนี้แล้ว",
-          } as const;
+          };
         }
         throw e;
       }
 
-      // หักคะแนนรายวัน: บันทึก PointAdjustment = -6 (ไม่แตะ totalPoints)
+      // หัก “คะแนนรายวัน” ด้วย PointAdjustment = -6 (ไม่แตะ total score)
       await tx.pointAdjustment.create({
         data: {
           userId,
@@ -131,8 +126,8 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      const after = Math.max(0, todaysPoints - TRANSCRIPT_COST);
-      return { ok: true, todaysPoints: after } as const;
+      const dailyPoints = Math.max(0, todaysPoints - TRANSCRIPT_COST);
+      return { ok: true as const, dailyPoints };
     });
 
     if (!result.ok) {
@@ -140,7 +135,7 @@ export async function POST(req: NextRequest) {
     }
     return NextResponse.json({
       message: `รับ transcript สำเร็จ และหัก ${TRANSCRIPT_COST} คะแนนรายวันแล้ว`,
-      todaysPoints: result.todaysPoints,
+      dailyPoints: result.dailyPoints,
     });
   } catch (err: any) {
     console.error("claim-transcript error:", err);
