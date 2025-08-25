@@ -15,7 +15,7 @@ const PROTECTED_PREFIXES = [
 const isStaticAsset = (p: string) =>
   p.startsWith("/_next") ||
   p.startsWith("/favicon") ||
-  /\.(png|jpe?g|gif|svg|ico|webp|avif|css|js|txt|json)$/.test(p);
+  /\.(png|jpe?g|gif|svg|ico|webp|avif|css|js|txt|json|woff2?)$/.test(p);
 
 const JWT_SECRET = process.env.JWT_SECRET
   ? new TextEncoder().encode(process.env.JWT_SECRET)
@@ -72,17 +72,8 @@ export async function middleware(request: NextRequest) {
   );
   if (!needsProtection) return NextResponse.next();
 
-  // 3) Maintenance จาก ENV (หรือสลับไปใช้ Vercel Edge Config ก็ได้)
-  const MAINTENANCE_ENABLED = process.env.MAINTENANCE_ENABLED === "true";
-  if (MAINTENANCE_ENABLED) {
-    const resp = NextResponse.redirect(new URL("/maintenance", request.url));
-    resp.cookies.delete("token");
-    return resp;
-  }
-
-  // 4) อ่าน JWT claims ตรง ๆ (ไม่ fetch)
+  // 3) อ่าน JWT claims ก่อน (เพื่อให้ admin bypass ได้จริง)
   const claims = await readClaims(request);
-
   if (!claims) {
     const url = new URL("/login", request.url);
     url.searchParams.set("from", pathname);
@@ -91,48 +82,90 @@ export async function middleware(request: NextRequest) {
     return resp;
   }
 
-  // 5) Admin bypass - ให้ admin เข้าได้โดยไม่ติดหน้า maintenance
+  // 4) Admin bypass (ไม่ติด maintenance/working-hours)
   const isAdmin = claims?.role === "admin";
-  if (isAdmin) return NextResponse.next();
+  if (!isAdmin) {
+    // 5) บังคับ daily login (Bangkok)
+    const today = bangkokYMD();
+    const lastYMD: string | undefined =
+      (claims.lastLoginYMD as string) ||
+      (claims.lastLoginDate
+        ? new Date(claims.lastLoginDate)
+            .toLocaleString("en-CA", {
+              timeZone: "Asia/Bangkok",
+              hour12: false,
+            })
+            .slice(0, 10)
+        : undefined);
 
-  // 6) บังคับ daily login จาก claim (แนะนำให้ฝัง lastLoginYMD ลง JWT ตอน login)
-  const today = bangkokYMD();
-  const lastYMD: string | undefined =
-    (claims.lastLoginYMD as string) ||
-    (claims.lastLoginDate
-      ? new Date(claims.lastLoginDate)
-          .toLocaleString("en-CA", { timeZone: "Asia/Bangkok", hour12: false })
-          .slice(0, 10)
-      : undefined);
+    if (lastYMD !== today) {
+      const url = new URL("/login", request.url);
+      url.searchParams.set("from", pathname);
+      const resp = NextResponse.redirect(url);
+      resp.cookies.delete("token");
+      return resp;
+    }
 
-  if (lastYMD !== today) {
-    const url = new URL("/login", request.url);
-    url.searchParams.set("from", pathname);
-    const resp = NextResponse.redirect(url);
-    resp.cookies.delete("token");
-    return resp;
+    // 6) โหลดสถานะจาก DB ผ่าน API (ถูก exclude จาก matcher แล้ว จึงไม่วนซ้ำ)
+    try {
+      const origin = request.nextUrl.origin;
+      const res = await fetch(`${origin}/api/maintenance-status`, {
+        cache: "no-store",
+        headers: {
+          // ส่ง cookie ไปด้วยเผื่อ API ต้องการตรวจสิทธิ์
+          Cookie: request.headers.get("cookie") ?? "",
+          "x-from-middleware": "1",
+        },
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
+        const workingHours = data?.workingHours ?? data?.working_hours ?? null;
+
+        const maintenanceActive = Boolean(
+          maintenance?.isActive ?? maintenance?.isEnabled
+        );
+
+        if (maintenanceActive) {
+          const resp = NextResponse.redirect(
+            new URL("/maintenance", request.url)
+          );
+          // เพื่อกัน state ค้าง ให้ลบ token ออกในช่วง maintenance
+          resp.cookies.delete("token");
+          return resp;
+        }
+
+        if (
+          workingHours &&
+          !withinHours(
+            Number(workingHours.startHour ?? 0),
+            Number(workingHours.endHour ?? 0),
+            Boolean(workingHours.isEnabled)
+          )
+        ) {
+          const url = new URL("/maintenance", request.url);
+          url.searchParams.set("reason", "working_hours");
+          url.searchParams.set("start", String(workingHours.startHour ?? 0));
+          url.searchParams.set("end", String(workingHours.endHour ?? 0));
+          return NextResponse.redirect(url);
+        }
+      } else {
+        // ถ้า API ล่ม: fail-open (อนุญาตผ่าน) เพื่อไม่ล็อกผู้ใช้ทั้งหมด
+        // หากอยาก fail-close ให้ redirect ไป /maintenance ตรงนี้แทน
+      }
+    } catch {
+      // network/API error → fail-open
+    }
   }
 
-  // 7) Working hours จาก ENV (ลดการ fetch)
-  const HOURS_ENABLED =
-    (process.env.WORKING_HOURS_ENABLED ?? "true") !== "false";
-  const START_HOUR = Number(process.env.WORKING_HOURS_START ?? 0);
-  const END_HOUR = Number(process.env.WORKING_HOURS_END ?? 0);
-
-  if (!withinHours(START_HOUR, END_HOUR, HOURS_ENABLED)) {
-    const url = new URL("/maintenance", request.url);
-    url.searchParams.set("reason", "working_hours");
-    url.searchParams.set("start", START_HOUR.toString());
-    url.searchParams.set("end", END_HOUR.toString());
-    return NextResponse.redirect(url);
-  }
-
+  // 7) ผ่านได้
   return NextResponse.next();
 }
 
 export const config = {
   matcher: [
-    // ตัด /api ออกจาก middleware ไปเลย แต่เก็บ maintenance ไว้
+    // ตัด /api ออกจาก middleware (กัน recursion) และคงไฟล์ static ไว้
     "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.json).*)",
   ],
 };
