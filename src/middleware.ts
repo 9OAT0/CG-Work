@@ -82,8 +82,6 @@ export async function middleware(request: NextRequest) {
 
   // 4) อ่าน JWT claims ตรง ๆ (ไม่ fetch)
   const claims = await readClaims(request);
-  const isAdmin = claims?.role === "admin";
-  if (isAdmin) return NextResponse.next();
 
   if (!claims) {
     const url = new URL("/login", request.url);
@@ -93,7 +91,11 @@ export async function middleware(request: NextRequest) {
     return resp;
   }
 
-  // 5) บังคับ daily login จาก claim (แนะนำให้ฝัง lastLoginYMD ลง JWT ตอน login)
+  // 5) Admin bypass - ให้ admin เข้าได้โดยไม่ติดหน้า maintenance
+  const isAdmin = claims?.role === "admin";
+  if (isAdmin) return NextResponse.next();
+
+  // 6) บังคับ daily login จาก claim (แนะนำให้ฝัง lastLoginYMD ลง JWT ตอน login)
   const today = bangkokYMD();
   const lastYMD: string | undefined =
     (claims.lastLoginYMD as string) ||
@@ -111,11 +113,11 @@ export async function middleware(request: NextRequest) {
     return resp;
   }
 
-  // 6) Working hours จาก ENV (ลดการ fetch)
+  // 7) Working hours จาก ENV (ลดการ fetch)
   const HOURS_ENABLED =
     (process.env.WORKING_HOURS_ENABLED ?? "true") !== "false";
-  const START_HOUR = Number(process.env.WORKING_HOURS_START ?? 6);
-  const END_HOUR = Number(process.env.WORKING_HOURS_END ?? 16);
+  const START_HOUR = Number(process.env.WORKING_HOURS_START ?? 0);
+  const END_HOUR = Number(process.env.WORKING_HOURS_END ?? 0);
 
   if (!withinHours(START_HOUR, END_HOUR, HOURS_ENABLED)) {
     const url = new URL("/maintenance", request.url);
