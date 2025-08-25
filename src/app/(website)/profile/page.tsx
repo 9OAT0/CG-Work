@@ -15,11 +15,18 @@ interface ProfileData {
 }
 
 /** ===== Test Mode (ควบคุมด้วย env) =====
- * true  = โหมดทดสอบ: ใช้ localStorage เป็นแหล่งข้อมูล transcriptDates และจำลองการเคลม
- * false = โหมดจริง: ใช้ API /api/profile และ /api/claim-transcript ตามจริง
+ * true  = โหมดทดสอบ: ใช้ localStorage เป็นแหล่งข้อมูล transcriptDates และจำลองการเคลม (ไม่หักแต้ม)
+ * false = โหมดจริง: ใช้ API /api/profile และ /api/claim-transcript ตามจริง (หักแต้มตามระบบ)
  */
-const TEST_MODE = process.env.NEXT_PUBLIC_TEST_MODE === "false";
+const TEST_MODE = process.env.NEXT_PUBLIC_TEST_MODE === "true";
 const TEST_LS_KEY = "test_transcriptDates";
+
+// แต้มรายวันที่ต้องมี “ขั้นต่ำ” ต่อวัน
+const REQUIRED_POINTS: Record<"27" | "28" | "29", number> = {
+  "27": 6,
+  "28": 10,
+  "29": 8,
+};
 
 // วันปัจจุบัน (2 หลัก) ตามโซนเวลา Asia/Bangkok
 function getBangkokDay(): string {
@@ -113,11 +120,9 @@ export default function ProfilePage() {
           }
         });
 
-        // แต่งคะแนนให้พอทดสอบเฉพาะ TEST_MODE
+        // แต้มขั้นต่ำเพื่อให้ทดสอบง่ายใน TEST_MODE (อย่างน้อย 12)
         const dailyPoints =
-          TEST_MODE && typeof data.dailyPoints === "number" && data.dailyPoints < 6
-            ? 12
-            : data.dailyPoints ?? 0;
+          TEST_MODE ? Math.max(data.dailyPoints ?? 0, 12) : data.dailyPoints ?? 0;
 
         if (!isMounted) return;
         setUser({
@@ -149,8 +154,8 @@ export default function ProfilePage() {
     };
   }, []);
 
-  // เคลมทรานสคริปต์ (รองรับ TEST_MODE) + อนุญาตเฉพาะวันนั้น ๆ
-  const handleRedeem = async (day: string) => {
+  // เคลมทรานสคริปต์ (รองรับ TEST_MODE) + อนุญาตเฉพาะวันนั้น ๆ + เช็คแต้มขั้นต่ำรายวันตามวัน
+  const handleRedeem = async (day: "27" | "28" | "29") => {
     if (!user) return;
     if (redeemed[day]) return;
     if (redeemingDay) return;
@@ -162,9 +167,11 @@ export default function ProfilePage() {
       return;
     }
 
-    if (user.dailyPoints < 6) {
-      const missing = 6 - user.dailyPoints;
-      setPopupMessage(`ท่านยังขาดคะแนนอีก ${missing} คะแนนในการแลกรับทรานสคริปต์`);
+    // ✅ เช็คแต้มขั้นต่ำเฉพาะ "คะแนนรายวัน" ตามวันที่กด
+    const required = REQUIRED_POINTS[day];
+    if (user.dailyPoints < required) {
+      const missing = required - user.dailyPoints;
+      setPopupMessage(`วันที่ ${day} ต้องมีอย่างน้อย ${required} คะแนน (ขาดอีก ${missing} คะแนน)`);
       setShowPopup(true);
       return;
     }
@@ -172,7 +179,7 @@ export default function ProfilePage() {
     const base = "2025-08"; // อิงเดือนของงานจริง
     const dateStr = `${base}-${day}`; // เช่น "2025-08-27"
 
-    // ------- TEST_MODE: จำลองใน client -------
+    // ------- TEST_MODE: จำลองใน client (ไม่หักแต้ม) -------
     if (TEST_MODE && typeof window !== "undefined") {
       try {
         setRedeemingDay(day);
@@ -186,10 +193,15 @@ export default function ProfilePage() {
         if (!lsDates.includes(dateStr)) lsDates.push(dateStr);
         localStorage.setItem(TEST_LS_KEY, JSON.stringify(lsDates));
 
+        // ไม่หักแต้มในโหมดทดสอบ
         setRedeemed((prev) => ({ ...prev, [day]: true }));
         setUser((prev) =>
           prev
-            ? { ...prev, dailyPoints: Math.max(0, prev.dailyPoints - 6), transcriptDates: lsDates }
+            ? {
+                ...prev,
+                // คง dailyPoints เดิม
+                transcriptDates: lsDates,
+              }
             : prev
         );
 
@@ -204,7 +216,7 @@ export default function ProfilePage() {
       return;
     }
 
-    // ------- โหมดจริง: เรียก API จริง แลกได้ครั้งเดียว (ฝั่ง server ควรป้องกันซ้ำ) -------
+    // ------- โหมดจริง: เรียก API จริง (หักแต้มตามระบบ) -------
     try {
       setRedeemingDay(day);
 
@@ -213,7 +225,7 @@ export default function ProfilePage() {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          day,           // "27"
+          day,           // "27" | "28" | "29"
           date: dateStr, // "2025-08-27" เผื่อฝั่งเซิร์ฟเวอร์ต้องการ
         }),
       });
@@ -232,7 +244,7 @@ export default function ProfilePage() {
         return;
       }
 
-      // อัปเดตคะแนนตามค่าที่ API ตอบกลับ (ถ้ามี) หรือหัก 6
+      // อัปเดตคะแนนตามค่าที่ API ตอบกลับ (ถ้ามี) หรือ fallback หัก 6
       setUser((prev) =>
         prev
           ? {
@@ -241,7 +253,6 @@ export default function ProfilePage() {
                 typeof data.dailyPoints === "number"
                   ? data.dailyPoints
                   : Math.max(0, prev.dailyPoints - 6),
-              // ให้แน่ใจว่าหน้า refresh แล้วยังคงเห็นว่าเคลมแล้ว: เพิ่มวันที่เข้า state
               transcriptDates: Array.isArray(prev.transcriptDates)
                 ? Array.from(new Set([...prev.transcriptDates, dateStr]))
                 : [dateStr],
@@ -259,6 +270,11 @@ export default function ProfilePage() {
       setRedeemingDay(null);
     }
   };
+
+  // ---------- helper สำหรับแสดง requirement เฉพาะ “วันนี้” ----------
+  const isEventDay = (d: string | null): d is "27" | "28" | "29" =>
+    d === "27" || d === "28" || d === "29";
+  const todayReq = isEventDay(todayDay) ? REQUIRED_POINTS[todayDay] : null;
 
   // Loading state
   if (loading) {
@@ -344,7 +360,13 @@ export default function ProfilePage() {
         <div className="border border-gray-300 w-full flex flex-col items-center py-6 px-4 rounded-xl">
           <h1 className="text-blueBrand text-[14px]">รับทรานสคริปต์</h1>
           <div className="w-full max-w-[366px] bg-blueBrand rounded-[20px] flex flex-col justify-center items-center text-white gap-3 mt-4 py-6 px-4">
-            <h1 className="text-[12px] font-medium">*ต้องมีอย่างน้อย 6 คะแนนจึงจะรับทรานสคริปต์ได้*</h1>
+            {/* ✅ แสดงเฉพาะ requirement ของ “วันนี้” เท่านั้น */}
+            {todayReq && (
+              <h1 className="text-[12px] font-medium">
+                *วันนี้ ({todayDay}) ต้องมีแต้มรายวันอย่างน้อย {todayReq} คะแนน*
+              </h1>
+            )}
+
             <div className="flex gap-4 sm:gap-8 mt-2">
               {(["27", "28", "29"] as const).map((day) => {
                 const isActiveToday = !!todayDay && day === todayDay;
