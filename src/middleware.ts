@@ -130,7 +130,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // ตัด /api ออกจาก middleware ไปเลย
-    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.json|maintenance).*)",
+    // ตัด /api ออกจาก middleware ไปเลย แต่เก็บ maintenance ไว้
+    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.json).*)",
   ],
 };

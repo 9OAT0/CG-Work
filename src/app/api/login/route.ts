@@ -72,13 +72,25 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // สร้าง JWT
+  // สร้าง JWT พร้อม lastLoginYMD สำหรับ middleware
+  const bangkokYMD = () => {
+    const th = new Date(
+      new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
+    );
+    const y = th.getFullYear();
+    const m = String(th.getMonth() + 1).padStart(2, "0");
+    const d = String(th.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+
   const token = jwt.sign(
     {
       id: user.id,
       student_id: user.student_id,
       name: user.name,
       role: user.role,
+      lastLoginYMD: bangkokYMD(), // เพิ่มวันที่ login ในรูปแบบ YYYY-MM-DD
+      lastLoginDate: now.toISOString(), // เก็บเวลาเต็มไว้ด้วย
     },
     JWT_SECRET,
     { expiresIn: "7d" }
