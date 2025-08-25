@@ -93,18 +93,6 @@ export async function middleware(request: NextRequest) {
     return resp;
   }
 
-<<<<<<< HEAD
-  // 7) Working hours เฉพาะเส้นทางที่ป้องกัน
-  const working = await getWorkingHours(request);
-  if (!isWithinAllowedTime(working.startHour, working.endHour, working.isEnabled)) {
-    // Instead of redirecting to maintenance, show a custom "outside working hours" page
-    // or redirect to a page that explains the working hours
-    const url = new URL("/maintenance", request.url);
-    url.searchParams.set("reason", "working_hours");
-    url.searchParams.set("start", working.startHour.toString());
-    url.searchParams.set("end", working.endHour.toString());
-    return NextResponse.redirect(url);
-=======
   // 5) บังคับ daily login จาก claim (แนะนำให้ฝัง lastLoginYMD ลง JWT ตอน login)
   const today = bangkokYMD();
   const lastYMD: string | undefined =
@@ -130,8 +118,11 @@ export async function middleware(request: NextRequest) {
   const END_HOUR = Number(process.env.WORKING_HOURS_END ?? 16);
 
   if (!withinHours(START_HOUR, END_HOUR, HOURS_ENABLED)) {
-    return NextResponse.redirect(new URL("/maintenance", request.url));
->>>>>>> 5bc1e862fb87d6a6dd0a5a2f49758b1252dc3d83
+    const url = new URL("/maintenance", request.url);
+    url.searchParams.set("reason", "working_hours");
+    url.searchParams.set("start", START_HOUR.toString());
+    url.searchParams.set("end", END_HOUR.toString());
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
