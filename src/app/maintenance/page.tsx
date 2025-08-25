@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 interface MaintenanceData {
   isEnabled: boolean
@@ -17,11 +18,17 @@ interface WorkingHours {
 }
 
 export default function MaintenancePage() {
+  const searchParams = useSearchParams()
   const [currentTime, setCurrentTime] = useState<string>('')
   const [timeUntilOpen, setTimeUntilOpen] = useState<string>('')
   const [maintenanceData, setMaintenanceData] = useState<MaintenanceData | null>(null)
   const [workingHours, setWorkingHours] = useState<WorkingHours | null>(null)
   const [isMaintenanceMode, setIsMaintenanceMode] = useState<boolean>(false)
+  
+  // ตรวจสอบว่ามาจาก working hours หรือไม่
+  const isWorkingHoursReason = searchParams.get('reason') === 'working_hours'
+  const startHour = searchParams.get('start') || '6'
+  const endHour = searchParams.get('end') || '16'
 
   // ดึงข้อมูล maintenance mode และ working hours
   useEffect(() => {
@@ -160,13 +167,32 @@ export default function MaintenancePage() {
 
         {/* ข้อความหลัก */}
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-          {maintenanceData?.title || "ระบบอยู่ในช่วงปรับปรุง"}
+          {isWorkingHoursReason ? "นอกเวลาให้บริการ" : (maintenanceData?.title || "ระบบอยู่ในช่วงปรับปรุง")}
         </h1>
         
         <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 mb-8">
+          {isWorkingHoursReason && (
+            <div className="mb-6 p-4 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
+              <p className="text-yellow-200 text-lg font-semibold mb-2">
+                🔐 การเข้าสู่ระบบสำเร็จแล้ว
+              </p>
+              <p className="text-yellow-100 text-sm">
+                แต่ขณะนี้อยู่นอกเวลาให้บริการ กรุณารอจนถึงเวลาเปิดให้บริการ
+              </p>
+            </div>
+          )}
+          
           <p className="text-xl md:text-2xl text-white/90 mb-6 leading-relaxed">
             {isMaintenanceMode ? (
               maintenanceData?.message || "เว็บไซต์อยู่ในช่วงปรับปรุง กรุณากลับมาใหม่อีกครั้ง"
+            ) : isWorkingHoursReason ? (
+              <>
+                เว็บไซต์เปิดให้ใช้งานเวลา <span className="font-semibold text-yellow-300">
+                  {startHour.padStart(2, '0')}:00 - {endHour.padStart(2, '0')}:00 น.
+                </span>
+                <br />
+                <span className="text-lg">กรุณาเข้าใช้งานในเวลาที่กำหนด</span>
+              </>
             ) : (
               <>
                 เว็บไซต์เปิดให้ใช้งานเวลา <span className="font-semibold text-yellow-300">
