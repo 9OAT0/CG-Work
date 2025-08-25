@@ -5,47 +5,68 @@ import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
+/* ---------- Dedupe & Cache /api/me (module-scope) ---------- */
+type MeResponse = { role?: string } | { user?: { role?: string } } | null;
+
+let meCache: MeResponse | undefined; // undefined = ยังไม่โหลด, null = ไม่มีข้อมูล
+let inflight: Promise<MeResponse> | null = null;
+
+async function fetchMeOnce(): Promise<MeResponse> {
+  if (meCache !== undefined) return meCache;
+  if (inflight) return inflight;
+
+  inflight = fetch("/api/me", {
+    credentials: "include",
+    cache: "no-store",
+  })
+    .then(async (res) => {
+      if (!res.ok) return null; // 401/500 → ไม่มีข้อมูล
+      const data = (await res.json().catch(() => null)) as MeResponse;
+      return data ?? null;
+    })
+    .finally(() => {
+      inflight = null;
+    })
+    .then((val) => {
+      meCache = val;
+      return val;
+    });
+
+  return inflight;
+}
+/* ---------------------------------------------------------- */
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const didInitRef = useRef(false);
+
   const router = useRouter();
   const pathname = usePathname();
 
   const toggleMenu = () => setMenuOpen((v) => !v);
 
-  // ✅ Check user role on mount (no redirect)
+  // ✅ โหลด /api/me ครั้งเดียวทั่วแอป (กันยิงซ้ำ/กันลูป)
   useEffect(() => {
-    let isMounted = true;
-    const ac = new AbortController();
+    if (didInitRef.current) return;
+    didInitRef.current = true;
 
-    (async () => {
-      try {
-        const response = await fetch("/api/me", {
-          credentials: "include",
-          cache: "no-store",
-          signal: ac.signal,
-        });
-        if (!isMounted) return;
-        if (response.ok) {
-          const userData = await response.json();
-          if (isMounted) setUserRole(userData.role ?? null);
-        } else {
-          if (isMounted) setUserRole(null);
-        }
-      } catch (error) {
-        if (isMounted) console.error("Error checking user role:", error);
-      }
-    })();
+    let mounted = true;
+    fetchMeOnce().then((data) => {
+      if (!mounted) return;
+      const role =
+        (data && "user" in (data as any) ? (data as any).user?.role : (data as any)?.role) ?? null;
+      setUserRole(role);
+    });
 
     return () => {
-      isMounted = false;
-      ac.abort();
+      mounted = false;
     };
   }, []);
 
-  // ✅ Close menu when click outside
+  // ✅ ปิดเมนูเมื่อคลิกข้างนอก
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -61,12 +82,12 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ✅ Close menu on route change
+  // ✅ ปิดเมนูเมื่อเปลี่ยนเส้นทาง
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
 
-  // ✅ Close menu on ESC
+  // ✅ ปิดเมนูเมื่อกด ESC
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false);
@@ -84,7 +105,8 @@ export default function Navbar() {
         headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
-        // หลัง logout แนะนำพากลับหน้าแรก ไม่ใช่ /login
+        // รีเซ็ต cache เพื่อให้รีเฟรชชื่อผู้ใช้รอบถัดไป (ถ้าจำเป็น)
+        meCache = undefined;
         router.push("/");
       } else {
         console.error("Logout failed");
@@ -105,11 +127,7 @@ export default function Navbar() {
       {/* Top Navbar */}
       <div className="bg-blueBrand h-[80px] sm:h-[106px] w-full flex justify-between items-center px-4 sm:px-6 relative z-50">
         {/* Logo */}
-        <Link
-          href="/homepage"
-          className="flex-shrink-0"
-          aria-label="ไปหน้าหลัก"
-        >
+        <Link href="/homepage" className="flex-shrink-0" aria-label="ไปหน้าหลัก">
           <Image
             src="/brainbang_logo.png"
             alt="Logo"

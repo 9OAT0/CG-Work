@@ -14,6 +14,13 @@ interface ProfileData {
   transcriptDates: string[];
 }
 
+/** ===== Test Mode =====
+ * true  = โหมดทดสอบ: ล้าง localStorage ทุกครั้งที่ refresh และจำลองการเคลมในฝั่ง client
+ * false = โหมดจริง: ใช้ API /api/profile และ /api/claim-transcript ตามเดิม (และส่ง day/date ให้ API)
+ */
+const TEST_MODE = true;
+const TEST_LS_KEY = "test_transcriptDates";
+
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<ProfileData | null>(null);
@@ -28,6 +35,15 @@ export default function ProfilePage() {
   const [showPopup, setShowPopup] = useState(false);
   const [redeemingDay, setRedeemingDay] = useState<string | null>(null);
 
+  // ล้าง localStorage ทุกครั้งที่ refresh เมื่อ TEST_MODE = true
+  useEffect(() => {
+    if (TEST_MODE && typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(TEST_LS_KEY);
+      } catch {}
+    }
+  }, []);
+
   useEffect(() => {
     let isMounted = true;
 
@@ -40,10 +56,10 @@ export default function ProfilePage() {
 
         const res = await fetch("/api/profile", {
           credentials: "include",
-          cache: "no-store", // Ensure fresh data
+          cache: "no-store",
         });
 
-        if (!isMounted) return; // Prevent state updates if component unmounted
+        if (!isMounted) return;
 
         const data = await res.json();
 
@@ -53,37 +69,48 @@ export default function ProfilePage() {
           return;
         }
 
-        // Ensure data has the expected structure
         if (!data || typeof data !== "object") {
           setError("Invalid response format");
           console.error("Invalid data format:", data);
           return;
         }
 
-        const claimedMap: { [key: string]: boolean } = {
-          "27": false,
-          "28": false,
-          "29": false,
-        };
+        let transcriptDatesSource: string[] = Array.isArray(data.transcriptDates)
+          ? data.transcriptDates
+          : [];
 
-        // Safely access transcriptDates with proper null checking
-        if (data.transcriptDates && Array.isArray(data.transcriptDates)) {
-          data.transcriptDates.forEach((date: string) => {
-            if (typeof date === "string") {
-              const day = date.split("-")[2];
-              if (["27", "28", "29"].includes(day)) claimedMap[day] = true;
-            }
-          });
+        // ใน TEST_MODE ใช้ localStorage เป็นแหล่งความจริง
+        if (TEST_MODE && typeof window !== "undefined") {
+          try {
+            const fromLS = localStorage.getItem(TEST_LS_KEY);
+            transcriptDatesSource = fromLS ? JSON.parse(fromLS) : [];
+          } catch {
+            transcriptDatesSource = [];
+          }
         }
 
+        const claimedMap: { [key: string]: boolean } = { "27": false, "28": false, "29": false };
+        transcriptDatesSource.forEach((date: string) => {
+          if (typeof date === "string") {
+            const day = date.split("-")[2];
+            if (["27", "28", "29"].includes(day)) claimedMap[day] = true;
+          }
+        });
+
+        const dailyPoints =
+          TEST_MODE && typeof data.dailyPoints === "number" && data.dailyPoints < 6
+            ? 12
+            : data.dailyPoints ?? 0;
+
+        if (!isMounted) return;
         setUser({
           name: data.name,
           student_id: data.student_id,
           status: data.status,
           dept: data.dept,
-          dailyPoints: data.dailyPoints ?? 0,
+          dailyPoints,
           totalPoints: data.totalPoints ?? 0,
-          transcriptDates: data.transcriptDates ?? [],
+          transcriptDates: transcriptDatesSource,
         });
 
         setRedeemed(claimedMap);
@@ -100,55 +127,87 @@ export default function ProfilePage() {
     };
 
     fetchProfile();
-
     return () => {
       isMounted = false;
     };
   }, []);
 
-  // แทนที่ฟังก์ชันเดิม
+  // เคลมทรานสคริปต์ (รองรับ TEST_MODE)
   const handleRedeem = async (day: string) => {
     if (!user) return;
-    if (redeemed[day]) return; // กดวันเดิมซ้ำไม่ให้ทำงาน
-    if (redeemingDay) return; // กันดับเบิลคลิก/ยิงซ้ำ
+    if (redeemed[day]) return;
+    if (redeemingDay) return;
 
     if (user.dailyPoints < 6) {
       const missing = 6 - user.dailyPoints;
-      setPopupMessage(
-        `ท่านยังขาดคะแนนอีก ${missing} คะแนนในการแลกรับทรานสคริปต์`
-      );
+      setPopupMessage(`ท่านยังขาดคะแนนอีก ${missing} คะแนนในการแลกรับทรานสคริปต์`);
       setShowPopup(true);
       return;
     }
 
+    // ใช้เดือน/ปีอ้างอิงเดียวกันกับงานจริงของคุณ
+    const base = "2025-08";
+    const dateStr = `${base}-${day}`; // เช่น "2025-08-27"
+
+    // ------- TEST_MODE: จำลองการเคลมในฝั่ง client -------
+    if (TEST_MODE && typeof window !== "undefined") {
+      try {
+        setRedeemingDay(day);
+
+        let lsDates: string[] = [];
+        try {
+          const raw = localStorage.getItem(TEST_LS_KEY);
+          lsDates = raw ? JSON.parse(raw) : [];
+        } catch {}
+
+        if (!lsDates.includes(dateStr)) lsDates.push(dateStr);
+        localStorage.setItem(TEST_LS_KEY, JSON.stringify(lsDates));
+
+        setRedeemed((prev) => ({ ...prev, [day]: true }));
+        setUser((prev) =>
+          prev
+            ? { ...prev, dailyPoints: Math.max(0, prev.dailyPoints - 6), transcriptDates: lsDates }
+            : prev
+        );
+
+        router.push(`/gettranscript?day=${day}`);
+      } catch (e) {
+        console.error(e);
+        setPopupMessage("เกิดข้อผิดพลาดในโหมดทดสอบ");
+        setShowPopup(true);
+      } finally {
+        setRedeemingDay(null);
+      }
+      return;
+    }
+
+    // ------- โหมดจริง: ส่ง day/date ไปยัง API ให้ชัดเจน (แก้ 400) -------
     try {
       setRedeemingDay(day);
 
-      // เรียก API หัก "คะแนนรายวัน" ในฐานข้อมูล (PointAdjustment = -6)
       const res = await fetch("/api/claim-transcript", {
         method: "POST",
         credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          day,      // เช่น "27"
+          date: dateStr, // เช่น "2025-08-27" (เผื่อฝั่งเซิร์ฟเวอร์ต้องการวันที่เต็ม)
+        }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        // เคสเคลมไปแล้ว / คะแนนไม่พอ ฯลฯ
         const msg = data?.error || "รับทรานสคริปต์ไม่สำเร็จ";
         setPopupMessage(msg);
         setShowPopup(true);
 
-        // ถ้าข้อความบอกว่าเคลมไปแล้ว ให้ mark วันนั้นว่า redeemed
-        if (
-          typeof msg === "string" &&
-          msg.includes("รับ transcript วันนี้แล้ว")
-        ) {
+        if (typeof msg === "string" && msg.includes("รับ transcript วันนี้แล้ว")) {
           setRedeemed((prev) => ({ ...prev, [day]: true }));
         }
         return;
       }
 
-      // ✅ สำเร็จ: อัปเดตคะแนนรายวันจากค่าที่ API ส่งกลับมา (todaysPoints)
       setUser((prev) =>
         prev
           ? {
@@ -161,10 +220,7 @@ export default function ProfilePage() {
           : prev
       );
 
-      // ✅ mark ว่าวันนี้รับแล้ว (เพื่อให้รูปเป็นเวอร์ชัน c.png)
       setRedeemed((prev) => ({ ...prev, [day]: true }));
-
-      // ไปหน้ารับทรานสคริปต์ (คงพฤติกรรมเดิมไว้)
       router.push(`/gettranscript?day=${day}`);
     } catch (err) {
       console.error(err);
@@ -228,9 +284,7 @@ export default function ProfilePage() {
         <div className="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-10">
           <img src="/prog.jpg" alt="profile" className="w-[110px] h-[110px]" />
           <div className="text-blueBrand flex flex-col gap-1 text-center sm:text-left">
-            <h1 className="text-[22px] sm:text-[24px] font-bold">
-              {user.name}
-            </h1>
+            <h1 className="text-[22px] sm:text-[24px] font-bold">{user.name}</h1>
             <h1 className="text-[16px]">
               {user.student_id} สถานะ : {user.status}
             </h1>
@@ -240,17 +294,11 @@ export default function ProfilePage() {
 
         {/* คะแนนประจำวัน */}
         <div className="border border-gray-300 w-full flex flex-col items-center py-6 px-4 rounded-xl">
-          <h1 className="text-blueBrand text-[14px]">
-            คะแนนประจำวันของการร่วมกิจกรรม
-          </h1>
+          <h1 className="text-blueBrand text-[14px]">คะแนนประจำวันของการร่วมกิจกรรม</h1>
           <div className="w-full max-w-[366px] h-auto bg-blueBrand rounded-[20px] flex flex-col justify-center items-center text-white gap-3 mt-4 py-6 px-4">
             <div className="flex flex-col items-center">
-              <h1 className="text-[40px] sm:text-[50px] font-bold">
-                {user.dailyPoints}/30
-              </h1>
-              <h1 className="font-medium text-[16px]">
-                คะแนนรวมทั้งหมด {user.totalPoints}/90
-              </h1>
+              <h1 className="text-[40px] sm:text-[50px] font-bold">{user.dailyPoints}/30</h1>
+              <h1 className="font-medium text-[16px]">คะแนนรวมทั้งหมด {user.totalPoints}/90</h1>
             </div>
             <button
               className="w-[250px] h-[49px] rounded-[30px] bg-pinkBrand"
@@ -267,15 +315,13 @@ export default function ProfilePage() {
         <div className="border border-gray-300 w-full flex flex-col items-center py-6 px-4 rounded-xl">
           <h1 className="text-blueBrand text-[14px]">รับทรานสคริปต์</h1>
           <div className="w-full max-w-[366px] bg-blueBrand rounded-[20px] flex flex-col justify-center items-center text-white gap-3 mt-4 py-6 px-4">
-            <h1 className="text-[12px] font-medium">
-              *ต้องมีอย่างน้อย 6 คะแนนจึงจะรับทรานสคริปต์ได้*
-            </h1>
+            <h1 className="text-[12px] font-medium">*ต้องมีอย่างน้อย 6 คะแนนจึงจะรับทรานสคริปต์ได้*</h1>
             <div className="flex gap-4 sm:gap-8 mt-2">
               {(["27", "28", "29"] as const).map((day) => (
                 <div key={`day-${day}`}>
                   <button
                     onClick={() => handleRedeem(day)}
-                    disabled={redeemed[day] || redeemingDay === day} // ถ้ามี redeemingDay ตามที่เราแนะนำก่อนหน้า
+                    disabled={redeemed[day] || redeemingDay === day}
                     className={`${redeemed[day] || redeemingDay === day ? "opacity-60 cursor-not-allowed" : ""}`}
                     aria-label={`รับทรานสคริปต์วันที่ ${day}`}
                   >
@@ -296,10 +342,7 @@ export default function ProfilePage() {
 
         {/* ปุ่มกลับหน้าหลัก */}
         <div className="flex justify-center mt-6">
-          <a
-            href="/homepage"
-            className="bg-blueBrand w-[250px] h-[49px] rounded-[30px] flex justify-center items-center"
-          >
+          <a href="/homepage" className="bg-blueBrand w-[250px] h-[49px] rounded-[30px] flex justify-center items-center">
             <h1 className="text-white text-[16px]">กลับหน้าหลัก</h1>
           </a>
         </div>
@@ -315,9 +358,7 @@ export default function ProfilePage() {
             className="bg-white p-6 rounded-lg shadow-lg text-center w-full max-w-[400px]"
             onClick={(e) => e.stopPropagation()}
           >
-            <h1 className="text-blueBrand font-semibold text-[18px] mb-4">
-              {popupMessage}
-            </h1>
+            <h1 className="text-blueBrand font-semibold text-[18px] mb-4">{popupMessage}</h1>
             <button
               onClick={() => setShowPopup(false)}
               className="mt-2 bg-pinkBrand text-white px-4 py-2 rounded-full w-[200px]"
