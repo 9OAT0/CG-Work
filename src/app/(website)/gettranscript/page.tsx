@@ -4,11 +4,11 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import Navbar from "../components/Navbar";
 
-/** ===== Test Mode (ให้ตรงกับหน้า Profile) =====
- * true  = ใช้ข้อมูลที่บันทึกใน localStorage (ไม่เรียก POST)
- * false = โหมดจริง: เช็กสิทธิ์จาก /api/profile ว่าได้เคลมวันนี้แล้วหรือยัง
+/** ===== Test Mode (ควบคุมด้วย env) =====
+ * true  = ใช้ข้อมูล localStorage เพื่อตรวจสิทธิ์ (ไม่ POST)
+ * false = โหมดจริง: ตรวจสิทธิ์ผ่าน /api/profile (ไม่ POST ซ้ำ)
  */
-const TEST_MODE = true;
+const TEST_MODE = process.env.NEXT_PUBLIC_TEST_MODE === "true";
 const TEST_LS_KEY = "test_transcriptDates";
 
 function GetTranscriptContent() {
@@ -18,11 +18,8 @@ function GetTranscriptContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const dayText: Record<string, string> = {
-    "27": "วันที่ 27 สิงหาคม 2568",
-    "28": "วันที่ 28 สิงหาคม 2568",
-    "29": "วันที่ 29 สิงหาคม 2568",
-  };
+  // แปะหัวเรื่องให้โชว์วันแบบสั้น ๆ (ไม่ใส่ปี)
+  const dayLabel = ["27", "28", "29"].includes(day) ? day : "";
 
   useEffect(() => {
     // วันต้องเป็น 27/28/29 เท่านั้น
@@ -32,7 +29,7 @@ function GetTranscriptContent() {
       return;
     }
 
-    // โหมดทดสอบ: อ่านสิทธิ์จาก localStorage (หน้าโปรไฟล์เป็นคนเขียนค่าไว้แล้ว)
+    // โหมดทดสอบ: อ่านสิทธิ์จาก localStorage
     if (TEST_MODE && typeof window !== "undefined") {
       try {
         const raw = localStorage.getItem(TEST_LS_KEY);
@@ -49,7 +46,7 @@ function GetTranscriptContent() {
       return;
     }
 
-    // โหมดจริง: ***ไม่ POST ซ้ำ*** ให้เช็กสิทธิ์จาก /api/profile แทน
+    // โหมดจริง: เช็กสิทธิ์จาก /api/profile เท่านั้น (ไม่ POST ซ้ำ)
     (async () => {
       try {
         const res = await fetch("/api/profile", {
@@ -67,7 +64,6 @@ function GetTranscriptContent() {
           ? data.transcriptDates
           : [];
 
-        // ตรวจว่ามีสิทธิ์ของวันนั้นแล้วหรือยัง
         const hasClaimed = transcriptDates.some((d) => {
           if (typeof d !== "string") return false;
           const dDay = d.split("-")[2];
@@ -109,46 +105,40 @@ function GetTranscriptContent() {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center pt-10 px-4">
-      <h1 className="text-xl md:text-2xl font-bold text-blueBrand mb-4 text-center">
-        Transcript สำหรับ {dayText[day]}
-      </h1>
+      {/* หัวข้อ (สั้น ไม่ใส่ปี) */}
+      <div className="text-center font-bold leading-tight mb-4">
+        <h1 className="text-lg sm:text-xl md:text-2xl">แลกคะแนน</h1>
+        <h1 className="text-lg sm:text-xl md:text-2xl">
+          รับทรานสคริปต์วันที่ {dayLabel} แล้ว
+        </h1>
+      </div>
+
+      {/* การ์ดสรุปแบบ responsive */}
       <div className="w-full max-w-[424px] rounded-[20px] bg-blueBrand text-white p-6 sm:p-8 flex flex-col items-center gap-8">
-        {/* หัวข้อ */}
-        <div className="text-center font-bold leading-tight">
-          <h1 className="text-lg sm:text-xl md:text-2xl">แลกคะแนน</h1>
-          <h1 className="text-lg sm:text-xl md:text-2xl">
-            รับทรานสคริปต์
-            {["27", "28", "29"].includes(day) ? ` วันที่ ${day}` : ""} แล้ว
-          </h1>
-        </div>
-        {/* เนื้อหา: 1 คอลัมน์บนมือถือ / 2 คอลัมน์บนจอที่กว้างขึ้น */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-[auto,1fr] gap-y-8 sm:gap-x-10">
-          {/* คอลัมน์ซ้าย: ไอคอนแนวตั้ง */}
+          {/* ซ้าย: ไอคอนเป็นแนวตั้ง (เลย์เอาต์จะสลับแนวนอนบนจอเล็ก) */}
           <div className="flex flex-row sm:flex-col items-center justify-center gap-6">
             <img src="/check.png" alt="สำเร็จ" className="w-10 h-10 sm:w-14 sm:h-14" />
-
             <div className="flex items-center sm:flex-col gap-4">
               <img src="/prog.jpg" alt="รูปโปรไฟล์" className="w-10 h-10 sm:w-14 sm:h-14 rounded-full object-cover" />
               <img src="/arrow.jpg" alt="" aria-hidden className="w-5 h-7 sm:w-6 sm:h-8 sm:rotate-0 rotate-90" />
             </div>
-
             <img src="/staff.png" alt="Staff" className="w-10 h-10 sm:w-14 sm:h-14" />
           </div>
 
-          {/* คอลัมน์ขวา: ข้อความ */}
+          {/* ขวา: ข้อความ */}
           <div className="flex flex-col justify-between gap-8 sm:gap-14">
             <h1 className="text-base sm:text-lg">แลก 06 คะแนนสำเร็จแล้ว</h1>
-
             <div className="space-y-1">
               <h1 className="font-semibold text-base sm:text-lg">รลิตา เครือระยา</h1>
               <h1 className="text-sm sm:text-base">65023938 นิสิต</h1>
               <h1 className="text-sm sm:text-base">คณะเทคโนโลยีและสารสนเทศ</h1>
             </div>
-
             <h1 className="text-base sm:text-lg">Staff ดูแลบูธ</h1>
           </div>
         </div>
       </div>
+
       <button
         className="mt-8 bg-blueBrand text-white px-6 py-2 md:py-3 rounded-full text-sm md:text-base"
         onClick={() => router.push("/profile")}

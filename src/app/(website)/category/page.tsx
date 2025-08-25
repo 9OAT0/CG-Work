@@ -187,7 +187,7 @@ function CategoryContent() {
 
       {/* Banner */}
       <div className="flex justify-center items-center px-4">
-        <img src="/banner.jpg" alt="banner" className="w-full max-w-[490px] h-auto rounded-xl" />
+        <img src="/mp.jpg" alt="banner" className="w-full max-w-[490px] h-auto rounded-xl" />
       </div>
 
       {/* Booths */}
