@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 interface MaintenanceData {
@@ -17,7 +17,7 @@ interface WorkingHours {
   isEnabled: boolean
 }
 
-export default function MaintenancePage() {
+function MaintenanceContent() {
   const searchParams = useSearchParams()
   const [currentTime, setCurrentTime] = useState<string>('')
   const [timeUntilOpen, setTimeUntilOpen] = useState<string>('')
@@ -234,5 +234,22 @@ export default function MaintenancePage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function MaintenancePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 flex items-center justify-center p-4">
+        <div className="max-w-2xl w-full text-center">
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-white/10 rounded-full backdrop-blur-sm border border-white/20 mb-6">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">กำลังโหลด...</h1>
+        </div>
+      </div>
+    }>
+      <MaintenanceContent />
+    </Suspense>
   )
 }
