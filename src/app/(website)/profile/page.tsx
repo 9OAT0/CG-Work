@@ -14,12 +14,20 @@ interface ProfileData {
   transcriptDates: string[];
 }
 
-/** ===== Test Mode =====
- * true  = โหมดทดสอบ: ล้าง localStorage ทุกครั้งที่ refresh และจำลองการเคลมในฝั่ง client
- * false = โหมดจริง: ใช้ API /api/profile และ /api/claim-transcript ตามเดิม (และส่ง day/date ให้ API)
+/** ===== Test Mode (ควบคุมด้วย env) =====
+ * true  = โหมดทดสอบ: ใช้ localStorage เป็นแหล่งข้อมูล transcriptDates และจำลองการเคลม
+ * false = โหมดจริง: ใช้ API /api/profile และ /api/claim-transcript ตามจริง
  */
-const TEST_MODE = true;
+const TEST_MODE = process.env.NEXT_PUBLIC_TEST_MODE === "false";
 const TEST_LS_KEY = "test_transcriptDates";
+
+// วันปัจจุบัน (2 หลัก) ตามโซนเวลา Asia/Bangkok
+function getBangkokDay(): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Bangkok",
+    day: "2-digit",
+  }).format(new Date());
+}
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -34,8 +42,14 @@ export default function ProfilePage() {
   const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [redeemingDay, setRedeemingDay] = useState<string | null>(null);
+  const [todayDay, setTodayDay] = useState<string | null>(null);
 
-  // ล้าง localStorage ทุกครั้งที่ refresh เมื่อ TEST_MODE = true
+  // คำนวณวันปัจจุบันฝั่ง client (กัน hydration mismatch)
+  useEffect(() => {
+    setTodayDay(getBangkokDay());
+  }, []);
+
+  // โหมดทดสอบ: ล้าง localStorage ทุกครั้งที่ refresh เฉพาะตอน TEST_MODE = true เท่านั้น
   useEffect(() => {
     if (TEST_MODE && typeof window !== "undefined") {
       try {
@@ -75,11 +89,12 @@ export default function ProfilePage() {
           return;
         }
 
+        // แหล่งข้อมูล transcriptDates
         let transcriptDatesSource: string[] = Array.isArray(data.transcriptDates)
           ? data.transcriptDates
           : [];
 
-        // ใน TEST_MODE ใช้ localStorage เป็นแหล่งความจริง
+        // โหมดทดสอบ: อ่านจาก localStorage แทน
         if (TEST_MODE && typeof window !== "undefined") {
           try {
             const fromLS = localStorage.getItem(TEST_LS_KEY);
@@ -89,6 +104,7 @@ export default function ProfilePage() {
           }
         }
 
+        // map วันว่าเคลมแล้วหรือยัง
         const claimedMap: { [key: string]: boolean } = { "27": false, "28": false, "29": false };
         transcriptDatesSource.forEach((date: string) => {
           if (typeof date === "string") {
@@ -97,6 +113,7 @@ export default function ProfilePage() {
           }
         });
 
+        // แต่งคะแนนให้พอทดสอบเฉพาะ TEST_MODE
         const dailyPoints =
           TEST_MODE && typeof data.dailyPoints === "number" && data.dailyPoints < 6
             ? 12
@@ -132,11 +149,18 @@ export default function ProfilePage() {
     };
   }, []);
 
-  // เคลมทรานสคริปต์ (รองรับ TEST_MODE)
+  // เคลมทรานสคริปต์ (รองรับ TEST_MODE) + อนุญาตเฉพาะวันนั้น ๆ
   const handleRedeem = async (day: string) => {
     if (!user) return;
     if (redeemed[day]) return;
     if (redeemingDay) return;
+
+    // กดได้เฉพาะวันที่ตรงกับวันนี้ (โซนเวลา Asia/Bangkok)
+    if (!todayDay || day !== todayDay) {
+      setPopupMessage(`สามารถรับทรานสคริปต์ของวันที่ ${day} ได้เฉพาะวันที่ ${day} เท่านั้น`);
+      setShowPopup(true);
+      return;
+    }
 
     if (user.dailyPoints < 6) {
       const missing = 6 - user.dailyPoints;
@@ -145,11 +169,10 @@ export default function ProfilePage() {
       return;
     }
 
-    // ใช้เดือน/ปีอ้างอิงเดียวกันกับงานจริงของคุณ
-    const base = "2025-08";
+    const base = "2025-08"; // อิงเดือนของงานจริง
     const dateStr = `${base}-${day}`; // เช่น "2025-08-27"
 
-    // ------- TEST_MODE: จำลองการเคลมในฝั่ง client -------
+    // ------- TEST_MODE: จำลองใน client -------
     if (TEST_MODE && typeof window !== "undefined") {
       try {
         setRedeemingDay(day);
@@ -181,7 +204,7 @@ export default function ProfilePage() {
       return;
     }
 
-    // ------- โหมดจริง: ส่ง day/date ไปยัง API ให้ชัดเจน (แก้ 400) -------
+    // ------- โหมดจริง: เรียก API จริง แลกได้ครั้งเดียว (ฝั่ง server ควรป้องกันซ้ำ) -------
     try {
       setRedeemingDay(day);
 
@@ -190,8 +213,8 @@ export default function ProfilePage() {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          day,      // เช่น "27"
-          date: dateStr, // เช่น "2025-08-27" (เผื่อฝั่งเซิร์ฟเวอร์ต้องการวันที่เต็ม)
+          day,           // "27"
+          date: dateStr, // "2025-08-27" เผื่อฝั่งเซิร์ฟเวอร์ต้องการ
         }),
       });
 
@@ -202,12 +225,14 @@ export default function ProfilePage() {
         setPopupMessage(msg);
         setShowPopup(true);
 
+        // ถ้าเซิร์ฟเวอร์แจ้งว่าเคลมไปแล้ว ให้ mark ปุ่มเป็นใช้แล้ว
         if (typeof msg === "string" && msg.includes("รับ transcript วันนี้แล้ว")) {
           setRedeemed((prev) => ({ ...prev, [day]: true }));
         }
         return;
       }
 
+      // อัปเดตคะแนนตามค่าที่ API ตอบกลับ (ถ้ามี) หรือหัก 6
       setUser((prev) =>
         prev
           ? {
@@ -216,6 +241,10 @@ export default function ProfilePage() {
                 typeof data.dailyPoints === "number"
                   ? data.dailyPoints
                   : Math.max(0, prev.dailyPoints - 6),
+              // ให้แน่ใจว่าหน้า refresh แล้วยังคงเห็นว่าเคลมแล้ว: เพิ่มวันที่เข้า state
+              transcriptDates: Array.isArray(prev.transcriptDates)
+                ? Array.from(new Set([...prev.transcriptDates, dateStr]))
+                : [dateStr],
             }
           : prev
       );
@@ -317,22 +346,26 @@ export default function ProfilePage() {
           <div className="w-full max-w-[366px] bg-blueBrand rounded-[20px] flex flex-col justify-center items-center text-white gap-3 mt-4 py-6 px-4">
             <h1 className="text-[12px] font-medium">*ต้องมีอย่างน้อย 6 คะแนนจึงจะรับทรานสคริปต์ได้*</h1>
             <div className="flex gap-4 sm:gap-8 mt-2">
-              {(["27", "28", "29"] as const).map((day) => (
-                <div key={`day-${day}`}>
-                  <button
-                    onClick={() => handleRedeem(day)}
-                    disabled={redeemed[day] || redeemingDay === day}
-                    className={`${redeemed[day] || redeemingDay === day ? "opacity-60 cursor-not-allowed" : ""}`}
-                    aria-label={`รับทรานสคริปต์วันที่ ${day}`}
-                  >
-                    <img
-                      src={redeemed[day] ? `/${day}c.png` : `/${day}.png`}
-                      className="w-[70px] sm:w-[86px] h-[70px] sm:h-[86px]"
-                      alt={`day-${day}`}
-                    />
-                  </button>
-                </div>
-              ))}
+              {(["27", "28", "29"] as const).map((day) => {
+                const isActiveToday = !!todayDay && day === todayDay;
+                const isDisabled = redeemed[day] || redeemingDay === day || !isActiveToday;
+                return (
+                  <div key={`day-${day}`}>
+                    <button
+                      onClick={() => handleRedeem(day)}
+                      disabled={isDisabled}
+                      className={`${isDisabled ? "opacity-60 cursor-not-allowed" : ""}`}
+                      aria-label={`รับทรานสคริปต์วันที่ ${day}`}
+                    >
+                      <img
+                        src={redeemed[day] ? `/${day}c.png` : `/${day}.png`}
+                        className="w-[70px] sm:w-[86px] h-[70px] sm:h-[86px]"
+                        alt={`day-${day}`}
+                      />
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <h1 className="font-bold text-[16px] text-blueBrand pt-4 text-center">
