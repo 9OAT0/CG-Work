@@ -17,7 +17,7 @@ const prisma =
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-const TRANSCRIPT_COST = 6;
+const TRANSCRIPT_COST = 6; // ใช้เป็นเกณฑ์ขั้นต่ำ (ไม่หักแต้ม)
 
 function getBangkokDay() {
   const th = new Date(
@@ -97,14 +97,15 @@ export async function POST(req: NextRequest) {
       ]);
       const todaysPoints = joinsToday + (adjSum._sum.amount ?? 0);
 
+      // ยังใช้เป็นเกณฑ์ขั้นต่ำ แต่จะ "ไม่หักแต้ม"
       if (todaysPoints < TRANSCRIPT_COST) {
         return { ok: false as const, code: 400, msg: "คะแนนรายวันไม่เพียงพอ" };
       }
 
-      // บันทึก Log (แนะนำมี unique ที่ (userId, dayKey) เพื่อกัน race)
+      // บันทึก Log (ควรมี unique (userId, dayKey) ที่ schema)
       try {
         await tx.transcriptLog.create({
-          data: { userId, date: new Date(), dayKey }, // ต้องมี field dayKey ใน schema ด้วยถ้าใช้บรรทัดนี้
+          data: { userId, date: new Date(), dayKey },
         });
       } catch (e: any) {
         if (e?.code === "P2002") {
@@ -117,39 +118,25 @@ export async function POST(req: NextRequest) {
         throw e;
       }
 
-      // 1) หัก "แต้มรายวัน" ด้วย PointAdjustment = -6
-      await tx.pointAdjustment.create({
-        data: {
-          userId,
-          amount: -TRANSCRIPT_COST,
-          reason: "CLAIM_TRANSCRIPT",
-          appliedAt: new Date(),
-        },
-      });
+      // ✅ ไม่มีการหักแต้มรายวันและไม่ไปลดคะแนนสะสมอีกแล้ว
+      const dailyPoints = todaysPoints;
 
-      // 2) หัก "score (แต้มสะสม)" ให้เชื่อมกับ dailyPoints ด้วยจำนวนเดียวกัน และไม่ให้ติดลบ
+      // ไม่ต้อง update user.score
       const current = await tx.user.findUnique({
         where: { id: userId },
         select: { score: true },
       });
-      const currentScore = current?.score ?? 0;
-      const newScore = Math.max(0, currentScore - TRANSCRIPT_COST);
-      await tx.user.update({
-        where: { id: userId },
-        data: { score: newScore },
-      });
+      const totalScore = current?.score ?? 0;
 
-      const dailyPoints = Math.max(0, todaysPoints - TRANSCRIPT_COST);
-      return { ok: true as const, dailyPoints, totalScore: newScore };
+      return { ok: true as const, dailyPoints, totalScore };
     });
 
     if (!result.ok) {
       return NextResponse.json({ error: result.msg }, { status: result.code });
     }
 
-    // ส่งกลับให้ FE อัปเดต state ได้ทั้งสองค่าพร้อมกัน
     return NextResponse.json({
-      message: `รับ transcript สำเร็จ และหัก ${TRANSCRIPT_COST} คะแนนรายวัน + คะแนนสะสมแล้ว`,
+      message: "รับ transcript สำเร็จ (ไม่มีการหักคะแนน)",
       dailyPoints: result.dailyPoints,
       totalScore: result.totalScore,
     });
