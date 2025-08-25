@@ -21,64 +21,116 @@ export default function TransferpointPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const qrScannerRef = useRef<Html5Qrcode | null>(null);
+  const startingRef = useRef(false); // กัน start ซ้อน
+  const mountedRef = useRef(false);
+  const resizeTimerRef = useRef<number | null>(null);
+  const lastStartAtRef = useRef<number>(0); // cooldown
+  const lastSizeRef = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
+
   const router = useRouter();
 
-  // เริ่มสแกน
-  useEffect(() => {
-    const startScanner = async () => {
-      try {
-        if (!qrScannerRef.current) {
-          qrScannerRef.current = new Html5Qrcode("qr-reader");
-        }
-        await qrScannerRef.current.start(
-          { facingMode: "environment" },
-          {
-            fps: 10,
-            // ทำให้กรอบสแกนใหญ่เกือบเต็ม container (90%)
-            qrbox: (vw: number, vh: number) => {
-              const s = Math.floor(Math.min(vw, vh) * 0.9);
-              return { width: s, height: s };
-            },
-            aspectRatio: 1.0, // บังคับเป็นสี่เหลี่ยมจัตุรัส
-          },
-          async (decodedText /*, decodedResult*/) => {
-            try {
-              await qrScannerRef.current?.stop();
-              await qrScannerRef.current?.clear();
-            } catch {}
-            setScannedQR(decodedText.trim());
-            setConfirmPopup(true);
-            setErrorMsg(null);
-            setResult(null);
-          },
-          () => {} // ไม่ต้องทำอะไรเมื่ออ่านไม่สำเร็จในแต่ละเฟรม
-        );
-      } catch (err) {
-        console.error("QR Scan Error", err);
-        setErrorMsg(
-          "ไม่สามารถเปิดกล้องเพื่อสแกนได้ กรุณาอนุญาตการเข้าถึงกล้อง"
-        );
-      }
-    };
+  const COOL_DOWN_MS = 1200;
+  const RESIZE_DEBOUNCE_MS = 350;
+  const SIZE_THRESHOLD_RATIO = 0.12; // เปลี่ยนเกิน 12% ค่อย restart
 
+  const computeQrbox = (vw: number, vh: number) => {
+    const minSide = Math.min(vw, vh);
+    let scale = 0.92;
+    if (minSide > 700) scale = 0.8;
+    if (minSide > 1000) scale = 0.7;
+    const size = Math.max(180, Math.min(Math.floor(minSide * scale), 640));
+    return { width: size, height: size };
+  };
+
+  const stopScanner = async () => {
+    try {
+      if (qrScannerRef.current) {
+        await qrScannerRef.current.stop();
+      }
+    } catch {}
+    try {
+      if (qrScannerRef.current) {
+        // clear() ไม่คืน Promise → ห้าม .catch
+        qrScannerRef.current.clear();
+      }
+    } catch {}
+  };
+
+  const startScanner = async () => {
+    if (startingRef.current) return;
+    startingRef.current = true;
+
+    try {
+      setErrorMsg(null);
+
+      if (!qrScannerRef.current) {
+        qrScannerRef.current = new Html5Qrcode("qr-reader");
+      } else {
+        // บางอุปกรณ์ต้องเคลียร์ DOM เดิมก่อนเริ่มใหม่ (clear() ไม่คืน Promise)
+        try {
+          qrScannerRef.current.clear();
+        } catch {}
+      }
+
+      await qrScannerRef.current.start(
+        { facingMode: "environment" },
+        {
+          fps: 10,
+          aspectRatio: 1,
+          qrbox: (vw: number, vh: number) => computeQrbox(vw, vh),
+        },
+        async (decodedText) => {
+          try {
+            await stopScanner();
+          } catch {}
+          setScannedQR(decodedText.trim());
+          setConfirmPopup(true);
+          setResult(null);
+          setErrorMsg(null);
+        },
+        () => {}
+      );
+
+      lastStartAtRef.current = Date.now();
+      lastSizeRef.current = { w: window.innerWidth, h: window.innerHeight };
+    } catch (err) {
+      console.error("QR Scan Error", err);
+      setErrorMsg("ไม่สามารถเปิดกล้องเพื่อสแกนได้ กรุณาอนุญาตการเข้าถึงกล้อง");
+    } finally {
+      startingRef.current = false;
+    }
+  };
+
+  const restartScan = async () => {
+    // ป้องกัน spam
+    if (Date.now() - lastStartAtRef.current < COOL_DOWN_MS) return;
+    await stopScanner();
+    // เว้นจังหวะเล็กน้อยให้ระบบคืนสิทธิ์กล้อง
+    await new Promise((r) => setTimeout(r, 120));
+    await startScanner();
+  };
+
+  // เริ่มสแกนครั้งแรก
+  useEffect(() => {
+    mountedRef.current = true;
     startScanner();
 
     return () => {
-      if (qrScannerRef.current) {
-        qrScannerRef.current.stop().finally(() => {
-          qrScannerRef.current?.clear();
-        });
+      mountedRef.current = false;
+      // เคลียร์ debounce
+      if (resizeTimerRef.current) {
+        clearTimeout(resizeTimerRef.current);
+        resizeTimerRef.current = null;
       }
+      stopScanner();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 3.1 แก้ 100vh บนมือถือ (iOS)
+  // แก้ 100vh บน iOS
   useEffect(() => {
     const setVh = () =>
-      document.documentElement.style.setProperty(
-        "--vh",
-        `${window.innerHeight * 0.01}px`
-      );
+      document.documentElement.style.setProperty("--vh", `${window.innerHeight * 0.01}px`);
     setVh();
     window.addEventListener("resize", setVh);
     window.addEventListener("orientationchange", setVh);
@@ -88,73 +140,58 @@ export default function TransferpointPage() {
     };
   }, []);
 
-  // 3.2 เมื่อจอเปลี่ยนขนาด ให้รีสตาร์ตกล้อง (ถ้าไม่ได้มี popup/result เปิดอยู่)
+  // รีสตาร์ตกล้องแบบ debounce เมื่อหน้าจอเปลี่ยน "มากพอ"
   useEffect(() => {
     const onResize = () => {
-      const hasOverlay = confirmPopup || !!result;
-      if (!hasOverlay) {
-        // ฟังก์ชันที่คุณมีอยู่แล้ว
-        restartScan();
-      }
+      if (confirmPopup || result) return; // มี overlay อยู่ ไม่ต้องยุ่ง
+
+      if (resizeTimerRef.current) clearTimeout(resizeTimerRef.current);
+      resizeTimerRef.current = window.setTimeout(async () => {
+        const { w: lw, h: lh } = lastSizeRef.current;
+        const nw = window.innerWidth;
+        const nh = window.innerHeight;
+
+        // ยังไม่เคยบันทึกขนาด → บันทึกและไม่ restart รอบแรก
+        if (lw === 0 && lh === 0) {
+          lastSizeRef.current = { w: nw, h: nh };
+          return;
+        }
+
+        const dw = Math.abs(nw - lw) / Math.max(lw, 1);
+        const dh = Math.abs(nh - lh) / Math.max(lh, 1);
+        const changedEnough = dw > SIZE_THRESHOLD_RATIO || dh > SIZE_THRESHOLD_RATIO;
+
+        if (changedEnough) {
+          await restartScan();
+        } else {
+          lastSizeRef.current = { w: nw, h: nh };
+        }
+      }, RESIZE_DEBOUNCE_MS) as unknown as number;
     };
+
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", onResize);
     return () => {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("orientationchange", onResize);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [confirmPopup, result]);
 
-  const restartScan = async () => {
-    setConfirmPopup(false);
-    setScannedQR(null);
-    setResult(null);
-    setErrorMsg(null);
-    try {
-      if (!qrScannerRef.current) {
-        qrScannerRef.current = new Html5Qrcode("qr-reader");
-      } else {
-        // เผื่อบางอุปกรณ์ต้อง clear ก่อน
-        await qrScannerRef.current.clear();
+  // พัก/กลับมาเปิดกล้องตาม visibility (ลดภาระ/บัคบนมือถือ)
+  useEffect(() => {
+    const onVis = async () => {
+      if (!mountedRef.current) return;
+      if (document.hidden) {
+        await stopScanner();
+      } else if (!confirmPopup && !result) {
+        await restartScan();
       }
-      await qrScannerRef.current.start(
-        { facingMode: "environment" },
-        {
-          fps: 10,
-          aspectRatio: 1, // กรอบสแกนสี่เหลี่ยมจัตุรัส
-          qrbox: (vw: number, vh: number) => {
-            const minSide = Math.min(vw, vh);
-
-            // จอเล็ก (มือถือ) ใช้ 92% ของพื้นที่, กลาง 80%, ใหญ่ 70%
-            let scale = 0.92;
-            if (minSide > 700) scale = 0.8; // tablet/เล็ก-กลาง
-            if (minSide > 1000) scale = 0.7; // desktop/จอใหญ่
-
-            // จำกัดไม่เล็ก/ไม่ใหญ่เกินไป
-            const size = Math.max(
-              180,
-              Math.min(Math.floor(minSide * scale), 640)
-            );
-            return { width: size, height: size };
-          },
-        },
-        async (decodedText) => {
-          try {
-            await qrScannerRef.current?.stop();
-            await qrScannerRef.current?.clear();
-          } catch {}
-          setScannedQR(decodedText.trim());
-          setConfirmPopup(true);
-          setErrorMsg(null);
-          setResult(null);
-        },
-        () => {}
-      );
-    } catch (e) {
-      console.error(e);
-      setErrorMsg("ไม่สามารถเริ่มสแกนใหม่ได้");
-    }
-  };
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [confirmPopup, result]);
 
   const redeem = async () => {
     if (!scannedQR) return;
@@ -200,16 +237,12 @@ export default function TransferpointPage() {
         {/* QR Scanner (responsive) */}
         <div className="w-[min(92vw,560px)] md:w-[min(70vw,560px)]">
           <div className="relative aspect-square rounded-[20px] border-2 border-blueBrand overflow-hidden">
-            {/* html5-qrcode จะใส่ <video> ลงใน div นี้ */}
+            {/* html5-qrcode จะ inject <video> ลงใน div นี้ */}
             <div
               id="qr-reader"
-              className="
-        absolute inset-0
-        [&_video]:w-full [&_video]:h-full [&_video]:object-cover
-        [&_video]:rounded-[20px]
-      "
+              className="absolute inset-0 [&_video]:w-full [&_video]:h-full [&_video]:object-cover [&_video]:rounded-[20px]"
             />
-            {/* มุมกรอบ */}
+            {/* Corners */}
             <div className="pointer-events-none absolute top-4 left-4 w-[40px] h-[40px] border-t-[6px] border-l-[6px] border-blueBrand rounded-tl-[12px]" />
             <div className="pointer-events-none absolute top-4 right-4 w-[40px] h-[40px] border-t-[6px] border-r-[6px] border-blueBrand rounded-tr-[12px]" />
             <div className="pointer-events-none absolute bottom-4 left-4 w-[40px] h-[40px] border-b-[6px] border-l-[6px] border-blueBrand rounded-bl-[12px]" />
@@ -223,7 +256,7 @@ export default function TransferpointPage() {
             onClick={restartScan}
             className="px-5 py-2 rounded-[30px] bg-blueBrand text-white text-[16px]"
           >
-            สแกนอีกครั้ง
+            เปิดกล้องใหม่
           </button>
           <a
             href="/profile"
@@ -255,9 +288,7 @@ export default function TransferpointPage() {
               </div>
               <div className="bg-gray-50 rounded p-3">
                 <div className="text-gray-500">คะแนนคงเหลือ</div>
-                <div className="font-semibold">
-                  {result.remainingScore ?? "—"}
-                </div>
+                <div className="font-semibold">{result.remainingScore ?? "—"}</div>
               </div>
             </div>
             <div className="mt-4 flex gap-3">
@@ -296,10 +327,10 @@ export default function TransferpointPage() {
                   {redeeming ? "กำลังแลก..." : "ยืนยันแลกสิทธิ์"}
                 </button>
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     setConfirmPopup(false);
-                    // ยกเลิกแล้วให้สแกนต่อได้เลย
-                    restartScan();
+                    setScannedQR(null);
+                    await restartScan();
                   }}
                   className="w-full sm:w-auto px-6 py-2 bg-gray-400 text-white rounded-[30px]"
                 >

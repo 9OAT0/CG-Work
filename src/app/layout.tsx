@@ -9,7 +9,7 @@ const kanit = Kanit({
   display: "swap",
 });
 
-// ---------- Site metadata (ไม่ใส่ viewport ตรงนี้) ----------
+// ---------- Site metadata (ไม่ใส่ themeColor ตรงนี้) ----------
 export const metadata: Metadata = {
   // ใช้โดเมนโปรดักชันของคุณ เพื่อให้ OG/Twitter สร้าง URL สมบูรณ์
   metadataBase: new URL("https://brainbang-exhibition.vercel.app"),
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
       "นิทรรศการแสดงผลงานศิลปนิพนธ์ นิสิตระดับชั้นปีที่ 4 สาขาวิชาคอมพิวเตอร์กราฟิกและมัลติมีเดีย",
     url: "/",
     siteName: "CG Work",
-    images: [{ url: "/og.png" }], // มีไฟล์นี้ไว้จะดีมาก
+    images: [{ url: "/og.png" }],
     locale: "th_TH",
     type: "website",
   },
@@ -45,13 +45,9 @@ export const metadata: Metadata = {
       "นิทรรศการแสดงผลงานศิลปนิพนธ์ นิสิตระดับชั้นปีที่ 4 สาขาวิชาคอมพิวเตอร์กราฟิกและมัลติมีเดีย",
     images: ["/og.png"],
   },
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#111827" },
-  ],
 };
 
-// ---------- Viewport ต้อง export แยก ----------
+// ---------- Viewport (ย้าย themeColor มาไว้ตรงนี้) ----------
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -59,6 +55,10 @@ export const viewport: Viewport = {
   // หมายเหตุ: maximumScale: 1 จะล็อกการซูม อาจกระทบการเข้าถึง
   // ถ้าอยากอนุญาต pinch-zoom ให้ลบบรรทัดนี้ออก
   // maximumScale: 1,
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#111827" },
+  ],
 };
 
 export default function RootLayout({
