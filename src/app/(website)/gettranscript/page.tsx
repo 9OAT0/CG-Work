@@ -112,11 +112,43 @@ function GetTranscriptContent() {
       <h1 className="text-xl md:text-2xl font-bold text-blueBrand mb-4 text-center">
         Transcript สำหรับ {dayText[day]}
       </h1>
-      <img
-        src={`/${day}c.png`}
-        alt="transcript"
-        className="w-full max-w-xs sm:max-w-sm md:max-w-md rounded-lg shadow-lg"
-      />
+      <div className="w-full max-w-[424px] rounded-[20px] bg-blueBrand text-white p-6 sm:p-8 flex flex-col items-center gap-8">
+        {/* หัวข้อ */}
+        <div className="text-center font-bold leading-tight">
+          <h1 className="text-lg sm:text-xl md:text-2xl">แลกคะแนน</h1>
+          <h1 className="text-lg sm:text-xl md:text-2xl">
+            รับทรานสคริปต์
+            {["27", "28", "29"].includes(day) ? ` วันที่ ${day}` : ""} แล้ว
+          </h1>
+        </div>
+        {/* เนื้อหา: 1 คอลัมน์บนมือถือ / 2 คอลัมน์บนจอที่กว้างขึ้น */}
+        <div className="w-full grid grid-cols-1 sm:grid-cols-[auto,1fr] gap-y-8 sm:gap-x-10">
+          {/* คอลัมน์ซ้าย: ไอคอนแนวตั้ง */}
+          <div className="flex flex-row sm:flex-col items-center justify-center gap-6">
+            <img src="/check.png" alt="สำเร็จ" className="w-10 h-10 sm:w-14 sm:h-14" />
+
+            <div className="flex items-center sm:flex-col gap-4">
+              <img src="/prog.jpg" alt="รูปโปรไฟล์" className="w-10 h-10 sm:w-14 sm:h-14 rounded-full object-cover" />
+              <img src="/arrow.jpg" alt="" aria-hidden className="w-5 h-7 sm:w-6 sm:h-8 sm:rotate-0 rotate-90" />
+            </div>
+
+            <img src="/staff.png" alt="Staff" className="w-10 h-10 sm:w-14 sm:h-14" />
+          </div>
+
+          {/* คอลัมน์ขวา: ข้อความ */}
+          <div className="flex flex-col justify-between gap-8 sm:gap-14">
+            <h1 className="text-base sm:text-lg">แลก 06 คะแนนสำเร็จแล้ว</h1>
+
+            <div className="space-y-1">
+              <h1 className="font-semibold text-base sm:text-lg">รลิตา เครือระยา</h1>
+              <h1 className="text-sm sm:text-base">65023938 นิสิต</h1>
+              <h1 className="text-sm sm:text-base">คณะเทคโนโลยีและสารสนเทศ</h1>
+            </div>
+
+            <h1 className="text-base sm:text-lg">Staff ดูแลบูธ</h1>
+          </div>
+        </div>
+      </div>
       <button
         className="mt-8 bg-blueBrand text-white px-6 py-2 md:py-3 rounded-full text-sm md:text-base"
         onClick={() => router.push("/profile")}
