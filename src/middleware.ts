@@ -178,7 +178,13 @@ export async function middleware(request: NextRequest) {
   // 7) Working hours เฉพาะเส้นทางที่ป้องกัน
   const working = await getWorkingHours(request);
   if (!isWithinAllowedTime(working.startHour, working.endHour, working.isEnabled)) {
-    return NextResponse.redirect(new URL("/maintenance", request.url));
+    // Instead of redirecting to maintenance, show a custom "outside working hours" page
+    // or redirect to a page that explains the working hours
+    const url = new URL("/maintenance", request.url);
+    url.searchParams.set("reason", "working_hours");
+    url.searchParams.set("start", working.startHour.toString());
+    url.searchParams.set("end", working.endHour.toString());
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
