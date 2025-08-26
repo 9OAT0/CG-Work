@@ -128,6 +128,11 @@ export type UserSession = $Result.DefaultSelection<Prisma.$UserSessionPayload>
  * 
  */
 export type PointAdjustment = $Result.DefaultSelection<Prisma.$PointAdjustmentPayload>
+/**
+ * Model DailyPoints
+ * 
+ */
+export type DailyPoints = $Result.DefaultSelection<Prisma.$DailyPointsPayload>
 
 /**
  * Enums
@@ -476,6 +481,16 @@ export class PrismaClient<
     * ```
     */
   get pointAdjustment(): Prisma.PointAdjustmentDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.dailyPoints`: Exposes CRUD operations for the **DailyPoints** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more DailyPoints
+    * const dailyPoints = await prisma.dailyPoints.findMany()
+    * ```
+    */
+  get dailyPoints(): Prisma.DailyPointsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -938,7 +953,8 @@ export namespace Prisma {
     QrScanLog: 'QrScanLog',
     UserOverlayLog: 'UserOverlayLog',
     UserSession: 'UserSession',
-    PointAdjustment: 'PointAdjustment'
+    PointAdjustment: 'PointAdjustment',
+    DailyPoints: 'DailyPoints'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -957,7 +973,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode" | "loginHistory" | "qrCode" | "playPass" | "qrScanLog" | "userOverlayLog" | "userSession" | "pointAdjustment"
+      modelProps: "user" | "booth" | "boothJoin" | "boothOwner" | "transcriptLog" | "visitLog" | "transcriptIssue" | "boothRating" | "boothComment" | "boothFavorite" | "file" | "notification" | "feedback" | "systemLog" | "workingHours" | "maintenanceMode" | "loginHistory" | "qrCode" | "playPass" | "qrScanLog" | "userOverlayLog" | "userSession" | "pointAdjustment" | "dailyPoints"
       txIsolationLevel: never
     }
     model: {
@@ -2663,6 +2679,80 @@ export namespace Prisma {
           }
         }
       }
+      DailyPoints: {
+        payload: Prisma.$DailyPointsPayload<ExtArgs>
+        fields: Prisma.DailyPointsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.DailyPointsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyPointsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.DailyPointsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyPointsPayload>
+          }
+          findFirst: {
+            args: Prisma.DailyPointsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyPointsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.DailyPointsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyPointsPayload>
+          }
+          findMany: {
+            args: Prisma.DailyPointsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyPointsPayload>[]
+          }
+          create: {
+            args: Prisma.DailyPointsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyPointsPayload>
+          }
+          createMany: {
+            args: Prisma.DailyPointsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.DailyPointsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyPointsPayload>
+          }
+          update: {
+            args: Prisma.DailyPointsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyPointsPayload>
+          }
+          deleteMany: {
+            args: Prisma.DailyPointsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.DailyPointsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.DailyPointsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$DailyPointsPayload>
+          }
+          aggregate: {
+            args: Prisma.DailyPointsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateDailyPoints>
+          }
+          groupBy: {
+            args: Prisma.DailyPointsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<DailyPointsGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.DailyPointsFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.DailyPointsAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.DailyPointsCountArgs<ExtArgs>
+            result: $Utils.Optional<DailyPointsCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2765,6 +2855,7 @@ export namespace Prisma {
     userOverlayLog?: UserOverlayLogOmit
     userSession?: UserSessionOmit
     pointAdjustment?: PointAdjustmentOmit
+    dailyPoints?: DailyPointsOmit
   }
 
   /* Types for Logging */
@@ -2864,6 +2955,7 @@ export namespace Prisma {
     overlayLogs: number
     sessions: number
     PointAdjustment: number
+    DailyPoints: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2886,6 +2978,7 @@ export namespace Prisma {
     overlayLogs?: boolean | UserCountOutputTypeCountOverlayLogsArgs
     sessions?: boolean | UserCountOutputTypeCountSessionsArgs
     PointAdjustment?: boolean | UserCountOutputTypeCountPointAdjustmentArgs
+    DailyPoints?: boolean | UserCountOutputTypeCountDailyPointsArgs
   }
 
   // Custom InputTypes
@@ -3030,6 +3123,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountPointAdjustmentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PointAdjustmentWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountDailyPointsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DailyPointsWhereInput
   }
 
 
@@ -3435,6 +3535,7 @@ export namespace Prisma {
     overlayLogs?: boolean | User$overlayLogsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     PointAdjustment?: boolean | User$PointAdjustmentArgs<ExtArgs>
+    DailyPoints?: boolean | User$DailyPointsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3476,6 +3577,7 @@ export namespace Prisma {
     overlayLogs?: boolean | User$overlayLogsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     PointAdjustment?: boolean | User$PointAdjustmentArgs<ExtArgs>
+    DailyPoints?: boolean | User$DailyPointsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -3501,6 +3603,7 @@ export namespace Prisma {
       overlayLogs: Prisma.$UserOverlayLogPayload<ExtArgs>[]
       sessions: Prisma.$UserSessionPayload<ExtArgs>[]
       PointAdjustment: Prisma.$PointAdjustmentPayload<ExtArgs>[]
+      DailyPoints: Prisma.$DailyPointsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3897,6 +4000,7 @@ export namespace Prisma {
     overlayLogs<T extends User$overlayLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$overlayLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserOverlayLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sessions<T extends User$sessionsArgs<ExtArgs> = {}>(args?: Subset<T, User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     PointAdjustment<T extends User$PointAdjustmentArgs<ExtArgs> = {}>(args?: Subset<T, User$PointAdjustmentArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PointAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    DailyPoints<T extends User$DailyPointsArgs<ExtArgs> = {}>(args?: Subset<T, User$DailyPointsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4761,6 +4865,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PointAdjustmentScalarFieldEnum | PointAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * User.DailyPoints
+   */
+  export type User$DailyPointsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    where?: DailyPointsWhereInput
+    orderBy?: DailyPointsOrderByWithRelationInput | DailyPointsOrderByWithRelationInput[]
+    cursor?: DailyPointsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: DailyPointsScalarFieldEnum | DailyPointsScalarFieldEnum[]
   }
 
   /**
@@ -27157,6 +27285,1075 @@ export namespace Prisma {
 
 
   /**
+   * Model DailyPoints
+   */
+
+  export type AggregateDailyPoints = {
+    _count: DailyPointsCountAggregateOutputType | null
+    _avg: DailyPointsAvgAggregateOutputType | null
+    _sum: DailyPointsSumAggregateOutputType | null
+    _min: DailyPointsMinAggregateOutputType | null
+    _max: DailyPointsMaxAggregateOutputType | null
+  }
+
+  export type DailyPointsAvgAggregateOutputType = {
+    earned: number | null
+    spent: number | null
+    adjusted: number | null
+    net: number | null
+  }
+
+  export type DailyPointsSumAggregateOutputType = {
+    earned: number | null
+    spent: number | null
+    adjusted: number | null
+    net: number | null
+  }
+
+  export type DailyPointsMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    dayKey: string | null
+    earned: number | null
+    spent: number | null
+    adjusted: number | null
+    net: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DailyPointsMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    dayKey: string | null
+    earned: number | null
+    spent: number | null
+    adjusted: number | null
+    net: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type DailyPointsCountAggregateOutputType = {
+    id: number
+    userId: number
+    dayKey: number
+    earned: number
+    spent: number
+    adjusted: number
+    net: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type DailyPointsAvgAggregateInputType = {
+    earned?: true
+    spent?: true
+    adjusted?: true
+    net?: true
+  }
+
+  export type DailyPointsSumAggregateInputType = {
+    earned?: true
+    spent?: true
+    adjusted?: true
+    net?: true
+  }
+
+  export type DailyPointsMinAggregateInputType = {
+    id?: true
+    userId?: true
+    dayKey?: true
+    earned?: true
+    spent?: true
+    adjusted?: true
+    net?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DailyPointsMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    dayKey?: true
+    earned?: true
+    spent?: true
+    adjusted?: true
+    net?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type DailyPointsCountAggregateInputType = {
+    id?: true
+    userId?: true
+    dayKey?: true
+    earned?: true
+    spent?: true
+    adjusted?: true
+    net?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type DailyPointsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DailyPoints to aggregate.
+     */
+    where?: DailyPointsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DailyPoints to fetch.
+     */
+    orderBy?: DailyPointsOrderByWithRelationInput | DailyPointsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: DailyPointsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DailyPoints from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DailyPoints.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned DailyPoints
+    **/
+    _count?: true | DailyPointsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: DailyPointsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: DailyPointsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: DailyPointsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: DailyPointsMaxAggregateInputType
+  }
+
+  export type GetDailyPointsAggregateType<T extends DailyPointsAggregateArgs> = {
+        [P in keyof T & keyof AggregateDailyPoints]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateDailyPoints[P]>
+      : GetScalarType<T[P], AggregateDailyPoints[P]>
+  }
+
+
+
+
+  export type DailyPointsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: DailyPointsWhereInput
+    orderBy?: DailyPointsOrderByWithAggregationInput | DailyPointsOrderByWithAggregationInput[]
+    by: DailyPointsScalarFieldEnum[] | DailyPointsScalarFieldEnum
+    having?: DailyPointsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: DailyPointsCountAggregateInputType | true
+    _avg?: DailyPointsAvgAggregateInputType
+    _sum?: DailyPointsSumAggregateInputType
+    _min?: DailyPointsMinAggregateInputType
+    _max?: DailyPointsMaxAggregateInputType
+  }
+
+  export type DailyPointsGroupByOutputType = {
+    id: string
+    userId: string
+    dayKey: string
+    earned: number
+    spent: number
+    adjusted: number
+    net: number
+    createdAt: Date
+    updatedAt: Date
+    _count: DailyPointsCountAggregateOutputType | null
+    _avg: DailyPointsAvgAggregateOutputType | null
+    _sum: DailyPointsSumAggregateOutputType | null
+    _min: DailyPointsMinAggregateOutputType | null
+    _max: DailyPointsMaxAggregateOutputType | null
+  }
+
+  type GetDailyPointsGroupByPayload<T extends DailyPointsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<DailyPointsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof DailyPointsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], DailyPointsGroupByOutputType[P]>
+            : GetScalarType<T[P], DailyPointsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type DailyPointsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    dayKey?: boolean
+    earned?: boolean
+    spent?: boolean
+    adjusted?: boolean
+    net?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["dailyPoints"]>
+
+
+
+  export type DailyPointsSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    dayKey?: boolean
+    earned?: boolean
+    spent?: boolean
+    adjusted?: boolean
+    net?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type DailyPointsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "dayKey" | "earned" | "spent" | "adjusted" | "net" | "createdAt" | "updatedAt", ExtArgs["result"]["dailyPoints"]>
+  export type DailyPointsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $DailyPointsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "DailyPoints"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      dayKey: string
+      earned: number
+      spent: number
+      adjusted: number
+      net: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["dailyPoints"]>
+    composites: {}
+  }
+
+  type DailyPointsGetPayload<S extends boolean | null | undefined | DailyPointsDefaultArgs> = $Result.GetResult<Prisma.$DailyPointsPayload, S>
+
+  type DailyPointsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<DailyPointsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: DailyPointsCountAggregateInputType | true
+    }
+
+  export interface DailyPointsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['DailyPoints'], meta: { name: 'DailyPoints' } }
+    /**
+     * Find zero or one DailyPoints that matches the filter.
+     * @param {DailyPointsFindUniqueArgs} args - Arguments to find a DailyPoints
+     * @example
+     * // Get one DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends DailyPointsFindUniqueArgs>(args: SelectSubset<T, DailyPointsFindUniqueArgs<ExtArgs>>): Prisma__DailyPointsClient<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one DailyPoints that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {DailyPointsFindUniqueOrThrowArgs} args - Arguments to find a DailyPoints
+     * @example
+     * // Get one DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends DailyPointsFindUniqueOrThrowArgs>(args: SelectSubset<T, DailyPointsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__DailyPointsClient<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DailyPoints that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyPointsFindFirstArgs} args - Arguments to find a DailyPoints
+     * @example
+     * // Get one DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends DailyPointsFindFirstArgs>(args?: SelectSubset<T, DailyPointsFindFirstArgs<ExtArgs>>): Prisma__DailyPointsClient<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first DailyPoints that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyPointsFindFirstOrThrowArgs} args - Arguments to find a DailyPoints
+     * @example
+     * // Get one DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends DailyPointsFindFirstOrThrowArgs>(args?: SelectSubset<T, DailyPointsFindFirstOrThrowArgs<ExtArgs>>): Prisma__DailyPointsClient<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DailyPoints that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyPointsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.findMany()
+     * 
+     * // Get first 10 DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const dailyPointsWithIdOnly = await prisma.dailyPoints.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends DailyPointsFindManyArgs>(args?: SelectSubset<T, DailyPointsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a DailyPoints.
+     * @param {DailyPointsCreateArgs} args - Arguments to create a DailyPoints.
+     * @example
+     * // Create one DailyPoints
+     * const DailyPoints = await prisma.dailyPoints.create({
+     *   data: {
+     *     // ... data to create a DailyPoints
+     *   }
+     * })
+     * 
+     */
+    create<T extends DailyPointsCreateArgs>(args: SelectSubset<T, DailyPointsCreateArgs<ExtArgs>>): Prisma__DailyPointsClient<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many DailyPoints.
+     * @param {DailyPointsCreateManyArgs} args - Arguments to create many DailyPoints.
+     * @example
+     * // Create many DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends DailyPointsCreateManyArgs>(args?: SelectSubset<T, DailyPointsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a DailyPoints.
+     * @param {DailyPointsDeleteArgs} args - Arguments to delete one DailyPoints.
+     * @example
+     * // Delete one DailyPoints
+     * const DailyPoints = await prisma.dailyPoints.delete({
+     *   where: {
+     *     // ... filter to delete one DailyPoints
+     *   }
+     * })
+     * 
+     */
+    delete<T extends DailyPointsDeleteArgs>(args: SelectSubset<T, DailyPointsDeleteArgs<ExtArgs>>): Prisma__DailyPointsClient<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one DailyPoints.
+     * @param {DailyPointsUpdateArgs} args - Arguments to update one DailyPoints.
+     * @example
+     * // Update one DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends DailyPointsUpdateArgs>(args: SelectSubset<T, DailyPointsUpdateArgs<ExtArgs>>): Prisma__DailyPointsClient<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more DailyPoints.
+     * @param {DailyPointsDeleteManyArgs} args - Arguments to filter DailyPoints to delete.
+     * @example
+     * // Delete a few DailyPoints
+     * const { count } = await prisma.dailyPoints.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends DailyPointsDeleteManyArgs>(args?: SelectSubset<T, DailyPointsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more DailyPoints.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyPointsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends DailyPointsUpdateManyArgs>(args: SelectSubset<T, DailyPointsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one DailyPoints.
+     * @param {DailyPointsUpsertArgs} args - Arguments to update or create a DailyPoints.
+     * @example
+     * // Update or create a DailyPoints
+     * const dailyPoints = await prisma.dailyPoints.upsert({
+     *   create: {
+     *     // ... data to create a DailyPoints
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the DailyPoints we want to update
+     *   }
+     * })
+     */
+    upsert<T extends DailyPointsUpsertArgs>(args: SelectSubset<T, DailyPointsUpsertArgs<ExtArgs>>): Prisma__DailyPointsClient<$Result.GetResult<Prisma.$DailyPointsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more DailyPoints that matches the filter.
+     * @param {DailyPointsFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const dailyPoints = await prisma.dailyPoints.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: DailyPointsFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a DailyPoints.
+     * @param {DailyPointsAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const dailyPoints = await prisma.dailyPoints.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: DailyPointsAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of DailyPoints.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyPointsCountArgs} args - Arguments to filter DailyPoints to count.
+     * @example
+     * // Count the number of DailyPoints
+     * const count = await prisma.dailyPoints.count({
+     *   where: {
+     *     // ... the filter for the DailyPoints we want to count
+     *   }
+     * })
+    **/
+    count<T extends DailyPointsCountArgs>(
+      args?: Subset<T, DailyPointsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], DailyPointsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a DailyPoints.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyPointsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends DailyPointsAggregateArgs>(args: Subset<T, DailyPointsAggregateArgs>): Prisma.PrismaPromise<GetDailyPointsAggregateType<T>>
+
+    /**
+     * Group by DailyPoints.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {DailyPointsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends DailyPointsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: DailyPointsGroupByArgs['orderBy'] }
+        : { orderBy?: DailyPointsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, DailyPointsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetDailyPointsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the DailyPoints model
+   */
+  readonly fields: DailyPointsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for DailyPoints.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__DailyPointsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the DailyPoints model
+   */
+  interface DailyPointsFieldRefs {
+    readonly id: FieldRef<"DailyPoints", 'String'>
+    readonly userId: FieldRef<"DailyPoints", 'String'>
+    readonly dayKey: FieldRef<"DailyPoints", 'String'>
+    readonly earned: FieldRef<"DailyPoints", 'Int'>
+    readonly spent: FieldRef<"DailyPoints", 'Int'>
+    readonly adjusted: FieldRef<"DailyPoints", 'Int'>
+    readonly net: FieldRef<"DailyPoints", 'Int'>
+    readonly createdAt: FieldRef<"DailyPoints", 'DateTime'>
+    readonly updatedAt: FieldRef<"DailyPoints", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * DailyPoints findUnique
+   */
+  export type DailyPointsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyPoints to fetch.
+     */
+    where: DailyPointsWhereUniqueInput
+  }
+
+  /**
+   * DailyPoints findUniqueOrThrow
+   */
+  export type DailyPointsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyPoints to fetch.
+     */
+    where: DailyPointsWhereUniqueInput
+  }
+
+  /**
+   * DailyPoints findFirst
+   */
+  export type DailyPointsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyPoints to fetch.
+     */
+    where?: DailyPointsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DailyPoints to fetch.
+     */
+    orderBy?: DailyPointsOrderByWithRelationInput | DailyPointsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DailyPoints.
+     */
+    cursor?: DailyPointsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DailyPoints from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DailyPoints.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DailyPoints.
+     */
+    distinct?: DailyPointsScalarFieldEnum | DailyPointsScalarFieldEnum[]
+  }
+
+  /**
+   * DailyPoints findFirstOrThrow
+   */
+  export type DailyPointsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyPoints to fetch.
+     */
+    where?: DailyPointsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DailyPoints to fetch.
+     */
+    orderBy?: DailyPointsOrderByWithRelationInput | DailyPointsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for DailyPoints.
+     */
+    cursor?: DailyPointsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DailyPoints from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DailyPoints.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of DailyPoints.
+     */
+    distinct?: DailyPointsScalarFieldEnum | DailyPointsScalarFieldEnum[]
+  }
+
+  /**
+   * DailyPoints findMany
+   */
+  export type DailyPointsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    /**
+     * Filter, which DailyPoints to fetch.
+     */
+    where?: DailyPointsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of DailyPoints to fetch.
+     */
+    orderBy?: DailyPointsOrderByWithRelationInput | DailyPointsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing DailyPoints.
+     */
+    cursor?: DailyPointsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` DailyPoints from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` DailyPoints.
+     */
+    skip?: number
+    distinct?: DailyPointsScalarFieldEnum | DailyPointsScalarFieldEnum[]
+  }
+
+  /**
+   * DailyPoints create
+   */
+  export type DailyPointsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a DailyPoints.
+     */
+    data: XOR<DailyPointsCreateInput, DailyPointsUncheckedCreateInput>
+  }
+
+  /**
+   * DailyPoints createMany
+   */
+  export type DailyPointsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many DailyPoints.
+     */
+    data: DailyPointsCreateManyInput | DailyPointsCreateManyInput[]
+  }
+
+  /**
+   * DailyPoints update
+   */
+  export type DailyPointsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a DailyPoints.
+     */
+    data: XOR<DailyPointsUpdateInput, DailyPointsUncheckedUpdateInput>
+    /**
+     * Choose, which DailyPoints to update.
+     */
+    where: DailyPointsWhereUniqueInput
+  }
+
+  /**
+   * DailyPoints updateMany
+   */
+  export type DailyPointsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update DailyPoints.
+     */
+    data: XOR<DailyPointsUpdateManyMutationInput, DailyPointsUncheckedUpdateManyInput>
+    /**
+     * Filter which DailyPoints to update
+     */
+    where?: DailyPointsWhereInput
+    /**
+     * Limit how many DailyPoints to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * DailyPoints upsert
+   */
+  export type DailyPointsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the DailyPoints to update in case it exists.
+     */
+    where: DailyPointsWhereUniqueInput
+    /**
+     * In case the DailyPoints found by the `where` argument doesn't exist, create a new DailyPoints with this data.
+     */
+    create: XOR<DailyPointsCreateInput, DailyPointsUncheckedCreateInput>
+    /**
+     * In case the DailyPoints was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<DailyPointsUpdateInput, DailyPointsUncheckedUpdateInput>
+  }
+
+  /**
+   * DailyPoints delete
+   */
+  export type DailyPointsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+    /**
+     * Filter which DailyPoints to delete.
+     */
+    where: DailyPointsWhereUniqueInput
+  }
+
+  /**
+   * DailyPoints deleteMany
+   */
+  export type DailyPointsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which DailyPoints to delete
+     */
+    where?: DailyPointsWhereInput
+    /**
+     * Limit how many DailyPoints to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * DailyPoints findRaw
+   */
+  export type DailyPointsFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * DailyPoints aggregateRaw
+   */
+  export type DailyPointsAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * DailyPoints without action
+   */
+  export type DailyPointsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DailyPoints
+     */
+    select?: DailyPointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the DailyPoints
+     */
+    omit?: DailyPointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: DailyPointsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -27449,6 +28646,21 @@ export namespace Prisma {
   export type PointAdjustmentScalarFieldEnum = (typeof PointAdjustmentScalarFieldEnum)[keyof typeof PointAdjustmentScalarFieldEnum]
 
 
+  export const DailyPointsScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    dayKey: 'dayKey',
+    earned: 'earned',
+    spent: 'spent',
+    adjusted: 'adjusted',
+    net: 'net',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type DailyPointsScalarFieldEnum = (typeof DailyPointsScalarFieldEnum)[keyof typeof DailyPointsScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -27599,6 +28811,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogListRelationFilter
     sessions?: UserSessionListRelationFilter
     PointAdjustment?: PointAdjustmentListRelationFilter
+    DailyPoints?: DailyPointsListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -27633,6 +28846,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogOrderByRelationAggregateInput
     sessions?: UserSessionOrderByRelationAggregateInput
     PointAdjustment?: PointAdjustmentOrderByRelationAggregateInput
+    DailyPoints?: DailyPointsOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -27670,6 +28884,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogListRelationFilter
     sessions?: UserSessionListRelationFilter
     PointAdjustment?: PointAdjustmentListRelationFilter
+    DailyPoints?: DailyPointsListRelationFilter
   }, "id">
 
   export type UserOrderByWithAggregationInput = {
@@ -29123,6 +30338,84 @@ export namespace Prisma {
     appliedAt?: DateTimeWithAggregatesFilter<"PointAdjustment"> | Date | string
   }
 
+  export type DailyPointsWhereInput = {
+    AND?: DailyPointsWhereInput | DailyPointsWhereInput[]
+    OR?: DailyPointsWhereInput[]
+    NOT?: DailyPointsWhereInput | DailyPointsWhereInput[]
+    id?: StringFilter<"DailyPoints"> | string
+    userId?: StringFilter<"DailyPoints"> | string
+    dayKey?: StringFilter<"DailyPoints"> | string
+    earned?: IntFilter<"DailyPoints"> | number
+    spent?: IntFilter<"DailyPoints"> | number
+    adjusted?: IntFilter<"DailyPoints"> | number
+    net?: IntFilter<"DailyPoints"> | number
+    createdAt?: DateTimeFilter<"DailyPoints"> | Date | string
+    updatedAt?: DateTimeFilter<"DailyPoints"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type DailyPointsOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    dayKey?: SortOrder
+    earned?: SortOrder
+    spent?: SortOrder
+    adjusted?: SortOrder
+    net?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type DailyPointsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_dayKey?: DailyPointsUserIdDayKeyCompoundUniqueInput
+    AND?: DailyPointsWhereInput | DailyPointsWhereInput[]
+    OR?: DailyPointsWhereInput[]
+    NOT?: DailyPointsWhereInput | DailyPointsWhereInput[]
+    userId?: StringFilter<"DailyPoints"> | string
+    dayKey?: StringFilter<"DailyPoints"> | string
+    earned?: IntFilter<"DailyPoints"> | number
+    spent?: IntFilter<"DailyPoints"> | number
+    adjusted?: IntFilter<"DailyPoints"> | number
+    net?: IntFilter<"DailyPoints"> | number
+    createdAt?: DateTimeFilter<"DailyPoints"> | Date | string
+    updatedAt?: DateTimeFilter<"DailyPoints"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_dayKey">
+
+  export type DailyPointsOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    dayKey?: SortOrder
+    earned?: SortOrder
+    spent?: SortOrder
+    adjusted?: SortOrder
+    net?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: DailyPointsCountOrderByAggregateInput
+    _avg?: DailyPointsAvgOrderByAggregateInput
+    _max?: DailyPointsMaxOrderByAggregateInput
+    _min?: DailyPointsMinOrderByAggregateInput
+    _sum?: DailyPointsSumOrderByAggregateInput
+  }
+
+  export type DailyPointsScalarWhereWithAggregatesInput = {
+    AND?: DailyPointsScalarWhereWithAggregatesInput | DailyPointsScalarWhereWithAggregatesInput[]
+    OR?: DailyPointsScalarWhereWithAggregatesInput[]
+    NOT?: DailyPointsScalarWhereWithAggregatesInput | DailyPointsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"DailyPoints"> | string
+    userId?: StringWithAggregatesFilter<"DailyPoints"> | string
+    dayKey?: StringWithAggregatesFilter<"DailyPoints"> | string
+    earned?: IntWithAggregatesFilter<"DailyPoints"> | number
+    spent?: IntWithAggregatesFilter<"DailyPoints"> | number
+    adjusted?: IntWithAggregatesFilter<"DailyPoints"> | number
+    net?: IntWithAggregatesFilter<"DailyPoints"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"DailyPoints"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"DailyPoints"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -29155,6 +30448,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -29189,6 +30483,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -29222,6 +30517,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -29255,6 +30551,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -30655,6 +31952,85 @@ export namespace Prisma {
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type DailyPointsCreateInput = {
+    id?: string
+    dayKey: string
+    earned?: number
+    spent?: number
+    adjusted?: number
+    net?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutDailyPointsInput
+  }
+
+  export type DailyPointsUncheckedCreateInput = {
+    id?: string
+    userId: string
+    dayKey: string
+    earned?: number
+    spent?: number
+    adjusted?: number
+    net?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DailyPointsUpdateInput = {
+    dayKey?: StringFieldUpdateOperationsInput | string
+    earned?: IntFieldUpdateOperationsInput | number
+    spent?: IntFieldUpdateOperationsInput | number
+    adjusted?: IntFieldUpdateOperationsInput | number
+    net?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutDailyPointsNestedInput
+  }
+
+  export type DailyPointsUncheckedUpdateInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    dayKey?: StringFieldUpdateOperationsInput | string
+    earned?: IntFieldUpdateOperationsInput | number
+    spent?: IntFieldUpdateOperationsInput | number
+    adjusted?: IntFieldUpdateOperationsInput | number
+    net?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DailyPointsCreateManyInput = {
+    id?: string
+    userId: string
+    dayKey: string
+    earned?: number
+    spent?: number
+    adjusted?: number
+    net?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DailyPointsUpdateManyMutationInput = {
+    dayKey?: StringFieldUpdateOperationsInput | string
+    earned?: IntFieldUpdateOperationsInput | number
+    spent?: IntFieldUpdateOperationsInput | number
+    adjusted?: IntFieldUpdateOperationsInput | number
+    net?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DailyPointsUncheckedUpdateManyInput = {
+    userId?: StringFieldUpdateOperationsInput | string
+    dayKey?: StringFieldUpdateOperationsInput | string
+    earned?: IntFieldUpdateOperationsInput | number
+    spent?: IntFieldUpdateOperationsInput | number
+    adjusted?: IntFieldUpdateOperationsInput | number
+    net?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -30839,6 +32215,12 @@ export namespace Prisma {
     none?: PointAdjustmentWhereInput
   }
 
+  export type DailyPointsListRelationFilter = {
+    every?: DailyPointsWhereInput
+    some?: DailyPointsWhereInput
+    none?: DailyPointsWhereInput
+  }
+
   export type BoothJoinOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -30912,6 +32294,10 @@ export namespace Prisma {
   }
 
   export type PointAdjustmentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type DailyPointsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -31827,6 +33213,61 @@ export namespace Prisma {
     amount?: SortOrder
   }
 
+  export type DailyPointsUserIdDayKeyCompoundUniqueInput = {
+    userId: string
+    dayKey: string
+  }
+
+  export type DailyPointsCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    dayKey?: SortOrder
+    earned?: SortOrder
+    spent?: SortOrder
+    adjusted?: SortOrder
+    net?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DailyPointsAvgOrderByAggregateInput = {
+    earned?: SortOrder
+    spent?: SortOrder
+    adjusted?: SortOrder
+    net?: SortOrder
+  }
+
+  export type DailyPointsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    dayKey?: SortOrder
+    earned?: SortOrder
+    spent?: SortOrder
+    adjusted?: SortOrder
+    net?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DailyPointsMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    dayKey?: SortOrder
+    earned?: SortOrder
+    spent?: SortOrder
+    adjusted?: SortOrder
+    net?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type DailyPointsSumOrderByAggregateInput = {
+    earned?: SortOrder
+    spent?: SortOrder
+    adjusted?: SortOrder
+    net?: SortOrder
+  }
+
   export type BoothJoinCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -31960,6 +33401,13 @@ export namespace Prisma {
     connect?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
   }
 
+  export type DailyPointsCreateNestedManyWithoutUserInput = {
+    create?: XOR<DailyPointsCreateWithoutUserInput, DailyPointsUncheckedCreateWithoutUserInput> | DailyPointsCreateWithoutUserInput[] | DailyPointsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DailyPointsCreateOrConnectWithoutUserInput | DailyPointsCreateOrConnectWithoutUserInput[]
+    createMany?: DailyPointsCreateManyUserInputEnvelope
+    connect?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
+  }
+
   export type BoothJoinUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -32091,6 +33539,13 @@ export namespace Prisma {
     connectOrCreate?: PointAdjustmentCreateOrConnectWithoutUserInput | PointAdjustmentCreateOrConnectWithoutUserInput[]
     createMany?: PointAdjustmentCreateManyUserInputEnvelope
     connect?: PointAdjustmentWhereUniqueInput | PointAdjustmentWhereUniqueInput[]
+  }
+
+  export type DailyPointsUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<DailyPointsCreateWithoutUserInput, DailyPointsUncheckedCreateWithoutUserInput> | DailyPointsCreateWithoutUserInput[] | DailyPointsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DailyPointsCreateOrConnectWithoutUserInput | DailyPointsCreateOrConnectWithoutUserInput[]
+    createMany?: DailyPointsCreateManyUserInputEnvelope
+    connect?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -32389,6 +33844,20 @@ export namespace Prisma {
     deleteMany?: PointAdjustmentScalarWhereInput | PointAdjustmentScalarWhereInput[]
   }
 
+  export type DailyPointsUpdateManyWithoutUserNestedInput = {
+    create?: XOR<DailyPointsCreateWithoutUserInput, DailyPointsUncheckedCreateWithoutUserInput> | DailyPointsCreateWithoutUserInput[] | DailyPointsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DailyPointsCreateOrConnectWithoutUserInput | DailyPointsCreateOrConnectWithoutUserInput[]
+    upsert?: DailyPointsUpsertWithWhereUniqueWithoutUserInput | DailyPointsUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: DailyPointsCreateManyUserInputEnvelope
+    set?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
+    disconnect?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
+    delete?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
+    connect?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
+    update?: DailyPointsUpdateWithWhereUniqueWithoutUserInput | DailyPointsUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: DailyPointsUpdateManyWithWhereWithoutUserInput | DailyPointsUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: DailyPointsScalarWhereInput | DailyPointsScalarWhereInput[]
+  }
+
   export type BoothJoinUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<BoothJoinCreateWithoutUserInput, BoothJoinUncheckedCreateWithoutUserInput> | BoothJoinCreateWithoutUserInput[] | BoothJoinUncheckedCreateWithoutUserInput[]
     connectOrCreate?: BoothJoinCreateOrConnectWithoutUserInput | BoothJoinCreateOrConnectWithoutUserInput[]
@@ -32653,6 +34122,20 @@ export namespace Prisma {
     update?: PointAdjustmentUpdateWithWhereUniqueWithoutUserInput | PointAdjustmentUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: PointAdjustmentUpdateManyWithWhereWithoutUserInput | PointAdjustmentUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: PointAdjustmentScalarWhereInput | PointAdjustmentScalarWhereInput[]
+  }
+
+  export type DailyPointsUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<DailyPointsCreateWithoutUserInput, DailyPointsUncheckedCreateWithoutUserInput> | DailyPointsCreateWithoutUserInput[] | DailyPointsUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: DailyPointsCreateOrConnectWithoutUserInput | DailyPointsCreateOrConnectWithoutUserInput[]
+    upsert?: DailyPointsUpsertWithWhereUniqueWithoutUserInput | DailyPointsUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: DailyPointsCreateManyUserInputEnvelope
+    set?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
+    disconnect?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
+    delete?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
+    connect?: DailyPointsWhereUniqueInput | DailyPointsWhereUniqueInput[]
+    update?: DailyPointsUpdateWithWhereUniqueWithoutUserInput | DailyPointsUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: DailyPointsUpdateManyWithWhereWithoutUserInput | DailyPointsUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: DailyPointsScalarWhereInput | DailyPointsScalarWhereInput[]
   }
 
   export type BoothCreatepicsInput = {
@@ -33490,6 +34973,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPointAdjustmentInput, UserUpdateWithoutPointAdjustmentInput>, UserUncheckedUpdateWithoutPointAdjustmentInput>
   }
 
+  export type UserCreateNestedOneWithoutDailyPointsInput = {
+    create?: XOR<UserCreateWithoutDailyPointsInput, UserUncheckedCreateWithoutDailyPointsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDailyPointsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutDailyPointsNestedInput = {
+    create?: XOR<UserCreateWithoutDailyPointsInput, UserUncheckedCreateWithoutDailyPointsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutDailyPointsInput
+    upsert?: UserUpsertWithoutDailyPointsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDailyPointsInput, UserUpdateWithoutDailyPointsInput>, UserUncheckedUpdateWithoutDailyPointsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -34203,6 +35700,37 @@ export namespace Prisma {
     data: PointAdjustmentCreateManyUserInput | PointAdjustmentCreateManyUserInput[]
   }
 
+  export type DailyPointsCreateWithoutUserInput = {
+    id?: string
+    dayKey: string
+    earned?: number
+    spent?: number
+    adjusted?: number
+    net?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DailyPointsUncheckedCreateWithoutUserInput = {
+    id?: string
+    dayKey: string
+    earned?: number
+    spent?: number
+    adjusted?: number
+    net?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type DailyPointsCreateOrConnectWithoutUserInput = {
+    where: DailyPointsWhereUniqueInput
+    create: XOR<DailyPointsCreateWithoutUserInput, DailyPointsUncheckedCreateWithoutUserInput>
+  }
+
+  export type DailyPointsCreateManyUserInputEnvelope = {
+    data: DailyPointsCreateManyUserInput | DailyPointsCreateManyUserInput[]
+  }
+
   export type BoothJoinUpsertWithWhereUniqueWithoutUserInput = {
     where: BoothJoinWhereUniqueInput
     update: XOR<BoothJoinUpdateWithoutUserInput, BoothJoinUncheckedUpdateWithoutUserInput>
@@ -34733,6 +36261,37 @@ export namespace Prisma {
     appliedAt?: DateTimeFilter<"PointAdjustment"> | Date | string
   }
 
+  export type DailyPointsUpsertWithWhereUniqueWithoutUserInput = {
+    where: DailyPointsWhereUniqueInput
+    update: XOR<DailyPointsUpdateWithoutUserInput, DailyPointsUncheckedUpdateWithoutUserInput>
+    create: XOR<DailyPointsCreateWithoutUserInput, DailyPointsUncheckedCreateWithoutUserInput>
+  }
+
+  export type DailyPointsUpdateWithWhereUniqueWithoutUserInput = {
+    where: DailyPointsWhereUniqueInput
+    data: XOR<DailyPointsUpdateWithoutUserInput, DailyPointsUncheckedUpdateWithoutUserInput>
+  }
+
+  export type DailyPointsUpdateManyWithWhereWithoutUserInput = {
+    where: DailyPointsScalarWhereInput
+    data: XOR<DailyPointsUpdateManyMutationInput, DailyPointsUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type DailyPointsScalarWhereInput = {
+    AND?: DailyPointsScalarWhereInput | DailyPointsScalarWhereInput[]
+    OR?: DailyPointsScalarWhereInput[]
+    NOT?: DailyPointsScalarWhereInput | DailyPointsScalarWhereInput[]
+    id?: StringFilter<"DailyPoints"> | string
+    userId?: StringFilter<"DailyPoints"> | string
+    dayKey?: StringFilter<"DailyPoints"> | string
+    earned?: IntFilter<"DailyPoints"> | number
+    spent?: IntFilter<"DailyPoints"> | number
+    adjusted?: IntFilter<"DailyPoints"> | number
+    net?: IntFilter<"DailyPoints"> | number
+    createdAt?: DateTimeFilter<"DailyPoints"> | Date | string
+    updatedAt?: DateTimeFilter<"DailyPoints"> | Date | string
+  }
+
   export type BoothOwnerCreateWithoutBoothInput = {
     id?: string
     addedAt?: Date | string
@@ -35071,6 +36630,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutJoinedBoothsInput = {
@@ -35104,6 +36664,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutJoinedBoothsInput = {
@@ -35193,6 +36754,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutJoinedBoothsInput = {
@@ -35225,6 +36787,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutJoinedUsersInput = {
@@ -35303,6 +36866,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedBoothsInput = {
@@ -35336,6 +36900,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedBoothsInput = {
@@ -35425,6 +36990,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedBoothsInput = {
@@ -35457,6 +37023,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutBoothOwnersInput = {
@@ -35535,6 +37102,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTranscriptLogInput = {
@@ -35568,6 +37136,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTranscriptLogInput = {
@@ -35616,6 +37185,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTranscriptLogInput = {
@@ -35648,6 +37218,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutVisitLogInput = {
@@ -35681,6 +37252,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutVisitLogInput = {
@@ -35714,6 +37286,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutVisitLogInput = {
@@ -35762,6 +37335,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutVisitLogInput = {
@@ -35794,6 +37368,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBoothRatingsInput = {
@@ -35827,6 +37402,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothRatingsInput = {
@@ -35860,6 +37436,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothRatingsInput = {
@@ -35949,6 +37526,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothRatingsInput = {
@@ -35981,6 +37559,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutRatingsInput = {
@@ -36059,6 +37638,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothCommentsInput = {
@@ -36092,6 +37672,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothCommentsInput = {
@@ -36181,6 +37762,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothCommentsInput = {
@@ -36213,6 +37795,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutCommentsInput = {
@@ -36291,6 +37874,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBoothFavoritesInput = {
@@ -36324,6 +37908,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBoothFavoritesInput = {
@@ -36413,6 +37998,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBoothFavoritesInput = {
@@ -36445,6 +38031,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutFavoritesInput = {
@@ -36523,6 +38110,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutUploadedFilesInput = {
@@ -36556,6 +38144,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutUploadedFilesInput = {
@@ -36604,6 +38193,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutUploadedFilesInput = {
@@ -36636,6 +38226,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -36669,6 +38260,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -36702,6 +38294,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -36750,6 +38343,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -36782,6 +38376,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutFeedbacksInput = {
@@ -36815,6 +38410,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFeedbacksInput = {
@@ -36848,6 +38444,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFeedbacksInput = {
@@ -36896,6 +38493,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFeedbacksInput = {
@@ -36928,6 +38526,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSystemLogsInput = {
@@ -36961,6 +38560,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSystemLogsInput = {
@@ -36994,6 +38594,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSystemLogsInput = {
@@ -37042,6 +38643,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSystemLogsInput = {
@@ -37074,6 +38676,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutWorkingHoursUpdatesInput = {
@@ -37107,6 +38710,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutWorkingHoursUpdatesInput = {
@@ -37140,6 +38744,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutWorkingHoursUpdatesInput = {
@@ -37188,6 +38793,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutWorkingHoursUpdatesInput = {
@@ -37220,6 +38826,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutMaintenanceModeUpdatesInput = {
@@ -37253,6 +38860,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMaintenanceModeUpdatesInput = {
@@ -37286,6 +38894,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMaintenanceModeUpdatesInput = {
@@ -37334,6 +38943,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMaintenanceModeUpdatesInput = {
@@ -37366,6 +38976,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutLoginHistoryInput = {
@@ -37399,6 +39010,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLoginHistoryInput = {
@@ -37432,6 +39044,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLoginHistoryInput = {
@@ -37480,6 +39093,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLoginHistoryInput = {
@@ -37512,6 +39126,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothCreateWithoutQrCodeInput = {
@@ -37709,6 +39324,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPlayPassInput = {
@@ -37742,6 +39358,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPlayPassInput = {
@@ -37868,6 +39485,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPlayPassInput = {
@@ -37900,6 +39518,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothUpsertWithoutPlayPassInput = {
@@ -38019,6 +39638,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQrScanLogInput = {
@@ -38052,6 +39672,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQrScanLogInput = {
@@ -38137,6 +39758,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQrScanLogInput = {
@@ -38169,6 +39791,7 @@ export namespace Prisma {
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QrCodeUpsertWithoutLogsInput = {
@@ -38243,6 +39866,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOverlayLogsInput = {
@@ -38276,6 +39900,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOverlayLogsInput = {
@@ -38324,6 +39949,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOverlayLogsInput = {
@@ -38356,6 +39982,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -38389,6 +40016,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -38422,6 +40050,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -38470,6 +40099,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -38502,6 +40132,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutPointAdjustmentInput = {
@@ -38535,6 +40166,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
     sessions?: UserSessionCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPointAdjustmentInput = {
@@ -38568,6 +40200,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
     overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
     sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    DailyPoints?: DailyPointsUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPointAdjustmentInput = {
@@ -38616,6 +40249,7 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPointAdjustmentInput = {
@@ -38648,6 +40282,157 @@ export namespace Prisma {
     QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
     overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
     sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    DailyPoints?: DailyPointsUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserCreateWithoutDailyPointsInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogCreateNestedManyWithoutUserInput
+    sessions?: UserSessionCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutDailyPointsInput = {
+    id?: string
+    username: string
+    status: string
+    role: string
+    year?: string | null
+    name: string
+    student_id?: string | null
+    dept: string
+    createdAt?: Date | string
+    score?: number
+    lastLoginDate?: Date | string | null
+    maintenanceLoggedOut?: boolean
+    joinedBooths?: BoothJoinUncheckedCreateNestedManyWithoutUserInput
+    ownedBooths?: BoothOwnerUncheckedCreateNestedManyWithoutUserInput
+    TranscriptLog?: TranscriptLogUncheckedCreateNestedManyWithoutUserInput
+    VisitLog?: VisitLogUncheckedCreateNestedManyWithoutUserInput
+    boothRatings?: BoothRatingUncheckedCreateNestedManyWithoutUserInput
+    boothComments?: BoothCommentUncheckedCreateNestedManyWithoutUserInput
+    boothFavorites?: BoothFavoriteUncheckedCreateNestedManyWithoutUserInput
+    uploadedFiles?: FileUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    feedbacks?: FeedbackUncheckedCreateNestedManyWithoutUserInput
+    systemLogs?: SystemLogUncheckedCreateNestedManyWithoutUserInput
+    workingHoursUpdates?: WorkingHoursUncheckedCreateNestedManyWithoutUpdatedUserInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedCreateNestedManyWithoutUpdatedUserInput
+    loginHistory?: LoginHistoryUncheckedCreateNestedManyWithoutUserInput
+    PlayPass?: PlayPassUncheckedCreateNestedManyWithoutUserInput
+    QrScanLog?: QrScanLogUncheckedCreateNestedManyWithoutUserInput
+    overlayLogs?: UserOverlayLogUncheckedCreateNestedManyWithoutUserInput
+    sessions?: UserSessionUncheckedCreateNestedManyWithoutUserInput
+    PointAdjustment?: PointAdjustmentUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutDailyPointsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutDailyPointsInput, UserUncheckedCreateWithoutDailyPointsInput>
+  }
+
+  export type UserUpsertWithoutDailyPointsInput = {
+    update: XOR<UserUpdateWithoutDailyPointsInput, UserUncheckedUpdateWithoutDailyPointsInput>
+    create: XOR<UserCreateWithoutDailyPointsInput, UserUncheckedCreateWithoutDailyPointsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutDailyPointsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutDailyPointsInput, UserUncheckedUpdateWithoutDailyPointsInput>
+  }
+
+  export type UserUpdateWithoutDailyPointsInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutDailyPointsInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    year?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    student_id?: NullableStringFieldUpdateOperationsInput | string | null
+    dept?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    score?: IntFieldUpdateOperationsInput | number
+    lastLoginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    maintenanceLoggedOut?: BoolFieldUpdateOperationsInput | boolean
+    joinedBooths?: BoothJoinUncheckedUpdateManyWithoutUserNestedInput
+    ownedBooths?: BoothOwnerUncheckedUpdateManyWithoutUserNestedInput
+    TranscriptLog?: TranscriptLogUncheckedUpdateManyWithoutUserNestedInput
+    VisitLog?: VisitLogUncheckedUpdateManyWithoutUserNestedInput
+    boothRatings?: BoothRatingUncheckedUpdateManyWithoutUserNestedInput
+    boothComments?: BoothCommentUncheckedUpdateManyWithoutUserNestedInput
+    boothFavorites?: BoothFavoriteUncheckedUpdateManyWithoutUserNestedInput
+    uploadedFiles?: FileUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    feedbacks?: FeedbackUncheckedUpdateManyWithoutUserNestedInput
+    systemLogs?: SystemLogUncheckedUpdateManyWithoutUserNestedInput
+    workingHoursUpdates?: WorkingHoursUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    maintenanceModeUpdates?: MaintenanceModeUncheckedUpdateManyWithoutUpdatedUserNestedInput
+    loginHistory?: LoginHistoryUncheckedUpdateManyWithoutUserNestedInput
+    PlayPass?: PlayPassUncheckedUpdateManyWithoutUserNestedInput
+    QrScanLog?: QrScanLogUncheckedUpdateManyWithoutUserNestedInput
+    overlayLogs?: UserOverlayLogUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: UserSessionUncheckedUpdateManyWithoutUserNestedInput
+    PointAdjustment?: PointAdjustmentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BoothJoinCreateManyUserInput = {
@@ -38798,6 +40583,17 @@ export namespace Prisma {
     amount: number
     reason?: string | null
     appliedAt?: Date | string
+  }
+
+  export type DailyPointsCreateManyUserInput = {
+    id?: string
+    dayKey: string
+    earned?: number
+    spent?: number
+    adjusted?: number
+    net?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type BoothJoinUpdateWithoutUserInput = {
@@ -39191,6 +40987,36 @@ export namespace Prisma {
     amount?: IntFieldUpdateOperationsInput | number
     reason?: NullableStringFieldUpdateOperationsInput | string | null
     appliedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DailyPointsUpdateWithoutUserInput = {
+    dayKey?: StringFieldUpdateOperationsInput | string
+    earned?: IntFieldUpdateOperationsInput | number
+    spent?: IntFieldUpdateOperationsInput | number
+    adjusted?: IntFieldUpdateOperationsInput | number
+    net?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DailyPointsUncheckedUpdateWithoutUserInput = {
+    dayKey?: StringFieldUpdateOperationsInput | string
+    earned?: IntFieldUpdateOperationsInput | number
+    spent?: IntFieldUpdateOperationsInput | number
+    adjusted?: IntFieldUpdateOperationsInput | number
+    net?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type DailyPointsUncheckedUpdateManyWithoutUserInput = {
+    dayKey?: StringFieldUpdateOperationsInput | string
+    earned?: IntFieldUpdateOperationsInput | number
+    spent?: IntFieldUpdateOperationsInput | number
+    adjusted?: IntFieldUpdateOperationsInput | number
+    net?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type BoothOwnerCreateManyBoothInput = {
