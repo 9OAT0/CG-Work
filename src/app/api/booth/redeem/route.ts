@@ -11,8 +11,8 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 const QR_JWT_SECRET = process.env.QR_JWT_SECRET || JWT_SECRET;
 
 type QrPayload = {
-  code?: string;     // mapping ไป QrCode.code
-  codeId?: string;   // หรือใช้ id โดยตรง
+  code?: string; // mapping ไป QrCode.code
+  codeId?: string; // หรือใช้ id โดยตรง
   overrideCost?: number;
   jti?: string;
   exp?: number;
@@ -145,12 +145,13 @@ export async function POST(req: NextRequest) {
           where: { userId, appliedAt: { gte: start, lte: end } },
         }),
       ]);
+
       const todayPoints = joinsToday + (adjSumToday._sum.amount ?? 0);
       const previousBalance = Math.max(0, currentScore - todayPoints);
 
-      // แบ่งยอดที่จะตัด
+      // ✅ กติกา: ใช้ previous ก่อน ถ้าไม่พอค่อยใช้ today
       const useFromPrev = Math.min(cost, previousBalance);
-      const useFromToday = cost - useFromPrev; // เหลือเท่าไหร่ค่อยกินของวันนี้
+      const useFromToday = cost - useFromPrev;
 
       // 7.1) ตัดคะแนนรวม (กันแข่งกันกดด้วยเงื่อนไข gte)
       const dec = await tx.user.updateMany({
@@ -166,7 +167,7 @@ export async function POST(req: NextRequest) {
           data: { uses: { increment: 1 }, updatedAt: nowTH },
         });
         if (upd.count !== 1) {
-          // ยกเลิกการตัดคะแนนรวม (ภายในทรานแซกชันเดียวกันไม่จำเป็น แต่คงรูปแบบเดิมของคุณไว้)
+          // ยกเลิกการตัดคะแนนรวมกลับ (ยังอยู่ในทรานแซกชันเดียวกัน)
           await tx.user.update({
             where: { id: userId },
             data: { score: { increment: cost } },
@@ -180,7 +181,7 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // 7.3) ถ้าต้องใช้แต้มของ "วันนี้" บางส่วน → บันทึก PointAdjustment ติดลบไว้วันนี้
+      // 7.3) ถ้าใช้แต้ม "วันนี้" บางส่วน → บันทึก PointAdjustment ติดลบวันนี้เพื่อให้ dailyPoints ลดตามจริง
       if (useFromToday > 0) {
         await tx.pointAdjustment.create({
           data: {
@@ -214,7 +215,11 @@ export async function POST(req: NextRequest) {
       return {
         passId: pass.id,
         remaining: updatedUser?.score ?? null,
-        breakdown: { useFromPrev, useFromToday, todayPointsBefore: todayPoints },
+        breakdown: {
+          useFromPrev,
+          useFromToday,
+          todayPointsBefore: todayPoints,
+        },
       };
     });
 
