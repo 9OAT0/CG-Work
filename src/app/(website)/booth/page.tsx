@@ -61,23 +61,29 @@ function BoothContent() {
   const handleCheckPassword = async () => {
     setChecking(true);
     try {
-      const res = await fetch("/api/booth/verify", {
+      const res = await fetch("/api/join-booth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ boothCode: password }),
+        credentials: "include", // << ส่ง cookie token ไปด้วย
+        body: JSON.stringify({ boothCode: password.trim() }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
+        // ทั้งกรณี "สำเร็จ" และ "ได้เข้าร่วมแล้ว" backend จะตอบ 200
         setShowResult("correct");
+
+        // ถ้าอยากแจ้งแต้มวันนี้ก็อ่านได้จาก data.todaysPoints
+        // ตัวอย่าง: console.log("คะแนนวันนี้", data.todaysPoints);
+
         setTimeout(() => {
           setShowResult(null);
           setShowPasswordModal(false);
-          router.push("/category");
-        }, 2000);
+          router.push("/profile"); // << ไปหน้าโปรไฟล์ให้เห็น dailypoint อัปเดต
+        }, 1500);
       } else {
+        // กรณีเกินเพดานต่อวัน ฯลฯ จะตอบ 400 พร้อมข้อความ error
         setShowResult("wrong");
       }
     } catch {

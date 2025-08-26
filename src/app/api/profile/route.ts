@@ -1,6 +1,6 @@
 // app/api/profile/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "@/generated/prisma"; // หรือ @prisma/client ถ้าคุณเปลี่ยนตามข้อแนะนำ
 import jwt from "jsonwebtoken";
 import {
   withErrorHandler,
@@ -9,8 +9,11 @@ import {
 } from "@/lib/middleware/errorHandler";
 import { validateRequest, updateProfileSchema } from "@/lib/validation/schemas";
 import { withRateLimit, apiRateLimit } from "@/lib/middleware/rateLimit";
+import { thaiDayKey } from "@/lib/dailyPoint";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic"; // 👈 ปิด cache
+export const revalidate = 0; // 👈 ปิด cache
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 const prisma =
@@ -24,19 +27,6 @@ const prisma =
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-const MAX_DAILY_SCORE = 30; // ✅ เพดานแต้มรายวัน
-
-// --- helpers เวลาไทย ---
-function getBangkokDayKey(date?: Date) {
-  const base = date ?? new Date();
-  const th = new Date(
-    base.toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
-  );
-  const y = th.getFullYear();
-  const m = String(th.getMonth() + 1).padStart(2, "0");
-  const d = String(th.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`; // YYYY-MM-DD (เวลาไทย)
-}
 
 function toTHDateYYYYMMDD(date: Date) {
   const th = new Date(
@@ -49,7 +39,6 @@ function toTHDateYYYYMMDD(date: Date) {
 }
 
 async function getProfileHandler(req: NextRequest) {
-  // auth
   const token = req.cookies.get("token")?.value;
   if (!token) throw new AuthenticationError("Unauthorized");
 
@@ -60,7 +49,6 @@ async function getProfileHandler(req: NextRequest) {
     throw new AuthenticationError("Invalid token");
   }
 
-  // user + transcript logs (เฉพาะวันที่)
   const user = await prisma.user.findUnique({
     where: { id: payload.id },
     select: {
@@ -68,24 +56,31 @@ async function getProfileHandler(req: NextRequest) {
       student_id: true,
       status: true,
       dept: true,
-      score: true,
+      score: true, // รวมทั้งหมด
       TranscriptLog: { select: { date: true } },
     },
   });
   if (!user) throw new NotFoundError("User not found");
 
-  // ✅ อ่านแต้มวันนี้จากตาราง DailyPoints (เร็ว/ตรงเวลาไทย)
-  const dayKey = getBangkokDayKey();
-  const dp = await prisma.dailyPoints.findUnique({
-    where: { userId_dayKey: { userId: payload.id, dayKey } },
-    select: { net: true, earned: true, spent: true, adjusted: true },
-  });
-
-  const dailyNet = Math.max(0, Math.min(MAX_DAILY_SCORE, dp?.net ?? 0));
+  // ✅ คะแนนวันนี้อ่านจาก DailyPoints.net (ถ้าเอกสารยังไม่มีให้ถือว่า 0)
+  const dayKey = thaiDayKey();
+  let dailyPoints = 0;
+  try {
+    const dp = await prisma.dailyPoints.findUnique({
+      where: { userId_dayKey: { userId: payload.id as string, dayKey } },
+      select: { net: true },
+    });
+    dailyPoints = Math.max(0, dp?.net ?? 0);
+  } catch (e) {
+    // ถ้า client เก่า/ไม่รู้จัก model — จะมาเข้าที่นี่ (หลังจาก generate ใหม่แล้วจะหาย)
+    dailyPoints = 0;
+  }
 
   const transcriptDates = user.TranscriptLog.map((log) =>
     toTHDateYYYYMMDD(log.date)
   );
+
+  console.log(dailyPoints);
 
   return NextResponse.json(
     {
@@ -93,16 +88,13 @@ async function getProfileHandler(req: NextRequest) {
       student_id: user.student_id,
       status: user.status,
       dept: user.dept,
-      dailyPoints: dailyNet, // ✅ แต้มวันนี้ (สุทธิ) จาก DailyPoints
-      dailyBreakdown: dp
-        ? { earned: dp.earned, spent: dp.spent, adjusted: dp.adjusted }
-        : { earned: 0, spent: 0, adjusted: 0 },
-      totalPoints: user.score, // คะแนนสะสมรวม
+      dailyPoints,
+      totalPoints: user.score,
       transcriptDates,
     },
     {
       headers: {
-        "Cache-Control": "no-store",
+        "Cache-Control": "no-store, no-cache, max-age=0, must-revalidate",
       },
     }
   );
