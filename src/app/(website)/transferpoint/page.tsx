@@ -210,7 +210,19 @@ export default function TransferpointPage() {
       if (!res.ok) {
         setErrorMsg(data?.error || "แลกสิทธิ์ไม่สำเร็จ");
       } else {
+        // ✅ เก็บข้อมูลการแลกล่าสุดไว้ที่ sessionStorage
+        try {
+          sessionStorage.setItem(
+            "lastRedeemSlip",
+            JSON.stringify({ ...data, scannedQR })
+          );
+        } catch {}
+
+        // ถ้าจะคงไว้แสดงการ์ดในหน้านี้ด้วยก็ไม่ห้าม
         setResult(data as RedeemSuccess);
+
+        // ✅ ไปหน้า slip
+        router.push("/sliptransferpoint");
       }
     } catch (e) {
       setErrorMsg("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
