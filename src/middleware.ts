@@ -1,9 +1,8 @@
-// middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-const PUBLIC_PATHS = ["/", "/login", "/register", "/maintenance"];
+const PUBLIC_PATHS = ["/", "/login", "/register", "/maintenance"]; // ✅ อนุญาต maintenance
 const PROTECTED_PREFIXES = [
   "/homepage",
   "/profile",
@@ -17,9 +16,16 @@ const isStaticAsset = (p: string) =>
   p.startsWith("/favicon") ||
   /\.(png|jpe?g|gif|svg|ico|webp|avif|css|js|txt|json|woff2?)$/.test(p);
 
-const JWT_SECRET = process.env.JWT_SECRET
-  ? new TextEncoder().encode(process.env.JWT_SECRET)
-  : null;
+const RAW_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = RAW_SECRET ? new TextEncoder().encode(RAW_SECRET) : null;
+
+// สวิตช์ผ่าน ENV
+const FORCE_DAILY_RELOGIN =
+  (process.env.FORCE_DAILY_RELOGIN ?? "true") !== "false";
+const FORCE_LOGOUT_ON_MAINTENANCE =
+  (process.env.FORCE_LOGOUT_ON_MAINTENANCE ?? "true") !== "false";
+const FORCE_LOGOUT_OUT_OF_HOURS =
+  (process.env.FORCE_LOGOUT_OUT_OF_HOURS ?? "true") !== "false";
 
 function bangkokYMD() {
   const th = new Date(
@@ -30,12 +36,16 @@ function bangkokYMD() {
   const d = String(th.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
 }
+function toBangkokYMD(d: Date) {
+  return new Date(d.toLocaleString("en-US", { timeZone: "Asia/Bangkok" }))
+    .toLocaleString("en-CA", { timeZone: "Asia/Bangkok", hour12: false })
+    .slice(0, 10);
+}
 
 function withinHours(startHour: number, endHour: number, enabled: boolean) {
   if (!enabled) return true;
-  const now = new Date();
   const th = new Date(
-    now.toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
+    new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
   );
   const h = th.getHours();
   return h >= startHour && h < endHour;
@@ -43,10 +53,11 @@ function withinHours(startHour: number, endHour: number, enabled: boolean) {
 
 async function readClaims(
   req: NextRequest
-): Promise<null | Record<string, any>> {
-  const token = req.cookies.get("token")?.value;
-  if (!token || !JWT_SECRET) return null;
+): Promise<Record<string, any> | null> {
   try {
+    if (!JWT_SECRET) return null;
+    const token = req.cookies.get("token")?.value;
+    if (!token) return null;
     const { payload } = await jwtVerify(token, JWT_SECRET);
     return payload as Record<string, any>;
   } catch {
@@ -55,50 +66,35 @@ async function readClaims(
 }
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  try {
+    const { pathname } = request.nextUrl;
 
-  // 1) ผ่านเลยสำหรับ static, public, และหน้า api
-  if (
-    pathname.startsWith("/api") ||
-    isStaticAsset(pathname) ||
-    PUBLIC_PATHS.includes(pathname)
-  ) {
-    return NextResponse.next();
-  }
+    // เข้า /login หรือ /register → เคลียร์ token กัน state ค้าง
+    if (pathname.startsWith("/login") || pathname.startsWith("/register")) {
+      const resp = NextResponse.next();
+      resp.cookies.delete("token");
+      return resp;
+    }
 
-  // 2) ไม่ใช่เส้นทางที่ป้องกัน → ผ่าน
-  const needsProtection = PROTECTED_PREFIXES.some((p) =>
-    pathname.startsWith(p)
-  );
-  if (!needsProtection) return NextResponse.next();
+    // ข้าม static และ /api
+    if (pathname.startsWith("/api") || isStaticAsset(pathname)) {
+      return NextResponse.next();
+    }
 
-  // 3) อ่าน JWT claims ก่อน (เพื่อให้ admin bypass ได้จริง)
-  const claims = await readClaims(request);
-  if (!claims) {
-    const url = new URL("/login", request.url);
-    url.searchParams.set("from", pathname);
-    const resp = NextResponse.redirect(url);
-    resp.cookies.delete("token");
-    return resp;
-  }
+    // หน้า public
+    if (PUBLIC_PATHS.includes(pathname)) {
+      return NextResponse.next();
+    }
 
-  // 4) Admin bypass (ไม่ติด maintenance/working-hours)
-  const isAdmin = claims?.role === "admin";
-  if (!isAdmin) {
-    // 5) บังคับ daily login (Bangkok)
-    const today = bangkokYMD();
-    const lastYMD: string | undefined =
-      (claims.lastLoginYMD as string) ||
-      (claims.lastLoginDate
-        ? new Date(claims.lastLoginDate)
-            .toLocaleString("en-CA", {
-              timeZone: "Asia/Bangkok",
-              hour12: false,
-            })
-            .slice(0, 10)
-        : undefined);
+    // ต้องป้องกัน?
+    const needsProtection = PROTECTED_PREFIXES.some((p) =>
+      pathname.startsWith(p)
+    );
+    if (!needsProtection) return NextResponse.next();
 
-    if (lastYMD !== today) {
+    // อ่าน JWT
+    const claims = await readClaims(request);
+    if (!claims) {
       const url = new URL("/login", request.url);
       url.searchParams.set("from", pathname);
       const resp = NextResponse.redirect(url);
@@ -106,66 +102,102 @@ export async function middleware(request: NextRequest) {
       return resp;
     }
 
-    // 6) โหลดสถานะจาก DB ผ่าน API (ถูก exclude จาก matcher แล้ว จึงไม่วนซ้ำ)
-    try {
-      const origin = request.nextUrl.origin;
-      const res = await fetch(`${origin}/api/maintenance-status`, {
-        cache: "no-store",
-        headers: {
-          // ส่ง cookie ไปด้วยเผื่อ API ต้องการตรวจสิทธิ์
-          Cookie: request.headers.get("cookie") ?? "",
-          "x-from-middleware": "1",
-        },
-      });
+    // admin bypass
+    const isAdmin = claims?.role === "admin";
+    if (!isAdmin) {
+      // ----- DAILY LOGIN -----
+      if (FORCE_DAILY_RELOGIN) {
+        const today = bangkokYMD();
 
-      if (res.ok) {
-        const data = await res.json();
-        const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
-        const workingHours = data?.workingHours ?? data?.working_hours ?? null;
+        const iatYMD =
+          typeof claims.iat === "number"
+            ? toBangkokYMD(new Date(claims.iat * 1000))
+            : undefined;
+        const claimedLastDate =
+          typeof claims.lastLoginDate === "number"
+            ? new Date(claims.lastLoginDate)
+            : typeof claims.lastLoginDate === "string"
+            ? new Date(claims.lastLoginDate)
+            : undefined;
 
-        const maintenanceActive = Boolean(
-          maintenance?.isActive ?? maintenance?.isEnabled
-        );
+        const lastYMD: string | undefined =
+          (claims.lastLoginYMD as string) ||
+          (claimedLastDate ? toBangkokYMD(claimedLastDate) : undefined) ||
+          iatYMD;
 
-        if (maintenanceActive) {
-          const resp = NextResponse.redirect(
-            new URL("/maintenance", request.url)
-          );
-          // เพื่อกัน state ค้าง ให้ลบ token ออกในช่วง maintenance
+        if (lastYMD !== today) {
+          const url = new URL("/login", request.url);
+          url.searchParams.set("from", pathname);
+          url.searchParams.set("forced", "daily");
+          const resp = NextResponse.redirect(url);
           resp.cookies.delete("token");
           return resp;
         }
-
-        if (
-          workingHours &&
-          !withinHours(
-            Number(workingHours.startHour ?? 0),
-            Number(workingHours.endHour ?? 0),
-            Boolean(workingHours.isEnabled)
-          )
-        ) {
-          const url = new URL("/maintenance", request.url);
-          url.searchParams.set("reason", "working_hours");
-          url.searchParams.set("start", String(workingHours.startHour ?? 0));
-          url.searchParams.set("end", String(workingHours.endHour ?? 0));
-          return NextResponse.redirect(url);
-        }
-      } else {
-        // ถ้า API ล่ม: fail-open (อนุญาตผ่าน) เพื่อไม่ล็อกผู้ใช้ทั้งหมด
-        // หากอยาก fail-close ให้ redirect ไป /maintenance ตรงนี้แทน
       }
-    } catch {
-      // network/API error → fail-open
-    }
-  }
 
-  // 7) ผ่านได้
-  return NextResponse.next();
+      // ----- Maintenance / Working hours จาก API (fail-open ถ้า API ล่ม) -----
+      try {
+        const apiUrl = new URL("/api/maintenance-status", request.url);
+        const res = await fetch(apiUrl, {
+          cache: "no-store",
+          headers: {
+            Cookie: request.headers.get("cookie") ?? "",
+            "x-from-middleware": "1",
+          },
+        });
+
+        if (res.ok) {
+          const data = await res.json().catch(() => null);
+          const maintenance =
+            data?.maintenance ?? data?.maintenanceMode ?? null;
+          const workingHours =
+            data?.workingHours ?? data?.working_hours ?? null;
+
+          const maintenanceActive = Boolean(
+            maintenance?.isActive ?? maintenance?.isEnabled
+          );
+
+          if (maintenanceActive) {
+            // ✅ เปลี่ยนไป /maintenance เพื่อไม่วนลูปกับ /login
+            const url = new URL("/maintenance", request.url);
+            url.searchParams.set("reason", "maintenance");
+            const resp = NextResponse.redirect(url);
+            if (FORCE_LOGOUT_ON_MAINTENANCE) resp.cookies.delete("token");
+            return resp;
+          }
+
+          if (workingHours) {
+            const start = Number(workingHours.startHour ?? 0);
+            const end = Number(workingHours.endHour ?? 0);
+            const enabled = Boolean(workingHours.isEnabled);
+            const ok = withinHours(start, end, enabled);
+            if (!ok) {
+              // ✅ เปลี่ยนไป /maintenance พร้อมพารามิเตอร์
+              const url = new URL("/maintenance", request.url);
+              url.searchParams.set("reason", "working_hours");
+              url.searchParams.set("start", String(start));
+              url.searchParams.set("end", String(end));
+              const resp = NextResponse.redirect(url);
+              if (FORCE_LOGOUT_OUT_OF_HOURS) resp.cookies.delete("token");
+              return resp;
+            }
+          }
+        }
+        // res !ok → fail-open
+      } catch {
+        // fetch error → fail-open
+      }
+    }
+
+    return NextResponse.next();
+  } catch (err) {
+    console.error("Middleware fatal:", err);
+    return NextResponse.next(); // fail-open
+  }
 }
 
 export const config = {
   matcher: [
-    // ตัด /api ออกจาก middleware (กัน recursion) และคงไฟล์ static ไว้
     "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.json).*)",
   ],
 };

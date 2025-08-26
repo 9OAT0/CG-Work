@@ -333,6 +333,18 @@ exports.Prisma.PointAdjustmentScalarFieldEnum = {
   appliedAt: 'appliedAt'
 };
 
+exports.Prisma.DailyPointsScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  dayKey: 'dayKey',
+  earned: 'earned',
+  spent: 'spent',
+  adjusted: 'adjusted',
+  net: 'net',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -379,7 +391,8 @@ exports.Prisma.ModelName = {
   QrScanLog: 'QrScanLog',
   UserOverlayLog: 'UserOverlayLog',
   UserSession: 'UserSession',
-  PointAdjustment: 'PointAdjustment'
+  PointAdjustment: 'PointAdjustment',
+  DailyPoints: 'DailyPoints'
 };
 
 /**

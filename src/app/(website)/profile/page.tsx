@@ -9,19 +9,22 @@ interface ProfileData {
   student_id: string;
   status: string;
   dept: string;
-  dailyPoints: number;
-  totalPoints: number;
-  transcriptDates: string[];
+  dailyPoints: number;            // ✅ จาก DailyPoints.net
+  totalPoints: number;            // คะแนนสะสมรวม (User.score)
+  transcriptDates: string[];      // ["YYYY-MM-DD", ...]
+  // optional เผื่ออนาคตอยากโชว์ breakdown
+  dailyBreakdown?: { earned: number; spent: number; adjusted: number };
 }
 
-/** ===== Test Mode (ควบคุมด้วย env) =====
- * true  = โหมดทดสอบ: ใช้ localStorage เป็นแหล่งข้อมูล transcriptDates และจำลองการเคลม (ไม่หักแต้ม)
- * false = โหมดจริง: ใช้ API /api/profile และ /api/claim-transcript ตามจริง (หักแต้มตามระบบ)
+/** ===== Test Mode =====
+ * true  = โหมดทดสอบ: ใช้ localStorage เก็บ transcriptDates และจำลองเคลม (ไม่หักแต้ม)
+ * false = โหมดจริง: ใช้ API ตามจริง
  */
 const TEST_MODE = process.env.NEXT_PUBLIC_TEST_MODE === "true";
 const TEST_LS_KEY = "test_transcriptDates";
+const EVENT_BASE = process.env.NEXT_PUBLIC_EVENT_MONTH || "2025-08"; // YYYY-MM
 
-// แต้มรายวันที่ต้องมี “ขั้นต่ำ” ต่อวัน
+// แต้มรายวันขั้นต่ำของแต่ละวัน
 const REQUIRED_POINTS: Record<"27" | "28" | "29", number> = {
   "27": 6,
   "28": 10,
@@ -41,11 +44,13 @@ export default function ProfilePage() {
   const [user, setUser] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
   const [redeemed, setRedeemed] = useState<{ [key: string]: boolean }>({
     "27": false,
     "28": false,
     "29": false,
   });
+
   const [popupMessage, setPopupMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const [redeemingDay, setRedeemingDay] = useState<string | null>(null);
@@ -96,12 +101,12 @@ export default function ProfilePage() {
           return;
         }
 
-        // แหล่งข้อมูล transcriptDates
+        // transcriptDates จาก API
         let transcriptDatesSource: string[] = Array.isArray(data.transcriptDates)
           ? data.transcriptDates
           : [];
 
-        // โหมดทดสอบ: อ่านจาก localStorage แทน
+        // โหมดทดสอบ: อ่าน/ทับจาก localStorage
         if (TEST_MODE && typeof window !== "undefined") {
           try {
             const fromLS = localStorage.getItem(TEST_LS_KEY);
@@ -112,7 +117,11 @@ export default function ProfilePage() {
         }
 
         // map วันว่าเคลมแล้วหรือยัง
-        const claimedMap: { [key: string]: boolean } = { "27": false, "28": false, "29": false };
+        const claimedMap: { [key: string]: boolean } = {
+          "27": false,
+          "28": false,
+          "29": false,
+        };
         transcriptDatesSource.forEach((date: string) => {
           if (typeof date === "string") {
             const day = date.split("-")[2];
@@ -120,8 +129,9 @@ export default function ProfilePage() {
           }
         });
 
-        // แต้มขั้นต่ำเพื่อให้ทดสอบง่ายใน TEST_MODE (อย่างน้อย 12)
-        const dailyPoints =
+        // แต้มรายวัน (API ให้ dailyPoints ที่คำนวณจาก DailyPoints.net แล้ว)
+        // ถ้า TEST_MODE อยากให้ทดสอบง่าย สามารถยกเพดานขั้นต่ำได้ตามเดิม:
+        const dailyPoints: number =
           TEST_MODE ? Math.max(data.dailyPoints ?? 0, 12) : data.dailyPoints ?? 0;
 
         if (!isMounted) return;
@@ -133,6 +143,7 @@ export default function ProfilePage() {
           dailyPoints,
           totalPoints: data.totalPoints ?? 0,
           transcriptDates: transcriptDatesSource,
+          dailyBreakdown: data.dailyBreakdown,
         });
 
         setRedeemed(claimedMap);
@@ -142,9 +153,7 @@ export default function ProfilePage() {
           console.error("Failed to load profile:", err);
         }
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -154,20 +163,20 @@ export default function ProfilePage() {
     };
   }, []);
 
-  // เคลมทรานสคริปต์ (รองรับ TEST_MODE) + อนุญาตเฉพาะวันนั้น ๆ + เช็คแต้มขั้นต่ำรายวันตามวัน
+  // เคลมทรานสคริปต์
   const handleRedeem = async (day: "27" | "28" | "29") => {
     if (!user) return;
     if (redeemed[day]) return;
     if (redeemingDay) return;
 
-    // กดได้เฉพาะวันที่ตรงกับวันนี้ (โซนเวลา Asia/Bangkok)
+    // เฉพาะวันนั้น ๆ เท่านั้น
     if (!todayDay || day !== todayDay) {
       setPopupMessage(`สามารถรับทรานสคริปต์ของวันที่ ${day} ได้เฉพาะวันที่ ${day} เท่านั้น`);
       setShowPopup(true);
       return;
     }
 
-    // ✅ เช็คแต้มขั้นต่ำเฉพาะ "คะแนนรายวัน" ตามวันที่กด
+    // ✅ เช็คแต้มขั้นต่ำเฉพาะ “คะแนนรายวัน” ตามวันที่กด
     const required = REQUIRED_POINTS[day];
     if (user.dailyPoints < required) {
       const missing = required - user.dailyPoints;
@@ -176,8 +185,7 @@ export default function ProfilePage() {
       return;
     }
 
-    const base = "2025-08"; // อิงเดือนของงานจริง
-    const dateStr = `${base}-${day}`; // เช่น "2025-08-27"
+    const dateStr = `${EVENT_BASE}-${day}`; // เช่น "2025-08-27"
 
     // ------- TEST_MODE: จำลองใน client (ไม่หักแต้ม) -------
     if (TEST_MODE && typeof window !== "undefined") {
@@ -193,13 +201,11 @@ export default function ProfilePage() {
         if (!lsDates.includes(dateStr)) lsDates.push(dateStr);
         localStorage.setItem(TEST_LS_KEY, JSON.stringify(lsDates));
 
-        // ไม่หักแต้มในโหมดทดสอบ
         setRedeemed((prev) => ({ ...prev, [day]: true }));
         setUser((prev) =>
           prev
             ? {
                 ...prev,
-                // คง dailyPoints เดิม
                 transcriptDates: lsDates,
               }
             : prev
@@ -216,7 +222,7 @@ export default function ProfilePage() {
       return;
     }
 
-    // ------- โหมดจริง: เรียก API จริง (หักแต้มตามระบบ) -------
+    // ------- โหมดจริง: เรียก API จริง -------
     try {
       setRedeemingDay(day);
 
@@ -225,8 +231,8 @@ export default function ProfilePage() {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          day,           // "27" | "28" | "29"
-          date: dateStr, // "2025-08-27" เผื่อฝั่งเซิร์ฟเวอร์ต้องการ
+          day,     // "27" | "28" | "29"
+          date: dateStr,
         }),
       });
 
@@ -237,22 +243,22 @@ export default function ProfilePage() {
         setPopupMessage(msg);
         setShowPopup(true);
 
-        // ถ้าเซิร์ฟเวอร์แจ้งว่าเคลมไปแล้ว ให้ mark ปุ่มเป็นใช้แล้ว
+        // ถ้าเซิร์ฟเวอร์บอกว่าเคลมไปแล้ว ให้ mark ใช้แล้ว
         if (typeof msg === "string" && msg.includes("รับ transcript วันนี้แล้ว")) {
           setRedeemed((prev) => ({ ...prev, [day]: true }));
         }
         return;
       }
 
-      // อัปเดตคะแนนตามค่าที่ API ตอบกลับ (ถ้ามี) หรือ fallback หัก 6
+      // ✅ ใช้ค่าจาก API โดยตรง (ไม่มี fallback หักแต้มเอง)
       setUser((prev) =>
         prev
           ? {
               ...prev,
               dailyPoints:
-                typeof data.dailyPoints === "number"
-                  ? data.dailyPoints
-                  : Math.max(0, prev.dailyPoints - 6),
+                typeof data.dailyPoints === "number" ? data.dailyPoints : prev.dailyPoints,
+              totalPoints:
+                typeof data.totalScore === "number" ? data.totalScore : prev.totalPoints,
               transcriptDates: Array.isArray(prev.transcriptDates)
                 ? Array.from(new Set([...prev.transcriptDates, dateStr]))
                 : [dateStr],
@@ -360,7 +366,7 @@ export default function ProfilePage() {
         <div className="border border-gray-300 w-full flex flex-col items-center py-6 px-4 rounded-xl">
           <h1 className="text-blueBrand text-[14px]">รับทรานสคริปต์</h1>
           <div className="w-full max-w-[366px] bg-blueBrand rounded-[20px] flex flex-col justify-center items-center text-white gap-3 mt-4 py-6 px-4">
-            {/* ✅ แสดงเฉพาะ requirement ของ “วันนี้” เท่านั้น */}
+            {/* ✅ แสดง requirement ของ “วันนี้” เท่านั้น */}
             {todayReq && (
               <h1 className="text-[12px] font-medium">
                 *วันนี้ ({todayDay}) ต้องมีแต้มรายวันอย่างน้อย {todayReq} คะแนน*
@@ -397,7 +403,10 @@ export default function ProfilePage() {
 
         {/* ปุ่มกลับหน้าหลัก */}
         <div className="flex justify-center mt-6">
-          <a href="/homepage" className="bg-blueBrand w-[250px] h-[49px] rounded-[30px] flex justify-center items-center">
+          <a
+            href="/homepage"
+            className="bg-blueBrand w-[250px] h-[49px] rounded-[30px] flex justify-center items-center"
+          >
             <h1 className="text-white text-[16px]">กลับหน้าหลัก</h1>
           </a>
         </div>
@@ -413,7 +422,9 @@ export default function ProfilePage() {
             className="bg-white p-6 rounded-lg shadow-lg text-center w-full max-w-[400px]"
             onClick={(e) => e.stopPropagation()}
           >
-            <h1 className="text-blueBrand font-semibold text-[18px] mb-4">{popupMessage}</h1>
+            <h1 className="text-blueBrand font-semibold text-[18px] mb-4">
+              {popupMessage}
+            </h1>
             <button
               onClick={() => setShowPopup(false)}
               className="mt-2 bg-pinkBrand text-white px-4 py-2 rounded-full w-[200px]"

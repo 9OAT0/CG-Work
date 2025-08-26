@@ -55,6 +55,8 @@ model User {
   sessions             UserSession[]
 
   PointAdjustment PointAdjustment[]
+
+  DailyPoints DailyPoints[]
 }
 
 model Booth {
@@ -88,6 +90,8 @@ model BoothJoin {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   booth    Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   joinedAt DateTime @default(now())
+
+  @@index([userId, joinedAt])
 }
 
 model BoothOwner {
@@ -353,4 +357,21 @@ model PointAdjustment {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, appliedAt])
+}
+
+model DailyPoints {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dayKey    String              // "YYYY-MM-DD" เวลาไทย
+  earned    Int      @default(0)
+  spent     Int      @default(0)
+  adjusted  Int      @default(0)
+  net       Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  @@unique([userId, dayKey])   // ✅ พอแล้ว ไม่ต้องมี @@index ซ้ำ
 }

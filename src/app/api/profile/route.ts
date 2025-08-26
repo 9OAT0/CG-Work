@@ -1,3 +1,4 @@
+// app/api/profile/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 import jwt from "jsonwebtoken";
@@ -11,9 +12,7 @@ import { withRateLimit, apiRateLimit } from "@/lib/middleware/rateLimit";
 
 export const runtime = "nodejs";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
@@ -28,7 +27,7 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 const MAX_DAILY_SCORE = 30; // ✅ เพดานแต้มรายวัน
 
 // --- helpers เวลาไทย ---
-function getBangkokDayRange(date?: Date) {
+function getBangkokDayKey(date?: Date) {
   const base = date ?? new Date();
   const th = new Date(
     base.toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
@@ -36,10 +35,7 @@ function getBangkokDayRange(date?: Date) {
   const y = th.getFullYear();
   const m = String(th.getMonth() + 1).padStart(2, "0");
   const d = String(th.getDate()).padStart(2, "0");
-  const dayStr = `${y}-${m}-${d}`;
-  const startUtc = new Date(`${dayStr}T00:00:00.000+07:00`);
-  const endUtc = new Date(`${dayStr}T23:59:59.999+07:00`);
-  return { startUtc, endUtc, dayStr };
+  return `${y}-${m}-${d}`; // YYYY-MM-DD (เวลาไทย)
 }
 
 function toTHDateYYYYMMDD(date: Date) {
@@ -64,7 +60,7 @@ async function getProfileHandler(req: NextRequest) {
     throw new AuthenticationError("Invalid token");
   }
 
-  // user + transcript logs
+  // user + transcript logs (เฉพาะวันที่)
   const user = await prisma.user.findUnique({
     where: { id: payload.id },
     select: {
@@ -78,39 +74,38 @@ async function getProfileHandler(req: NextRequest) {
   });
   if (!user) throw new NotFoundError("User not found");
 
-  const { startUtc, endUtc } = getBangkokDayRange();
+  // ✅ อ่านแต้มวันนี้จากตาราง DailyPoints (เร็ว/ตรงเวลาไทย)
+  const dayKey = getBangkokDayKey();
+  const dp = await prisma.dailyPoints.findUnique({
+    where: { userId_dayKey: { userId: payload.id, dayKey } },
+    select: { net: true, earned: true, spent: true, adjusted: true },
+  });
 
-  // ✅ คิดแต้มรายวัน = จำนวน join วันนี้ + ผลรวม PointAdjustment วันนี้
-  const [joinsToday, adjSum] = await Promise.all([
-    prisma.boothJoin.count({
-      where: {
-        userId: payload.id,
-        joinedAt: { gte: startUtc, lt: endUtc },
-        booth: { id: { not: undefined } },
-      },
-    }),
-    prisma.pointAdjustment.aggregate({
-      _sum: { amount: true },
-      where: { userId: payload.id, appliedAt: { gte: startUtc, lt: endUtc } },
-    }),
-  ]);
-
-  const rawDailyPoints = joinsToday + (adjSum._sum.amount ?? 0);
-  const dailyPoints = Math.max(0, Math.min(MAX_DAILY_SCORE, rawDailyPoints)); // clamp 0..30
+  const dailyNet = Math.max(0, Math.min(MAX_DAILY_SCORE, dp?.net ?? 0));
 
   const transcriptDates = user.TranscriptLog.map((log) =>
     toTHDateYYYYMMDD(log.date)
   );
 
-  return NextResponse.json({
-    name: user.name,
-    student_id: user.student_id,
-    status: user.status,
-    dept: user.dept,
-    dailyPoints, // ✅ รวม Adjustment แล้ว
-    totalPoints: user.score, // ⚠️ ไม่แตะ คะแนนสะสมรวม
-    transcriptDates,
-  });
+  return NextResponse.json(
+    {
+      name: user.name,
+      student_id: user.student_id,
+      status: user.status,
+      dept: user.dept,
+      dailyPoints: dailyNet, // ✅ แต้มวันนี้ (สุทธิ) จาก DailyPoints
+      dailyBreakdown: dp
+        ? { earned: dp.earned, spent: dp.spent, adjusted: dp.adjusted }
+        : { earned: 0, spent: 0, adjusted: 0 },
+      totalPoints: user.score, // คะแนนสะสมรวม
+      transcriptDates,
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    }
+  );
 }
 
 async function updateProfileHandler(req: NextRequest) {
