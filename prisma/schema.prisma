@@ -88,6 +88,8 @@ model BoothJoin {
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   booth    Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   joinedAt DateTime @default(now())
+
+  @@index([userId, joinedAt])
 }
 
 model BoothOwner {

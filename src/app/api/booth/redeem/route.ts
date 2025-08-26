@@ -11,14 +11,14 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 const QR_JWT_SECRET = process.env.QR_JWT_SECRET || JWT_SECRET;
 
 type QrPayload = {
-  code?: string; // mapping ไป QrCode.code
-  codeId?: string; // หรือใช้ id โดยตรง
+  code?: string;     // mapping ไป QrCode.code
+  codeId?: string;   // หรือใช้ id โดยตรง
   overrideCost?: number;
   jti?: string;
   exp?: number;
 };
 
-// คำนวณช่วงวันไทย (UTC+7) สำหรับกฎ ONCE_PER_DAY
+// คำนวณช่วงวันไทย (UTC+7) สำหรับกฎ ONCE_PER_DAY และสำหรับคำนวณแต้ม "วันนี้"
 function thailandDayRange(date: Date) {
   const msPerDay = 24 * 60 * 60 * 1000;
   const thOffsetMs = 7 * 60 * 60 * 1000;
@@ -126,9 +126,33 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // 7) ธุรกรรม: หักคะแนน → อัปเดต uses → ออกสิทธิ์ → log (flow จบที่ออกสิทธิ์)
+    // 7) ธุรกรรม: หักคะแนนแบบ "ใช้ของวันก่อนก่อน" → "ค่อยใช้ของวันนี้"
     const result = await prisma.$transaction(async (tx) => {
-      // 7.1) หักคะแนนแบบป้องกันแข่งกันกด
+      // 7.0) อ่าน score ปัจจุบัน และคำนวณแต้มวันนี้
+      const user = await tx.user.findUnique({
+        where: { id: userId },
+        select: { score: true },
+      });
+      const currentScore = user?.score ?? 0;
+      if (currentScore < cost) throw new Error("INSUFFICIENT_POINTS");
+
+      const [joinsToday, adjSumToday] = await Promise.all([
+        tx.boothJoin.count({
+          where: { userId, joinedAt: { gte: start, lte: end } },
+        }),
+        tx.pointAdjustment.aggregate({
+          _sum: { amount: true },
+          where: { userId, appliedAt: { gte: start, lte: end } },
+        }),
+      ]);
+      const todayPoints = joinsToday + (adjSumToday._sum.amount ?? 0);
+      const previousBalance = Math.max(0, currentScore - todayPoints);
+
+      // แบ่งยอดที่จะตัด
+      const useFromPrev = Math.min(cost, previousBalance);
+      const useFromToday = cost - useFromPrev; // เหลือเท่าไหร่ค่อยกินของวันนี้
+
+      // 7.1) ตัดคะแนนรวม (กันแข่งกันกดด้วยเงื่อนไข gte)
       const dec = await tx.user.updateMany({
         where: { id: userId, score: { gte: cost } },
         data: { score: { decrement: cost } },
@@ -142,6 +166,7 @@ export async function POST(req: NextRequest) {
           data: { uses: { increment: 1 }, updatedAt: nowTH },
         });
         if (upd.count !== 1) {
+          // ยกเลิกการตัดคะแนนรวม (ภายในทรานแซกชันเดียวกันไม่จำเป็น แต่คงรูปแบบเดิมของคุณไว้)
           await tx.user.update({
             where: { id: userId },
             data: { score: { increment: cost } },
@@ -155,7 +180,19 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // 7.3) ออกสิทธิ์ (นี่คือ “จุดจบของกระบวนการ”)
+      // 7.3) ถ้าต้องใช้แต้มของ "วันนี้" บางส่วน → บันทึก PointAdjustment ติดลบไว้วันนี้
+      if (useFromToday > 0) {
+        await tx.pointAdjustment.create({
+          data: {
+            userId,
+            amount: -useFromToday,
+            reason: "QR_REDEEM",
+            appliedAt: nowTH, // อยู่ในวันไทยวันนี้
+          },
+        });
+      }
+
+      // 7.4) ออกสิทธิ์ (จบกระบวนการ)
       const pass = await tx.playPass.create({
         data: {
           userId,
@@ -166,23 +203,31 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // 7.4) Log
+      // 7.5) Log
       await tx.qrScanLog.create({
         data: { userId, qrCodeId: qrCode.id, scannedAt: nowTH },
       });
 
-      // 7.5) คะแนนคงเหลือ
+      // 7.6) คะแนนคงเหลือ
       const updatedUser = await tx.user.findUnique({ where: { id: userId } });
 
-      return { passId: pass.id, remaining: updatedUser?.score ?? null };
+      return {
+        passId: pass.id,
+        remaining: updatedUser?.score ?? null,
+        breakdown: { useFromPrev, useFromToday, todayPointsBefore: todayPoints },
+      };
     });
 
     return NextResponse.json({
-      message: `แลกสิทธิ์สำเร็จ หัก ${cost} คะแนน`,
+      message:
+        result.breakdown.useFromToday > 0
+          ? `แลกสิทธิ์สำเร็จ หัก ${cost} คะแนน (ใช้แต้มสะสมเดิม ${result.breakdown.useFromPrev} + แต้มวันนี้ ${result.breakdown.useFromToday})`
+          : `แลกสิทธิ์สำเร็จ หัก ${cost} คะแนน (ใช้แต้มสะสมเดิมทั้งหมด)`,
       booth: { id: qrCode.boothId, name: qrCode.booth.booth_name },
       entitlementKey: qrCode.entitlementKey,
-      playPassId: result.passId, // ใช้โชว์หรือเก็บใน client
+      playPassId: result.passId,
       remainingScore: result.remaining,
+      deduction: result.breakdown, // เผื่อ FE อยากโชว์รายละเอียด
     });
   } catch (err: any) {
     console.error(err);

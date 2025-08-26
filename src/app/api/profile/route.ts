@@ -1,3 +1,4 @@
+// app/api/profile/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 import jwt from "jsonwebtoken";
@@ -11,9 +12,7 @@ import { withRateLimit, apiRateLimit } from "@/lib/middleware/rateLimit";
 
 export const runtime = "nodejs";
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
@@ -80,20 +79,19 @@ async function getProfileHandler(req: NextRequest) {
 
   const { startUtc, endUtc } = getBangkokDayRange();
 
-  // ✅ คิดแต้มรายวัน = จำนวน join วันนี้ + ผลรวม PointAdjustment วันนี้
-  const [joinsToday, adjSum] = await Promise.all([
-    prisma.boothJoin.count({
-      where: {
-        userId: payload.id,
-        joinedAt: { gte: startUtc, lt: endUtc },
-        booth: { id: { not: undefined } },
-      },
-    }),
-    prisma.pointAdjustment.aggregate({
-      _sum: { amount: true },
-      where: { userId: payload.id, appliedAt: { gte: startUtc, lt: endUtc } },
-    }),
-  ]);
+  // ✅ แต้ม "วันนี้ (เวลาไทย)" เท่านั้น
+  const joinsToday = await prisma.boothJoin.count({
+    where: {
+      userId: payload.id,
+      joinedAt: { gte: startUtc, lt: endUtc },
+    },
+  });
+
+  // ถ้าไม่อยากให้นับ adjustments ใน dailyPoints ให้ตั้ง adjSum = 0 ไปเลย
+  const adjSum = await prisma.pointAdjustment.aggregate({
+    _sum: { amount: true },
+    where: { userId: payload.id, appliedAt: { gte: startUtc, lt: endUtc } },
+  });
 
   const rawDailyPoints = joinsToday + (adjSum._sum.amount ?? 0);
   const dailyPoints = Math.max(0, Math.min(MAX_DAILY_SCORE, rawDailyPoints)); // clamp 0..30
@@ -102,15 +100,23 @@ async function getProfileHandler(req: NextRequest) {
     toTHDateYYYYMMDD(log.date)
   );
 
-  return NextResponse.json({
-    name: user.name,
-    student_id: user.student_id,
-    status: user.status,
-    dept: user.dept,
-    dailyPoints, // ✅ รวม Adjustment แล้ว
-    totalPoints: user.score, // ⚠️ ไม่แตะ คะแนนสะสมรวม
-    transcriptDates,
-  });
+  return new NextResponse(
+    JSON.stringify({
+      name: user.name,
+      student_id: user.student_id,
+      status: user.status,
+      dept: user.dept,
+      dailyPoints, // ✅ นับเฉพาะวันนี้
+      totalPoints: user.score, // คะแนนสะสมรวม (ไม่แตะ)
+      transcriptDates,
+    }),
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+      },
+    }
+  );
 }
 
 async function updateProfileHandler(req: NextRequest) {
