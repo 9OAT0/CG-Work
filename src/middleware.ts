@@ -1,171 +1,201 @@
-// middleware.ts
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { jwtVerify } from "jose";
+// app/api/auth/register/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@/generated/prisma";
 
-const PUBLIC_PATHS = ["/", "/login", "/register", "/maintenance"];
-const PROTECTED_PREFIXES = [
-  "/homepage",
-  "/profile",
-  "/transferpoint",
-  "/dashboard",
-  "/admin",
-];
+export const runtime = "nodejs";
 
-const isStaticAsset = (p: string) =>
-  p.startsWith("/_next") ||
-  p.startsWith("/favicon") ||
-  /\.(png|jpe?g|gif|svg|ico|webp|avif|css|js|txt|json|woff2?)$/.test(p);
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
+  });
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-const JWT_SECRET = process.env.JWT_SECRET
-  ? new TextEncoder().encode(process.env.JWT_SECRET)
-  : null;
-
-function bangkokYMD() {
-  const th = new Date(
-    new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
-  );
-  const y = th.getFullYear();
-  const m = String(th.getMonth() + 1).padStart(2, "0");
-  const d = String(th.getDate()).padStart(2, "0");
-  return `${y}-${m}-${d}`;
-}
-
-function withinHours(startHour: number, endHour: number, enabled: boolean) {
-  if (!enabled) return true;
-  const now = new Date();
-  const th = new Date(
-    now.toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
-  );
-  const h = th.getHours();
-  return h >= startHour && h < endHour;
-}
-
-async function readClaims(
-  req: NextRequest
-): Promise<null | Record<string, any>> {
-  const token = req.cookies.get("token")?.value;
-  if (!token || !JWT_SECRET) return null;
+export async function POST(req: NextRequest) {
   try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
-    return payload as Record<string, any>;
-  } catch {
-    return null;
-  }
-}
+    const { status, studentId, name, dept } = await req.json();
+    const now = new Date();
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+    console.log("Registration attempt:", {
+      status,
+      studentId: studentId || "N/A",
+      name,
+      dept,
+    });
 
-  // 1) ผ่านเลยสำหรับ static, public, และหน้า api
-  if (
-    pathname.startsWith("/api") ||
-    isStaticAsset(pathname) ||
-    PUBLIC_PATHS.includes(pathname)
-  ) {
-    return NextResponse.next();
-  }
-
-  // 2) ไม่ใช่เส้นทางที่ป้องกัน → ผ่าน
-  const needsProtection = PROTECTED_PREFIXES.some((p) =>
-    pathname.startsWith(p)
-  );
-  if (!needsProtection) return NextResponse.next();
-
-  // 3) อ่าน JWT claims ก่อน (เพื่อให้ admin bypass ได้จริง)
-  const claims = await readClaims(request);
-  if (!claims) {
-    const url = new URL("/login", request.url);
-    url.searchParams.set("from", pathname);
-    const resp = NextResponse.redirect(url);
-    resp.cookies.delete("token");
-    return resp;
-  }
-
-  // 4) Admin bypass (ไม่ติด maintenance/working-hours)
-  const isAdmin = claims?.role === "admin";
-  if (!isAdmin) {
-    // 5) บังคับ daily login (Bangkok)
-    const today = bangkokYMD();
-    const lastYMD: string | undefined =
-      (claims.lastLoginYMD as string) ||
-      (claims.lastLoginDate
-        ? new Date(claims.lastLoginDate)
-            .toLocaleString("en-CA", {
-              timeZone: "Asia/Bangkok",
-              hour12: false,
-            })
-            .slice(0, 10)
-        : undefined);
-
-    if (lastYMD !== today) {
-      const url = new URL("/login", request.url);
-      url.searchParams.set("from", pathname);
-      const resp = NextResponse.redirect(url);
-      resp.cookies.delete("token");
-      return resp;
+    // ✅ ตรวจสอบฟิลด์ที่ต้องกรอก
+    if (!status || !name || !dept) {
+      console.log("Missing required fields");
+      return NextResponse.json(
+        { error: "กรุณากรอกข้อมูลให้ครบทุกช่อง" },
+        { status: 400 }
+      );
     }
 
-    // 6) โหลดสถานะจาก DB ผ่าน API (ถูก exclude จาก matcher แล้ว จึงไม่วนซ้ำ)
-    try {
-      const origin = request.nextUrl.origin;
-      const res = await fetch(`${origin}/api/maintenance-status`, {
-        cache: "no-store",
-        headers: {
-          // ส่ง cookie ไปด้วยเผื่อ API ต้องการตรวจสิทธิ์
-          Cookie: request.headers.get("cookie") ?? "",
-          "x-from-middleware": "1",
+    // ✅ ตรวจสอบ studentId เฉพาะนิสิต
+    if (status === "นิสิต") {
+      if (!studentId || studentId.trim() === "") {
+        console.log("Missing student ID for student registration");
+        return NextResponse.json(
+          { error: "กรุณากรอกรหัสนิสิต สำหรับการลงทะเบียนนิสิต" },
+          { status: 400 }
+        );
+      }
+
+      const trimmedStudentId = studentId.trim();
+
+      // รูปแบบรหัสนิสิต (8 หลัก)
+      if (!/^\d{8}$/.test(trimmedStudentId)) {
+        console.log("Invalid student ID format:", trimmedStudentId);
+        return NextResponse.json(
+          { error: "รหัสนิสิตต้องเป็นตัวเลข 8 หลัก" },
+          { status: 400 }
+        );
+      }
+
+      console.log("Checking for existing student ID:", trimmedStudentId);
+
+      const existingUser = await prisma.user.findFirst({
+        where: { student_id: trimmedStudentId },
+      });
+
+      if (existingUser) {
+        console.log(
+          "Student ID already exists:",
+          trimmedStudentId,
+          "for user:",
+          existingUser.name
+        );
+        return NextResponse.json(
+          {
+            error: `รหัสนิสิต ${trimmedStudentId} ถูกใช้ลงทะเบียนแล้วโดย ${existingUser.name}`,
+          },
+          { status: 409 }
+        );
+      }
+
+      console.log("Student ID is available:", trimmedStudentId);
+    } else {
+      // ✅ ผู้ที่ไม่ใช่นิสิต: ห้ามชื่อซ้ำในสถานะเดียวกัน (และไม่มี student_id)
+      console.log(
+        "Checking for existing name for non-student:",
+        name.trim(),
+        "status:",
+        status
+      );
+
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          name: name.trim(),
+          status: status,
+          student_id: null,
         },
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
-        const workingHours = data?.workingHours ?? data?.working_hours ?? null;
-
-        const maintenanceActive = Boolean(
-          maintenance?.isActive ?? maintenance?.isEnabled
+      if (existingUser) {
+        console.log(
+          "Name already exists for same status:",
+          name.trim(),
+          "status:",
+          existingUser.status
         );
-
-        if (maintenanceActive) {
-          const resp = NextResponse.redirect(
-            new URL("/maintenance", request.url)
-          );
-          // เพื่อกัน state ค้าง ให้ลบ token ออกในช่วง maintenance
-          resp.cookies.delete("token");
-          return resp;
-        }
-
-        if (
-          workingHours &&
-          !withinHours(
-            Number(workingHours.startHour ?? 0),
-            Number(workingHours.endHour ?? 0),
-            Boolean(workingHours.isEnabled)
-          )
-        ) {
-          const url = new URL("/maintenance", request.url);
-          url.searchParams.set("reason", "working_hours");
-          url.searchParams.set("start", String(workingHours.startHour ?? 0));
-          url.searchParams.set("end", String(workingHours.endHour ?? 0));
-          return NextResponse.redirect(url);
-        }
-      } else {
-        // ถ้า API ล่ม: fail-open (อนุญาตผ่าน) เพื่อไม่ล็อกผู้ใช้ทั้งหมด
-        // หากอยาก fail-close ให้ redirect ไป /maintenance ตรงนี้แทน
+        return NextResponse.json(
+          {
+            error: `ชื่อ "${name.trim()}" ถูกใช้ลงทะเบียนแล้วในสถานะ ${
+              existingUser.status
+            }`,
+          },
+          { status: 409 }
+        );
       }
-    } catch {
-      // network/API error → fail-open
+
+      console.log(
+        "Name is available for status:",
+        status,
+        "name:",
+        name.trim()
+      );
     }
+
+    // ✅ สร้าง username (ซ้ำได้)
+    const username =
+      status === "นิสิต" && studentId
+        ? studentId.trim()
+        : `${name.replace(/\s/g, "")}-${Date.now()}`;
+
+    // ✅ เตรียมข้อมูลผู้ใช้ใหม่
+    const userData: any = {
+      username,
+      status,
+      role: "user",
+      name,
+      dept,
+    };
+
+    if (status === "นิสิต" && studentId) {
+      userData.student_id = studentId.trim();
+    }
+
+    // ✅ บันทึกผู้ใช้ใหม่
+    const newUser = await prisma.user.create({ data: userData });
+
+    // (ออปชัน) บันทึก visit แรก
+    await prisma.visitLog.create({
+      data: {
+        userId: newUser.id,
+        visitedAt: now,
+      },
+    });
+
+    // ✅ ไม่ออก JWT / ไม่ set cookie — ให้ผู้ใช้ไป login เอง
+    return NextResponse.json(
+      {
+        message: "ลงทะเบียนสำเร็จ กรุณาเข้าสู่ระบบ",
+        redirect: "/login",
+        user: {
+          id: newUser.id,
+          username: newUser.username,
+          status: newUser.status,
+          name: newUser.name,
+          dept: newUser.dept,
+          student_id: newUser.student_id ?? null,
+        },
+      },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    console.error("Registration error:", error);
+
+    // Prisma unique constraint
+    if (error.code === "P2002") {
+      console.log("Unique constraint violation:", error.meta);
+      if (error.meta?.target?.includes("student_id")) {
+        return NextResponse.json(
+          { error: "รหัสนิสิตนี้ถูกใช้ลงทะเบียนแล้ว" },
+          { status: 409 }
+        );
+      } else if (error.meta?.target?.includes("name")) {
+        return NextResponse.json(
+          { error: "ชื่อนี้ถูกใช้ลงทะเบียนแล้ว" },
+          { status: 409 }
+        );
+      } else if (error.meta?.target?.includes("username")) {
+        return NextResponse.json(
+          { error: "ชื่อผู้ใช้นี้ถูกใช้แล้ว" },
+          { status: 409 }
+        );
+      } else {
+        return NextResponse.json(
+          { error: "ข้อมูลนี้ถูกใช้ลงทะเบียนแล้ว" },
+          { status: 409 }
+        );
+      }
+    }
+
+    return NextResponse.json(
+      { error: "เกิดข้อผิดพลาดในการลงทะเบียน กรุณาลองใหม่อีกครั้ง" },
+      { status: 500 }
+    );
   }
-
-  // 7) ผ่านได้
-  return NextResponse.next();
 }
-
-export const config = {
-  matcher: [
-    // ตัด /api ออกจาก middleware (กัน recursion) และคงไฟล์ static ไว้
-    "/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.json).*)",
-  ],
-};
