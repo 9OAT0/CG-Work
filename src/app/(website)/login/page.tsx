@@ -2,6 +2,9 @@
 
 import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+const LoginParticles = dynamic(() => import("../components/LoginParticles"), { ssr: false });
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -27,8 +30,8 @@ export default function LoginPage() {
         return;
       }
 
-      // Store login flag for overlay system - ALWAYS set for every login
-      sessionStorage.setItem('isNewLogin', 'true');
+      // ใช้โดยระบบ overlay หลัง login
+      sessionStorage.setItem("isNewLogin", "true");
 
       alert(data.message || "เข้าสู่ระบบสำเร็จ");
       router.push("/homepage");
@@ -48,62 +51,50 @@ export default function LoginPage() {
         backgroundBlendMode: "overlay",
       }}
     >
-      {/* Animated particles background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(50)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-white opacity-30 rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 3}s`
-            }}
-          />
-        ))}
-      </div>
+      {/* พื้นหลังอนุภาคแบบ client-only (หลีกเลี่ยง hydration mismatch) */}
+      <LoginParticles count={50} />
 
       <div className="relative z-10 flex flex-col items-center gap-12 w-full max-w-[380px]">
-        <h1 className="text-white text-3xl sm:text-4xl font-bold">เข้าสู่ระบบ</h1>
+        <h1 className="text-white text-3xl sm:text-4xl font-bold">
+          เข้าสู่ระบบ
+        </h1>
+
         <form
           onSubmit={handleSubmit}
           className="flex flex-col items-center gap-6 w-full"
         >
-        <input
-          type="text"
-          placeholder="รหัสนิสิต (สำหรับนิสิตเท่านั้น)"
-          value={studentID}
-          onChange={(e) => {
-            const value = e.target.value.replace(/\D/g, ''); // Only allow digits
-            if (value.length <= 8) {
-              setStudentID(value);
-            }
-          }}
-          className="w-full h-[51px] rounded-[30px] px-4 text-base"
-          maxLength={8}
-        />
+          <input
+            type="text"
+            placeholder="รหัสนิสิต (สำหรับนิสิตเท่านั้น)"
+            value={studentID}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, ""); // เฉพาะตัวเลข
+              if (value.length <= 8) setStudentID(value);
+            }}
+            className="w-full h-[51px] rounded-[30px] px-4 text-base"
+            maxLength={8}
+          />
 
-        <input
-          type="text"
-          placeholder="ชื่อ - นามสกุล*"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full h-[51px] rounded-[30px] px-4 text-base"
-          required
-        />
+          <input
+            type="text"
+            placeholder="ชื่อ - นามสกุล*"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full h-[51px] rounded-[30px] px-4 text-base"
+            required
+          />
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`w-[250px] h-[49px] rounded-[30px] mt-2 text-white font-bold text-lg transition-colors duration-300 ${
-            isSubmitting
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-pinkBrand hover:bg-pink-600"
-          }`}
-        >
-          {isSubmitting ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
-        </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`w-[250px] h-[49px] rounded-[30px] mt-2 text-white font-bold text-lg transition-colors duration-300 ${
+              isSubmitting
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-pinkBrand hover:bg-pink-600"
+            }`}
+          >
+            {isSubmitting ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
+          </button>
         </form>
       </div>
     </div>
