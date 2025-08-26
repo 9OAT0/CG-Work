@@ -13,12 +13,22 @@ type RedeemSuccess = {
   remainingScore: number | null;
 };
 
+type ProfileHeader = {
+  name: string;
+  student_id: string;
+  status: string;
+  dept: string;
+};
+
 export default function TransferpointPage() {
   const [confirmPopup, setConfirmPopup] = useState(false);
   const [scannedQR, setScannedQR] = useState<string | null>(null);
   const [redeeming, setRedeeming] = useState(false);
   const [result, setResult] = useState<RedeemSuccess | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  // ✅ โปรไฟล์สำหรับแสดงหัวข้อด้านบน
+  const [profile, setProfile] = useState<ProfileHeader | null>(null);
 
   const qrScannerRef = useRef<Html5Qrcode | null>(null);
   const startingRef = useRef(false); // กัน start ซ้อน
@@ -109,6 +119,43 @@ export default function TransferpointPage() {
     await new Promise((r) => setTimeout(r, 120));
     await startScanner();
   };
+
+  // ✅ ดึงโปรไฟล์สำหรับโชว์ในหัวข้อ (เรียกครั้งเดียว ไม่ redirect)
+  useEffect(() => {
+    let isMounted = true;
+    const ac = new AbortController();
+
+    (async () => {
+      try {
+        const res = await fetch("/api/profile", {
+          credentials: "include",
+          cache: "no-store",
+          signal: ac.signal,
+        });
+        if (!isMounted) return;
+
+        if (res.ok) {
+          const data = await res.json();
+          const p: ProfileHeader = {
+            name: data?.name ?? "—",
+            student_id: data?.student_id ?? "—",
+            status: data?.status ?? "—",
+            dept: data?.dept ?? "—",
+          };
+          setProfile(p);
+        } else {
+          setProfile(null);
+        }
+      } catch {
+        if (isMounted) setProfile(null);
+      }
+    })();
+
+    return () => {
+      isMounted = false;
+      ac.abort();
+    };
+  }, []);
 
   // เริ่มสแกนครั้งแรก
   useEffect(() => {
@@ -236,12 +283,16 @@ export default function TransferpointPage() {
     <>
       <Navbar />
       <div className="min-h-screen flex flex-col justify-center items-center gap-10 px-4 py-6">
-        {/* Profile Section (ตัวอย่าง) */}
+        {/* Profile Section (ดึงจาก /api/profile) */}
         <div className="flex flex-col md:flex-row justify-center items-center gap-6 text-center md:text-left">
           <div className="text-blueBrand flex flex-col gap-1">
-            <h1 className="text-[22px] font-bold">รลิตา เครือระยา</h1>
-            <h1 className="text-[16px]">65023938 สถานะ : นิสิต</h1>
-            <h1 className="text-[16px]">คณะเทคโนโลยีสารสนเทศและการสื่อสาร</h1>
+            <h1 className="text-[22px] font-bold">{profile?.name ?? "กำลังโหลด..."}</h1>
+            <h1 className="text-[16px]">
+              {profile
+                ? `${profile.student_id} สถานะ : ${profile.status}`
+                : " "}
+            </h1>
+            <h1 className="text-[16px]">{profile?.dept ?? " "}</h1>
           </div>
           <img src="/prog.jpg" alt="โปรไฟล์" className="w-[110px] h-[110px]" />
         </div>
