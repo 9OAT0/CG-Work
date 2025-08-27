@@ -88,10 +88,13 @@ export async function middleware(request: NextRequest) {
       return resp;
     }
 
-    // ======= GLOBAL DAILY CHECK (ทุกหน้า) =======
+    // อ่าน claims หนึ่งครั้งเพื่อเช็คบทบาท
     const token = request.cookies.get("token")?.value;
-    if (token && FORCE_DAILY_RELOGIN) {
-      const claims = await readClaims(request); // verify (ถ้าหมดอายุ/เสียจะเป็น null)
+    const claims = token ? await readClaims(request) : null;
+    const isAdmin = claims?.role === "admin";
+
+    // ======= GLOBAL DAILY CHECK (ทุกหน้า ยกเว้น admin) =======
+    if (token && FORCE_DAILY_RELOGIN && !isAdmin) {
       const today = bangkokYMD();
 
       let lastYMD: string | undefined;
@@ -117,13 +120,13 @@ export async function middleware(request: NextRequest) {
       if (isStale) {
         if (pathname === "/") {
           const resp = NextResponse.next(); // อยู่หน้า / อยู่แล้ว
-          resp.cookies.delete("token");     // ลบคุกกี้
+          resp.cookies.delete("token"); // ลบคุกกี้
           return resp;
         } else {
           const url = new URL("/", request.url);
           url.searchParams.set("forced", "daily");
           const resp = NextResponse.redirect(url); // พาไปหน้า /
-          resp.cookies.delete("token");            // ลบคุกกี้
+          resp.cookies.delete("token"); // ลบคุกกี้
           return resp;
         }
       }
@@ -182,8 +185,7 @@ export async function middleware(request: NextRequest) {
     );
     if (!needsProtection) return NextResponse.next();
 
-    // อ่าน JWT สำหรับหน้า protected (หลังจาก daily check)
-    const claims = await readClaims(request);
+    // ต้องมี JWT เสมอ (ทั้ง user และ admin)
     if (!claims) {
       const url = new URL("/login", request.url);
       url.searchParams.set("from", pathname);
@@ -192,54 +194,57 @@ export async function middleware(request: NextRequest) {
       return resp;
     }
 
-    // ----- Maintenance / Working hours (fail-open ถ้า API ล่ม) -----
-    try {
-      const apiUrl = new URL("/api/maintenance-status", request.url);
-      const res = await fetch(apiUrl, {
-        cache: "no-store",
-        headers: {
-          Cookie: request.headers.get("cookie") ?? "",
-          "x-from-middleware": "1",
-        },
-      });
+    // ----- Maintenance / Working hours (admin bypass) -----
+    if (!isAdmin) {
+      try {
+        const apiUrl = new URL("/api/maintenance-status", request.url);
+        const res = await fetch(apiUrl, {
+          cache: "no-store",
+          headers: {
+            Cookie: request.headers.get("cookie") ?? "",
+            "x-from-middleware": "1",
+          },
+        });
 
-      if (res.ok) {
-        const data = await res.json().catch(() => null);
-        const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
-        const workingHours = data?.workingHours ?? data?.working_hours ?? null;
+        if (res.ok) {
+          const data = await res.json().catch(() => null);
+          const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
+          const workingHours = data?.workingHours ?? data?.working_hours ?? null;
 
-        const maintenanceActive = Boolean(
-          maintenance?.isActive ?? maintenance?.isEnabled
-        );
+          const maintenanceActive = Boolean(
+            maintenance?.isActive ?? maintenance?.isEnabled
+          );
 
-        if (maintenanceActive) {
-          const url = new URL("/maintenance", request.url);
-          url.searchParams.set("reason", "maintenance");
-          const resp = NextResponse.redirect(url);
-          if (FORCE_LOGOUT_ON_MAINTENANCE) resp.cookies.delete("token");
-          return resp;
-        }
-
-        if (workingHours) {
-          const start = Number(workingHours.startHour ?? 0);
-          const end = Number(workingHours.endHour ?? 0);
-          const enabled = Boolean(workingHours.isEnabled);
-          const ok = withinHours(start, end, enabled);
-          if (!ok) {
+          if (maintenanceActive) {
             const url = new URL("/maintenance", request.url);
-            url.searchParams.set("reason", "working_hours");
-            url.searchParams.set("start", String(start));
-            url.searchParams.set("end", String(end));
+            url.searchParams.set("reason", "maintenance");
             const resp = NextResponse.redirect(url);
-            if (FORCE_LOGOUT_OUT_OF_HOURS) resp.cookies.delete("token");
+            if (FORCE_LOGOUT_ON_MAINTENANCE) resp.cookies.delete("token");
             return resp;
           }
+
+          if (workingHours) {
+            const start = Number(workingHours.startHour ?? 0);
+            const end = Number(workingHours.endHour ?? 0);
+            const enabled = Boolean(workingHours.isEnabled);
+            const ok = withinHours(start, end, enabled);
+            if (!ok) {
+              const url = new URL("/maintenance", request.url);
+              url.searchParams.set("reason", "working_hours");
+              url.searchParams.set("start", String(start));
+              url.searchParams.set("end", String(end));
+              const resp = NextResponse.redirect(url);
+              if (FORCE_LOGOUT_OUT_OF_HOURS) resp.cookies.delete("token");
+              return resp;
+            }
+          }
         }
+        // res !ok → fail-open
+      } catch {
+        // fetch error → fail-open
       }
-      // res !ok → fail-open
-    } catch {
-      // fetch error → fail-open
     }
+    // isAdmin → bypass ทั้ง maintenance/working-hours
 
     return NextResponse.next();
   } catch (err) {

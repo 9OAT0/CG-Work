@@ -9,15 +9,19 @@ type SearchParams = {
   forced?: string;
 };
 
-export default function Page({ searchParams }: { searchParams?: SearchParams }) {
-  const from = searchParams?.from;
-  const next = searchParams?.next;
-  const forced = searchParams?.forced;
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const q = await searchParams; // ✅ ต้อง await ก่อนใช้
 
-  // เลือกปลายทางหลังล็อกอิน (ค่าเริ่มต้น /homepage)
-  const candidate = (typeof from === "string" && from) || (typeof next === "string" && next) || "/homepage";
+  const from = typeof q.from === "string" ? q.from : undefined;
+  const next = typeof q.next === "string" ? q.next : undefined;
+  const forced = typeof q.forced === "string" ? q.forced : undefined;
 
-  // กัน open-redirect + กันวนลูปไปหน้าที่ไม่ควรกลับ
+  // เลือกปลายทางหลังล็อกอิน (ค่าเริ่มต้น /homepage) + กัน open-redirect
+  const candidate = from || next || "/homepage";
   let returnTo = candidate.startsWith("/") ? candidate : "/homepage";
   if (
     returnTo.startsWith("/login") ||
