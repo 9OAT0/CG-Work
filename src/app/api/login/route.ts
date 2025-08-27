@@ -18,7 +18,11 @@ const prisma =
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const JWT_SECRET = process.env.JWT_SECRET!;
+if (!JWT_SECRET) {
+  throw new Error("Missing JWT_SECRET");
+}
 
+// YYYY-MM-DD เวลาไทย
 function bangkokYMD() {
   const th = new Date(
     new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
@@ -27,6 +31,21 @@ function bangkokYMD() {
   const m = String(th.getMonth() + 1).padStart(2, "0");
   const d = String(th.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
+}
+
+/** คืนค่า Date (UTC) ที่ตรงกับเที่ยงคืนไทยของวันถัดไป */
+function nextBangkokMidnightUTC(): Date {
+  const now = new Date();
+  const UTC_OFFSET_MS = 7 * 60 * 60 * 1000; // Asia/Bangkok = UTC+7
+  const bkkNow = new Date(now.getTime() + UTC_OFFSET_MS);
+
+  const y = bkkNow.getUTCFullYear();
+  const m = bkkNow.getUTCMonth();
+  const d = bkkNow.getUTCDate();
+
+  // เที่ยงคืนวันถัดไป (เวลาไทย) แล้วแปลงกลับเป็น UTC
+  const nextMidnightUTC = Date.UTC(y, m, d + 1, 0, 0, 0) - UTC_OFFSET_MS;
+  return new Date(nextMidnightUTC);
 }
 
 export async function POST(req: NextRequest) {
@@ -47,11 +66,11 @@ export async function POST(req: NextRequest) {
     const user =
       sidTrim !== ""
         ? await prisma.user.findFirst({
-            where: { student_id: sidTrim, name: nameTrim, status: "นิสิต" },
-          })
+          where: { student_id: sidTrim, name: nameTrim, status: "นิสิต" },
+        })
         : await prisma.user.findFirst({
-            where: { name: nameTrim, status: { not: "นิสิต" } },
-          });
+          where: { name: nameTrim, status: { not: "นิสิต" } },
+        });
 
     if (!user) {
       const errorMsg =
@@ -61,7 +80,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: errorMsg }, { status: 404 });
     }
 
-    const now = new Date(); // เก็บ UTC
+    const now = new Date(); // UTC
 
     // visit log
     await prisma.visitLog.create({
@@ -87,18 +106,22 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // JWT พร้อมฟิลด์ daily login
+    // ===== สำคัญ: ให้โทเคนหมดอายุ "เที่ยงคืนไทย" ของวันนั้น =====
+    const expiresAt = nextBangkokMidnightUTC();         // Date (UTC)
+    const exp = Math.floor(expiresAt.getTime() / 1000); // seconds epoch
+
+    // สร้าง JWT (กำหนด exp เอง; ไม่ใช้ expiresIn 7d)
     const token = jwt.sign(
       {
         id: user.id,
         student_id: user.student_id,
         name: user.name,
         role: user.role,
-        lastLoginYMD: bangkokYMD(),      // YYYY-MM-DD (เวลาไทย)
-        lastLoginDate: now.toISOString() // ไว้อ่านสำรอง
+        lastLoginYMD: bangkokYMD(),      // YYYY-MM-DD (เวลาไทย) — ใช้เช็ครายวัน
+        lastLoginDate: now.toISOString(),// สำรองให้ middleware คำนวณ YMD ได้
+        exp,                              // บังคับหมดอายุเที่ยงคืนไทย
       },
-      JWT_SECRET,
-      { expiresIn: "7d" }
+      JWT_SECRET
     );
 
     const res = NextResponse.json({
@@ -107,6 +130,7 @@ export async function POST(req: NextRequest) {
       isNewLogin: true,
     });
 
+    // คุกกี้หมดอายุพร้อม JWT
     res.cookies.set({
       name: "token",
       value: token,
@@ -114,7 +138,7 @@ export async function POST(req: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7,
+      expires: expiresAt,
     });
 
     return res;

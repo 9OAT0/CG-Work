@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
+import DailyRolloverWatcher from "./(website)/components/DailyRolloverWatcher";
 
 const kanit = Kanit({
   variable: "--font-kanit",
@@ -71,6 +72,7 @@ export default function RootLayout({
         [padding:env(safe-area-inset-top)_env(safe-area-inset-right)_env(safe-area-inset-bottom)_env(safe-area-inset-left)]`}
       >
         {children}
+        <DailyRolloverWatcher />
       </body>
     </html>
   );
