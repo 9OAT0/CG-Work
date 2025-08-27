@@ -12,10 +12,10 @@ const kanit = Kanit({
 // ---------- Site metadata (ไม่ใส่ themeColor ตรงนี้) ----------
 export const metadata: Metadata = {
   // ใช้โดเมนโปรดักชันของคุณ เพื่อให้ OG/Twitter สร้าง URL สมบูรณ์
-  metadataBase: new URL("https://brainbang-exhibition.vercel.app"),
+  metadataBase: new URL("https://brainbang.vercel.app"),
   title: {
-    default: "นิทรรศการแสดงศิลปนิพนธ์ - CG Work",
-    template: "%s | CG Work",
+    default: "นิทรรศการแสดงศิลปนิพนธ์ - brainbang-exhibition",
+    template: "%s | brainbang-exhibition",
   },
   description:
     "นิทรรศการแสดงผลงานศิลปนิพนธ์ นิสิตระดับชั้นปีที่ 4 สาขาวิชาคอมพิวเตอร์กราฟิกและมัลติมีเดีย",
@@ -24,23 +24,23 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/Ellipse 51.png",
     apple: "/apple-touch-icon.png",
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "นิทรรศการแสดงศิลปนิพนธ์ - CG Work",
+    title: "นิทรรศการแสดงศิลปนิพนธ์ - brainbang-exhibition",
     description:
       "นิทรรศการแสดงผลงานศิลปนิพนธ์ นิสิตระดับชั้นปีที่ 4 สาขาวิชาคอมพิวเตอร์กราฟิกและมัลติมีเดีย",
     url: "/",
-    siteName: "CG Work",
+    siteName: "brainbang-exhibition",
     images: [{ url: "/og.png" }],
     locale: "th_TH",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "นิทรรศการแสดงศิลปนิพนธ์ - CG Work",
+    title: "นิทรรศการแสดงศิลปนิพนธ์ - brainbang-exhibition",
     description:
       "นิทรรศการแสดงผลงานศิลปนิพนธ์ นิสิตระดับชั้นปีที่ 4 สาขาวิชาคอมพิวเตอร์กราฟิกและมัลติมีเดีย",
     images: ["/og.png"],
