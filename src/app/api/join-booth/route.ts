@@ -47,8 +47,8 @@ function staleDailyToken(payload: any): boolean {
     typeof payload?.lastLoginDate === "number"
       ? new Date(payload.lastLoginDate)
       : typeof payload?.lastLoginDate === "string"
-      ? new Date(payload.lastLoginDate)
-      : undefined;
+        ? new Date(payload.lastLoginDate)
+        : undefined;
 
   const lastYMD: string | undefined =
     (payload?.lastLoginYMD as string) ||
@@ -56,14 +56,6 @@ function staleDailyToken(payload: any): boolean {
     iatYMD;
 
   return lastYMD !== today;
-}
-
-// คืนช่วงเวลา "วันนี้ (UTC+7)" เพื่อ query ข้อมูลเฉพาะของวันนี้
-function getBangkokDayRange() {
-  const dayKey = bangkokYMD();
-  const startUtc = new Date(`${dayKey}T00:00:00.000+07:00`);
-  const endUtc = new Date(`${dayKey}T23:59:59.999+07:00`);
-  return { dayKey, startUtc, endUtc };
 }
 
 export async function POST(req: NextRequest) {
@@ -111,67 +103,48 @@ export async function POST(req: NextRequest) {
     if (!user) return NextResponse.json({ error: "ไม่พบผู้ใช้งาน" }, { status: 404 });
     if (!booth) return NextResponse.json({ error: "Booth code ไม่ถูกต้อง" }, { status: 400 });
 
-    const { startUtc, endUtc } = getBangkokDayRange();
-
     // ---- Business Tx ----
-    let result: JoinTxResult;
-    try {
-      result = await prisma.$transaction(async (tx): Promise<JoinTxResult> => {
-        // กันซ้ำทั้งงาน
-        const existed = await tx.boothJoin.findFirst({
-          where: { userId: user.id, boothId: booth.id },
-          select: { id: true },
-        });
-
-        // คะแนน "ของวันนี้" ก่อนเพิ่ม (อิง createdAt ภายในช่วงวันไทย)
-        const todayDP = await tx.dailyPoints.findFirst({
-          where: { userId: user.id, createdAt: { gte: startUtc, lt: endUtc } },
-          select: { net: true },
-        });
-        const todaysPoints = Math.max(0, todayDP?.net ?? 0);
-
-        if (existed) {
-          return { ok: false, code: 200, msg: "คุณได้เข้าร่วม booth นี้แล้ว", todaysPoints };
-        }
-        if (todaysPoints >= MAX_DAILY_SCORE) {
-          return {
-            ok: false,
-            code: 400,
-            msg: `คุณมีคะแนนครบ ${MAX_DAILY_SCORE} คะแนนในวันนี้แล้ว`,
-            todaysPoints,
-          };
-        }
-
-        // 1) join  2) total +=1  3) daily(net) +=1
-        const now = new Date();
-        await tx.boothJoin.create({ data: { userId: user.id, boothId: booth.id, joinedAt: now } });
-        await tx.user.update({ where: { id: user.id }, data: { score: { increment: 1 } } });
-
-        const { net: afterNet } = await incDailyEarned(tx, user.id, 1);
-        if (afterNet > MAX_DAILY_SCORE) throw new Error("DAILY_CAP_REACHED");
-
-        return {
-          ok: true,
-          msg: `เข้าร่วมบูธ "${booth.booth_name}" สำเร็จ (คะแนนวันนี้: ${afterNet}/${MAX_DAILY_SCORE})`,
-          todaysPoints: afterNet,
-        };
+    const result = await prisma.$transaction(async (tx): Promise<JoinTxResult> => {
+      // กันซ้ำทั้งงาน
+      const existed = await tx.boothJoin.findFirst({
+        where: { userId: user.id, boothId: booth.id },
+        select: { id: true },
       });
-    } catch (e: any) {
-      // ถ้าเจอ unique constraint จาก @@unique([userId, boothId]) ให้ถือว่า "เข้าร่วมแล้ว"
-      if (e?.code === "P2002") {
-        // อ่านคะแนนวันนี้อีกรอบเพื่อแจ้งผล
-        const todayDP = await prisma.dailyPoints.findFirst({
-          where: { userId: user.id, createdAt: { gte: startUtc, lt: endUtc } },
-          select: { net: true },
-        });
-        const todays = Math.max(0, todayDP?.net ?? 0);
-        return NextResponse.json(
-          { message: "คุณได้เข้าร่วม booth นี้แล้ว", todaysPoints: todays },
-          { status: 200 }
-        );
+
+      // คะแนนวันนี้ก่อนเพิ่ม
+      const dpBefore = await tx.dailyPoints.findFirst({
+        where: { userId: user.id },
+        orderBy: { createdAt: "desc" },
+        select: { net: true },
+      });
+      const todaysPoints = Math.max(0, dpBefore?.net ?? 0);
+
+      if (existed) {
+        return { ok: false, code: 200, msg: "คุณได้เข้าร่วม booth นี้แล้ว", todaysPoints };
       }
-      throw e;
-    }
+      if (todaysPoints >= MAX_DAILY_SCORE) {
+        return {
+          ok: false,
+          code: 400,
+          msg: `คุณมีคะแนนครบ ${MAX_DAILY_SCORE} คะแนนในวันนี้แล้ว`,
+          todaysPoints,
+        };
+      }
+
+      // 1) join  2) total +=1  3) daily(net) +=1
+      const now = new Date();
+      await tx.boothJoin.create({ data: { userId: user.id, boothId: booth.id, joinedAt: now } });
+      await tx.user.update({ where: { id: user.id }, data: { score: { increment: 1 } } });
+
+      const { net: afterNet } = await incDailyEarned(tx, user.id, 1);
+      if (afterNet > MAX_DAILY_SCORE) throw new Error("DAILY_CAP_REACHED");
+
+      return {
+        ok: true,
+        msg: `เข้าร่วมบูธ "${booth.booth_name}" สำเร็จ (คะแนนวันนี้: ${afterNet}/${MAX_DAILY_SCORE})`,
+        todaysPoints: afterNet,
+      };
+    });
 
     if (!result.ok) {
       const body =
