@@ -1051,20 +1051,20 @@ export default function AdminDashboard() {
                                   )}
                                 </td>
                                 <td className="px-4 py-2 font-medium">
-                                  {login.user.name}
+                                  {login.user?.name ?? "(ไม่พบผู้ใช้)"}
                                 </td>
                                 <td className="px-4 py-2">
-                                  {login.user.student_id || "-"}
+                                  {login.user?.student_id ?? "-"}
                                 </td>
                                 <td className="px-4 py-2">
                                   <span
                                     className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                      login.user.role === "admin"
+                                      (login.user?.role ?? "user") === "admin"
                                         ? "bg-purple-100 text-purple-800"
                                         : "bg-blue-100 text-blue-800"
                                     }`}
                                   >
-                                    {login.user.role === "admin"
+                                    {(login.user?.role ?? "user") === "admin"
                                       ? "Admin"
                                       : "User"}
                                   </span>

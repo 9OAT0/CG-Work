@@ -71,27 +71,25 @@ export async function GET(request: NextRequest) {
       dateParamRaw || undefined
     );
 
-    // 4) ดึงประวัติการล็อกอิน
-    const dailyLogins = await prisma.loginHistory.findMany({
+    // 4) ดึงประวัติการล็อกอิน (แพตช์ด่วน: ไม่ include user เพื่อกัน error)
+    const dailyLoginsRaw = await prisma.loginHistory.findMany({
       where: { loginDate: { gte: startUtc, lte: endUtc } },
-      include: {
-        user: {
-          select: { id: true, student_id: true, name: true, role: true },
-        },
+      select: {
+        id: true,
+        loginDate: true,
+        ipAddress: true,
+        userAgent: true,
+        userId: true,
       },
       orderBy: { loginDate: "desc" },
     });
 
-    // 5) หา unique users ของวันนั้น
-    const uniqueUsers = await prisma.loginHistory.groupBy({
-      by: ["userId"],
-      where: { loginDate: { gte: startUtc, lte: endUtc } },
-      _count: { userId: true },
-    });
-
-    // 6) เติมรายละเอียดผู้ใช้ (กันกรณี user ถูกลบ)
+    // ดึง user เฉพาะที่อ้างอิงในวันนั้น แล้วทำแผนที่ไว้
+    const userIds = Array.from(
+      new Set(dailyLoginsRaw.map((l) => l.userId).filter(Boolean))
+    );
     const users = await prisma.user.findMany({
-      where: { id: { in: uniqueUsers.map((u) => u.userId) } },
+      where: { id: { in: userIds } },
       select: {
         id: true,
         student_id: true,
@@ -100,9 +98,27 @@ export async function GET(request: NextRequest) {
         lastLoginDate: true,
       },
     });
+    const userMap = new Map(users.map((u) => [u.id, u]));
 
+    // ประกบ user (ถ้าไม่พบให้เป็น null)
+    const loginHistory = dailyLoginsRaw.map((l) => ({
+      id: l.id,
+      loginDate: l.loginDate,
+      ipAddress: l.ipAddress,
+      userAgent: l.userAgent,
+      user: l.userId ? userMap.get(l.userId) ?? null : null,
+    }));
+
+    // 5) หา unique users ของวันนั้น (ใช้ groupBy เหมือนเดิม)
+    const uniqueUsers = await prisma.loginHistory.groupBy({
+      by: ["userId"],
+      where: { loginDate: { gte: startUtc, lte: endUtc } },
+      _count: { userId: true },
+    });
+
+    // 6) เติมรายละเอียดผู้ใช้จาก userMap (กันกรณี user ถูกลบ)
     const uniqueUsersWithDetails = uniqueUsers.map((u) => {
-      const detail = users.find((x) => x.id === u.userId);
+      const detail = userMap.get(u.userId);
       return {
         id: u.userId,
         student_id: detail?.student_id ?? null,
@@ -113,12 +129,19 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    // 7) รวมสถิติ
+    // 7) รวมสถิติ (อ้างอิงจาก userMap เพื่อรู้ role)
+    const adminLogins = dailyLoginsRaw.filter(
+      (l) => (l.userId && userMap.get(l.userId)?.role) === "admin"
+    ).length;
+    const userLogins = dailyLoginsRaw.filter(
+      (l) => ((l.userId && userMap.get(l.userId)?.role) ?? "user") === "user"
+    ).length;
+
     const stats = {
-      totalLogins: dailyLogins.length,
+      totalLogins: loginHistory.length,
       uniqueUsers: uniqueUsersWithDetails.length,
-      adminLogins: dailyLogins.filter((l) => l.user?.role === "admin").length,
-      userLogins: dailyLogins.filter((l) => l.user?.role === "user").length,
+      adminLogins,
+      userLogins,
       date: dayStr,
     };
 
@@ -127,13 +150,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         stats,
-        loginHistory: dailyLogins.map((l) => ({
-          id: l.id,
-          loginDate: l.loginDate,
-          ipAddress: l.ipAddress,
-          userAgent: l.userAgent,
-          user: l.user,
-        })),
+        loginHistory,
         uniqueUsers: uniqueUsersWithDetails,
       },
     });
