@@ -17,7 +17,7 @@ const prisma =
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-const TRANSCRIPT_COST = 10; // เกณฑ์ขั้นต่ำ (ไม่หักแต้ม)
+const TRANSCRIPT_COST = 6; // เกณฑ์ขั้นต่ำ (ไม่หักแต้ม)
 
 // ===== Helpers: เวลาไทย & daily check =====
 function bangkokYMD(d?: Date): string {
