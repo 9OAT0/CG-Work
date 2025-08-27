@@ -1,3 +1,4 @@
+// app/api/register/route.ts  (หรือไฟล์นี้ของคุณตาม path จริง)
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@/generated/prisma";
 import jwt from "jsonwebtoken";
@@ -17,12 +18,27 @@ const prisma =
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const JWT_SECRET = process.env.JWT_SECRET!;
+if (!JWT_SECRET) {
+  throw new Error("Missing JWT_SECRET");
+}
 
 // ช่วยคืน YYYY-MM-DD ตามเวลาไทย (Bangkok)
 function toBangkokYMD(d: Date) {
   return new Date(d.toLocaleString("en-US", { timeZone: "Asia/Bangkok" }))
     .toLocaleString("en-CA", { timeZone: "Asia/Bangkok", hour12: false })
     .slice(0, 10);
+}
+
+/** คืนค่า Date (UTC) ของ "เที่ยงคืนไทยของวันถัดไป" */
+function nextBangkokMidnightUTC(): Date {
+  const now = new Date();
+  const UTC_OFFSET_MS = 7 * 60 * 60 * 1000; // Asia/Bangkok = UTC+7
+  const bkkNow = new Date(now.getTime() + UTC_OFFSET_MS);
+  const y = bkkNow.getUTCFullYear();
+  const m = bkkNow.getUTCMonth();
+  const d = bkkNow.getUTCDate();
+  const nextMidnightUTC = Date.UTC(y, m, d + 1, 0, 0, 0) - UTC_OFFSET_MS;
+  return new Date(nextMidnightUTC);
 }
 
 export async function POST(req: NextRequest) {
@@ -60,9 +76,7 @@ export async function POST(req: NextRequest) {
       });
       if (existingUser) {
         return NextResponse.json(
-          {
-            error: `รหัสนิสิต ${trimmedStudentId} ถูกใช้ลงทะเบียนแล้วโดย ${existingUser.name}`,
-          },
+          { error: `รหัสนิสิต ${trimmedStudentId} ถูกใช้ลงทะเบียนแล้วโดย ${existingUser.name}` },
           { status: 409 }
         );
       }
@@ -78,9 +92,7 @@ export async function POST(req: NextRequest) {
       });
       if (existingUser) {
         return NextResponse.json(
-          {
-            error: `ชื่อ "${name.trim()}" ถูกใช้ลงทะเบียนแล้วในสถานะ ${existingUser.status}`,
-          },
+          { error: `ชื่อ "${name.trim()}" ถูกใช้ลงทะเบียนแล้วในสถานะ ${existingUser.status}` },
           { status: 409 }
         );
       }
@@ -99,7 +111,7 @@ export async function POST(req: NextRequest) {
       role: "user",
       name,
       dept,
-      lastLoginDate: now, // สำคัญเพื่อให้ middleware ผ่าน
+      lastLoginDate: now, // เพื่อให้ middleware ผ่าน
     };
     if (status === "นิสิต" && studentId) {
       userData.student_id = studentId.trim();
@@ -109,25 +121,26 @@ export async function POST(req: NextRequest) {
     const newUser = await prisma.user.create({ data: userData });
 
     // ✅ บันทึก visit log ครั้งแรก
-    await prisma.visitLog.create({
-      data: { userId: newUser.id, visitedAt: now },
-    });
+    await prisma.visitLog.create({ data: { userId: newUser.id, visitedAt: now } });
 
-    // ✅ ออก JWT พร้อมฝัง daily-login fields
+    // ===== ออก JWT ให้หมดอายุ "เที่ยงคืนไทย" ของวันนั้น =====
+    const expiresAt = nextBangkokMidnightUTC();
+    const exp = Math.floor(expiresAt.getTime() / 1000); // seconds epoch
+
     const token = jwt.sign(
       {
         id: newUser.id,
         student_id: newUser.student_id,
         name: newUser.name,
         role: newUser.role,
-        lastLoginYMD: toBangkokYMD(now),    // <— ใช้ middleware เช็ก daily login
-        lastLoginDate: now.toISOString(),   // <— สำรอง
+        lastLoginYMD: toBangkokYMD(now),   // ใช้กับ middleware เช็ค daily login
+        lastLoginDate: now.toISOString(),  // สำรอง
+        exp,                               // บังคับหมดอายุเที่ยงคืนไทย
       },
-      JWT_SECRET,
-      { expiresIn: "7d" }
+      JWT_SECRET
     );
 
-    // ✅ ตอบกลับ + set cookie
+    // ✅ ตอบกลับ + set cookie ให้หมดอายุพร้อม JWT
     const response = NextResponse.json(
       { message: "ลงทะเบียนและเข้าสู่ระบบสำเร็จ", user: newUser },
       { status: 201 }
@@ -139,14 +152,13 @@ export async function POST(req: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 วัน
+      expires: expiresAt, // คุกกี้หมดอายุที่เที่ยงคืนไทยเหมือนกัน
     });
 
     return response;
   } catch (error: any) {
     console.error("Registration error:", error);
 
-    // Prisma unique constraint (ถ้ามี)
     if (error.code === "P2002") {
       if (error.meta?.target?.includes("student_id")) {
         return NextResponse.json(
@@ -163,12 +175,11 @@ export async function POST(req: NextRequest) {
           { error: "ชื่อผู้ใช้นี้ถูกใช้แล้ว" },
           { status: 409 }
         );
-      } else {
-        return NextResponse.json(
-          { error: "ข้อมูลนี้ถูกใช้ลงทะเบียนแล้ว" },
-          { status: 409 }
-        );
       }
+      return NextResponse.json(
+        { error: "ข้อมูลนี้ถูกใช้ลงทะเบียนแล้ว" },
+        { status: 409 }
+      );
     }
 
     return NextResponse.json(

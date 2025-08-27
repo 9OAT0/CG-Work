@@ -17,7 +17,41 @@ const prisma =
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
 const JWT_SECRET = process.env.JWT_SECRET!;
-const TRANSCRIPT_COST = 6; // ใช้เป็นเกณฑ์ขั้นต่ำ (ไม่หักแต้ม)
+const TRANSCRIPT_COST = 10; // เกณฑ์ขั้นต่ำ (ไม่หักแต้ม)
+
+// ===== Helpers: เวลาไทย & daily check =====
+function bangkokYMD(d?: Date): string {
+  const date = d ?? new Date();
+  const th = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Bangkok" }));
+  const y = th.getFullYear();
+  const m = String(th.getMonth() + 1).padStart(2, "0");
+  const dd = String(th.getDate()).padStart(2, "0");
+  return `${y}-${m}-${dd}`;
+}
+function toBangkokYMD(d: Date) {
+  return new Date(d.toLocaleString("en-US", { timeZone: "Asia/Bangkok" }))
+    .toLocaleString("en-CA", { timeZone: "Asia/Bangkok", hour12: false })
+    .slice(0, 10);
+}
+function staleDailyToken(payload: any): boolean {
+  const today = bangkokYMD();
+  const iatYMD =
+    typeof payload?.iat === "number" ? toBangkokYMD(new Date(payload.iat * 1000)) : undefined;
+
+  const claimedLastDate =
+    typeof payload?.lastLoginDate === "number"
+      ? new Date(payload.lastLoginDate)
+      : typeof payload?.lastLoginDate === "string"
+      ? new Date(payload.lastLoginDate)
+      : undefined;
+
+  const lastYMD: string | undefined =
+    (payload?.lastLoginYMD as string) ||
+    (claimedLastDate ? toBangkokYMD(claimedLastDate) : undefined) ||
+    iatYMD;
+
+  return lastYMD !== today;
+}
 
 function getBangkokDay() {
   const th = new Date(
@@ -58,14 +92,27 @@ async function withTxRetry<T>(
 export async function POST(req: NextRequest) {
   try {
     const token = req.cookies.get("token")?.value;
-    if (!token)
+    if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-    let payload: { id: string };
+    let payload: any;
     try {
-      payload = jwt.verify(token, JWT_SECRET) as { id: string };
+      payload = jwt.verify(token, JWT_SECRET) as any; // exp หมด/ปลอม → throw
     } catch {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      const res = NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      res.cookies.set("token", "", { path: "/", expires: new Date(0) }); // ล้างคุกกี้
+      return res;
+    }
+
+    // ✅ Daily enforcement: ข้ามวัน (เวลาไทย) → ล้างคุกกี้ + 401
+    if (staleDailyToken(payload)) {
+      const res = NextResponse.json(
+        { error: "Session expired. Please login again." },
+        { status: 401 }
+      );
+      res.cookies.set("token", "", { path: "/", expires: new Date(0) });
+      return res;
     }
 
     const userId = payload.id;
@@ -97,12 +144,11 @@ export async function POST(req: NextRequest) {
       ]);
       const todaysPoints = joinsToday + (adjSum._sum.amount ?? 0);
 
-      // ยังใช้เป็นเกณฑ์ขั้นต่ำ แต่จะ "ไม่หักแต้ม"
       if (todaysPoints < TRANSCRIPT_COST) {
         return { ok: false as const, code: 400, msg: "คะแนนรายวันไม่เพียงพอ" };
       }
 
-      // บันทึก Log (ควรมี unique (userId, dayKey) ที่ schema)
+      // บันทึก Log (มี unique (userId, dayKey) ที่ schema จะยิ่งชัวร์)
       try {
         await tx.transcriptLog.create({
           data: { userId, date: new Date(), dayKey },
@@ -118,10 +164,10 @@ export async function POST(req: NextRequest) {
         throw e;
       }
 
-      // ✅ ไม่มีการหักแต้มรายวันและไม่ไปลดคะแนนสะสมอีกแล้ว
+      // ✅ ไม่หักแต้ม
       const dailyPoints = todaysPoints;
 
-      // ไม่ต้อง update user.score
+      // คะแนนสะสมคงเดิม
       const current = await tx.user.findUnique({
         where: { id: userId },
         select: { score: true },

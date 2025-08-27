@@ -104,8 +104,8 @@ export async function middleware(request: NextRequest) {
           typeof claims.lastLoginDate === "number"
             ? new Date(claims.lastLoginDate)
             : typeof claims.lastLoginDate === "string"
-            ? new Date(claims.lastLoginDate)
-            : undefined;
+              ? new Date(claims.lastLoginDate)
+              : undefined;
 
         lastYMD =
           (claims.lastLoginYMD as string) ||
@@ -129,6 +129,47 @@ export async function middleware(request: NextRequest) {
       }
     }
     // ======= END GLOBAL DAILY CHECK =======
+
+    // ----- Auto-exit /maintenance when maintenance ends -----
+    if (pathname === "/maintenance") {
+      try {
+        const apiUrl = new URL("/api/maintenance-status", request.url);
+        const res = await fetch(apiUrl, {
+          cache: "no-store",
+          headers: {
+            Cookie: request.headers.get("cookie") ?? "",
+            "x-from-middleware": "1",
+          },
+        });
+
+        if (res.ok) {
+          const data = await res.json().catch(() => null);
+          const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
+          const workingHours = data?.workingHours ?? data?.working_hours ?? null;
+
+          const maintenanceActive = Boolean(
+            maintenance?.isActive ?? maintenance?.isEnabled
+          );
+
+          // เข้าเวลาทำการแล้วหรือยัง (ถ้าเปิดใช้ workingHours)
+          let canOpen = true;
+          if (workingHours) {
+            const start = Number(workingHours.startHour ?? 0);
+            const end = Number(workingHours.endHour ?? 0);
+            const enabled = Boolean(workingHours.isEnabled);
+            canOpen = withinHours(start, end, enabled);
+          }
+
+          // ถ้าไม่อยู่ในช่วง maintenance และ (ไม่มีการจำกัดเวลา หรือ ตอนนี้อยู่ในช่วงเวลาใช้งาน)
+          if (!maintenanceActive && canOpen) {
+            return NextResponse.redirect(new URL("/", request.url));
+          }
+        }
+        // ถ้า API ล่ม/ไม่ ok → ปล่อยให้อยู่หน้า /maintenance ต่อ (fail-open)
+      } catch {
+        // fetch error → อยู่หน้า /maintenance ต่อ
+      }
+    }
 
     // หน้า public (ถ้าผ่าน daily check แล้ว)
     if (PUBLIC_PATHS.includes(pathname)) {
