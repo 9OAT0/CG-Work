@@ -85,6 +85,7 @@ export default function RegisterBooth() {
 
       const response = await fetch("/api/upload", {
         method: "POST",
+        credentials: "include",
         body: formData,
       });
 
@@ -141,6 +142,7 @@ export default function RegisterBooth() {
     try {
       const response = await fetch("/api/upload", {
         method: "POST",
+        credentials: "include",
         body: formData,
       });
       const data = await response.json();
@@ -239,6 +241,7 @@ export default function RegisterBooth() {
 
       const response = await fetch("/api/admin/register-booth", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
