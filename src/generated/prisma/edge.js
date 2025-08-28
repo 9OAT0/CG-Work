@@ -377,7 +377,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\CG-Work\\src\\generated\\prisma",
+      "value": "G:\\cg_work\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -391,7 +391,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\CG-Work\\prisma\\schema.prisma",
+    "sourceFilePath": "G:\\cg_work\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -405,6 +405,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mongodb",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

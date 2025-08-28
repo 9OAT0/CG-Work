@@ -46,6 +46,7 @@ function BoothContent() {
   // รายการกล้อง & ตัวที่เลือก
   const [cameras, setCameras] = useState<MediaDeviceInfo[]>([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>("");
+  const [preferFront, setPreferFront] = useState(true); // ✅ เริ่มต้นกล้องหน้า
 
   // result state
   const [showResult, setShowResult] = useState<"correct" | "wrong" | null>(null);
@@ -84,19 +85,29 @@ function BoothContent() {
     if (!showScannerModal) return;
     (async () => {
       try {
-        await navigator.mediaDevices.getUserMedia({ video: true });
+        // ✅ ขอสิทธิ์พร้อมชี้นำให้เริ่มที่ 'user' (กล้องหน้า) เพื่อให้ browser เลือก stream ที่ถูก
+        await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: preferFront ? "user" : "environment" },
+        });
+
         const all = await navigator.mediaDevices.enumerateDevices();
         const vids = all.filter((d) => d.kind === "videoinput");
         setCameras(vids);
+
         if (!selectedDeviceId && vids.length) {
+          // ✅ พยายามจับชื่อกล้องหน้า/หลังจาก label
+          const front = vids.find((d) => /front|user|selfie|face/i.test(d.label));
           const back = vids.find((d) => /back|rear|environment/i.test(d.label));
-          setSelectedDeviceId((back || vids[0]).deviceId);
+
+          const firstChoice = preferFront ? (front || vids[0]) : (back || vids[0]);
+          setSelectedDeviceId(firstChoice.deviceId);
         }
       } catch (e: any) {
         setScanError(e?.message || "เปิดกล้องไม่สำเร็จ (HTTPS หรือ permission?)");
       }
     })();
-  }, [showScannerModal, selectedDeviceId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showScannerModal, preferFront]);
 
   // -------- join booth ----------
   async function doJoin(boothCode: string) {
@@ -194,21 +205,24 @@ function BoothContent() {
     }
   };
 
-  // ใช้ constraints แบบอิง deviceId (ชัวร์สุด) ถ้ายังไม่มี fallback เป็น facingMode
+  // ✅ ใช้ constraints แบบอิง deviceId ถ้ามี, ไม่มีก็ชี้นำที่กล้องหน้า ('user') เพื่อเริ่มจากกล้องหน้า
   const constraints = useMemo<MediaTrackConstraints>(() => {
     if (selectedDeviceId) {
       return {
         deviceId: { exact: selectedDeviceId },
-        width: { ideal: 1280 },
-        height: { ideal: 720 },
+        // ✅ ลดความละเอียดเพื่อความเร็วในการสแกน
+        width: { ideal: 640 },
+        height: { ideal: 480 },
+        aspectRatio: { ideal: 4 / 3 },
       };
     }
     return {
-      facingMode: { ideal: "environment" },
-      width: { ideal: 1280 },
-      height: { ideal: 720 },
+      facingMode: preferFront ? { ideal: "user" } : { ideal: "environment" },
+      width: { ideal: 640 },
+      height: { ideal: 480 },
+      aspectRatio: { ideal: 4 / 3 },
     };
-  }, [selectedDeviceId]);
+  }, [selectedDeviceId, preferFront]);
 
   if (loading) return <div className="text-center mt-10">กำลังโหลด...</div>;
 
@@ -375,30 +389,44 @@ function BoothContent() {
                 </div>
               )}
 
-              {/* เลือกกล้อง (ถ้ามีหลายตัว) */}
-              {cameras.length > 1 && (
-                <div className="mb-3 flex items-center gap-2">
-                  <label className="text-sm text-gray-700">เลือกกล้อง:</label>
-                  <select
-                    value={selectedDeviceId}
-                    onChange={(e) => setSelectedDeviceId(e.target.value)}
-                    className="px-3 py-2 border rounded-md text-sm"
+              {/* เลือกกล้อง & ปุ่มสลับ */}
+              {(cameras.length > 1 || selectedDeviceId) && (
+                <div className="mb-3 flex flex-wrap items-center gap-2 justify-center">
+                  {cameras.length > 1 && (
+                    <select
+                      value={selectedDeviceId}
+                      onChange={(e) => setSelectedDeviceId(e.target.value)}
+                      className="px-3 py-2 border rounded-md text-sm"
+                    >
+                      {cameras.map((c) => (
+                        <option key={c.deviceId} value={c.deviceId}>
+                          {c.label || `Camera ${c.deviceId.slice(0, 6)}…`}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  <button
+                    onClick={() => {
+                      setPreferFront((v) => !v);
+                      // เคลียร์เลือกเดิมเพื่อบังคับ re-init scanner ด้วย facingMode ใหม่
+                      setSelectedDeviceId("");
+                      scanningLockRef.current = false;
+                      setScanError(null);
+                    }}
+                    className="px-3 py-2 rounded-md bg-gray-800 text-white text-sm"
                   >
-                    {cameras.map((c) => (
-                      <option key={c.deviceId} value={c.deviceId}>
-                        {c.label || `Camera ${c.deviceId.slice(0, 6)}…`}
-                      </option>
-                    ))}
-                  </select>
+                    สลับกล้อง (หน้า/หลัง)
+                  </button>
                 </div>
               )}
 
               {/* กล้องสแกน */}
               <div className="rounded-xl overflow-hidden border bg-black">
                 <Scanner
-                  key={String(showScannerModal) + selectedDeviceId} // re-init เมื่อสลับกล้อง
+                  key={String(showScannerModal) + selectedDeviceId + String(preferFront)} // re-init เมื่อสลับกล้อง
                   constraints={constraints}
-                  scanDelay={350}
+                  // ✅ ลด delay ให้สแกนถี่ขึ้น
+                  scanDelay={100}
                   onScan={(results) => {
                     const text =
                       Array.isArray(results) && results.length > 0
