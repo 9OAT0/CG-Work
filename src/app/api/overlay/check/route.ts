@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         shouldShow: true,
         triggerType: 'EVERY_LOGIN',
         reason: 'ผู้ใช้เข้าสู่ระบบใหม่',
-        imageUrl: '/overlay.PNG'
+        imageUrl: '/ovl28.png'
       };
       
       console.log('📤 API Response:', response);
