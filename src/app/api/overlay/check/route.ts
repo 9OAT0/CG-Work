@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         shouldShow: true,
         triggerType: 'EVERY_LOGIN',
         reason: 'ผู้ใช้เข้าสู่ระบบใหม่',
-        imageUrl: '/ovl28.png'
+        imageUrl: '/ovl29.png'
       };
       
       console.log('📤 API Response:', response);
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
         shouldShow: true,
         triggerType: 'DAILY_FIRST_VISIT',
         reason: 'ครั้งแรกของวันนี้',
-        imageUrl: '/ovl28.png'
+        imageUrl: '/ovl29.png'
       });
     }
 
