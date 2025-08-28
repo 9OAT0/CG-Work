@@ -40,7 +40,7 @@ export default function Homepage() {
   // ---- Fast-close overlay: เปิด overlay ก่อน (พื้นหลังเป็นหน้า Home), ปิดไวทันที ----
   // ให้ overlay แสดงมาก่อนทุกอย่างโดยยังเห็นหน้า Home ด้านหลัง:
   // เริ่มต้น open = true แล้วค่อยปิดเองถ้าไม่ควรแสดง
-  const [overlayOpen, setOverlayOpen] = useState(true);
+  const [overlayOpen, setOverlayOpen] = useState(false);
   const closedRef = useRef(false);
 
   // เมื่อ hook ตัดสินใจเสร็จ อัปเดตสถานะ overlay
@@ -135,6 +135,27 @@ export default function Homepage() {
     setDragOffset(0);
     startAuto();
   };
+
+  // เพิ่มด้านบนไฟล์ (ใต้ hooks/useOverlay ก็ได้)
+const OVERLAY_FALLBACK = "/ovl28.png";
+
+// สำหรับ src ที่พร้อมใช้งาน (มี cache-buster แล้ว)
+const [overlayImgSrc, setOverlayImgSrc] = useState<string>(OVERLAY_FALLBACK);
+const baseImgRef = useRef<string>("");
+
+// อัปเดตรูปเมื่อผลจาก hook มาใหม่ (และใส่ cache-buster หนึ่งครั้งต่อ URL)
+useEffect(() => {
+  if (loading) return;
+  const base = overlayData?.imageUrl || OVERLAY_FALLBACK;
+
+  if (base !== baseImgRef.current) {
+    baseImgRef.current = base;
+    // ใส่เวอร์ชันเพื่อบังคับโหลดใหม่ (ไม่เปลี่ยนทุก render)
+    const v = Date.now(); // เปลี่ยนเป็นเลขอื่นได้เวลามีอัปเดตรูป
+    setOverlayImgSrc(`${base}?v=${v}`);
+  }
+}, [loading, overlayData?.imageUrl]);
+
 
   // ---- เนื้อหาเพจหลัก (render เสมอ เพื่อให้เห็นเป็นพื้นหลังของ overlay) ----
   return (
@@ -392,11 +413,19 @@ export default function Homepage() {
             ) : (
               <>
                 <img
-                  src={overlayData?.imageUrl || "/ovl28.png"}
+                  key={overlayImgSrc}               // บังคับ remount เมื่อ URL เปลี่ยน
+                  src={overlayImgSrc}
                   alt="แจ้งเตือน"
                   className="block rounded-2xl w-auto h-auto max-w-[90vw] max-h-[90vh] object-contain shadow-2xl"
                   loading="eager"
                   decoding="async"
+                  onError={(e) => {
+                    // fallback รูปสำรอง (พร้อม cache-buster) ถ้าโหลดไม่ขึ้น
+                    const target = e.currentTarget as HTMLImageElement;
+                    if (target.src !== OVERLAY_FALLBACK) {
+                      target.src = `${OVERLAY_FALLBACK}?v=${Date.now()}`;
+                    }
+                  }}
                 />
                 <button
                   type="button"
