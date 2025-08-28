@@ -198,11 +198,6 @@ export default function Navbar() {
             </li>
           )}
           <li role="menuitem">
-            <Link href="/homepage" className={linkCls("/homepage")}>
-              ผลงาน
-            </Link>
-          </li>
-          <li role="menuitem">
             <button
               onClick={handleLogout}
               className="text-left hover:text-blue-300 font-light text-xl"

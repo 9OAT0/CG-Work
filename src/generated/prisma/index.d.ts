@@ -29041,6 +29041,7 @@ export namespace Prisma {
 
   export type BoothJoinWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    userId_boothId?: BoothJoinUserIdBoothIdCompoundUniqueInput
     AND?: BoothJoinWhereInput | BoothJoinWhereInput[]
     OR?: BoothJoinWhereInput[]
     NOT?: BoothJoinWhereInput | BoothJoinWhereInput[]
@@ -29049,7 +29050,7 @@ export namespace Prisma {
     joinedAt?: DateTimeFilter<"BoothJoin"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     booth?: XOR<BoothScalarRelationFilter, BoothWhereInput>
-  }, "id">
+  }, "id" | "userId_boothId">
 
   export type BoothJoinOrderByWithAggregationInput = {
     id?: SortOrder
@@ -32498,6 +32499,11 @@ export namespace Prisma {
   export type BoothScalarRelationFilter = {
     is?: BoothWhereInput
     isNot?: BoothWhereInput
+  }
+
+  export type BoothJoinUserIdBoothIdCompoundUniqueInput = {
+    userId: string
+    boothId: string
   }
 
   export type BoothJoinCountOrderByAggregateInput = {

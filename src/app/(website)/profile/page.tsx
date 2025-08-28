@@ -27,8 +27,8 @@ const EVENT_BASE = process.env.NEXT_PUBLIC_EVENT_MONTH || "2025-08"; // YYYY-MM
 // แต้มรายวันขั้นต่ำของแต่ละวัน
 const REQUIRED_POINTS: Record<"27" | "28" | "29", number> = {
   "27": 6,
-  "28": 10,
-  "29": 8,
+  "28": 6,
+  "29": 10,
 };
 
 // วันปัจจุบัน (2 หลัก) ตามโซนเวลา Asia/Bangkok

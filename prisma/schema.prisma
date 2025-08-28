@@ -92,6 +92,7 @@ model BoothJoin {
   joinedAt DateTime @default(now())
 
   @@index([userId, joinedAt])
+  @@unique([userId, boothId])
 }
 
 model BoothOwner {

@@ -91,6 +91,7 @@ model BoothJoin {
   booth    Booth    @relation(fields: [boothId], references: [id], onDelete: Cascade)
   joinedAt DateTime @default(now())
 
+  @@unique([userId, boothId])
   @@index([userId, joinedAt])
 }
 
