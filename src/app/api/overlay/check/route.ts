@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
         shouldShow: true,
         triggerType: 'DAILY_FIRST_VISIT',
         reason: 'ครั้งแรกของวันนี้',
-        imageUrl: '/overlay.PNG'
+        imageUrl: '/ovl28.png'
       });
     }
 
