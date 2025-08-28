@@ -82,19 +82,34 @@ export async function middleware(request: NextRequest) {
     }
 
     // เข้า /login หรือ /register → เคลียร์ token กัน state ค้าง
-    if (pathname.startsWith("/login") || pathname.startsWith("/register")) {
+    const AUTH_PAGES = new Set(["/login", "/register"]);
+    if (AUTH_PAGES.has(pathname.replace(/\/$/, ""))) {
       const resp = NextResponse.next();
       resp.cookies.delete("token");
       return resp;
     }
 
-    // อ่าน claims หนึ่งครั้งเพื่อเช็คบทบาท
-    const token = request.cookies.get("token")?.value;
-    const claims = token ? await readClaims(request) : null;
+    // ===== ตรวจ token หมดอายุ/ปลอม → เด้ง "/" ทุกหน้า =====
+    const rawToken = request.cookies.get("token")?.value;
+    if (rawToken && JWT_SECRET) {
+      try {
+        await jwtVerify(rawToken, JWT_SECRET); // จะ throw ถ้า exp/ลายเซ็นต์ไม่ผ่าน
+      } catch {
+        const url = new URL("/", request.url);
+        url.searchParams.set("forced", "expired");
+        const resp =
+          pathname === "/" ? NextResponse.next() : NextResponse.redirect(url);
+        resp.cookies.delete("token");
+        return resp;
+      }
+    }
+
+    // อ่าน claims เพื่อดูบทบาท
+    const claims = rawToken ? await readClaims(request) : null;
     const isAdmin = claims?.role === "admin";
 
     // ======= GLOBAL DAILY CHECK (ทุกหน้า ยกเว้น admin) =======
-    if (token && FORCE_DAILY_RELOGIN && !isAdmin) {
+    if (rawToken && FORCE_DAILY_RELOGIN && !isAdmin) {
       const today = bangkokYMD();
 
       let lastYMD: string | undefined;
@@ -107,8 +122,8 @@ export async function middleware(request: NextRequest) {
           typeof claims.lastLoginDate === "number"
             ? new Date(claims.lastLoginDate)
             : typeof claims.lastLoginDate === "string"
-              ? new Date(claims.lastLoginDate)
-              : undefined;
+            ? new Date(claims.lastLoginDate)
+            : undefined;
 
         lastYMD =
           (claims.lastLoginYMD as string) ||
@@ -147,8 +162,10 @@ export async function middleware(request: NextRequest) {
 
         if (res.ok) {
           const data = await res.json().catch(() => null);
-          const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
-          const workingHours = data?.workingHours ?? data?.working_hours ?? null;
+          const maintenance =
+            data?.maintenance ?? data?.maintenanceMode ?? null;
+          const workingHours =
+            data?.workingHours ?? data?.working_hours ?? null;
 
           const maintenanceActive = Boolean(
             maintenance?.isActive ?? maintenance?.isEnabled
@@ -208,8 +225,10 @@ export async function middleware(request: NextRequest) {
 
         if (res.ok) {
           const data = await res.json().catch(() => null);
-          const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
-          const workingHours = data?.workingHours ?? data?.working_hours ?? null;
+          const maintenance =
+            data?.maintenance ?? data?.maintenanceMode ?? null;
+          const workingHours =
+            data?.workingHours ?? data?.working_hours ?? null;
 
           const maintenanceActive = Boolean(
             maintenance?.isActive ?? maintenance?.isEnabled
