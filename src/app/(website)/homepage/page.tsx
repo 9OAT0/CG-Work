@@ -392,7 +392,7 @@ export default function Homepage() {
             ) : (
               <>
                 <img
-                  src={overlayData?.imageUrl || "/ovl28.png"}
+                  src="/ovl28.png"
                   alt="แจ้งเตือน"
                   className="block rounded-2xl w-auto h-auto max-w-[90vw] max-h-[90vh] object-contain shadow-2xl"
                   loading="eager"
