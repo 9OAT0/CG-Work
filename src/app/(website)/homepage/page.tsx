@@ -137,7 +137,7 @@ export default function Homepage() {
   };
 
   // เพิ่มด้านบนไฟล์ (ใต้ hooks/useOverlay ก็ได้)
-const OVERLAY_FALLBACK = "/ovl28.png";
+const OVERLAY_FALLBACK = "/ovl29.png";
 
 // สำหรับ src ที่พร้อมใช้งาน (มี cache-buster แล้ว)
 const [overlayImgSrc, setOverlayImgSrc] = useState<string>(OVERLAY_FALLBACK);
