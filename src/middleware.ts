@@ -82,7 +82,8 @@ export async function middleware(request: NextRequest) {
     }
 
     // เข้า /login หรือ /register → เคลียร์ token กัน state ค้าง
-    if (pathname.startsWith("/login") || pathname.startsWith("/register")) {
+    const AUTH_PAGES = new Set(["/login", "/register"]);
+    if (AUTH_PAGES.has(pathname.replace(/\/$/, ""))) {
       const resp = NextResponse.next();
       resp.cookies.delete("token");
       return resp;
@@ -107,8 +108,8 @@ export async function middleware(request: NextRequest) {
           typeof claims.lastLoginDate === "number"
             ? new Date(claims.lastLoginDate)
             : typeof claims.lastLoginDate === "string"
-              ? new Date(claims.lastLoginDate)
-              : undefined;
+            ? new Date(claims.lastLoginDate)
+            : undefined;
 
         lastYMD =
           (claims.lastLoginYMD as string) ||
@@ -147,8 +148,10 @@ export async function middleware(request: NextRequest) {
 
         if (res.ok) {
           const data = await res.json().catch(() => null);
-          const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
-          const workingHours = data?.workingHours ?? data?.working_hours ?? null;
+          const maintenance =
+            data?.maintenance ?? data?.maintenanceMode ?? null;
+          const workingHours =
+            data?.workingHours ?? data?.working_hours ?? null;
 
           const maintenanceActive = Boolean(
             maintenance?.isActive ?? maintenance?.isEnabled
@@ -208,8 +211,10 @@ export async function middleware(request: NextRequest) {
 
         if (res.ok) {
           const data = await res.json().catch(() => null);
-          const maintenance = data?.maintenance ?? data?.maintenanceMode ?? null;
-          const workingHours = data?.workingHours ?? data?.working_hours ?? null;
+          const maintenance =
+            data?.maintenance ?? data?.maintenanceMode ?? null;
+          const workingHours =
+            data?.workingHours ?? data?.working_hours ?? null;
 
           const maintenanceActive = Boolean(
             maintenance?.isActive ?? maintenance?.isEnabled
