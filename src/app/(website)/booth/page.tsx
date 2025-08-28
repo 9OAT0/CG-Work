@@ -49,7 +49,9 @@ function BoothContent() {
   const [preferFront, setPreferFront] = useState(true); // ✅ เริ่มต้นกล้องหน้า
 
   // result state
-  const [showResult, setShowResult] = useState<"correct" | "wrong" | null>(null);
+  const [showResult, setShowResult] = useState<"correct" | "wrong" | null>(
+    null
+  );
   const [checking, setChecking] = useState(false);
 
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -75,9 +77,15 @@ function BoothContent() {
 
   // แจ้งเตือนถ้าไม่ใช่ HTTPS (ยกเว้น localhost)
   useEffect(() => {
-    const isLocalhost = typeof window !== "undefined" && window.location.hostname === "localhost";
-    const isSecure = typeof window !== "undefined" && window.location.protocol === "https:";
-    setSecureHint(!isLocalhost && !isSecure ? "ต้องเข้าผ่าน HTTPS เท่านั้นถึงจะเปิดกล้องได้" : null);
+    const isLocalhost =
+      typeof window !== "undefined" && window.location.hostname === "localhost";
+    const isSecure =
+      typeof window !== "undefined" && window.location.protocol === "https:";
+    setSecureHint(
+      !isLocalhost && !isSecure
+        ? "ต้องเข้าผ่าน HTTPS เท่านั้นถึงจะเปิดกล้องได้"
+        : null
+    );
   }, [showScannerModal]);
 
   // เปิด modal สแกน → ขอ permission + enumerate อุปกรณ์
@@ -96,14 +104,19 @@ function BoothContent() {
 
         if (!selectedDeviceId && vids.length) {
           // ✅ พยายามจับชื่อกล้องหน้า/หลังจาก label
-          const front = vids.find((d) => /front|user|selfie|face/i.test(d.label));
+          const front = vids.find((d) =>
+            /front|user|selfie|face/i.test(d.label)
+          );
           const back = vids.find((d) => /back|rear|environment/i.test(d.label));
-
-          const firstChoice = preferFront ? (front || vids[0]) : (back || vids[0]);
+          const firstChoice = preferFront
+            ? front || vids[0]
+            : back || vids[vids.length - 1] || vids[0]; // ✅ ถ้าไม่เจอ back ให้ใช้ตัวท้าย
           setSelectedDeviceId(firstChoice.deviceId);
         }
       } catch (e: any) {
-        setScanError(e?.message || "เปิดกล้องไม่สำเร็จ (HTTPS หรือ permission?)");
+        setScanError(
+          e?.message || "เปิดกล้องไม่สำเร็จ (HTTPS หรือ permission?)"
+        );
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -132,7 +145,9 @@ function BoothContent() {
         }, 1000);
       } else {
         setShowResult("wrong");
-        setScanError(typeof data?.error === "string" ? data.error : "เข้าร่วมไม่สำเร็จ");
+        setScanError(
+          typeof data?.error === "string" ? data.error : "เข้าร่วมไม่สำเร็จ"
+        );
       }
     } catch {
       setShowResult("wrong");
@@ -153,13 +168,18 @@ function BoothContent() {
       if (o && typeof o.boothCode === "string" && o.boothCode.trim()) {
         return o.boothCode.trim();
       }
-    } catch { /* not json */ }
+    } catch {
+      /* not json */
+    }
 
     try {
       const u = new URL(raw);
-      const code = u.searchParams.get("booth") || u.searchParams.get("boothCode");
+      const code =
+        u.searchParams.get("booth") || u.searchParams.get("boothCode");
       if (code && code.trim()) return code.trim();
-    } catch { /* not url */ }
+    } catch {
+      /* not url */
+    }
 
     if (/^[A-Za-z0-9_-]{2,}$/.test(raw)) return raw;
 
@@ -231,7 +251,11 @@ function BoothContent() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6">
         <a href="/category">
-          <img src="bbt.png" alt="back" className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px]" />
+          <img
+            src="bbt.png"
+            alt="back"
+            className="w-[50px] h-[50px] sm:w-[60px] sm:h-[60px]"
+          />
         </a>
         <div className="w-full sm:w-[281px] h-[50px] sm:h-[56px] rounded-[30px] flex justify-center items-center bg-blueBrand">
           <h1 className="text-[20px] sm:text-[24px] font-bold text-white">
@@ -253,7 +277,11 @@ function BoothContent() {
         >
           {booth?.pics.map((img, idx) => (
             <SwiperSlide key={idx}>
-              <img src={img} alt={`slide-${idx}`} className="rounded-xl w-full h-full object-cover" />
+              <img
+                src={img}
+                alt={`slide-${idx}`}
+                className="rounded-xl w-full h-full object-cover"
+              />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -264,17 +292,24 @@ function BoothContent() {
         <h2 className="font-bold text-lg">ชื่อบูธ/ผลงานวิจัย</h2>
         <p className="whitespace-pre-wrap">{booth?.booth_name || "-"}</p>
         <p className="mt-4 text-sm">รายละเอียด</p>
-        <p className="text-sm text-gray-700 whitespace-pre-wrap">{booth?.description || "-"}</p>
+        <p className="text-sm text-gray-700 whitespace-pre-wrap">
+          {booth?.description || "-"}
+        </p>
       </div>
 
       {/* Owners */}
       <div>
-        <div className="flex justify-center font-bold text-lg text-center sm:text-left">ผู้จัดทำ</div>
+        <div className="flex justify-center font-bold text-lg text-center sm:text-left">
+          ผู้จัดทำ
+        </div>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-6">
           {booth?.owner_names && booth.owner_names.length > 0 ? (
             <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-10">
               {booth.owner_names.map((ownerName, index) => (
-                <div key={index} className="flex flex-col items-center text-center max-w-[150px]">
+                <div
+                  key={index}
+                  className="flex flex-col items-center text-center max-w-[150px]"
+                >
                   <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-200 border-2 border-white shadow-md flex-shrink-0">
                     {booth.owner_images && booth.owner_images[index] ? (
                       <img
@@ -284,12 +319,16 @@ function BoothContent() {
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gray-300">
-                        <span className="text-gray-600 text-sm font-medium">รูป</span>
+                        <span className="text-gray-600 text-sm font-medium">
+                          รูป
+                        </span>
                       </div>
                     )}
                   </div>
                   {/* make owner name to be same line*/}
-                  <p className="text-sm font-medium text-gray-800 mt-2 break-words line-clamp-2 text-center">{ownerName}</p>
+                  <p className="text-sm font-medium text-gray-800 mt-2 break-words line-clamp-2 text-center">
+                    {ownerName}
+                  </p>
                 </div>
               ))}
             </div>
@@ -346,7 +385,11 @@ function BoothContent() {
           {showResult === "correct" && (
             <div className="bg-blueBrand rounded-[30px] w-full max-w-[300px] p-6 text-white text-center">
               <h2 className="text-xl font-bold mb-4">สำเร็จ</h2>
-              <img src="/correct.jpg" alt="correct" className="mx-auto w-[120px] mb-6" />
+              <img
+                src="/correct.jpg"
+                alt="correct"
+                className="mx-auto w-[120px] mb-6"
+              />
               <p>กำลังพากลับไปหน้าโปรไฟล์…</p>
             </div>
           )}
@@ -354,7 +397,11 @@ function BoothContent() {
           {showResult === "wrong" && (
             <div className="bg-blueBrand rounded-[30px] w-full max-w-[300px] p-6 text-white text-center">
               <h2 className="text-xl font-bold mb-4">ไม่สำเร็จ</h2>
-              <img src="/incorrec.jpg" alt="wrong" className="mx-auto w-[120px] mb-6" />
+              <img
+                src="/incorrec.jpg"
+                alt="wrong"
+                className="mx-auto w-[120px] mb-6"
+              />
               <p className="text-sm mb-3">{scanError || "รหัสไม่ถูกต้อง"}</p>
               <button
                 onClick={() => {
@@ -423,7 +470,11 @@ function BoothContent() {
               {/* กล้องสแกน */}
               <div className="rounded-xl overflow-hidden border bg-black">
                 <Scanner
-                  key={String(showScannerModal) + selectedDeviceId + String(preferFront)} // re-init เมื่อสลับกล้อง
+                  key={
+                    String(showScannerModal) +
+                    selectedDeviceId +
+                    String(preferFront)
+                  } // re-init เมื่อสลับกล้อง
                   constraints={constraints}
                   // ✅ ลด delay ให้สแกนถี่ขึ้น
                   scanDelay={100}
@@ -452,7 +503,9 @@ function BoothContent() {
               </div>
 
               {scanError && (
-                <p className="mt-3 text-center text-sm text-red-600">⚠️ {scanError}</p>
+                <p className="mt-3 text-center text-sm text-red-600">
+                  ⚠️ {scanError}
+                </p>
               )}
               <div className="mt-4 flex gap-2 justify-center">
                 <button
@@ -472,7 +525,11 @@ function BoothContent() {
           {showResult === "correct" && (
             <div className="bg-blueBrand rounded-[30px] w-full max-w-[300px] p-6 text-white text-center">
               <h2 className="text-xl font-bold mb-4">สำเร็จ</h2>
-              <img src="/correct.jpg" alt="correct" className="mx-auto w-[120px] mb-6" />
+              <img
+                src="/correct.jpg"
+                alt="correct"
+                className="mx-auto w-[120px] mb-6"
+              />
               <p>กำลังพากลับไปหน้าโปรไฟล์…</p>
             </div>
           )}
@@ -480,7 +537,11 @@ function BoothContent() {
           {showResult === "wrong" && (
             <div className="bg-blueBrand rounded-[30px] w-full max-w-[300px] p-6 text-white text-center">
               <h2 className="text-xl font-bold mb-4">ไม่สำเร็จ</h2>
-              <img src="/incorrec.jpg" alt="wrong" className="mx-auto w-[120px] mb-6" />
+              <img
+                src="/incorrec.jpg"
+                alt="wrong"
+                className="mx-auto w-[120px] mb-6"
+              />
               <p className="text-sm mb-3">{scanError || "เข้าร่วมไม่สำเร็จ"}</p>
               <button
                 onClick={() => {
@@ -504,7 +565,9 @@ export default function BoothPage() {
   return (
     <>
       <Navbar />
-      <Suspense fallback={<div className="text-center mt-10">กำลังโหลด...</div>}>
+      <Suspense
+        fallback={<div className="text-center mt-10">กำลังโหลด...</div>}
+      >
         <BoothContent />
       </Suspense>
     </>
